@@ -9,6 +9,7 @@
   "author": "shani almog",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "express": "^4.12.4",
     "mongoose": "^4.0.5"
   }

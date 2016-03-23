@@ -17,8 +17,6 @@ var usersSchema = new Schema({
     profileImage: String,
     mode: Number,
     registered: {type : Date, default : Date.now},
-    businessPieId: Number,
-    pleasurePieId: Number,
     typeOfUser: String
 });
 
