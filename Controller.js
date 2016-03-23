@@ -8,7 +8,7 @@ var db = mongoose.connection;
 
 
 
-var usersSchema = require("./scheme_users.js").usersSchema; 
+var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
 var Consumer = mongoose.model('User', usersSchema, 'Users');
 
 // var usersSchema = require("./scheme_users.js").usersSchema; 
