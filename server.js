@@ -40,7 +40,7 @@ var session      = require('express-session');
 
 		var data = {};
 		data = req.body;
-		res.json(Controller.registerConsumer(data));
+		Controller.registerConsumer(res,data);
 	});
 
 
@@ -122,4 +122,3 @@ var session      = require('express-session');
 	app.listen(process.env.PORT || 3000);
 	console.log("The magic happens on port 3000");
 
-	

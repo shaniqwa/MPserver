@@ -24,7 +24,7 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
-exports.registerConsumer = function(data) {
+exports.registerConsumer = function(res,data) {
 	var newUser = new Consumer(data.userInfo);
 
 	async.waterfall([
@@ -33,7 +33,10 @@ exports.registerConsumer = function(data) {
     	var userid;
 		//SAVE user
 		newUser.save(function (err, doc) {
-		  if (err) return console.error(err);
+		  if (err) {
+		  	res.status(200).json("error creating user: " + err.message);
+		  	return console.error(err);
+		  }
 		  	userid = doc.userId;
 		  	console.log("userid:" + userid);
 		  	console.log(data.BusinessPie.businessPieId);
@@ -45,21 +48,25 @@ exports.registerConsumer = function(data) {
 
     //step 2
     function(callback) {
-
 		var business_pie = new BusinessPie(data.BusinessPie);
 		//Save user's business pie
 		business_pie.save(function (err, doc) {
-		  if (err) return console.error(err);
+		  if (err) {
+		  	res.status(200).json("error saving user business pie: " + err.message);
+		  	return console.error(err);
+		  }
 		  callback();
 		});
     },
    	//step 3
     function(callback) {
-
 		var pleasure_pie = new PleasurePie(data.PleasurePie);
 		//Save user's pleasure pie
 		pleasure_pie.save(function (err, doc) {
-		  if (err) return console.error(err);
+		  if (err) {
+		  	res.status(200).json("error saving user pleasure pie: " + err.message);
+		  	return console.error(err);
+		  }
 		  callback();
 		});
     }
@@ -68,7 +75,7 @@ exports.registerConsumer = function(data) {
 	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
 	    }
 	    console.log('New user has been added successfully');
-	    return newUser;
+	    res.status(200).json("New user has been added successfully");
 	});
 }
 
