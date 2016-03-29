@@ -1,37 +1,75 @@
 var config = require('config.json')('./config.json'),
 	url = config.mongodb.url;
+var async = require("async");
 
 //Mongoose
 var mongoose = require('mongoose');
 	mongoose.connect(url);
 var db = mongoose.connection;
 
+var autoIncrement = require('mongoose-auto-increment');
+
+autoIncrement.initialize(db);
 
 
+//set schemas to models. Models are used as classes
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
 var Consumer = mongoose.model('User', usersSchema, 'Users');
 
-// var usersSchema = require("./scheme_users.js").usersSchema; 
-// var Producer = mongoose.model('User', usersSchema, 'Users');
+usersSchema.plugin(autoIncrement.plugin, { model: 'Users', field: 'userId' });
+
+var businessPieSchema = require("./schemas/scheme_businessPie.js").businessPieSchema; 
+var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
+
+var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
+var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
 exports.registerConsumer = function(data) {
-	var user1 = new Consumer(data);
-// console.log(user1.lastName); 
+	var newUser = new Consumer(data.userInfo);
 
+	async.waterfall([
+		//step1
+    function(callback) {
+    	var userid;
+		//SAVE user
+		newUser.save(function (err, doc) {
+		  if (err) return console.error(err);
+		  	userid = doc.userId;
+		  	console.log("userid:" + userid);
+		  	console.log(data.BusinessPie.businessPieId);
+		  	data.BusinessPie.businessPieId = userid;
+			data.PleasurePie.pleasurePieId = userid;
+			callback();
+		});
+    },	
 
-// SAVE
-user1.save(function (err, doc) {
-  if (err) return console.error(err);
-  console.log(doc);
-});
+    //step 2
+    function(callback) {
 
-//FIND
-// Consumer.find(function (err, users) {
-//   if (err) return console.error(err);
-//   console.log(users);
-// });
+		var business_pie = new BusinessPie(data.BusinessPie);
+		//Save user's business pie
+		business_pie.save(function (err, doc) {
+		  if (err) return console.error(err);
+		  callback();
+		});
+    },
+   	//step 3
+    function(callback) {
 
-	return user1;
+		var pleasure_pie = new PleasurePie(data.PleasurePie);
+		//Save user's pleasure pie
+		pleasure_pie.save(function (err, doc) {
+		  if (err) return console.error(err);
+		  callback();
+		});
+    }
+	], function(err) {
+	    if (err) {
+	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+	    }
+	    console.log('New user has been added successfully');
+	    return newUser;
+	});
 }
 
 

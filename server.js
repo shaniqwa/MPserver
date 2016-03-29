@@ -3,11 +3,32 @@ var express = require('express'),
 	Controller = require('./Controller');
 
 var bodyParser = require('body-parser');
-	app.use(bodyParser.json()); // support json encoded bodies
-	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-	
+var passport = require('passport');
+var flash    = require('connect-flash');
 
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
+
+
+	//===============EXPRESS================
+	app.use(morgan('dev')); // log every request to the console
+	app.use(cookieParser()); // read cookies (needed for auth)
+	app.set('view engine', 'ejs'); // set up ejs for templating
+	app.use(bodyParser.urlencoded({
+  		extended: true
+	}));
+	app.use(bodyParser.json()); // support json encoded bodies
+	// required for passport
+	app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+	app.use(passport.initialize());
+	app.use(passport.session()); // persistent login sessions
+	app.use(flash()); // use connect-flash for flash messages stored in session
+		
 	app.use('/', express.static('./public'));
+
+	//===============ROUTES===============
 
 	//route that return all genres objects in our data base in a json format
 	app.post('/registerConsumer', function (req, res){
@@ -18,21 +39,7 @@ var bodyParser = require('body-parser');
 		res.status(200);
 
 		var data = {};
-		data.username = req.body.username;
-		data.firstName = req.body.firstName;
-		data.lastName = req.body.lastName;
-		data.password = req.body.password;
-		data.ageGroup = req.body.ageGroup;
-		data.email = req.body.email;
-		data.FB_AT = req.body.FB_AT;
-		data.FB_RT = req.body.FB_RT;
-		data.YT_AT = req.body.YT_AT;
-		data.YT_RT = req.body.YT_RT;
-		data.country = req.body.country;
-		data.profileImage = req.body.profileImage;
-		data.mode = req.body.mode;
-		data.typeOfUser = req.body.typeOfUser;
-
+		data = req.body;
 		res.json(Controller.registerConsumer(data));
 	});
 
@@ -111,6 +118,8 @@ var bodyParser = require('body-parser');
 	});
 
 
-
+//===============PORT=================
 	app.listen(process.env.PORT || 3000);
-	console.log("service is listening on port 3000");
+	console.log("The magic happens on port 3000");
+
+	

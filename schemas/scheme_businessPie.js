@@ -7,16 +7,10 @@ var businessPieSchema = new Schema({
         {
             genreName: String,
             percent: Number,
-            artists: [
-                {
-                    artistName: String
-                }
-            ],
-            producers: [
-                {
-                    producerName: String
-                }
-            ]
+            artists: [{ type: String}],
+            producers: [{ type: String}]
         }
     ]
 });
+
+exports.businessPieSchema = businessPieSchema; 
