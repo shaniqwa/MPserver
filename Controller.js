@@ -111,34 +111,15 @@ exports.registerConsumer = function(res,data) {
 }
 
 exports.addToFavorites = function(res,data) {
-	// var userid;
-	// async.waterfall([
-	// 	//step1
- //    function(callback) {
-	// User.findOne({ username: data.username }, function (err, doc) {
-	// 	  if (err){
-	// 	  	res.status(200).json("error finding user: " + err.message);
-	// 	  	return err;
-	// 	  } 
-	// 	  // found!
-	// 	  userid = doc.userId;
-	// 	  console.log("User found: " + doc.userId);
-	// 	  callback();
-	// 	});
- //    },	
-
- //    //step 2
- //    function(callback) {
-
-
- //    }
-	// ], function(err) {
-	//     if (err) {
-	//         throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-	//     }
-	//     console.log('New user has been added successfully');
-	//     res.status(200).json("New user has been added successfully");
-	// });
+	//addToSet make sure there are no duplicates is songs array.
+	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error adding song to favorites: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json("New song has been added to favorites successfully for user " + data.userId);
+	});
 }
 
 
