@@ -14,7 +14,7 @@ autoIncrement.initialize(db);
 
 //set schemas to models. Models are used as classes
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
-var Consumer = mongoose.model('User', usersSchema, 'Users');
+var User = mongoose.model('User', usersSchema, 'Users');
 
 usersSchema.plugin(autoIncrement.plugin, { model: 'Users', field: 'userId' });
 
@@ -24,14 +24,19 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
-exports.registerConsumer = function(res,data) {
-	var newUser = new Consumer(data.userInfo);
+var favoritesSchema = require("./schemas/scheme_favorites.js").favoritesSchema; 
+var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
 
+var blacklistSchema = require("./schemas/scheme_blacklist.js").blacklistSchema; 
+var BlackList = mongoose.model('Black_list', blacklistSchema, 'Black_list');
+
+exports.registerConsumer = function(res,data) {
+	var newUser = new User(data.userInfo);
+	var userid;
 	async.waterfall([
-		//step1
+	//step1 : create user
     function(callback) {
-    	var userid;
-		//SAVE user
+		//create user
 		newUser.save(function (err, doc) {
 		  if (err) {
 		  	res.status(200).json("error creating user: " + err.message);
@@ -46,29 +51,55 @@ exports.registerConsumer = function(res,data) {
 		});
     },	
 
-    //step 2
+    //step 2 : create user's business pie, pleasure pie, favorites list and black list.
     function(callback) {
-		var business_pie = new BusinessPie(data.BusinessPie);
-		//Save user's business pie
-		business_pie.save(function (err, doc) {
-		  if (err) {
-		  	res.status(200).json("error saving user business pie: " + err.message);
-		  	return console.error(err);
-		  }
-		  callback();
-		});
-    },
-   	//step 3
-    function(callback) {
-		var pleasure_pie = new PleasurePie(data.PleasurePie);
-		//Save user's pleasure pie
-		pleasure_pie.save(function (err, doc) {
-		  if (err) {
-		  	res.status(200).json("error saving user pleasure pie: " + err.message);
-		  	return console.error(err);
-		  }
-		  callback();
-		});
+
+		async.parallel([
+		    function(callback) {
+		    	var business_pie = new BusinessPie(data.BusinessPie);
+				//Save user's business pie
+				business_pie.save(function (err, doc) {
+				  if (err) {
+				  	res.status(200).json("error saving user business pie: " + err.message);
+				  	return console.error(err);
+				  }
+				  callback();
+				});
+		    },
+		    function(callback) {
+		    	var pleasure_pie = new PleasurePie(data.PleasurePie);
+				//Save user's pleasure pie
+				pleasure_pie.save(function (err, doc) {
+				  if (err) {
+				  	res.status(200).json("error saving user pleasure pie: " + err.message);
+				  	return console.error(err);
+				  }
+				  callback();
+				});
+		    },
+		   	function(callback) {
+		    	var favorites = new Favorites({ userId : userid });
+				//Save user's pleasure pie
+				favorites.save(function (err, doc) {
+				  if (err) {
+				  	res.status(200).json("error saving favorites list: " + err.message);
+				  	return console.error(err);
+				  }
+				  callback();
+				});
+		    },
+		    function(callback) {
+		    	var blacklist = new BlackList({ userId : userid });
+				//Save user's pleasure pie
+				blacklist.save(function (err, doc) {
+				  if (err) {
+				  	res.status(200).json("error saving user blacklist pie: " + err.message);
+				  	return console.error(err);
+				  }
+				  callback();
+				});
+		    }
+		],callback);
     }
 	], function(err) {
 	    if (err) {
@@ -77,6 +108,37 @@ exports.registerConsumer = function(res,data) {
 	    console.log('New user has been added successfully');
 	    res.status(200).json("New user has been added successfully");
 	});
+}
+
+exports.addToFavorites = function(res,data) {
+	// var userid;
+	// async.waterfall([
+	// 	//step1
+ //    function(callback) {
+	// User.findOne({ username: data.username }, function (err, doc) {
+	// 	  if (err){
+	// 	  	res.status(200).json("error finding user: " + err.message);
+	// 	  	return err;
+	// 	  } 
+	// 	  // found!
+	// 	  userid = doc.userId;
+	// 	  console.log("User found: " + doc.userId);
+	// 	  callback();
+	// 	});
+ //    },	
+
+ //    //step 2
+ //    function(callback) {
+
+
+ //    }
+	// ], function(err) {
+	//     if (err) {
+	//         throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+	//     }
+	//     console.log('New user has been added successfully');
+	//     res.status(200).json("New user has been added successfully");
+	// });
 }
 
 
