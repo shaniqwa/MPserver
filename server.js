@@ -28,6 +28,8 @@ var session      = require('express-session');
 		
 	app.use('/', express.static('./public'));
 
+
+
 	//===============ROUTES===============
 
 	//Rgister Consumer
@@ -56,6 +58,18 @@ var session      = require('express-session');
 		Controller.addToFavorites(res,data);
 	});
 
+	//Add Song to Blacklist
+	app.post('/addToBlackList', function (req, res){
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		app.set('json spaces', 4);
+		res.set("Content-Type", "application/json");
+		res.status(200);
+
+		var data = {};
+		data = req.body;
+		Controller.addToBlackList(res,data);
+	});
 
 	//route that return a genre object by passing it's name as parameter
 	app.param('genre', function ( req, res, next, value){

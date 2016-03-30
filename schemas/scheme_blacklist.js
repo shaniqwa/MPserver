@@ -5,6 +5,7 @@ var blacklistSchema = new Schema({
         userId: { type: Number, index: true},
     songs: [
         {
+        	_id:false,
             song: String,
             artist: String
         }

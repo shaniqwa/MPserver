@@ -12,7 +12,7 @@ var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(db);
 
 
-//set schemas to models. Models are used as classes
+//===============MODELS===============
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
 var User = mongoose.model('User', usersSchema, 'Users');
 
@@ -30,11 +30,15 @@ var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
 var blacklistSchema = require("./schemas/scheme_blacklist.js").blacklistSchema; 
 var BlackList = mongoose.model('Black_list', blacklistSchema, 'Black_list');
 
+
+//===============FUNCTIONS===============
+
 exports.registerConsumer = function(res,data) {
 	var newUser = new User(data.userInfo);
 	var userid;
+
 	async.waterfall([
-	//step1 : create user
+	//step1 : create user and get his id
     function(callback) {
 		//create user
 		newUser.save(function (err, doc) {
@@ -119,6 +123,18 @@ exports.addToFavorites = function(res,data) {
 	  } 
 	  // done!
 	  res.status(200).json("New song has been added to favorites successfully for user " + data.userId);
+	});
+}
+
+exports.addToBlackList = function(res,data) {
+	//addToSet make sure there are no duplicates is songs array.
+	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error adding song to blacklist: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json("New song has been added to blacklist successfully for user " + data.userId);
 	});
 }
 
