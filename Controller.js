@@ -1,4 +1,4 @@
-var config = require('config.json')('./config.json'),
+var config = require('config.json')('./config/database.json'),
 	url = config.mongodb.url;
 var async = require("async");
 

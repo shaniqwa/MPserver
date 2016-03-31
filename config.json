@@ -1,7 +1,0 @@
-{
-  "domain": "www.example.com",
-  "mongodb": {
-    "url": "mongodb://52.35.9.144:27017/musicprofile"
-  }
-}
-
