@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Node Authentication</title>
+    <title>Music Profile</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
@@ -23,6 +23,14 @@
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">
         <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" name="firstName">
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" class="form-control" name="lastName">
+        </div>
+        <div class="form-group">
             <label>Email</label>
             <input type="text" class="form-control" name="email">
         </div>
@@ -30,7 +38,25 @@
             <label>Password</label>
             <input type="password" class="form-control" name="password">
         </div>
-
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label>Age Group</label>
+            <select class="form-control" name="ageGroup">
+                <option>21 and Under</option>
+                <option>22 to 34</option>
+                <option>35 to 44</option>
+                <option>45 to 54</option>
+                <option>55 to 64</option>
+                <option>65 and Over</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Country</label>
+            <input type="text" class="form-control" name="country">
+        </div>
         <button type="submit" class="btn btn-warning btn-lg">Signup</button>
     </form>
 

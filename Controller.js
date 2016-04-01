@@ -1,14 +1,10 @@
-var config = require('config.json')('./config/database.json'),
-	url = config.mongodb.url;
-var async = require("async");
-
 //Mongoose
 var mongoose = require('mongoose');
-	mongoose.connect(url);
-var db = mongoose.connection;
+var configDB = require('./config/database.js');
+var db = mongoose.createConnection(configDB.url); // connect to our database
 
 var autoIncrement = require('mongoose-auto-increment');
-
+var async = require("async");
 autoIncrement.initialize(db);
 
 

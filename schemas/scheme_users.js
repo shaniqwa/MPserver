@@ -9,7 +9,7 @@ var usersSchema = new Schema({
     firstName: String,
     lastName: String,
     password: String,
-    ageGroup: Number,
+    ageGroup: String,
     email:  { type: String, unique: true },
     // email:  String,
     FB_AT: String,
