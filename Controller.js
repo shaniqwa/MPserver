@@ -29,86 +29,88 @@ var BlackList = mongoose.model('Black_list', blacklistSchema, 'Black_list');
 
 //===============FUNCTIONS===============
 
-exports.registerConsumer = function(res,data) {
-	var newUser = new User(data.userInfo);
-	var userid;
 
-	async.waterfall([
-	//step1 : create user and get his id
-    function(callback) {
-		//create user
-		newUser.save(function (err, doc) {
-		  if (err) {
-		  	res.status(200).json("error creating user: " + err.message);
-		  	return console.error(err);
-		  }
-		  	userid = doc.userId;
-		  	console.log("userid:" + userid);
-		  	console.log(data.BusinessPie.businessPieId);
-		  	data.BusinessPie.businessPieId = userid;
-			data.PleasurePie.pleasurePieId = userid;
-			callback();
-		});
-    },	
+//HAS BEEN RELOCATED to passport.js!!!
+// exports.registerConsumer = function(res,data) {
+// 	var newUser = new User(data.userInfo);
+// 	var userid;
 
-    //step 2 : create user's business pie, pleasure pie, favorites list and black list.
-    function(callback) {
+// 	async.waterfall([
+// 	//step1 : create user and get his id
+//     function(callback) {
+// 		//create user
+// 		newUser.save(function (err, doc) {
+// 		  if (err) {
+// 		  	res.status(200).json("error creating user: " + err.message);
+// 		  	return console.error(err);
+// 		  }
+// 		  	userid = doc.userId;
+// 		  	console.log("userid:" + userid);
+// 		  	console.log(data.BusinessPie.businessPieId);
+// 		  	data.BusinessPie.businessPieId = userid;
+// 			data.PleasurePie.pleasurePieId = userid;
+// 			callback();
+// 		});
+//     },	
 
-		async.parallel([
-		    function(callback) {
-		    	var business_pie = new BusinessPie(data.BusinessPie);
-				//Save user's business pie
-				business_pie.save(function (err, doc) {
-				  if (err) {
-				  	res.status(200).json("error saving user business pie: " + err.message);
-				  	return console.error(err);
-				  }
-				  callback();
-				});
-		    },
-		    function(callback) {
-		    	var pleasure_pie = new PleasurePie(data.PleasurePie);
-				//Save user's pleasure pie
-				pleasure_pie.save(function (err, doc) {
-				  if (err) {
-				  	res.status(200).json("error saving user pleasure pie: " + err.message);
-				  	return console.error(err);
-				  }
-				  callback();
-				});
-		    },
-		   	function(callback) {
-		    	var favorites = new Favorites({ userId : userid });
-				//Save user's pleasure pie
-				favorites.save(function (err, doc) {
-				  if (err) {
-				  	res.status(200).json("error saving favorites list: " + err.message);
-				  	return console.error(err);
-				  }
-				  callback();
-				});
-		    },
-		    function(callback) {
-		    	var blacklist = new BlackList({ userId : userid });
-				//Save user's pleasure pie
-				blacklist.save(function (err, doc) {
-				  if (err) {
-				  	res.status(200).json("error saving user blacklist pie: " + err.message);
-				  	return console.error(err);
-				  }
-				  callback();
-				});
-		    }
-		],callback);
-    }
-	], function(err) {
-	    if (err) {
-	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-	    }
-	    console.log('New user has been added successfully');
-	    res.status(200).json("New user has been added successfully");
-	});
-}
+//     //step 2 : create user's business pie, pleasure pie, favorites list and black list.
+//     function(callback) {
+
+// 		async.parallel([
+// 		    function(callback) {
+// 		    	var business_pie = new BusinessPie(data.BusinessPie);
+// 				//Save user's business pie
+// 				business_pie.save(function (err, doc) {
+// 				  if (err) {
+// 				  	res.status(200).json("error saving user business pie: " + err.message);
+// 				  	return console.error(err);
+// 				  }
+// 				  callback();
+// 				});
+// 		    },
+// 		    function(callback) {
+// 		    	var pleasure_pie = new PleasurePie(data.PleasurePie);
+// 				//Save user's pleasure pie
+// 				pleasure_pie.save(function (err, doc) {
+// 				  if (err) {
+// 				  	res.status(200).json("error saving user pleasure pie: " + err.message);
+// 				  	return console.error(err);
+// 				  }
+// 				  callback();
+// 				});
+// 		    },
+// 		   	function(callback) {
+// 		    	var favorites = new Favorites({ userId : userid });
+// 				//Save user's pleasure pie
+// 				favorites.save(function (err, doc) {
+// 				  if (err) {
+// 				  	res.status(200).json("error saving favorites list: " + err.message);
+// 				  	return console.error(err);
+// 				  }
+// 				  callback();
+// 				});
+// 		    },
+// 		    function(callback) {
+// 		    	var blacklist = new BlackList({ userId : userid });
+// 				//Save user's pleasure pie
+// 				blacklist.save(function (err, doc) {
+// 				  if (err) {
+// 				  	res.status(200).json("error saving user blacklist pie: " + err.message);
+// 				  	return console.error(err);
+// 				  }
+// 				  callback();
+// 				});
+// 		    }
+// 		],callback);
+//     }
+// 	], function(err) {
+// 	    if (err) {
+// 	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+// 	    }
+// 	    console.log('New user has been added successfully');
+// 	    res.status(200).json("New user has been added successfully");
+// 	});
+// }
 
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.

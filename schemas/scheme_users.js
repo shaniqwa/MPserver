@@ -5,13 +5,11 @@ var Schema = mongoose.Schema;
 var usersSchema = new Schema({
     userId: { type: Number, index: true },
     username:  { type: String, unique: true },
-    // username:  String,
     firstName: String,
     lastName: String,
     password: String,
     ageGroup: String,
     email:  { type: String, unique: true },
-    // email:  String,
     FB_AT: String,
     FB_RT: String,
     FB_email: String, //new

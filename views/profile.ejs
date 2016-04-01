@@ -27,7 +27,18 @@
                         <!--if local login -->
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.email %><br>
-                        <strong>password</strong>: <%= user.password %>
+                        <!-- <strong>password</strong>: <%= user.password %><br> -->
+                        <h2>Music Profile:</h2>
+
+
+                        <table>
+                        <% for(var i=0; i < business.genres.length; i++) { %>
+                           <tr>
+                             <td><%= business.genres[i].genreName %></td>
+                             <td><%= business.genres[i].percent %></td>
+                           </tr>
+                        <% } %>
+                        </table>
                     </p>
 
             </div>

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var pleasurePieSchema = new Schema({
-	    pleasurePieId: {type: Number,index: true },
+	pleasurePieId: {type: Number,index: true },
     genres: [
         {
             genreName: String,

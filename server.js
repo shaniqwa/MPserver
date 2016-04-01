@@ -15,6 +15,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
+var async = require("async");
+
+var businessPieSchema = require("./schemas/scheme_businessPie.js").businessPieSchema; 
+var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
+
+var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
+var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
 	//===============EXPRESS================
 	require('./config/passport')(passport);
@@ -86,9 +93,34 @@ var session      = require('express-session');
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-        res.render('profile.ejs', {
-            user : req.user // get the user out of session and pass to template
-        });
+    	var business;
+ 		async.waterfall([
+                    //step1 : create user and get his id
+                    function(callback) {
+                        //create user
+                        BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
+				            // if there are any errors, return the error
+				            if (err){
+				                return console.log(err);
+				            }
+				            business = businessPie;
+				            callback();
+				        });
+                    }
+                    ], function(err) {
+                        if (err) {
+                            throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+                        }
+                        console.log('all done');
+  						res.render('profile.ejs', {
+				            user : req.user, // get the user out of session and pass to template
+				            business: business
+				            // pleasure: pleasure;
+				        });
+                    });
+
+    	
+        
     });
 
     // =====================================
@@ -106,7 +138,7 @@ var session      = require('express-session');
     // send to google to do the authentication
     // profile gets us their basic information including their name
     // email gets their emails
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
 
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
@@ -180,78 +212,8 @@ var session      = require('express-session');
 		Controller.addToBlackList(res,data);
 	});
 
-	//route that return a genre object by passing it's name as parameter
-	app.param('genre', function ( req, res, next, value){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		console.log("\nRequest recived with genre: " + value);
-		next();
-	});
-
-	//route that recives parameter using defined parameters - enter a genre to get info about it. res parsed to json
-	app.get('/genre/:genre', 
-
-		function (req, res, next){
-			res.header("Access-Control-Allow-Origin", "*");
-			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			next(); 
-		},
-
-		function (req, res) {
-		res.status(200).json(MP.getRelatedTo(req.params.genre));
-	});
 
 
-	// FACEBOOK
-	//define route MP with parameter FBat (fabebook access token).
-	app.param('FBac', function ( req, res, next, value){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		console.log("\nRequest recived with genre: " + value);
-		next();
-	});
-	// YOUTUBE
-	//define route MP with parameter YTat (youtube access token).
-	app.param('YTac', function ( req, res, next, value){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		console.log("\nRequest recived with genre: " + value);
-		next();
-	});
-
-	//route that recives parameter using defined parameters - enter FB/YT/both access token to get  music info about it
-	app.get('/MP/:FBat/:YTat', 
-		function (req, res, next){
-			res.header("Access-Control-Allow-Origin", "*");
-			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			next(); 
-		},
-
-		function (req, res) {
-		MP.getMP(req, res, req.params.FBat,req.params.YTat);
-	});
-
-
-		// ONLY YOUTUBE
-	//define route MP with parameter YTat (youtube access token).
-	app.param('YT', function ( req, res, next, value){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		console.log("\nRequest recived with genre: " + value);
-		next();
-	});
-
-		//route that recives parameter using defined parameters - enter FB/YT/both access token to get  music info about it
-	app.get('/test/:YT', 
-		function (req, res, next){
-			res.header("Access-Control-Allow-Origin", "*");
-			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			next(); 
-		},
-
-		function (req, res) {
-		MP.YouTube(req, res, req.params.YT);
-	});
 
 
 //===============PORT=================

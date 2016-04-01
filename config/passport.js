@@ -7,9 +7,25 @@ var mongoose = require('mongoose');
 var configDB = require('./database.js');
 mongoose.connect(configDB.url); // connect to our database
 
+var async = require("async");
+var request = require('request');
+
+//SCHEMAS
 // load up the user model
 var usersSchema = require("./../schemas/scheme_users.js").usersSchema; 
 var User = mongoose.model('User', usersSchema, 'Users');
+
+var businessPieSchema = require("./../schemas/scheme_businessPie.js").businessPieSchema; 
+var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
+
+var pleasurePieSchema = require("./../schemas/scheme_pleasurePie.js").pleasurePieSchema; 
+var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
+
+var favoritesSchema = require("./../schemas/scheme_favorites.js").favoritesSchema; 
+var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
+
+var blacklistSchema = require("./../schemas/scheme_blacklist.js").blacklistSchema; 
+var BlackList = mongoose.model('Black_list', blacklistSchema, 'Black_list');
 
 // load the auth variables
 var configAuth = require('./auth');
@@ -66,7 +82,7 @@ module.exports = function(passport) {
 
                 // if there is no user with that email
                 // create the user
-                var newUser            = new User();
+                var newUser = new User();
 
                 // set the user's local credentials
                 newUser.email    = email;
@@ -150,7 +166,12 @@ module.exports = function(passport) {
                     return done(err);
 
                 if (user) {
-
+                    var data = {};
+                    //get business pie and please pie
+                    data.user = user;
+                    console.log(data)
+                    // data.businessPie = businessPie;
+                    // data.pleasurePie = pleasurePie;
                     // if a user is found, log them in
                     return done(null, user);
                 } else {
@@ -160,18 +181,115 @@ module.exports = function(passport) {
                     // set all of the relevant information
                     newUser.YT_id    = profile.id;
                     newUser.YT_AT = token;
+                    newUser.YT_RT = refreshToken;
                     newUser.YT_email = profile.emails[0].value; // pull the first email
                     newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
                     newUser.email = profile.emails[0].value; 
                     newUser.firstName = profile.name.givenName;
                     newUser.lastName = profile.name.familyName;
                     newUser.profileImage = profile._json.picture;
-                    newUser.country = profile._json.picture;
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    // newUser.country = profile._json.picture;
+
+                    var userid;
+                    var MP = {};
+                    MP.business = {};
+                    MP.pleasure = {};
+                    async.waterfall([
+                    //step1 : create user and get his id
+                    function(callback) {
+                        //create user
+                        newUser.save(function (err, doc) {
+                          if (err) {
+                            return console.error(err);
+                          }
+                            userid = doc.userId;
+                            console.log("userid:" + userid);
+                            callback();
+                        });
+                    },  
+                    //step 2 : build MP
+                    function(callback) {
+                        request.get('http://localhost:8080/MP/null/' + token, function (error, response, body) {
+                          if (!error && response.statusCode == 200) {
+                            //fix result to match our pie schema
+                            var obj = body.toString();
+                                obj = JSON.parse(obj);
+                            for(i in obj){
+                                obj[i].genreName = obj[i].genre;
+                                delete obj[i].genre;
+                                delete obj[i].counter;
+                                obj[i].producers = [];
+                            }
+                            // console.log(body); // Show the HTML for the Google homepage. 
+                            body = JSON.stringify([obj]);
+                            MP.business.businessPieId = userid;
+                            MP.business.genres = obj;
+                            MP.pleasure.pleasurePieId = userid;
+                            MP.pleasure.genres = obj;
+                            console.log(MP);
+                            callback();
+                          }else if(error){
+                            return console.error(error);
+                          }
+                        });
+                    },
+                     //step 3 : create user's business pie, pleasure pie, favorites list and black list.
+                    function(callback) {
+
+                        async.parallel([
+                            function(callback) {
+                                var business_pie = new BusinessPie(MP.business);
+                                //Save user's business pie
+                                business_pie.save(function (err, doc) {
+                                  if (err) {
+                                    res.status(200).json("error saving user business pie: " + err.message);
+                                    return console.error(err);
+                                  }
+                                  callback();
+                                });
+                            },
+                            function(callback) {
+                                var pleasure_pie = new PleasurePie(MP.pleasure);
+                                //Save user's pleasure pie
+                                pleasure_pie.save(function (err, doc) {
+                                  if (err) {
+                                    res.status(200).json("error saving user pleasure pie: " + err.message);
+                                    return console.error(err);
+                                  }
+                                  callback();
+                                });
+                            },
+                            function(callback) {
+                                var favorites = new Favorites({ userId : userid });
+                                //Save user's pleasure pie
+                                favorites.save(function (err, doc) {
+                                  if (err) {
+                                    res.status(200).json("error saving favorites list: " + err.message);
+                                    return console.error(err);
+                                  }
+                                  callback();
+                                });
+                            },
+                            function(callback) {
+                                var blacklist = new BlackList({ userId : userid });
+                                //Save user's pleasure pie
+                                blacklist.save(function (err, doc) {
+                                  if (err) {
+                                    res.status(200).json("error saving user blacklist pie: " + err.message);
+                                    return console.error(err);
+                                  }
+                                  callback();
+                                });
+                            }
+                        ],callback);
+                    }
+                   
+                    ], function(err) {
+                        if (err) {
+                            throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+                        }
+                        console.log('New user has been added successfully');
+                        return done(null, newUser);    
                     });
                 }
             });
@@ -194,7 +312,7 @@ module.exports = function(passport) {
 
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
-
+        console.log(token);
         // asynchronous
         process.nextTick(function() {
 
