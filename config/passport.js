@@ -152,147 +152,49 @@ module.exports = function(passport) {
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
+        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+
 
     },
-    function(token, refreshToken, profile, done) {
-        console.log(profile);
+    function(req, token, refreshToken, profile, done) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
 
+        // check if the user is already logged in
+        if (!req.user) {
             // try to find the user based on their google id
             User.findOne({ 'YT_id' : profile.id }, function(err, user) {
                 if (err)
                     return done(err);
 
                 if (user) {
-                    var data = {};
-                    //get business pie and please pie
-                    data.user = user;
-                    console.log(data)
-                    // data.businessPie = businessPie;
-                    // data.pleasurePie = pleasurePie;
                     // if a user is found, log them in
                     return done(null, user);
                 } else {
                     // if the user isnt in our database, create a new user
-                    var newUser = new User();
-
-                    // set all of the relevant information
-                    newUser.YT_id    = profile.id;
-                    newUser.YT_AT = token;
-                    newUser.YT_RT = refreshToken;
-                    newUser.YT_email = profile.emails[0].value; // pull the first email
-                    newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
-                    newUser.email = profile.emails[0].value; 
-                    newUser.firstName = profile.name.givenName;
-                    newUser.lastName = profile.name.familyName;
-                    newUser.profileImage = profile._json.picture;
-                    // newUser.country = profile._json.picture;
-
-                    var userid;
-                    var MP = {};
-                    MP.business = {};
-                    MP.pleasure = {};
-                    async.waterfall([
-                    //step1 : create user and get his id
-                    function(callback) {
-                        //create user
-                        newUser.save(function (err, doc) {
-                          if (err) {
-                            return console.error(err);
-                          }
-                            userid = doc.userId;
-                            console.log("userid:" + userid);
-                            callback();
-                        });
-                    },  
-                    //step 2 : build MP
-                    function(callback) {
-                        request.get('http://localhost:8080/MP/null/' + token, function (error, response, body) {
-                          if (!error && response.statusCode == 200) {
-                            //fix result to match our pie schema
-                            var obj = body.toString();
-                                obj = JSON.parse(obj);
-                            for(i in obj){
-                                obj[i].genreName = obj[i].genre;
-                                delete obj[i].genre;
-                                delete obj[i].counter;
-                                obj[i].producers = [];
-                            }
-                            // console.log(body); // Show the HTML for the Google homepage. 
-                            body = JSON.stringify([obj]);
-                            MP.business.businessPieId = userid;
-                            MP.business.genres = obj;
-                            MP.pleasure.pleasurePieId = userid;
-                            MP.pleasure.genres = obj;
-                            console.log(MP);
-                            callback();
-                          }else if(error){
-                            return console.error(error);
-                          }
-                        });
-                    },
-                     //step 3 : create user's business pie, pleasure pie, favorites list and black list.
-                    function(callback) {
-
-                        async.parallel([
-                            function(callback) {
-                                var business_pie = new BusinessPie(MP.business);
-                                //Save user's business pie
-                                business_pie.save(function (err, doc) {
-                                  if (err) {
-                                    res.status(200).json("error saving user business pie: " + err.message);
-                                    return console.error(err);
-                                  }
-                                  callback();
-                                });
-                            },
-                            function(callback) {
-                                var pleasure_pie = new PleasurePie(MP.pleasure);
-                                //Save user's pleasure pie
-                                pleasure_pie.save(function (err, doc) {
-                                  if (err) {
-                                    res.status(200).json("error saving user pleasure pie: " + err.message);
-                                    return console.error(err);
-                                  }
-                                  callback();
-                                });
-                            },
-                            function(callback) {
-                                var favorites = new Favorites({ userId : userid });
-                                //Save user's pleasure pie
-                                favorites.save(function (err, doc) {
-                                  if (err) {
-                                    res.status(200).json("error saving favorites list: " + err.message);
-                                    return console.error(err);
-                                  }
-                                  callback();
-                                });
-                            },
-                            function(callback) {
-                                var blacklist = new BlackList({ userId : userid });
-                                //Save user's pleasure pie
-                                blacklist.save(function (err, doc) {
-                                  if (err) {
-                                    res.status(200).json("error saving user blacklist pie: " + err.message);
-                                    return console.error(err);
-                                  }
-                                  callback();
-                                });
-                            }
-                        ],callback);
-                    }
-                   
-                    ], function(err) {
-                        if (err) {
-                            throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-                        }
-                        console.log('New user has been added successfully');
-                        return done(null, newUser);    
+                    registerNewUser(profile, token, refreshToken, function(err,newUser){
+                        return done(null, newUser);
                     });
                 }
             });
+            } else {
+                // user already exists and is logged in, we have to link accounts
+                var user = req.user; // pull the user out of the session
+
+                // update the current users google credentials
+                user.YT_id    = profile.id;
+                user.YT_AT = token;
+                user.YT_RT = refreshToken;
+                user.YT_email = profile.emails[0].value; 
+
+                // save the user
+                user.save(function(err) {
+                    if (err)
+                        throw err;
+                    return done(null, user);
+                });
+            }
         });
 
     }));
@@ -306,15 +208,19 @@ module.exports = function(passport) {
         // pull in our app id and secret from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURL
+        callbackURL     : configAuth.facebookAuth.callbackURL,
+        profileFields   : ['id','photos', 'emails', 'displayName'],
+        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
 
     // facebook will send back the token and profile
-    function(token, refreshToken, profile, done) {
-        console.log(token);
+    function(req,token, refreshToken, profile, done) {
+        console.log(profile);
         // asynchronous
         process.nextTick(function() {
+        // check if the user is already logged in
+        if (!req.user) {
 
             // find the user in the database based on their facebook id
             User.findOne({ 'FB_id' : profile.id }, function(err, user) {
@@ -351,8 +257,150 @@ module.exports = function(passport) {
                 }
 
             });
+             } else {
+                // user already exists and is logged in, we have to link accounts
+                var user = req.user; // pull the user out of the session
+
+                // update the current users google credentials
+                user.FB_id    = profile.id;
+                user.FB_AT = token;
+                user.FB_RT = refreshToken;
+                user.FB_email = profile.emails[0].value; 
+
+                // save the user
+                user.save(function(err) {
+                    if (err)
+                        throw err;
+                    return done(null, user);
+                });
+            }
         });
 
     }));
 
 };
+
+registerNewUser = function(profile,token , refreshToken , NewUserCallback){
+    var newUser = new User();
+
+    // set all of the relevant information
+    newUser.YT_id    = profile.id;
+    newUser.YT_AT = token;
+    newUser.YT_RT = refreshToken;
+    newUser.YT_email = profile.emails[0].value; // pull the first email
+    newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
+    newUser.email = profile.emails[0].value; 
+    newUser.firstName = profile.name.givenName;
+    newUser.lastName = profile.name.familyName;
+    newUser.profileImage = profile._json.picture;
+    // newUser.country = profile._json.picture;
+
+    var userid;
+    var MP = {};
+    MP.business = {};
+    MP.pleasure = {};
+
+    async.waterfall([
+    //step1 : create user and get his id
+    function(callback) {
+        //create user
+        newUser.save(function (err, doc) {
+          if (err) {
+            return console.error(err);
+          }
+            userid = doc.userId;
+            console.log("userid:" + userid);
+            callback();
+        });
+    },  
+    //step 2 : build MP
+    function(callback) {
+        request.get('http://localhost:8080/MP/null/' + token, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            //fix result to match our pie schema
+            var obj = body.toString();
+                obj = JSON.parse(obj);
+            for(i in obj){
+                obj[i].genreName = obj[i].genre;
+                delete obj[i].genre;
+                delete obj[i].counter;
+                obj[i].producers = [];
+            }
+            // console.log(body); // Show the HTML for the Google homepage. 
+            body = JSON.stringify([obj]);
+            MP.business.businessPieId = userid;
+            MP.business.genres = obj;
+            MP.pleasure.pleasurePieId = userid;
+            MP.pleasure.genres = obj;
+            console.log(MP);
+            callback();
+          }else if(error){
+            return console.error(error);
+          }
+        });
+    },
+     //step 3 : create user's business pie, pleasure pie, favorites list and black list.
+    function(callback) {
+
+        async.parallel([
+            function(callback) {
+                var business_pie = new BusinessPie(MP.business);
+                //Save user's business pie
+                business_pie.save(function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving user business pie: " + err.message);
+                    return console.error(err);
+                  }
+                  callback();
+                });
+            },
+            function(callback) {
+                var pleasure_pie = new PleasurePie(MP.pleasure);
+                //Save user's pleasure pie
+                pleasure_pie.save(function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving user pleasure pie: " + err.message);
+                    return console.error(err);
+                  }
+                  callback();
+                });
+            },
+            function(callback) {
+                var favorites = new Favorites({ userId : userid });
+                //create ampty favorites 
+                favorites.save(function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving favorites list: " + err.message);
+                    return console.error(err);
+                  }
+                  callback();
+                });
+            },
+            function(callback) {
+                var blacklist = new BlackList({ userId : userid });
+                //create ampty blacklist 
+                blacklist.save(function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving user blacklist pie: " + err.message);
+                    return console.error(err);
+                  }
+                  callback();
+                });
+            }
+        ],callback);
+    }
+   
+    ], function(err) {
+        if (err) {
+            NewUserCallback(err,null);    
+        }
+        console.log('New user has been added successfully');
+        NewUserCallback(null,newUser);    
+    });
+
+}//end of function 
+
+
+
+
+

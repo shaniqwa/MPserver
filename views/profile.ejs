@@ -22,24 +22,68 @@
         <div class="col-sm-6">
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
-
                     <p>
                         <!--if local login -->
+                        <% if (user.profileImage) { %>
+                            <img src=" <%= user.profileImage %> " width="200"><br>
+                        <% } %>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.email %><br>
-                        <!-- <strong>password</strong>: <%= user.password %><br> -->
-                        <h2>Music Profile:</h2>
-
-
-                        <table>
-                        <% for(var i=0; i < business.genres.length; i++) { %>
-                           <tr>
-                             <td><%= business.genres[i].genreName %></td>
-                             <td><%= business.genres[i].percent %></td>
-                           </tr>
+                        <strong>password</strong>: <%= user.password %><br>
+                        
+                        <% if (business) { %>
+                            <h2>Music Profile:</h2>
+                            <table>
+                            <% for(var i=0; i < business.genres.length; i++) { %>
+                               <tr>
+                                 <td><%= business.genres[i].genreName %></td>
+                                 <td><%= business.genres[i].percent %></td>
+                               </tr>
+                            <% } %>
+                            </table>
                         <% } %>
-                        </table>
                     </p>
+            </div>
+        </div>
+        <!-- GOOGLE INFORMATION -->
+         <div class="col-sm-6">
+            <div class="well">
+                <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+
+                <!-- check if the user has this token (is the user authenticated with this social account) -->
+                <% if (user.YT_AT) { %>
+                    <p>
+                        <strong>id</strong>: <%= user.YT_id %><br>
+                        <strong>token</strong>: <%= user.YT_AT %><br>
+                        <strong>email</strong>: <%= user.YT_email %><br>
+
+                    </p>
+
+                    <a href="/unlink/google" class="btn btn-danger">Unlink</a>
+                <% } else { %>
+                    <a href="/connect/google" class="btn btn-danger">Connect Google</a>
+                <% } %>
+
+            </div>
+        </div>
+
+         <!-- FACEBOOK INFORMATION -->
+        <div class="col-sm-6">
+            <div class="well">
+                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+
+                <!-- check if the user has this token (is the user authenticated with this social account) -->
+                <% if (user.FB_AT) { %>
+                    <p>
+                        <strong>id</strong>: <%= user.FB_id %><br>
+                        <strong>token</strong>: <%= user.FB_AT %><br>
+                        <strong>email</strong>: <%= user.FB_email %><br>
+                    </p>
+
+                    <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
+                <% } else { %>
+                    <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
+                <% } %>
 
             </div>
         </div>
