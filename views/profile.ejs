@@ -14,6 +14,10 @@
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <form>
+            <input type="text"></input>
+            <button>Search</button>
+        </form>
     </div>
 
     <div class="row">
@@ -28,14 +32,24 @@
                             <img src=" <%= user.profileImage %> " width="200"><br>
                         <% } %>
                         <strong>id</strong>: <%= user._id %><br>
+                        <strong>Fist Name</strong>: <%= user.firstName %><br>
+                        <strong>Last Name</strong>: <%= user.lastName %><br>
                         <strong>email</strong>: <%= user.email %><br>
-                        <strong>password</strong>: <%= user.password %><br>
                         
-                        <% if (business) { %>
+                        <% if (business) { 
+                            business.genres.sort(function(a, b){
+                                if(a.category < b.category) return -1;
+                                if(a.category > b.category) return 1;
+                                return 0;
+                            });
+
+
+                        %>
                             <h2>Music Profile:</h2>
                             <table>
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
+                                 <td><%= business.genres[i].category %></td>
                                  <td><%= business.genres[i].genreName %></td>
                                  <td><%= business.genres[i].percent %></td>
                                </tr>

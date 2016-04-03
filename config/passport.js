@@ -261,17 +261,27 @@ module.exports = function(passport) {
                 // user already exists and is logged in, we have to link accounts
                 var user = req.user; // pull the user out of the session
 
-                // update the current users google credentials
+                // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
                 user.FB_RT = refreshToken;
                 user.FB_email = profile.emails[0].value; 
+                if(!user.profileImage){
+                    user.profileImage = profile.photos[0].value; 
+                }
+
 
                 // save the user
                 user.save(function(err) {
                     if (err)
                         throw err;
-                    return done(null, user);
+                    UpdateMP(user, function(err,callback){
+                        if(err){
+                            return console.log(err);
+                        }
+                        return done(null, user);    
+                    });
+                    
                 });
             }
         });
@@ -280,7 +290,9 @@ module.exports = function(passport) {
 
 };
 
-registerNewUser = function(profile,token , refreshToken , NewUserCallback){
+
+//by google
+registerNewUser = function(profile, token , refreshToken , NewUserCallback){
     var newUser = new User();
 
     // set all of the relevant information
@@ -293,6 +305,8 @@ registerNewUser = function(profile,token , refreshToken , NewUserCallback){
     newUser.firstName = profile.name.givenName;
     newUser.lastName = profile.name.familyName;
     newUser.profileImage = profile._json.picture;
+    newUser.typeOfUser = "Consumer";
+    newUser.mode = 1;
     // newUser.country = profile._json.picture;
 
     var userid;
@@ -315,6 +329,7 @@ registerNewUser = function(profile,token , refreshToken , NewUserCallback){
     },  
     //step 2 : build MP
     function(callback) {
+
         request.get('http://localhost:8080/MP/null/' + token, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
@@ -400,7 +415,68 @@ registerNewUser = function(profile,token , refreshToken , NewUserCallback){
 
 }//end of function 
 
+UpdateMP = function(user,UpdateMPcallback){
+    request.get('http://localhost:8080/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            //fix result to match our pie schema
+            var obj = body.toString();
+                obj = JSON.parse(obj);
+            for(i in obj){
+                obj[i].genreName = obj[i].genre;
+                delete obj[i].genre;
+                delete obj[i].counter;
+                obj[i].producers = [];
+            }
+            // console.log(body); // Show the HTML for the Google homepage. 
+            body = JSON.stringify([obj]);
 
+            async.parallel([
+                function(callback) {
+                    //findOndAndUpdate :  business pies
+                    BusinessPie.findOne({ businessPieId: user.userId }, function (err, doc) {
+                          if (err){
+                            callback(err);
+                          } 
+                          //found pie
+                          doc.genres = obj; //update pie
+                          doc.save(function (err, doc) {    //save pie
+                           if (err) {
+                             res.status(200).json("error saving user business pie: " + err.message);
+                             return console.error(err);
+                           }
+                           callback();
+                        });
+                    });
+                },  
+                function(callback) {
+                    //findOndAndUpdate :  pleasure pies
+                    PleasurePie.findOne({ pleasurePieId: user.userId }, function (err, doc) {
+                          if (err){
+                            callback(err);
+                          } 
+                          //found pie
+                          doc.genres = obj; //update pie
+                          doc.save(function (err, doc) {    //save pie
+                           if (err) {
+                             res.status(200).json("error saving user pleasure pie: " + err.message);
+                             return console.error(err);
+                           }
+                           callback();
+                        });
+                    });
+                }
+            ], function(err) {
+                if (err) {
+                    throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+                }
+                console.log('Both pies are saved now');
+                UpdateMPcallback();
+            });
+        }else if(error){ //error with lastfm request
+                return console.error(error);
+            }
+    });
+}
 
 
 
