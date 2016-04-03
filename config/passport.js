@@ -152,6 +152,7 @@ module.exports = function(passport) {
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
+        profileFields   : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
 
@@ -173,7 +174,7 @@ module.exports = function(passport) {
                     return done(null, user);
                 } else {
                     // if the user isnt in our database, create a new user
-                    registerNewUser(profile, token, refreshToken, function(err,newUser){
+                    registerNewUser("google",profile, token, refreshToken, function(err,newUser){
                         return done(null, newUser);
                     });
                 }
@@ -192,7 +193,14 @@ module.exports = function(passport) {
                 user.save(function(err) {
                     if (err)
                         throw err;
-                    return done(null, user);
+                    if(user.FB_AT != null){
+                        UpdateMP(user, function(err,callback){
+                            if(err){
+                                return console.log(err);
+                            }
+                            return done(null, user);    
+                        });                        
+                    }
                 });
             }
         });
@@ -234,24 +242,7 @@ module.exports = function(passport) {
                     return done(null, user); // user found, return that user
                 } else {
                     // if there is no user found with that facebook id, create them
-                    var newUser  = new User();
-
-                    // set all of the facebook information in our user model
-                    newUser.FB_id    = profile.id; // set the users facebook id                   
-                    newUser.FB_AT = token; // we will save the token that facebook provides to the user   
-                    console.log(profile.name.givenName);
-                    // newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newUser.FB_email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    
-                    //unique indexes
-                    newUser.username = profile.emails[0].value; 
-                    newUser.email = profile.emails[0].value; 
-                    // save our user to the database
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-
-                        // if successful, return the new user
+                    registerNewUser("facebook",profile, token, refreshToken, function(err,newUser){
                         return done(null, newUser);
                     });
                 }
@@ -275,13 +266,14 @@ module.exports = function(passport) {
                 user.save(function(err) {
                     if (err)
                         throw err;
-                    UpdateMP(user, function(err,callback){
-                        if(err){
-                            return console.log(err);
-                        }
-                        return done(null, user);    
-                    });
-                    
+
+                        UpdateMP(user, function(err,callback){
+                            if(err){
+                                return console.log(err);
+                            }
+                            return done(null, user);    
+                        });                        
+
                 });
             }
         });
@@ -292,22 +284,40 @@ module.exports = function(passport) {
 
 
 //by google
-registerNewUser = function(profile, token , refreshToken , NewUserCallback){
+registerNewUser = function(platform, profile, token , refreshToken , NewUserCallback){
     var newUser = new User();
-
-    // set all of the relevant information
-    newUser.YT_id    = profile.id;
-    newUser.YT_AT = token;
-    newUser.YT_RT = refreshToken;
-    newUser.YT_email = profile.emails[0].value; // pull the first email
-    newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
-    newUser.email = profile.emails[0].value; 
-    newUser.firstName = profile.name.givenName;
-    newUser.lastName = profile.name.familyName;
-    newUser.profileImage = profile._json.picture;
-    newUser.typeOfUser = "Consumer";
-    newUser.mode = 1;
-    // newUser.country = profile._json.picture;
+    var url;
+    if(platform == "google"){
+        url = "http://localhost:8080/MP/null/" + token;
+        // set all of the relevant information
+        newUser.YT_id    = profile.id;
+        newUser.YT_AT = token;
+        newUser.YT_RT = refreshToken;
+        newUser.YT_email = profile.emails[0].value; // pull the first email
+        newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
+        newUser.email = profile.emails[0].value; 
+        newUser.firstName = profile.name.givenName;
+        newUser.lastName = profile.name.familyName;
+        newUser.profileImage = profile._json.picture;
+        newUser.typeOfUser = "Consumer";
+        newUser.mode = 1;
+    // newUser.country = profile._json.picture;    
+    }else if(platform == "facebook"){
+        url = "http://localhost:8080/MP/" + token + "/null";
+        // set all of the facebook information in our user model
+        newUser.FB_id    = profile.id; // set the users facebook id                   
+        newUser.FB_AT = token; // we will save the token that facebook provides to the user   
+        newUser.FB_RT = refreshToken;
+        newUser.FB_email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+        newUser.username = profile.emails[0].value; 
+        newUser.email = profile.emails[0].value; 
+        newUser.firstName = profile.name.givenName;
+        newUser.lastName = profile.name.familyName;
+        newUser.profileImage = profile.photos[0].value; 
+        newUser.typeOfUser = "Consumer";
+        newUser.mode = 1;
+    }
+    
 
     var userid;
     var MP = {};
@@ -330,7 +340,7 @@ registerNewUser = function(profile, token , refreshToken , NewUserCallback){
     //step 2 : build MP
     function(callback) {
 
-        request.get('http://localhost:8080/MP/null/' + token, function (error, response, body) {
+        request.get(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
             var obj = body.toString();
