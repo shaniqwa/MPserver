@@ -1,8 +1,10 @@
 var express = require('express'),
 	app = express(),
-	Controller = require('./Controller');
+	Controller = require('./Controller'),
+    DJ = require('./dj');
 
 var mongoose = require('mongoose');
+
 var configDB = require('./config/database.js');
 mongoose.createConnection(configDB.url); // connect to our database
 
@@ -305,6 +307,38 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 		Controller.deleteUser(res,req.params.userID);
 	});
 
+
+    //Get Playlist
+    app.param('uid', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\nRequest to delete user with userID: " + value);
+        next();
+    });
+    app.param('mode', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\nRequest to delete user with userID: " + value);
+        next();
+    });
+
+    app.param('limit', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\nRequest to delete user with userID: " + value);
+        next();
+    });
+    //route that recives parameter using defined parameters
+    app.get('/getPlaylist/:uid/:mode/:limit', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit);
+    });
 
 //===============PORT=================
 	app.listen(process.env.PORT || 3000);
