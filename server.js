@@ -285,6 +285,25 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 
 
 
+	//Delete User
+	app.param('userID', function ( req, res, next, value){
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		console.log("\nRequest to delete user with userID: " + value);
+		next();
+	});
+
+	//route that recives parameter using defined parameters
+	app.get('/deleteUser/:userID', 
+		function (req, res, next){
+			res.header("Access-Control-Allow-Origin", "*");
+			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+			next(); 
+		},
+
+		function (req, res) {
+		Controller.deleteUser(res,req.params.userID);
+	});
 
 
 //===============PORT=================

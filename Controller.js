@@ -136,6 +136,15 @@ exports.addToBlackList = function(res,data) {
 	});
 }
 
+exports.deleteUser = function(res, userID){
+	User.findOne({ userId: userID }).remove().exec();
+	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
+	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
+	Favorites.findOne({ userId: userID }).remove().exec();
+	BlackList.findOne({ userId: userID }).remove().exec();
+	res.status(200).json("User has been deleted " + userID);
+}
+
 
 //TODO: register as producer - regular regisntration like consumer, but then we need to access the producer's YouTube authorized playlist
 //and insert add songs to scheme_producerSongs.js
