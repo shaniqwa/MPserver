@@ -217,7 +217,7 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields   : ['id','photos', 'emails', 'displayName'],
+        profileFields   : ['id','photos', 'emails', 'displayName', 'name'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
@@ -255,6 +255,7 @@ module.exports = function(passport) {
                 // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
+                console.log("fb token: " + token);
                 user.FB_RT = refreshToken;
                 user.FB_email = profile.emails[0].value; 
                 if(!user.profileImage){
