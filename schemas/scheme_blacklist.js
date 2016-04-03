@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var blacklistSchema = new Schema({
-        userId: { type: Number, index: true},
+    userId: { type: Number, index: true},
     songs: [
         {
         	_id:false,
