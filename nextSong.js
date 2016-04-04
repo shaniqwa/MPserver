@@ -102,8 +102,8 @@ function pickProducerConsumer() {
 
 function pickArtistOrSimiliar() {
     var relations = [
-        [50, "thisArtist"],
-        [50, "similiar"]
+        [20, "thisArtist"],
+        [80, "similiar"]
     ];
     return pickChoice(relations);
 };
@@ -116,6 +116,7 @@ function getRandArtist(type, userObject, currGenre) {
         //console.log(userObject[obj].genreName); // for tests
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
+            console.log("random artist choosen :" +userObject[obj][type][distribution(engine)]);
             return userObject[obj][type][distribution(engine)];
         }
     }

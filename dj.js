@@ -37,8 +37,8 @@ require('deasync').sleep(1000);
 console.log("***length array of songs: " + ns.getPlaylistLength());
 
 //console.log(user.getGraph());
-console.log("the playlist :");
-console.log(ns.getPlaylist());
+// console.log("the playlist :");
+// console.log(ns.getPlaylist());
 var result = ns.getPlaylist();
 res.status(200).json(result);
 }
