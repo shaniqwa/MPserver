@@ -116,7 +116,6 @@ function getRandArtist(type, userObject, currGenre) {
         //console.log(userObject[obj].genreName); // for tests
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
-            console.log("random artist choosen :" +userObject[obj][type][distribution(engine)]);
             return userObject[obj][type][distribution(engine)];
         }
     }
@@ -128,17 +127,19 @@ function getRandTrack(artist) { // todo validations
     //console.log("[]sending request for top tracks");
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=1000&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     //console.log(JSON.parse(res.getBody('utf8')));
-    console.log("the artist sent :" + artist);
+    // console.log("getRandTrack:: the artist sent :" + artist.name);
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
+    console.log("getRandTrack:: the song :" + JSON.stringify(theSong));
     return theSong;
 };
 
 function getSimilarArtist(artist) {
+    // console.log("getSimilarArtist:: the artist sent :" + artist.name);
     //console.log("[]sending request for similiar artists");
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=50&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     //console.log(JSON.parse(res.getBody('utf8')));
-    console.log("the artist sent :" + artist);
+    
     var artists = JSON.parse(res.getBody('utf8')).similarartists.artist;
     var theArtist = Random.pick(engine, artists, 0, artists.length);
     return theArtist;
@@ -213,8 +214,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             //console.log("getting song from picked artist: " + randArtist);
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             //console.log("song choosen : ");
-                                            //console.log(chsnSongArtist);
-                                            playlist.push(  chsnSongArtist  );
+                                            console.log("the artist:: "+ chsnSongArtist);
+                                            playlist.push( { chsnSongArtist } );
                                             playlist.push( { genrename : currGenre });
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
@@ -232,7 +233,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongSimilar);
-                                            playlist.push(  chsnSongSimilar );
+                                            playlist.push( { chsnSongSimilar } );
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);

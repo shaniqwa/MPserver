@@ -3,6 +3,7 @@
 <head>
     <title>Music Profile</title>
      <%- include head %>
+     <script src="js/pie.js"></script>
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
     </style>
@@ -22,7 +23,7 @@
     <div class="row">
 
         <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
                     <p>
@@ -45,6 +46,10 @@
 
                         %>
                             <h2>Music Profile:</h2>
+                        <!-- <div id="container" style="width: 600px; height: 400px; margin: 0 auto"></div> -->
+
+
+
                             <table>
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
@@ -59,7 +64,7 @@
             </div>
         </div>
         <!-- GOOGLE INFORMATION -->
-         <div class="col-sm-6">
+         <div class="col-sm-4">
             <div class="well">
                 <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
 
@@ -81,7 +86,7 @@
         </div>
 
          <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="well">
                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
 
