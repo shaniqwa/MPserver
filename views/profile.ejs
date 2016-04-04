@@ -54,7 +54,7 @@
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
                                  <td><%= business.genres[i].category %></td>
-                                 <td><%= business.genres[i].genreName %></td>
+                                 <td ng-click="getSong($event)"><%= business.genres[i].genreName %></td>
                                  <td><%= business.genres[i].percent %></td>
                                </tr>
                             <% } %>
