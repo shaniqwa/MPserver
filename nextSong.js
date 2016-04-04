@@ -4,7 +4,7 @@ var Random = require('random-js');
 var request = require('sync-request');
 var graphInit = require('./graph');
 
-//variables
+//variables 
 var currGenre;
 var user;
 var mode;
@@ -44,7 +44,27 @@ nextSong.prototype.getNextSong = function() {
     //console.log("[]checking if existing genre..");
     this.connectDB(this.currGenre, this.user, this.mode,this.userGraph, this.startGenre);
 }
-
+/*
+function buildPlaylist(playlist) {
+	//var playlistLength = playlist.length;
+	var artist;
+	var song;
+	var finalPlaylist = [];
+	for (song in playlist) {
+		if(typeof playlist.artist === 'Object'){
+			//finalPlaylist[song].push({ artist : playlist.artist.name })
+			artist = playlist.artist.name;
+		} else {
+			artist = playlist.
+			
+		}
+		
+	}
+	
+	
+	
+}
+*/
 
 function pickChoice(choice) {
     var sum = 0;
@@ -125,6 +145,10 @@ function getRandArtist(type, userObject, currGenre) {
 
 function getRandTrack(artist) { // todo validations
     //console.log("[]sending request for top tracks");
+	if(typeof artist === 'object'){
+			//finalPlaylist[song].push({ artist : playlist.artist.name })
+			artist = artist.name;
+		}
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=1000&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     //console.log(JSON.parse(res.getBody('utf8')));
     // console.log("getRandTrack:: the artist sent :" + artist.name);
