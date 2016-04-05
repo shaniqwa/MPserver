@@ -280,7 +280,7 @@ Highcharts.setOptions(Highcharts.theme);
         // add version data
         drillDataLen = data[i].drilldown.data.length;
         for (j = 0; j < drillDataLen; j += 1) {
-            brightness = 0.2 - (j / drillDataLen) / 5;
+            brightness = 0.2 - (j / drillDataLen) / 2;
             versionsData.push({
                 name: data[i].drilldown.categories[j],
                 y: data[i].drilldown.data[j],
@@ -307,6 +307,7 @@ Highcharts.setOptions(Highcharts.theme);
         },
         plotOptions: {
             pie: {
+                borderColor: '#3e3e40',
                 shadow: false,
                 center: ['50%', '50%']
             }

@@ -11,7 +11,8 @@ var user = new graph(uid,mode);
 user.buildGraph();
 //console.log(user.getGraph());
 //genre,userid,p/b
-var currGenre = startGenre;
+var currGenre = "rock";
+startGenre = "pop";
 
 
 

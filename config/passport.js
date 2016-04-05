@@ -309,9 +309,11 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.FB_id    = profile.id; // set the users facebook id                   
         newUser.FB_AT = token; // we will save the token that facebook provides to the user   
         newUser.FB_RT = refreshToken;
-        newUser.FB_email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-        newUser.username = profile.emails[0].value; 
-        newUser.email = profile.emails[0].value; 
+        if(typeof profile.emails !== 'undefined'){
+            newUser.FB_email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+            newUser.username = profile.emails[0].value; 
+            newUser.email = profile.emails[0].value; 
+        }
         newUser.firstName = profile.name.givenName;
         newUser.lastName = profile.name.familyName;
         newUser.profileImage = profile.photos[0].value; 
