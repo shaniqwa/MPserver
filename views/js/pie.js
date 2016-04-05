@@ -333,7 +333,7 @@ console.log("color: " + counter);
             cursor: 'pointer',
             events: {
                     click: function (event) {
-                        console.log(event.point.name);
+                        // console.log(event.point.name);
                         sendEvent(event.point.name);
                     }
             },
@@ -345,17 +345,29 @@ console.log("color: " + counter);
             }
         }]
     });
-    
- // $("#currGenre").on('click',function(){
- //    console.log("currGenre was clicked");
- // });
 
+// document.addEventListener("getPlaylist", getPlaylistHandler, false);
 };
 
 
 
 function sendEvent(currGenre){
     $("#currGenre").html(currGenre);
-    $("#currGenre").trigger("click");
+    var event = new CustomEvent(
+        "getPlaylist", 
+        {
+            detail: {
+                message: "a user request playlist",
+                genre: currGenre,
+                time: new Date(),
+            },
+            bubbles: true,
+            cancelable: true
+        }
+    );
+    document.getElementById("currGenre").dispatchEvent(event);
 }
 
+// function getPlaylistHandler(event){
+//     console.log(event);
+// }
