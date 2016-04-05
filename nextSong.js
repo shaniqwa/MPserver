@@ -123,8 +123,8 @@ function pickProducerConsumer() {
 
 function pickArtistOrSimiliar() {
     var relations = [
-        [20, "thisArtist"],
-        [80, "similiar"]
+        [40, "thisArtist"],
+        [60, "similiar"]
     ];
     return pickChoice(relations);
 };
