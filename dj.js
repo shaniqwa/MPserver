@@ -6,13 +6,13 @@ var deasync = require('deasync');
 // var times = 20;
 // var mode = 2;
 // var uid = 59;
-exports.getUserPlaylist = function(res,uid,mode,times){
+exports.getUserPlaylist = function(res,uid,mode,times,startGenre){
 var user = new graph(uid,mode);
 user.buildGraph();
 //console.log(user.getGraph());
 //genre,userid,p/b
-var currGenre = "pop";
-var startGenre = "pop";
+var currGenre = startGenre;
+
 
 
 
