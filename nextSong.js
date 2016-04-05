@@ -4,14 +4,14 @@ var Random = require('random-js');
 var request = require('sync-request');
 var graphInit = require('./graph');
 
-//variables
+//variables 
 var currGenre;
 var user;
 var mode;
 var userGraph;
 var playlist = [];
 var uId;
-var IWantToKillMyself;
+var prevNG;
 var ng;
 //var flagFinish;
 var runs = 0;
@@ -25,6 +25,7 @@ function nextSong(currGenre, user, mode,userGraph, startGenre) {
     this.startGenre = startGenre;
     this.playlist = [];
     this.flagFinish = 0;
+	ng = currGenre;
     //console.log("[]initialized");
 }
 
@@ -44,7 +45,27 @@ nextSong.prototype.getNextSong = function() {
     //console.log("[]checking if existing genre..");
     this.connectDB(this.currGenre, this.user, this.mode,this.userGraph, this.startGenre);
 }
-
+/*
+function buildPlaylist(playlist) {
+	//var playlistLength = playlist.length;
+	var artist;
+	var song;
+	var finalPlaylist = [];
+	for (song in playlist) {
+		if(typeof playlist.artist === 'Object'){
+			//finalPlaylist[song].push({ artist : playlist.artist.name })
+			artist = playlist.artist.name;
+		} else {
+			artist = playlist.
+			
+		}
+		
+	}
+	
+	
+	
+}
+*/
 
 function pickChoice(choice) {
     var sum = 0;
@@ -113,6 +134,7 @@ function getRandArtist(type, userObject, currGenre) {
     //console.log("this is the user object : ");
     //console.log(userObject);
     for (obj in userObject) {
+		if(userObject[obj][type].length == 0) { return "almog.einattt@gmail.com"; } // todo: will return from findMatch
         //console.log(userObject[obj].genreName); // for tests
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
@@ -125,6 +147,10 @@ function getRandArtist(type, userObject, currGenre) {
 
 function getRandTrack(artist) { // todo validations
     //console.log("[]sending request for top tracks");
+	if(typeof artist === 'object'){
+			//finalPlaylist[song].push({ artist : playlist.artist.name })
+			artist = artist.name;
+		}
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=1000&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     //console.log(JSON.parse(res.getBody('utf8')));
     // console.log("getRandTrack:: the artist sent :" + artist.name);
@@ -152,17 +178,17 @@ function getRandTrackProducer(arrSongs) {
 };
 
 nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGenre) {
-    if (runs != 0) {
-        if (IWantToKillMyself == false) { currGenre = ng; }
+    if ((runs != 0) && (typeof prevNG !== 'undefined')) {
+        if (prevNG == false) { currGenre = ng; }
     else {
 
-        currGenre = IWantToKillMyself;
+        currGenre = prevNG;
     }
     }
-    //this.currGenre = (IWantToKillMyself == false) ?  ng : IWantToKillMyself; currGenre = this.currGenre;}
+    //this.currGenre = (prevNG == false) ?  ng : prevNG; currGenre = this.currGenre;}
     
     runs = parseInt(runs) + 1;
-    //console.log("************************** currGenre is: " + currGenre + " IWantToKillMyself is: " +IWantToKillMyself + "ng is" + ng);
+    //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
         if (err) {
             throw err;
@@ -215,8 +241,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             //console.log("song choosen : ");
                                             console.log("the artist:: "+ chsnSongArtist);
-                                            playlist.push( { chsnSongArtist } );
-                                            playlist.push( { genrename : currGenre });
+                                            playlist.push(  chsnSongArtist  );
+                                            
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);
@@ -233,7 +259,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongSimilar);
-                                            playlist.push( { chsnSongSimilar } );
+                                            playlist.push(  chsnSongSimilar  );
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);
@@ -266,7 +292,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                                         //console.log("picked rand song of producer: ");
                                                         //console.log(getRandTrackProducer(document.songs));
                                                         playlist.push(getRandTrackProducer(document.songs));
-                                                        playlist.push( { genrename : currGenre});
+                                                        
                                                         //console.log("the playlist:");
                                                         //console.log(playlist);
                                                         //console.log("**changing flag");
@@ -282,9 +308,10 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("the graph********");
                                     //console.log(this.currGenre);
                                     //console.log(userGraph.getGraph());
-                                    var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
-                                     IWantToKillMyself = pickedGenre;
-                                      //console.log("IWantToKillMyself = pickedGenre  ==>" + IWantToKillMyself + "=" + pickedGenre);
+									console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
+									var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
+                                    prevNG = pickedGenre;
+                                      //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
                                     //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
                                     console.log("# the returned value is: " + pickedGenre);
                                     if (pickedGenre == false) { //switch genre and get song
@@ -500,6 +527,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
+								ng = newGenre;
                                 //console.log("picked randomaly by percents: " + newGenre);
                                 if (currGenre == newGenre) {
                                     //console.log("same genre choosen"); //if stay in same genre
@@ -558,6 +586,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
 
                                                     }
                                                 });
+
                                             }
                                         });
                                     }
@@ -565,9 +594,10 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("getting next genre from graph");
                                     //console.log("the graph********");
                                     //console.log(userGraph.getGraph());
+									console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
                                     var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
-                                    IWantToKillMyself = pickedGenre;
-                                    //console.log("IWantToKillMyself = pickedGenre  ==>" + IWantToKillMyself + "=" + pickedGenre);
+                                    prevNG = pickedGenre;
+                                    //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
                                     //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
                                     //console.log("# the returned value is: " + pickedGenre);
                                     //pickedGenre = "electro"; // for tests only!!
