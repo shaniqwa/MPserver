@@ -1,15 +1,15 @@
 <!doctype html>
-<html>
+<html ng-app="profile">
 <head>
     <title>Music Profile</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+     <%- include head %>
+     <script src="js/pie.js"></script>
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-controller="profileCtrl">
 
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
@@ -23,13 +23,13 @@
     <div class="row">
 
         <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
                     <p>
                         <!--if local login -->
                         <% if (user.profileImage) { %>
-                            <img src=" <%= user.profileImage %> " width="200"><br>
+                            <img src=" <%= user.profileImage %> " width="50"><br>
                         <% } %>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>Fist Name</strong>: <%= user.firstName %><br>
@@ -46,21 +46,26 @@
 
                         %>
                             <h2>Music Profile:</h2>
-                            <table>
+                        <div id="container" style="width: 100%; height: 600px; margin: 0 auto"></div>
+                        <script type='text/javascript'>
+                            var data =<%-JSON.stringify( business.genres)%>
+                            drawPie(data);
+                        </script>
+<!--                             <table>
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
                                  <td><%= business.genres[i].category %></td>
-                                 <td><%= business.genres[i].genreName %></td>
+                                 <td ng-click="getSong($event)"><%= business.genres[i].genreName %></td>
                                  <td><%= business.genres[i].percent %></td>
                                </tr>
                             <% } %>
-                            </table>
+                            </table> -->
                         <% } %>
                     </p>
             </div>
         </div>
         <!-- GOOGLE INFORMATION -->
-         <div class="col-sm-6">
+         <div class="col-sm-4">
             <div class="well">
                 <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
 
@@ -82,7 +87,7 @@
         </div>
 
          <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="well">
                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
 
@@ -105,5 +110,6 @@
     </div>
 
 </div>
+ <%- include jsFiles %>
 </body>
 </html>

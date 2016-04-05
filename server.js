@@ -1,8 +1,10 @@
 var express = require('express'),
 	app = express(),
-	Controller = require('./Controller');
+	Controller = require('./Controller'),
+    DJ = require('./dj');
 
 var mongoose = require('mongoose');
+
 var configDB = require('./config/database.js');
 mongoose.createConnection(configDB.url); // connect to our database
 
@@ -148,7 +150,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // facebook -------------------------------
 
         // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : 'email' }));
+        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email'] }));
 
         // handle the callback after facebook has authorized the user
         app.get('/connect/facebook/callback',
@@ -160,7 +162,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // google ---------------------------------
 
         // send to google to do the authentication
-        app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
+        app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
 
         // the callback after google has authorized the user
         app.get('/connect/google/callback',
@@ -223,7 +225,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes'] }));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
@@ -305,6 +307,42 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 		Controller.deleteUser(res,req.params.userID);
 	});
 
+
+    //Get Playlist
+    app.param('uid', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    app.param('mode', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+
+    app.param('limit', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+
+     app.param('genre', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    //route that recives parameter using defined parameters
+    app.get('/getPlaylist/:uid/:mode/:limit/:genre', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        	console.log("request for playlist with user id " +req.params.uid + " on mode " +req.params.mode + " list length " +req.params.limit + " genre: " + req.params.genre);
+        DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre);
+    });
 
 //===============PORT=================
 	app.listen(process.env.PORT || 3000);
