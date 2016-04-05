@@ -17,6 +17,7 @@ profile.controller('profileCtrl', function ($scope, $http) {
 
     //console.log(" rafi print---->" + $scope.currGenre);
    $scope.bringMePlaylist = function($event){
+   	$scope.track = [];
    	//$scope.mod.currGenre = currGenre;
          // console.log(" rafi print---->" + $scope.mod.currGenre );
          var genre = $event.currentTarget.innerHTML;
@@ -25,8 +26,22 @@ profile.controller('profileCtrl', function ($scope, $http) {
          console.log(url);
         // alert(currGenre.toString() + $scope.currGenre)
           //console.log(currGenre);
-         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + user.mode + '/' + 10 + '/' + genre).success(function(data){
+         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + user.mode + '/' + 4 + '/' + genre).success(function(data){
            console.log(data);
+           if(typeof data === 'undefined'){
+
+           }else{
+
+           }
+           for(i in data){
+           	   if(typeof data[i].artist === 'undefined'){
+	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName});
+	           }
+	           else{
+	           	$scope.track.push({artistName: data[i].artist.name, songName: data[i].name});
+	           }
+	           	  
+	       }
          });
 	     
     };
