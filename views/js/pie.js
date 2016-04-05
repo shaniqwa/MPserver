@@ -353,19 +353,21 @@ console.log("color: " + counter);
 
 function sendEvent(currGenre){
     $("#currGenre").html(currGenre);
-    var event = new CustomEvent(
-        "getPlaylist", 
-        {
-            detail: {
-                message: "a user request playlist",
-                genre: currGenre,
-                time: new Date(),
-            },
-            bubbles: true,
-            cancelable: true
-        }
-    );
-    document.getElementById("currGenre").dispatchEvent(event);
+    $("#currGenre").trigger("click");
+    // var event = new CustomEvent(
+    //     "getPlaylist", 
+    //     {
+    //         detail: {
+    //             message: "a user request playlist",
+    //             genre: currGenre,
+    //             time: new Date(),
+    //         },
+    //         bubbles: true,
+    //         cancelable: true
+    //     }
+    // );
+    // document.getElementById("currGenre").dispatchEvent(event);
+    
 }
 
 // function getPlaylistHandler(event){
