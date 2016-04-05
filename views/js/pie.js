@@ -1,5 +1,5 @@
 function drawPie(pieData) {
-    console.log(pieData);
+    // console.log(pieData);
 
 /**
  * Dark theme for Highcharts JS
@@ -229,7 +229,7 @@ Highcharts.setOptions(Highcharts.theme);
         for(i in pieData){
             if($.inArray(pieData[i].category, categories) == -1){
                 categories.push(pieData[i].category);
-console.log("color: " + counter);
+// console.log("color: " + counter);
                 var obj = {
                     y: 0,
                     color: colors[counter],
@@ -244,7 +244,7 @@ console.log("color: " + counter);
                     counter++;
             }
         }
-        console.log(data);
+        // console.log(data);
         
 
         for(i in data){
