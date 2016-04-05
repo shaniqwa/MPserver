@@ -241,7 +241,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             //console.log("song choosen : ");
                                             console.log("the artist:: "+ chsnSongArtist);
-                                            playlist.push( { chsnSongArtist } );
+                                            playlist.push(  chsnSongArtist  );
                                             playlist.push( { genrename : currGenre });
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
@@ -259,7 +259,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongSimilar);
-                                            playlist.push( { chsnSongSimilar } );
+                                            playlist.push(  chsnSongSimilar  );
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);
