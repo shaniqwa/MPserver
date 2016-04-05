@@ -1,71 +1,261 @@
-$(function () {
+function drawPie(pieData) {
+    console.log(pieData);
+
+/**
+ * Dark theme for Highcharts JS
+ * @author Torstein Honsi
+ */
+
+// Load the fonts
+Highcharts.createElement('link', {
+   href: '//fonts.googleapis.com/css?family=Unica+One',
+   rel: 'stylesheet',
+   type: 'text/css'
+}, null, document.getElementsByTagName('head')[0]);
+
+Highcharts.theme = {
+   colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#ff3d6a","#ffa1b9","#ff8510"],
+   chart: {
+      backgroundColor: {
+         linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+         stops: [
+            [0, '#2a2a2b'],
+            [1, '#3e3e40']
+         ]
+      },
+      style: {
+         fontFamily: "'Unica One', sans-serif"
+      },
+      plotBorderColor: '#606063'
+   },
+   title: {
+      style: {
+         color: '#E0E0E3',
+         textTransform: 'uppercase',
+         fontSize: '24px'
+      }
+   },
+   subtitle: {
+      style: {
+         color: '#E0E0E3',
+         textTransform: 'uppercase'
+      }
+   },
+   xAxis: {
+      gridLineColor: '#707073',
+      labels: {
+         style: {
+            color: '#E0E0E3'
+         }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      title: {
+         style: {
+            color: '#A0A0A3'
+
+         }
+      }
+   },
+   yAxis: {
+      gridLineColor: '#707073',
+      labels: {
+         style: {
+            color: '#E0E0E3'
+         }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      tickWidth: 1,
+      title: {
+         style: {
+            color: '#A0A0A3'
+         }
+      }
+   },
+   tooltip: {
+      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      style: {
+         color: '#F0F0F0'
+      }
+   },
+   plotOptions: {
+      series: {
+         dataLabels: {
+            color: '#B0B0B3'
+         },
+         marker: {
+            lineColor: '#333'
+         }
+      },
+      boxplot: {
+         fillColor: '#505053'
+      },
+      candlestick: {
+         lineColor: 'white'
+      },
+      errorbar: {
+         color: 'white'
+      }
+   },
+   legend: {
+      itemStyle: {
+         color: '#E0E0E3'
+      },
+      itemHoverStyle: {
+         color: '#FFF'
+      },
+      itemHiddenStyle: {
+         color: '#606063'
+      }
+   },
+   credits: {
+      style: {
+         color: '#666'
+      }
+   },
+   labels: {
+      style: {
+         color: '#707073'
+      }
+   },
+
+   drilldown: {
+      activeAxisLabelStyle: {
+         color: '#F0F0F3'
+      },
+      activeDataLabelStyle: {
+         color: '#F0F0F3'
+      }
+   },
+
+   navigation: {
+      buttonOptions: {
+         symbolStroke: '#DDDDDD',
+         theme: {
+            fill: '#505053'
+         }
+      }
+   },
+
+   // scroll charts
+   rangeSelector: {
+      buttonTheme: {
+         fill: '#505053',
+         stroke: '#000000',
+         style: {
+            color: '#CCC'
+         },
+         states: {
+            hover: {
+               fill: '#707073',
+               stroke: '#000000',
+               style: {
+                  color: 'white'
+               }
+            },
+            select: {
+               fill: '#000003',
+               stroke: '#000000',
+               style: {
+                  color: 'white'
+               }
+            }
+         }
+      },
+      inputBoxBorderColor: '#505053',
+      inputStyle: {
+         backgroundColor: '#333',
+         color: 'silver'
+      },
+      labelStyle: {
+         color: 'silver'
+      }
+   },
+
+   navigator: {
+      handles: {
+         backgroundColor: '#666',
+         borderColor: '#AAA'
+      },
+      outlineColor: '#CCC',
+      maskFill: 'rgba(255,255,255,0.1)',
+      series: {
+         color: '#7798BF',
+         lineColor: '#A6C7ED'
+      },
+      xAxis: {
+         gridLineColor: '#505053'
+      }
+   },
+
+   scrollbar: {
+      barBackgroundColor: '#808083',
+      barBorderColor: '#808083',
+      buttonArrowColor: '#CCC',
+      buttonBackgroundColor: '#606063',
+      buttonBorderColor: '#606063',
+      rifleColor: '#FFF',
+      trackBackgroundColor: '#404043',
+      trackBorderColor: '#404043'
+   },
+
+   // special colors for some of the
+   legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+   background2: '#505053',
+   dataLabelsColor: '#B0B0B3',
+   textColor: '#C0C0C0',
+   contrastTextColor: '#F0F0F3',
+   maskColor: 'rgba(255,255,255,0.3)'
+};
+
+// Apply the theme
+Highcharts.setOptions(Highcharts.theme);
 
     var colors = Highcharts.getOptions().colors,
-        categories = ['MSIE', 'Firefox', 'Chrome', 'Safari', 'Opera'],
-        data = [{
-            y: 56.33,
-            color: colors[0],
-            drilldown: {
-                name: 'MSIE versions',
-                categories: ['MSIE 6.0', 'MSIE 7.0', 'MSIE 8.0', 'MSIE 9.0', 'MSIE 10.0', 'MSIE 11.0'],
-                data: [1.06, 0.5, 17.2, 8.11, 5.33, 24.13],
-                color: colors[0]
+        categories = [],
+        data = [];
+        var counter = 0;
+        for(i in pieData){
+            if($.inArray(pieData[i].category, categories) == -1){
+                categories.push(pieData[i].category);
+console.log("color: " + counter);
+                var obj = {
+                    y: 0,
+                    color: colors[counter],
+                    drilldown: {
+                        name: pieData[i].category,
+                        categories: [],
+                        data: [],
+                        color: colors[counter]
+                    }
+                }
+                    data.push(obj);
+                    counter++;
             }
-        }, {
-            y: 10.38,
-            color: colors[1],
-            drilldown: {
-                name: 'Firefox versions',
-                categories: ['Firefox v31', 'Firefox v32', 'Firefox v33', 'Firefox v35', 'Firefox v36', 'Firefox v37', 'Firefox v38'],
-                data: [0.33, 0.15, 0.22, 1.27, 2.76, 2.32, 2.31, 1.02],
-                color: colors[1]
+        }
+        console.log(data);
+        
+
+        for(i in data){
+            for(j in pieData){
+                if(pieData[j].category == data[i].drilldown.name){
+                    data[i].y += pieData[j].percent;
+                    data[i].drilldown.categories.push(pieData[j].genreName);
+                    data[i].drilldown.data.push(pieData[j].percent);
+                }
             }
-        }, {
-            y: 24.03,
-            color: colors[2],
-            drilldown: {
-                name: 'Chrome versions',
-                categories: ['Chrome v30.0', 'Chrome v31.0', 'Chrome v32.0', 'Chrome v33.0', 'Chrome v34.0',
-                    'Chrome v35.0', 'Chrome v36.0', 'Chrome v37.0', 'Chrome v38.0', 'Chrome v39.0', 'Chrome v40.0', 'Chrome v41.0', 'Chrome v42.0', 'Chrome v43.0'
-                    ],
-                data: [0.14, 1.24, 0.55, 0.19, 0.14, 0.85, 2.53, 0.38, 0.6, 2.96, 5, 4.32, 3.68, 1.45],
-                color: colors[2]
-            }
-        }, {
-            y: 4.77,
-            color: colors[3],
-            drilldown: {
-                name: 'Safari versions',
-                categories: ['Safari v5.0', 'Safari v5.1', 'Safari v6.1', 'Safari v6.2', 'Safari v7.0', 'Safari v7.1', 'Safari v8.0'],
-                data: [0.3, 0.42, 0.29, 0.17, 0.26, 0.77, 2.56],
-                color: colors[3]
-            }
-        }, {
-            y: 0.91,
-            color: colors[4],
-            drilldown: {
-                name: 'Opera versions',
-                categories: ['Opera v12.x', 'Opera v27', 'Opera v28', 'Opera v29'],
-                data: [0.34, 0.17, 0.24, 0.16],
-                color: colors[4]
-            }
-        }, {
-            y: 0.2,
-            color: colors[5],
-            drilldown: {
-                name: 'Proprietary or Undetectable',
-                categories: [],
-                data: [],
-                color: colors[5]
-            }
-        }],
-        browserData = [],
-        versionsData = [],
-        i,
-        j,
-        dataLen = data.length,
-        drillDataLen,
-        brightness;
+        }
+
+        var browserData = [],
+            versionsData = [],
+            i,
+            j,
+            dataLen = data.length,
+            drillDataLen,
+            brightness;
 
 
     // Build the data arrays
@@ -96,10 +286,10 @@ $(function () {
             type: 'pie'
         },
         title: {
-            text: 'Browser market share, January, 2015 to May, 2015'
+            text: 'Music Profile'
         },
         subtitle: {
-            text: 'Source: <a href="http://netmarketshare.com/">netmarketshare.com</a>'
+            text: 'Explore your pie'
         },
         yAxis: {
             title: {
@@ -108,7 +298,7 @@ $(function () {
         },
         plotOptions: {
             pie: {
-                shadow: false,
+                shadow: true,
                 center: ['50%', '50%']
             }
         },
@@ -118,7 +308,7 @@ $(function () {
         series: [{
             name: 'Browsers',
             data: browserData,
-            size: '60%',
+            size: '80%',
             dataLabels: {
                 formatter: function () {
                     return this.y > 5 ? this.point.name : null;
@@ -139,4 +329,6 @@ $(function () {
             }
         }]
     });
-});
+
+
+};

@@ -46,11 +46,12 @@
 
                         %>
                             <h2>Music Profile:</h2>
-                        <!-- <div id="container" style="width: 600px; height: 400px; margin: 0 auto"></div> -->
-
-
-
-                            <table>
+                        <div id="container" style="width: 100%; height: 600px; margin: 0 auto"></div>
+                        <script type='text/javascript'>
+                            var data =<%-JSON.stringify( business.genres)%>
+                            drawPie(data);
+                        </script>
+<!--                             <table>
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
                                  <td><%= business.genres[i].category %></td>
@@ -58,7 +59,7 @@
                                  <td><%= business.genres[i].percent %></td>
                                </tr>
                             <% } %>
-                            </table>
+                            </table> -->
                         <% } %>
                     </p>
             </div>
