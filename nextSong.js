@@ -242,7 +242,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             //console.log("song choosen : ");
                                             console.log("the artist:: "+ chsnSongArtist);
                                             playlist.push(  chsnSongArtist  );
-                                            playlist.push( { genrename : currGenre });
+                                            
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);
@@ -292,7 +292,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                                         //console.log("picked rand song of producer: ");
                                                         //console.log(getRandTrackProducer(document.songs));
                                                         playlist.push(getRandTrackProducer(document.songs));
-                                                        playlist.push( { genrename : currGenre});
+                                                        
                                                         //console.log("the playlist:");
                                                         //console.log(playlist);
                                                         //console.log("**changing flag");
@@ -308,6 +308,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("the graph********");
                                     //console.log(this.currGenre);
                                     //console.log(userGraph.getGraph());
+									console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
 									var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
                                     prevNG = pickedGenre;
                                       //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
@@ -585,6 +586,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
 
                                                     }
                                                 });
+
                                             }
                                         });
                                     }
@@ -592,6 +594,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("getting next genre from graph");
                                     //console.log("the graph********");
                                     //console.log(userGraph.getGraph());
+									console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
                                     var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
                                     prevNG = pickedGenre;
                                     //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
