@@ -257,7 +257,9 @@ module.exports = function(passport) {
                 user.FB_AT = token;
                 console.log("fb token: " + token);
                 user.FB_RT = refreshToken;
-                user.FB_email = profile.emails[0].value; 
+                 if(typeof profile.emails !== 'undefined'){
+                    user.FB_email = profile.emails[0].value; 
+                }
                 if(!user.profileImage){
                     user.profileImage = profile.photos[0].value; 
                 }

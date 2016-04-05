@@ -16,13 +16,14 @@ Highcharts.createElement('link', {
 Highcharts.theme = {
    colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#d120a6", "#8900fe","#3872f8","#ff166f"],
    chart: {
-      backgroundColor: {
-         linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-         stops: [
-            [0, '#2a2a2b'],
-            [1, '#3e3e40']
-         ]
-      },
+      // backgroundColor: {
+      //    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+      //    stops: [
+      //       [0, '#2a2a2b'],
+      //       [1, '#3e3e40']
+      //    ]
+      // },
+      backgroundColor: '#333335',
       style: {
          fontFamily: "'Unica One', sans-serif"
       },
