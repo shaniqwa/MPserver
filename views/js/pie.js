@@ -14,7 +14,7 @@ Highcharts.createElement('link', {
 }, null, document.getElementsByTagName('head')[0]);
 
 Highcharts.theme = {
-   colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#ff3d6a","#ffa1b9","#ff8510"],
+   colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#ff8510"],
    chart: {
       backgroundColor: {
          linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
@@ -77,8 +77,14 @@ Highcharts.theme = {
    },
    tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      animation: true,
+      // positioner: function () {      //fixed tooltip position
+      //           return { x: 80, y: 50 };
+      //       },
       style: {
-         color: '#F0F0F0'
+         color: '#F0F0F0',
+         fontSize: '16px',
+         padding: '10px'
       }
    },
    plotOptions: {
@@ -118,7 +124,8 @@ Highcharts.theme = {
    },
    labels: {
       style: {
-         color: '#707073'
+         color: '#707073',
+         fontSize: '20px'
       }
    },
 
@@ -127,7 +134,8 @@ Highcharts.theme = {
          color: '#F0F0F3'
       },
       activeDataLabelStyle: {
-         color: '#F0F0F3'
+         color: '#F0F0F3',
+         fontSize: '20px'
       }
    },
 
@@ -243,6 +251,7 @@ console.log("color: " + counter);
             for(j in pieData){
                 if(pieData[j].category == data[i].drilldown.name){
                     data[i].y += pieData[j].percent;
+                    data[i].y = Math.round(data[i].y * 100)/100;
                     data[i].drilldown.categories.push(pieData[j].genreName);
                     data[i].drilldown.data.push(pieData[j].percent);
                 }
@@ -298,7 +307,7 @@ console.log("color: " + counter);
         },
         plotOptions: {
             pie: {
-                shadow: true,
+                shadow: false,
                 center: ['50%', '50%']
             }
         },
@@ -306,9 +315,9 @@ console.log("color: " + counter);
             valueSuffix: '%'
         },
         series: [{
-            name: 'Browsers',
+            name: ' ',
             data: browserData,
-            size: '80%',
+            size: '85%',
             dataLabels: {
                 formatter: function () {
                     return this.y > 5 ? this.point.name : null;
@@ -317,10 +326,10 @@ console.log("color: " + counter);
                 distance: -30
             }
         }, {
-            name: 'Versions',
+            name: ' ',
             data: versionsData,
-            size: '80%',
-            innerSize: '60%',
+            size: '100%',
+            innerSize: '95%',
             dataLabels: {
                 formatter: function () {
                     // display only if larger than 1
