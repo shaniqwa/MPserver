@@ -11,7 +11,7 @@ var mode;
 var userGraph;
 var playlist = [];
 var uId;
-var IWantToKillMyself;
+var prevNG;
 var ng;
 //var flagFinish;
 var runs = 0;
@@ -25,6 +25,7 @@ function nextSong(currGenre, user, mode,userGraph, startGenre) {
     this.startGenre = startGenre;
     this.playlist = [];
     this.flagFinish = 0;
+	ng = currGenre;
     //console.log("[]initialized");
 }
 
@@ -133,6 +134,7 @@ function getRandArtist(type, userObject, currGenre) {
     //console.log("this is the user object : ");
     //console.log(userObject);
     for (obj in userObject) {
+		if(userObject[obj][type].length == 0) { return "almog.einattt@gmail.com"; } // todo: will return from findMatch
         //console.log(userObject[obj].genreName); // for tests
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
@@ -176,17 +178,17 @@ function getRandTrackProducer(arrSongs) {
 };
 
 nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGenre) {
-    if (runs != 0) {
-        if (IWantToKillMyself == false) { currGenre = ng; }
+    if ((runs != 0) && (typeof prevNG !== 'undefined')) {
+        if (prevNG == false) { currGenre = ng; }
     else {
 
-        currGenre = IWantToKillMyself;
+        currGenre = prevNG;
     }
     }
-    //this.currGenre = (IWantToKillMyself == false) ?  ng : IWantToKillMyself; currGenre = this.currGenre;}
+    //this.currGenre = (prevNG == false) ?  ng : prevNG; currGenre = this.currGenre;}
     
     runs = parseInt(runs) + 1;
-    //console.log("************************** currGenre is: " + currGenre + " IWantToKillMyself is: " +IWantToKillMyself + "ng is" + ng);
+    //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
         if (err) {
             throw err;
@@ -306,9 +308,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("the graph********");
                                     //console.log(this.currGenre);
                                     //console.log(userGraph.getGraph());
-                                    var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
-                                     IWantToKillMyself = pickedGenre;
-                                      //console.log("IWantToKillMyself = pickedGenre  ==>" + IWantToKillMyself + "=" + pickedGenre);
+									var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
+                                    prevNG = pickedGenre;
+                                      //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
                                     //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
                                     console.log("# the returned value is: " + pickedGenre);
                                     if (pickedGenre == false) { //switch genre and get song
@@ -524,6 +526,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
+								ng = newGenre;
                                 //console.log("picked randomaly by percents: " + newGenre);
                                 if (currGenre == newGenre) {
                                     //console.log("same genre choosen"); //if stay in same genre
@@ -590,8 +593,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                     //console.log("the graph********");
                                     //console.log(userGraph.getGraph());
                                     var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
-                                    IWantToKillMyself = pickedGenre;
-                                    //console.log("IWantToKillMyself = pickedGenre  ==>" + IWantToKillMyself + "=" + pickedGenre);
+                                    prevNG = pickedGenre;
+                                    //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
                                     //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
                                     //console.log("# the returned value is: " + pickedGenre);
                                     //pickedGenre = "electro"; // for tests only!!
