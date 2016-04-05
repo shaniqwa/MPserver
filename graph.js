@@ -387,7 +387,7 @@ graph.prototype.getRandomGenre = function(startGenre, currGenre) {
        return false;
     }
     var firstNode = gr.getNode(startGenre);
-    if(typeof firstNode.name === 'undefined'){
+    if(typeof firstNode === 'undefined'){
        console.log("firstNode is undefined - location: graph.js - line 391");
        return false;
     }
