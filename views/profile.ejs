@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="profile">
 <head>
     <title>Music Profile</title>
      <%- include head %>
@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-controller="profileCtrl">
 
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
@@ -54,7 +54,7 @@
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
                                  <td><%= business.genres[i].category %></td>
-                                 <td><%= business.genres[i].genreName %></td>
+                                 <td ng-click="getSong($event)"><%= business.genres[i].genreName %></td>
                                  <td><%= business.genres[i].percent %></td>
                                </tr>
                             <% } %>
@@ -109,5 +109,6 @@
     </div>
 
 </div>
+ <%- include jsFiles %>
 </body>
 </html>
