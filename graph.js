@@ -383,6 +383,9 @@ graph.prototype.getRandomGenre = function(startGenre, currGenre) {
     gr.getNode(temp).counter++;
     gr.getNode(temp).visited++;
     var firstNode = gr.getNode(startGenre);
+    if(typeof firstNode.name === 'undefined'){
+       return false;
+    }
     firstNode.visited = 1;
     
     return weighedGenres[randomnumber];
