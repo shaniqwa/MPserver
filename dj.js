@@ -28,11 +28,9 @@ var ns = new nextsong(currGenre,uid,mode,user,startGenre);
     async.waterfall([
     //step1 : create user and get his id
 	function(callback) {
-			ns.clearPlaylist(function(){
-				console.log("length after clear: " + ns.getPlaylistLength());
-				callback();	
-			});
-			
+		ns.clearPlaylist();
+		console.log("length after clear: " + ns.getPlaylistLength());
+		callback();	
     },
     //step 2
     function(callback){
@@ -55,6 +53,18 @@ var ns = new nextsong(currGenre,uid,mode,user,startGenre);
 
 }
 
-
-
+//after we change getNextSong so that it recives a callback, we can use this code instead of the for loop (line 39) 
+//pass i=0 and times= number of times we want to call getNextSong
+function callNextSong(i, times) {
+  if( i < times ) {
+    ns.getNextSong(function(err) {
+      if( err ) {
+        console.log('error: '+err)
+      }
+      else {
+        callNextSong(i+1)
+      }
+    })
+  }
+}
 

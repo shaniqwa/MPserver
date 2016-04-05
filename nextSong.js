@@ -37,10 +37,9 @@ nextSong.prototype.getPlaylistLength = function(){
 nextSong.prototype.getPlaylist = function(){
   return playlist;
 };
-nextSong.prototype.clearPlaylist = function(callback){
+nextSong.prototype.clearPlaylist = function(){
   playlist.length = 0;
   playlist = [];
-  callback();
 };
 
 // methods
@@ -183,11 +182,10 @@ function getRandTrackProducer(arrSongs) {
 
 nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGenre) {
     if ((runs != 0) && (typeof prevNG !== 'undefined')) {
-        if (prevNG == false) { currGenre = ng; }
-    else {
-
-        currGenre = prevNG;
-    }
+        if (prevNG == false) { currGenre = ng; 
+        }else{
+            currGenre = prevNG;
+        }
     }
     //this.currGenre = (prevNG == false) ?  ng : prevNG; currGenre = this.currGenre;}
     
