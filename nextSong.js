@@ -37,7 +37,11 @@ nextSong.prototype.getPlaylistLength = function(){
 nextSong.prototype.getPlaylist = function(){
   return playlist;
 };
-
+nextSong.prototype.clearPlaylist = function(callback){
+  playlist.length = 0;
+  playlist = [];
+  callback();
+};
 
 // methods
 nextSong.prototype.getNextSong = function() {

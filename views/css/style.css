@@ -6,10 +6,18 @@
 body{
 	color: #E0E0E3 !important;
 	font-family: 'Unica One', sans-serif;
+	background-color: #a4a4a6;
+}
+
+h1,h2,h3,h4{
+	font-family: 'Unica One', sans-serif;
 }
 .highcharts-tooltip tspan{
 	font-size: 16px !important;
 }
 .well{
 	background-color : #333335 !important;
+}
+.height-800{
+	min-height: 800px;
 }

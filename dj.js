@@ -2,6 +2,7 @@
 var graph = require('./graph');
 var nextsong = require('./nextSong');
 var deasync = require('deasync');
+var async = require("async");
 
 // var times = 20;
 // var mode = 2;
@@ -11,10 +12,9 @@ var user = new graph(uid,mode);
 user.buildGraph();
 //console.log(user.getGraph());
 //genre,userid,p/b
-var currGenre = "rock";
-startGenre = "pop";
+var currGenre = startGenre;
 
-
+console.log("times: " + times);
 
 
 while(user.getGraphStatus()  == 0) {
@@ -25,23 +25,34 @@ console.log("waiting");
 
 var ns = new nextsong(currGenre,uid,mode,user,startGenre);
 
-for(var i=0; i<times; i++) {
-ns.getNextSong();
-require('deasync').sleep(1000);
-}
+    async.waterfall([
+    //step1 : create user and get his id
+	function(callback) {
+			ns.clearPlaylist(function(){
+				console.log("length after clear: " + ns.getPlaylistLength());
+				callback();	
+			});
+			
+    },
+    //step 2
+    function(callback){
+		for(var i=0; i<times; i++) {
+			ns.getNextSong();
+			require('deasync').sleep(2000);
+		}
+		callback();
+    }
+    ], 
+    //all is done
+    function(err) {
+        if (err) {
+			console.log("error with dj: " + err);
+        }
+		console.log("the playlist is done. length: "+ ns.getPlaylistLength());
+		var result = ns.getPlaylist();
+		res.status(200).json(result);   
+    });
 
-  while(ns.getPlaylistLength()  < times) {
-    require('deasync').sleep(1000);
-    var temp = ns.getPlaylistLength();
-    console.log(temp);
-  }
-console.log("***length array of songs: " + ns.getPlaylistLength());
-
-//console.log(user.getGraph());
-console.log("the playlist is done");
-// console.log(ns.getPlaylist());
-var result = ns.getPlaylist();
-res.status(200).json(result);
 }
 
 

@@ -17,9 +17,7 @@ profile.controller('profileCtrl', function ($scope, $http) {
 
     //console.log(" rafi print---->" + $scope.currGenre);
    $scope.bringMePlaylist = function($event){
-
-   	$scope.track = [];	
-   
+   	$scope.track = [];
    	//$scope.mod.currGenre = currGenre;
          // console.log(" rafi print---->" + $scope.mod.currGenre );
          var genre = $event.currentTarget.innerHTML;
@@ -28,7 +26,7 @@ profile.controller('profileCtrl', function ($scope, $http) {
          console.log(url);
         // alert(currGenre.toString() + $scope.currGenre)
           //console.log(currGenre);
-         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + user.mode + '/' + 4 + '/' + genre).success(function(data){
+         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + user.mode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
            if(typeof data === 'undefined'){
 

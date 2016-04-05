@@ -14,16 +14,16 @@
         <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        <form>
+<!--         <form>
             <input type="text"></input>
             <button>Search</button>
-        </form>
+        </form> -->
     </div>
 
     <div class="row">
         <!-- PLAYLIST -->
          <div class="col-sm-4">
-            <div class="well">
+            <div class="well height-800">
             <h3><span class="fa fa-play-circle"></span> Playlist</h3>
             <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
             
@@ -48,7 +48,7 @@
                     <p>
                         <!--if local login -->
                         <% if (user.profileImage) { %>
-                            <img src=" <%= user.profileImage %> " width="50"><br>
+                            <img src=" <%= user.profileImage %> " width="60"><br><br>
                         <% } %>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>Fist Name</strong>: <%= user.firstName %><br>
@@ -64,7 +64,6 @@
 
 
                         %>
-                            <h2>Music Profile:</h2>
                         <div id="container" style="width: 100%; height: 500px; margin: 0 auto"></div>
                         <script type='text/javascript'>
                             var data =<%-JSON.stringify( business.genres)%>
