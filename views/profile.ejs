@@ -11,7 +11,7 @@
 <body>
 <div class="container" ng-controller="profileCtrl">
     <div class="page-header text-center">
-
+        <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
         <form>
