@@ -156,7 +156,7 @@ function getRandTrack(artist) { // todo validations
     // console.log("getRandTrack:: the artist sent :" + artist.name);
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
-    console.log("getRandTrack:: the song :" + JSON.stringify(theSong));
+    // console.log("getRandTrack:: the song :" + JSON.stringify(theSong));
     return theSong;
 };
 
