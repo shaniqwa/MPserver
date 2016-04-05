@@ -14,7 +14,7 @@ Highcharts.createElement('link', {
 }, null, document.getElementsByTagName('head')[0]);
 
 Highcharts.theme = {
-   colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#ff8510"],
+   colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#d120a6", "#8900fe","#3872f8","#ff166f"],
    chart: {
       backgroundColor: {
          linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
@@ -330,6 +330,13 @@ console.log("color: " + counter);
             data: versionsData,
             size: '100%',
             innerSize: '95%',
+            cursor: 'pointer',
+            events: {
+                    click: function (event) {
+                        console.log(event.point.name);
+                        sendEvent(event.point.name);
+                    }
+            },
             dataLabels: {
                 formatter: function () {
                     // display only if larger than 1
@@ -341,3 +348,7 @@ console.log("color: " + counter);
 
 
 };
+
+function sendEvent(currGenre){
+    $("#currGenre").html(currGenre);
+}

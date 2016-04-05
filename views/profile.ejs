@@ -10,7 +10,6 @@
 </head>
 <body>
 <div class="container" ng-controller="profileCtrl">
-<div ng-init="init('<%= JSON.stringify(user) %>')"></div>
     <div class="page-header text-center">
 
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
@@ -22,6 +21,14 @@
     </div>
 
     <div class="row">
+        <!-- PLAYLIST -->
+         <div class="col-sm-4">
+            <div class="well">
+            <h3><span class="fa fa-play-circle"></span> Playlist</h3>
+            <p id="currGenre" ng-model="currGenre"></p>
+
+            </div>
+        </div>
 
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-8">
@@ -47,7 +54,7 @@
 
                         %>
                             <h2>Music Profile:</h2>
-                        <div id="container" style="width: 100%; height: 600px; margin: 0 auto"></div>
+                        <div id="container" style="width: 100%; height: 500px; margin: 0 auto"></div>
                         <script type='text/javascript'>
                             var data =<%-JSON.stringify( business.genres)%>
                             drawPie(data);
