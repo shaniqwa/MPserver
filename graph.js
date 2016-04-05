@@ -382,15 +382,7 @@ graph.prototype.getRandomGenre = function(startGenre, currGenre) {
     var temp = weighedGenres[randomnumber];
     gr.getNode(temp).counter++;
     gr.getNode(temp).visited++;
-     if(typeof startGenre === 'undefined'){
-       console.log("startGenre is undefined - location: graph.js - line 386");
-       return false;
-    }
     var firstNode = gr.getNode(startGenre);
-    if(typeof firstNode === 'undefined'){
-       console.log("firstNode is undefined - location: graph.js - line 391");
-       return false;
-    }
     firstNode.visited = 1;
     
     return weighedGenres[randomnumber];

@@ -16,13 +16,14 @@ Highcharts.createElement('link', {
 Highcharts.theme = {
    colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#d120a6", "#8900fe","#3872f8","#ff166f"],
    chart: {
-      backgroundColor: {
-         linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-         stops: [
-            [0, '#2a2a2b'],
-            [1, '#3e3e40']
-         ]
-      },
+      // backgroundColor: {
+      //    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+      //    stops: [
+      //       [0, '#2a2a2b'],
+      //       [1, '#3e3e40']
+      //    ]
+      // },
+      backgroundColor: '#333335',
       style: {
          fontFamily: "'Unica One', sans-serif"
       },
@@ -280,7 +281,7 @@ Highcharts.setOptions(Highcharts.theme);
         // add version data
         drillDataLen = data[i].drilldown.data.length;
         for (j = 0; j < drillDataLen; j += 1) {
-            brightness = 0.2 - (j / drillDataLen) / 5;
+            brightness = 0.2 - (j / drillDataLen) / 2;
             versionsData.push({
                 name: data[i].drilldown.categories[j],
                 y: data[i].drilldown.data[j],
@@ -307,6 +308,7 @@ Highcharts.setOptions(Highcharts.theme);
         },
         plotOptions: {
             pie: {
+                borderColor: '#3e3e40',
                 shadow: false,
                 center: ['50%', '50%']
             }
