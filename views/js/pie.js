@@ -345,10 +345,17 @@ console.log("color: " + counter);
             }
         }]
     });
-
+    
+ // $("#currGenre").on('click',function(){
+ //    console.log("currGenre was clicked");
+ // });
 
 };
 
+
+
 function sendEvent(currGenre){
     $("#currGenre").html(currGenre);
+    $("#currGenre").trigger("click");
 }
+
