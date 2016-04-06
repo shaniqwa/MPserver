@@ -25,46 +25,44 @@ console.log("waiting");
 
 var ns = new nextsong(currGenre,uid,mode,user,startGenre);
 
-    async.waterfall([
-    //step1 : create user and get his id
-	function(callback) {
-		ns.clearPlaylist();
-		console.log("length after clear: " + ns.getPlaylistLength());
-		callback();	
-    },
-    //step 2
-    function(callback){
-		for(var i=0; i<times; i++) {
-			ns.getNextSong();
-			require('deasync').sleep(2000);
-		}
-		callback();
-    }
-    ], 
-    //all is done
-    function(err) {
-        if (err) {
-			console.log("error with dj: " + err);
-        }
-		console.log("the playlist is done. length: "+ ns.getPlaylistLength());
-		var result = ns.getPlaylist();
-		res.status(200).json(result);   
-    });
+	async.waterfall([
+	    function(callback){
+	    	ns.clearPlaylist();
+			callNextSong(times,ns,function(err){
+				callback();	
+			});	
+	    }
+	    ], 
+	    //all is done
+	    function(err) {
+	        if (err) {
+				console.log("error with dj: " + err);
+	        }
+			console.log("the playlist is done. length: "+ ns.getPlaylistLength());
+			var result = ns.getPlaylist();
+			res.status(200).json(result);   
+	    });
 
 }
 
-//after we change getNextSong so that it recives a callback, we can use this code instead of the for loop (line 39) 
-//pass i=0 and times= number of times we want to call getNextSong
-function callNextSong(i, times) {
-  if( i < times ) {
-    ns.getNextSong(function(err) {
-      if( err ) {
-        console.log('error: '+err)
-      }
-      else {
-        callNextSong(i+1)
-      }
-    })
+
+function callNextSong(times,ns, callNextSongCallback) {
+	 var inserted = 0;
+  for(var i = 0; i < times; i++) {
+    (function(i) {
+	    ns.getNextSong(function(err) {
+	      if( err ) {
+	        console.log('error: '+err);
+	        callNextSongCallback(err);
+	      }
+	      else {
+	      	console.log("finished running getNextSong, i = " + i);
+	      	if (++inserted == times) {
+       			callNextSongCallback();
+      		}
+	      }
+	    });
+    })(i);
   }
 }
 
