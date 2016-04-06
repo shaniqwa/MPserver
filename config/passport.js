@@ -217,7 +217,7 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields   : ['id','photos', 'emails', 'displayName', 'name'],
+        profileFields   : ['id','picture.type(large)', 'emails', 'displayName', 'name'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
@@ -262,6 +262,7 @@ module.exports = function(passport) {
                 }
                 if(!user.profileImage){
                     user.profileImage = profile.photos[0].value; 
+                    //get a larger photo from facebook : https://graph.facebook.com/<facebook-id>/picture?width=200&height=200&access_token=<facebook-token>
                 }
 
 
