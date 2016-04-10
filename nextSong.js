@@ -3,6 +3,10 @@ var MongoClient = require('mongodb').MongoClient,
 var Random = require('random-js');
 var request = require('sync-request');
 var graphInit = require('./graph');
+var YouTube = require('youtube-node');
+
+
+
 
 //variables 
 var currGenre;
@@ -16,6 +20,9 @@ var ng;
 //var flagFinish;
 var runs = 0;
 var engine = Random.engines.mt19937().autoSeed();
+var youTube = new YouTube();
+
+youTube.setKey('AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk');
 // constructor
 function nextSong(currGenre, user, mode,userGraph, startGenre) {
     this.currGenre = currGenre;
@@ -122,6 +129,25 @@ function pickChoice(choice) {
 
 };
 
+var pushSong =  function (song,callback){
+    //console.log("pushing song : ");
+    var songFull = song.artist.name + " - " + song.name;
+    console.log("full song " + songFull);
+    //console.log(song
+	
+    youTube.search(songFull, 2,  function(error, result) {
+        if (error) {
+            console.log(error);
+        } else {
+
+			console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
+			playlist.push({artistName : song.artist.name, songName : song.name, url : "https://www.youtube.com/watch?v=" + result.items[0].id.videoId });
+			callback();
+        }
+    });
+	
+
+}
 function pickProducerConsumer() {
     var relations = [
         [20, "producers"],
@@ -249,8 +275,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             //console.log("song choosen : ");
                                             console.log("the artist:: "+ chsnSongArtist);
-                                            playlist.push(  chsnSongArtist  );
+                                            pushSong(chsnSongArtist, function() {
                                             callback();
+											});
                                             
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
@@ -268,8 +295,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongSimilar);
-                                            playlist.push(  chsnSongSimilar  );
+                                            pushSong(chsnSongSimilar, function() {
                                             callback();
+											});
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("the playlist:");
                                             //console.log(playlist);
@@ -367,8 +395,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             //console.log("song choosen : ");
                                             
                                             //console.log(chsnSongArtist);
-                                            playlist.push(chsnSongArtist);
+                                            pushSong(chsnSongArtist, function() {
                                             callback();
+											});
                                             //playlist.push( { genrename : currGenre});
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("**changing flag");
@@ -384,8 +413,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongSimilar);
-                                            playlist.push(chsnSongSimilar);
+                                            pushSong(chsnSongSimilar, function() {
                                             callback();
+											});
                                             //playlist.push( { genrename : currGenre});
                                             //console.log("length of playlist:" + playlist.length);
                                             //console.log("**changing flag");
@@ -458,8 +488,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             //console.log("song choosen : ");
                                             //console.log(chsnSongArtist);
-                                            playlist.push(chsnSongArtist);
+                                            pushSong(chsnSongArtist, function() {
                                             callback();
+											});
                                             //console.log("**changing flag");
                                             //flagFinish = 1;
                                             //console.log("the playlist:");
@@ -472,8 +503,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             //console.log(artistSimiliar);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             //console.log("song choosen : ");
-                                            playlist.push(chsnSongSimilar);
+                                            pushSong(chsnSongSimilar, function() {
                                             callback();
+											});
                                             //console.log("**changing flag");
                                             //flagFinish = 1;
                                             //console.log("the playlist*****:" + playlist.length);
