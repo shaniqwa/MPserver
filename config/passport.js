@@ -224,7 +224,7 @@ module.exports = function(passport) {
 
     // facebook will send back the token and profile
     function(req,token, refreshToken, profile, done) {
-        console.log(profile);
+        // console.log(profile);
         // asynchronous
         process.nextTick(function() {
         // check if the user is already logged in
@@ -255,7 +255,7 @@ module.exports = function(passport) {
                 // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
-                console.log("fb token: " + token);
+                // console.log("fb token: " + token);
                 user.FB_RT = refreshToken;
                  if(typeof profile.emails !== 'undefined'){
                     user.FB_email = profile.emails[0].value; 
@@ -292,7 +292,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
     var newUser = new User();
     var url;
     if(platform == "google"){
-        url = "http://localhost:8080/MP/null/" + token;
+        url = "http://52.35.9.144:8082/MP/null/" + token;
         // set all of the relevant information
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
@@ -307,7 +307,8 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.mode = 1;
     // newUser.country = profile._json.picture;    
     }else if(platform == "facebook"){
-        url = "http://localhost:8080/MP/" + token + "/null";
+        console.log("fdsfds");
+        url = "http://52.35.9.144:8082/MP/" + token + "/null";
         // set all of the facebook information in our user model
         newUser.FB_id    = profile.id; // set the users facebook id                   
         newUser.FB_AT = token; // we will save the token that facebook provides to the user   
@@ -339,7 +340,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
             return console.error(err);
           }
             userid = doc.userId;
-            console.log("userid:" + userid);
+            // console.log("userid:" + userid);
             callback();
         });
     },  
@@ -348,6 +349,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 
         request.get(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
+            console.log("success return from ws");
             //fix result to match our pie schema
             var obj = body.toString();
                 obj = JSON.parse(obj);
@@ -363,7 +365,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
             MP.business.genres = obj;
             MP.pleasure.pleasurePieId = userid;
             MP.pleasure.genres = obj;
-            console.log(MP);
+            // console.log(MP);
             callback();
           }else if(error){
             return console.error(error);
@@ -432,7 +434,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 }//end of function 
 
 UpdateMP = function(user,UpdateMPcallback){
-    request.get('http://localhost:8080/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
+    request.get('http://52.35.9.144:8082/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
             var obj = body.toString();

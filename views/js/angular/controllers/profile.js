@@ -8,7 +8,7 @@ profile.controller('profileCtrl', function ($scope, $http) {
 	$scope.mod = model;
 	$scope.init = function(data){
        user = JSON.parse(data);
-       console.log(user); 
+       // console.log(user); 
 
     }; 
 

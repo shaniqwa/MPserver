@@ -3,6 +3,9 @@ var express = require('express'),
 	Controller = require('./Controller'),
     DJ = require('./dj');
 
+var server = require('http').createServer(app);  
+var io = require('socket.io')(server);
+
 var mongoose = require('mongoose');
 
 var configDB = require('./config/database.js');
@@ -19,6 +22,10 @@ var session      = require('express-session');
 
 var async = require("async");
 
+
+
+
+    //===============SCHEMAS================
 var businessPieSchema = require("./schemas/scheme_businessPie.js").businessPieSchema; 
 var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
 
@@ -41,6 +48,26 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 	app.use(flash()); // use connect-flash for flash messages stored in session
 		
 	app.use('/', express.static('./views'));
+
+
+    //===============SOCKET.IO EVENTS===============
+
+io.on('connection', function(client) {  
+    console.log('Client connected...');
+
+    client.on('join', function(data) {
+        console.log(data);
+         // client.emit('messages', 'Hello from server');
+    });
+
+    client.on('messages', function(data) {
+           client.emit('broad', data);
+           client.broadcast.emit('broad',data);
+    });
+
+});
+
+
 
 
 
@@ -97,32 +124,29 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     app.get('/profile', isLoggedIn, function(req, res) {
     	var business;
  		async.waterfall([
-                    //step1 : create user and get his id
-                    function(callback) {
-                        //create user
-                        BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
-				            // if there are any errors, return the error
-				            if (err){
-				                return console.log(err);
-				            }
-				            business = businessPie;
-				            callback();
-				        });
-                    }
-                    ], function(err) {
-                        if (err) {
-                            throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-                        }
-                        console.log('all done');
-  						res.render('profile.ejs', {
-				            user : req.user, // get the user out of session and pass to template
-				            business: business
-				            // pleasure: pleasure;
-				        });
-                    });
-
-    	
-        
+        //find user's pies
+        function(callback) {
+            //create user
+            BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
+	            // if there are any errors, return the error
+	            if (err){
+	                return console.log(err);
+	            }
+	            business = businessPie;
+	            callback();
+	        });
+        }
+        ], function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('all done');
+				res.render('profile.ejs', {
+	            user : req.user, // get the user out of session and pass to template
+	            business: business
+	            // pleasure: pleasure;
+	        });
+        });        
     });
 
     // =====================================
@@ -150,7 +174,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // facebook -------------------------------
 
         // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email'] }));
+        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes'] }));
 
         // handle the callback after facebook has authorized the user
         app.get('/connect/facebook/callback',
@@ -170,6 +194,8 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
                 successRedirect : '/profile',
                 failureRedirect : '/'
             }));
+
+
 // =============================================================================
 // UNLINK ACCOUNTS =============================================================
 // =============================================================================
@@ -189,7 +215,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 
     // facebook -------------------------------
     app.get('/unlink/facebook', function(req, res) {
-        var user            = req.user;
+        var user = req.user;
         user.FB_AT = undefined;
         user.save(function(err) {
             res.redirect('/profile');
@@ -198,7 +224,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 
     // google ---------------------------------
     app.get('/unlink/google', function(req, res) {
-        var user          = req.user;
+        var user = req.user;
         user.YT_AT = undefined;
         user.save(function(err) {
            res.redirect('/profile');
@@ -221,7 +247,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
             }));
 
 
-     // =====================================
+    // =====================================
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
@@ -345,6 +371,6 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     });
 
 //===============PORT=================
-	app.listen(process.env.PORT || 3000);
+	server.listen(process.env.PORT || 3000);
 	console.log("The magic happens on port 3000");
 

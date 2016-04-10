@@ -125,9 +125,38 @@
             </div>
         </div>
 
+    <div class="col-sm-4">
+        <div class="well">
+            <form id="form1">
+                <input type="text" id="chat_input"></input>
+            </form>
+            <button type="submit" form="form1" value="Submit">Submit</button>
+            <div id="future"></div>
+        </div>
+    </div>
     </div>
 
 </div>
  <%- include jsFiles %>
 </body>
+
+<script>  
+
+//on form submmition, input field is broadcasted to all users. on broadcast, insert data to div #future to display it. 
+ var socket = io.connect('http://localhost:3000');
+ socket.on('connect', function(data) {
+    socket.emit('join', 'Hello World from client');
+ });
+ socket.on('broad', function(data) {
+         $('#future').html(data);
+   });
+
+ $('form').submit(function(e){
+    console.log("submit");
+     e.preventDefault();
+     var message = $('#chat_input').val();
+     socket.emit('messages', message);
+ });
+</script>
+
 </html>
