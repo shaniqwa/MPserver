@@ -86,35 +86,34 @@ io.on('connection', function(client) {
     // LOGIN ===============================
     // =====================================
     // show the login form
-    app.get('/login', function(req, res) {
+    // app.get('/login', function(req, res) {
+    //     // render the page and pass in any flash data if it exists
+    //     res.render('login.ejs', { message: req.flash('loginMessage') }); 
+    // });
 
-        // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { message: req.flash('loginMessage') }); 
-    });
+    // // process the login form
+    // app.post('/login', passport.authenticate('local-login', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 
-    // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // // =====================================
+    // // SIGNUP ==============================
+    // // =====================================
+    // // show the signup form
+    // app.get('/signup', function(req, res) {
 
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
-    app.get('/signup', function(req, res) {
+    //     // render the page and pass in any flash data if it exists
+    //     res.render('signup.ejs', { message: req.flash('signupMessage') });
+    // });
 
-        // render the page and pass in any flash data if it exists
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
-    });
-
-    // process the signup form
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // // process the signup form
+    // app.post('/signup', passport.authenticate('local-signup', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 
     // =====================================
     // PROFILE SECTION =====================
@@ -204,14 +203,14 @@ io.on('connection', function(client) {
 // user account will stay active in case they want to reconnect in the future
 
     // local -----------------------------------
-    app.get('/unlink/local', function(req, res) {
-        var user            = req.user;
-        user.email    = undefined;
-        user.password = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
+    // app.get('/unlink/local', function(req, res) {
+    //     var user            = req.user;
+    //     user.email    = undefined;
+    //     user.password = undefined;
+    //     user.save(function(err) {
+    //         res.redirect('/profile');
+    //     });
+    // });
 
     // facebook -------------------------------
     app.get('/unlink/facebook', function(req, res) {
@@ -256,9 +255,12 @@ io.on('connection', function(client) {
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect : '/profile',
             failureRedirect : '/'
-        }));
+        }),function(req, res){
+            console.log(req.user.is_New);
+            if (req.user.is_New) { return res.redirect('/BPwizard'); }
+            res.redirect('/profile');
+        });
 
 
 	// route middleware to make sure a user is logged in
@@ -272,17 +274,10 @@ io.on('connection', function(client) {
 	    res.redirect('/');
 	}
 
-	//Rgister Consumer
-	app.post('/registerConsumer', function (req, res){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		app.set('json spaces', 4);
-		res.set("Content-Type", "application/json");
-		res.status(200);
-
-		var data = {};
-		data = req.body;
-		Controller.registerConsumer(res,data);
+	//Business Pleasure Wizard - a step in registration
+	app.get('/BPwizard', function (req, res){
+            res.render('BPwizard.ejs', {
+            });
 	});
 
 	//Add Song to Favorites
