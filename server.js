@@ -387,7 +387,12 @@ io.on('connection', function(client) {
     });
 
 
-
+     //getProducerStatistics
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
     // getProducerSongs
      app.get('/getProducerSongs/:prodID', 
         function (req, res, next){
