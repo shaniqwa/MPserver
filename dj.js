@@ -50,13 +50,20 @@ function callNextSong(times,ns, callNextSongCallback) {
 	 var inserted = 0;
   for(var i = 0; i < times; i++) {
     (function(i) {
+		while(ns.getPlaylistLength()  != i) 
+		{ //while prev not finished
+		console.log("waiting prev iter to finish");
+		require('deasync').sleep(100);
+}
 	    ns.getNextSong(function(err) {
+		
 	      if( err ) {
 	        console.log('error: '+err);
 	        callNextSongCallback(err);
 	      }
 	      else {
 	      	console.log("finished running getNextSong, i = " + i);
+
 	      	if (++inserted == times) {
        			callNextSongCallback();
       		}
