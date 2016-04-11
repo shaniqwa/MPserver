@@ -22,7 +22,8 @@ var usersSchema = new Schema({
     profileImage: String,
     mode: Number,
     registered: {type : Date, default : Date.now},
-    typeOfUser: String
+    typeOfUser: String,
+    is_New: Number
 });
 
 // methods ======================

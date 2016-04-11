@@ -10,7 +10,8 @@ var producerSongsSchema = new Schema({
             albumName: String,
             duration: Number,
             year: Number,
-            artwork: String
+            artwork: String,
+            url: String
         }
     ]
 });
