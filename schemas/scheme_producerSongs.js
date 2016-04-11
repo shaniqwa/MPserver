@@ -15,3 +15,6 @@ var producerSongsSchema = new Schema({
         }
     ]
 });
+
+
+exports.producerSongsSchema = producerSongsSchema; 

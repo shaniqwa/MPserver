@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var producerSongsGeneralSchema = new Schema({
-producerId: {type: Number, index: true },
+userId: {type: Number, index: true },
     songs: [
         {
             songId: Number,
@@ -19,11 +19,11 @@ producerId: {type: Number, index: true },
             songId: Number
         }
     ],
-    totalCounter: Number,
+    totalCounter: Number,  //
     internalCounter: Number,
     ageGroup1Coutner: Number,
     ageGroup2Counter: Number,
-    counterLocal: Number,
+    counterLocal: Number,  //number of listens in our system in the current country
     FBHISTORY: {
         history: String
     },
@@ -31,3 +31,5 @@ producerId: {type: Number, index: true },
         history: String
     }
 });
+
+exports.producerSongsGeneralSchema = producerSongsGeneralSchema; 
