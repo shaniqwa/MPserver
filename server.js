@@ -365,6 +365,8 @@ io.on('connection', function(client) {
         DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre);
     });
 
+
+    //getProducerStatistics
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -383,6 +385,9 @@ io.on('connection', function(client) {
             Controller.getProducerStatistics(res,req.params.prodID);
     });
 
+
+
+    // getProducerSongs
      app.get('/getProducerSongs/:prodID', 
         function (req, res, next){
             res.header("Access-Control-Allow-Origin", "*");
@@ -393,6 +398,19 @@ io.on('connection', function(client) {
         function (req, res) {
             console.log("request for getProducerStatistics with user id " +req.params.prodID);
             Controller.getProducerSongs(res,req.params.prodID);
+    });
+
+    //process Wizard Form
+    app.post('/addToFavorites', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.processWizardForm(res,data);
     });
 
 
