@@ -34,11 +34,11 @@ profile.controller('profileCtrl', function ($scope, $http) {
 
            }
            for(i in data){
-           	   if(typeof data[i].artist === 'undefined'){
-	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName});
+           	   if(typeof data[i].artistName === 'undefined'){
+	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork});
 	           }
 	           else{
-	           	$scope.track.push({artistName: data[i].artist.name, songName: data[i].name});
+	           	$scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url});
 	           }
 	           	  
 	       }
