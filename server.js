@@ -1,6 +1,7 @@
 var express = require('express'),
 	app = express(),
 	Controller = require('./Controller'),
+    ProducerController = require('./ProducerController'),
     DJ = require('./dj');
 
 var server = require('http').createServer(app);  
@@ -382,7 +383,7 @@ io.on('connection', function(client) {
 
         function (req, res) {
             console.log("request for getProducerStatistics with user id " +req.params.prodID);
-            Controller.getProducerStatistics(res,req.params.prodID);
+            ProducerController.getProducerStatistics(res,req.params.prodID);
     });
 
 
@@ -397,11 +398,11 @@ io.on('connection', function(client) {
 
         function (req, res) {
             console.log("request for getProducerStatistics with user id " +req.params.prodID);
-            Controller.getProducerSongs(res,req.params.prodID);
+            ProducerController.getProducerSongs(res,req.params.prodID);
     });
 
     //process Wizard Form
-    app.post('/addToFavorites', function (req, res){
+    app.post('/processWizardForm', function (req, res){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         app.set('json spaces', 4);
