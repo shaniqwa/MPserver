@@ -138,8 +138,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                          if(typeof this.related.genres[y][genreNameTemp] === 'undefined'){
                          }
                          else{
-                           for(w in this.related.genres[y][genreNameTemp]){
-                             for(p in structure.nodes){
+                            
                                if (typeof gr.getNode(genreNameTemp) === 'undefined'){
                                  gr.nodes.push({name:genreNameTemp , percent:genrePercentTemp , visited:0, counter:0});
 
@@ -162,9 +161,9 @@ graph.prototype.connectDB = function(pieId, mode) {
                                 var someNode = gr.getNode(genreNameTemp);
                                 someNode.percent = genrePercentTemp;
                                }
-                             }
+                            
                            
-                           }
+                          
                          }
                       }
                     }
@@ -242,9 +241,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                          if(typeof this.related.genres[j][genreNameTemp] === 'undefined'){
                          }
                          else{
-                           for(k in this.related.genres[j][genreNameTemp]){
                              
-                             for(p in structure.nodes){
                                if (typeof gr.getNode(genreNameTemp) === 'undefined'){
                                  gr.nodes.push({name:genreNameTemp , percent:genrePercentTemp , visited:0, counter:0});
                                 
@@ -267,8 +264,8 @@ graph.prototype.connectDB = function(pieId, mode) {
                                 var someNode = gr.getNode(genreNameTemp);
                                 someNode.percent = genrePercentTemp;
                                }
-                             }
-                           }
+                            
+                          
                          }
                       }
                     }
@@ -297,6 +294,14 @@ graph.prototype.connectDB = function(pieId, mode) {
 
 /************NextGenres for NextSong use*************/   
 graph.prototype.nextGenre = function(userId, startGenre, currGenre) {
+  console.log(" ");
+  console.log(" ");
+  console.log("*************************************");
+  console.log("file graph.js function nextGenre -->");
+  console.log("*************************************");
+  console.log("userId: " + userId + " startGenre: " + startGenre + " currGenre: " + currGenre);
+  console.log(" ");
+  console.log(" ");
     if(this.nextNode(currGenre)){ //if there is a circle in the graph and there are no nodes connected
        //return to stas genre after random
           return this.getRandomGenre(startGenre, currGenre);
@@ -339,7 +344,19 @@ graph.prototype.findCycle = function(startGenre, currGenre) {
        return true;
     }
     else{
+      console.log(" ");
+      console.log(" ");
+      console.log("*************************************************");
       console.log("#: nextGenre of " + currGenre + " creats a cycle");
+      console.log("print cycle: ")
+      for(b in gr.nodes){
+        if (gr.nodes[b].visited == 1){
+          console.log(gr.nodes[b].name + " ");
+        }
+      }
+      console.log("*************************************************");
+      console.log(" ");
+      console.log(" ");
       return false;
     }
 }
