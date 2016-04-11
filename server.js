@@ -365,6 +365,37 @@ io.on('connection', function(client) {
         DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre);
     });
 
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
+    //route that recives parameter using defined parameters
+    app.get('/getProducerStatistics/:prodID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for getProducerStatistics with user id " +req.params.prodID);
+            Controller.getProducerStatistics(res,req.params.prodID);
+    });
+
+     app.get('/getProducerSongs/:prodID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for getProducerStatistics with user id " +req.params.prodID);
+            Controller.getProducerSongs(res,req.params.prodID);
+    });
+
+
 //===============PORT=================
 	server.listen(process.env.PORT || 3000);
 	console.log("The magic happens on port 3000");
