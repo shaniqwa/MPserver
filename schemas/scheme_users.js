@@ -12,12 +12,12 @@ var usersSchema = new Schema({
     email:  { type: String, unique: true },
     FB_AT: String,
     FB_RT: String,
-    FB_email: String, //new
-    FB_id : String,    //new
+    FB_email: String, 
+    FB_id : String,    
     YT_AT: String,
     YT_RT: String,
-    YT_email: String, //new
-    YT_id : String,    //new
+    YT_email: String, 
+    YT_id : String,   
     country: String,
     profileImage: String,
     mode: Number,
