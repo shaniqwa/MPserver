@@ -26,6 +26,12 @@ var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
 var blacklistSchema = require("./schemas/scheme_blacklist.js").blacklistSchema; 
 var BlackList = mongoose.model('Black_list', blacklistSchema, 'Black_list');
 
+var BusinessGraphSchema = require("./schemas/scheme_BusinessGraph.js").BusinessGraphSchema; 
+var BusinessGraph = mongoose.model('Business_graph', BusinessGraphSchema, 'Business_graph');
+
+var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureGraphSchema; 
+var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
+
 
 //===============FUNCTIONS===============
 
@@ -136,12 +142,15 @@ exports.addToBlackList = function(res,data) {
 	});
 }
 
+//safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
 	User.findOne({ userId: userID }).remove().exec();
 	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
 	Favorites.findOne({ userId: userID }).remove().exec();
 	BlackList.findOne({ userId: userID }).remove().exec();
+	BusinessGraph.findOne({ pieId: userID }).remove().exec();
+	PleasureGraph.findOne({ pieId: userID }).remove().exec();
 	res.status(200).json("User has been deleted " + userID);
 }
 
