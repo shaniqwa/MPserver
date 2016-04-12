@@ -6,6 +6,16 @@
      <script src="js/pie.js"></script>
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
+        .nav-tabs li a{
+           color:#ffffff;
+        }
+        .tab-content div{
+            position: relative;
+        }
+        .highcharts-container{
+            margin: 0 auto;
+        }
+
     </style>
 </head>
 <body>
@@ -72,12 +82,65 @@
                             <option value="P" selected="selected">Pleasure</option>
                             <option value="B">Business</option>
                         </select>
+                        
+                         <div class="">
+                         
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#profile">Profile</a></li>
+                            <li><a href="#favorites">Favorites</a></li>
+                            <li><a href="#following">Following</a></li>
+                            <li><a href="#followers">Followers</a></li>
+                            <li><a href="#recommended">Recommended</a></li>
+                            <li><a href="#statistics">Statistics</a></li>
+                            <li><a href="#mySongs">My Songs</a></li>
+                          </ul>
 
-                        <div id="container" style="width: 100%; height: 500px; margin: 0 auto"></div>
-                        <script type='text/javascript'>
-                            var data =<%-JSON.stringify( business.genres)%>
-                            drawPie(data);
+                          <div class="tab-content">
+                             <div id="profile" class="tab-pane fade in active">
+                              <h3>profile</h3>
+                              <div id="container" style=" height: 500px; margin: 0 auto"></div>
+                                <script type='text/javascript'>
+                                    var data =<%-JSON.stringify( business.genres)%>
+                                    drawPie(data);
+                                </script>
+                            </div>
+                            <div id="favorites" class="tab-pane fade">
+                              <h3>favorites</h3>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </div>
+                            <div id="following" class="tab-pane fade">
+                              <h3>following</h3>
+                              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            </div>
+                            <div id="followers" class="tab-pane fade">
+                              <h3>Followers</h3>
+                              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                            </div>
+                            <div id="recommended" class="tab-pane fade">
+                              <h3>Recommended</h3>
+                              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                            </div>
+                             <div id="statistics" class="tab-pane fade">
+                              <h3>statistics</h3>
+                              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                            </div>
+                             <div id="mySongs" class="tab-pane fade">
+                              <h3>mySongs</h3>
+                              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <script>
+                        $(document).ready(function(){
+                            $(".nav-tabs a").click(function(){
+                                $(this).tab('show');
+                            });
+                        });
                         </script>
+
+
+                        
 <!--                             <table>
                             <% for(var i=0; i < business.genres.length; i++) { %>
                                <tr>
