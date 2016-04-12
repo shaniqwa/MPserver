@@ -8,8 +8,12 @@ userId: {type: Number, index: true },
             songId: Number,
             counterTotal: Number,
             counterInternal: Number,
-            counterAgeGroup1: Number,
-            counterAgeGroup2: Number,
+            counterAgeGroup1: Number,    //14 and less
+            counterAgeGroup2: Number,    //15-24
+            counterAgeGroup3: Number,    //25-34
+            counterAgeGroup4: Number,    //35-44
+            counterAgeGroup5: Number,    //45-54
+            counterAgeGroup6: Number,    //55+
             counterLocal: Number
         }
     ],
@@ -21,8 +25,12 @@ userId: {type: Number, index: true },
     ],
     totalCounter: Number,  //
     internalCounter: Number,
-    ageGroup1Coutner: Number,
-    ageGroup2Counter: Number,
+    ageGroup1Coutner: Number,  //14 and less
+    ageGroup2Counter: Number,  //15-24
+    ageGroup3Coutner: Number,  //25-34
+    ageGroup4Counter: Number,  //35-44
+    ageGroup5Coutner: Number,  //45-54
+    ageGroup6Counter: Number,  //55+
     counterLocal: Number,  //number of listens in our system in the current country
     FBHISTORY: {
         history: String
