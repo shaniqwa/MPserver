@@ -122,7 +122,8 @@ io.on('connection', function(client) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-    	var business;
+    	var business, pleasure;
+
  		async.waterfall([
         //find user's pies
         function(callback) {
@@ -135,6 +136,17 @@ io.on('connection', function(client) {
 	            business = businessPie;
 	            callback();
 	        });
+        },
+        function(callback) {
+            //create user
+            PleasurePie.findOne({ 'pleasurePieId' :  req.user.userId }, function(err, pleasurePie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                pleasure = pleasurePie;
+                callback();
+            });
         }
         ], function(err) {
             if (err) {
@@ -143,8 +155,8 @@ io.on('connection', function(client) {
             console.log('all done');
 				res.render('profile.ejs', {
 	            user : req.user, // get the user out of session and pass to template
-	            business: business
-	            // pleasure: pleasure;
+	            business: business,
+	            pleasure: pleasure
 	        });
         });        
     });
@@ -277,7 +289,9 @@ io.on('connection', function(client) {
 
 	//Business Pleasure Wizard - a step in registration
 	app.get('/BPwizard', function (req, res){
+        console.log("user id: " +req.user.userId);
             res.render('BPwizard.ejs', {
+                userID : req.user.userId
             });
 	});
 
@@ -448,7 +462,7 @@ io.on('connection', function(client) {
 
         var data = {};
         data = req.body;
-        Controller.processWizardForm(res,data);
+        Controller.processWizardForm(req,res,data);
     });
 
 
