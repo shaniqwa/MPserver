@@ -30,8 +30,10 @@
              <div ng-repeat="x in track"> 
                        
                         <div style="padding-top:10px">
-                            <div class="name">{{x.artistName}}</div>
-                            <div class="location">{{x.songName}}</div>
+                            <div class="name">Artist: {{x.artistName}}</div>
+                            <div class="location">Song: {{x.songName}}</div>
+                            <div class="location"><a href="{{x.url}}" target="_blank">{{x.url}}</a></div>
+                            <hr>
                         </div>
                        
               </div>     
@@ -64,6 +66,13 @@
 
 
                         %>
+
+                        <br><br>
+                        <select id="list">
+                            <option value="P">Pleasure
+                            <option value="B">Business
+                        </select>
+
                         <div id="container" style="width: 100%; height: 500px; margin: 0 auto"></div>
                         <script type='text/javascript'>
                             var data =<%-JSON.stringify( business.genres)%>
@@ -125,9 +134,55 @@
             </div>
         </div>
 
+    <div class="col-sm-4">
+        <div class="well">
+            <form id="form1">
+                <input type="text" id="chat_input"></input>
+            </form>
+            <button type="submit" form="form1" value="Submit">Submit</button>
+            <div id="future"></div>
+        </div>
+    </div>
     </div>
 
 </div>
  <%- include jsFiles %>
 </body>
+
+<script>  
+$(function () {
+
+    var businessData =<%-JSON.stringify( business.genres)%>
+    var pleasureData =<%-JSON.stringify( pleasure.genres)%>
+
+    drawPie(pleasureData);
+
+    $("#list").change(function() {
+        if ($("#list").val() == "P") {
+            drawPie(pleasureData);
+            // $.get('/dough/includes/live-chart.php?mode=month'
+        } else {
+            drawPie(businessData);
+            // $.get('/dough/includes/live-chart.php?mode=newmode'
+        }   
+    });
+
+});
+//on form submmition, input field is broadcasted to all users. on broadcast, insert data to div #future to display it. 
+ var socket = io.connect('http://localhost:3000');
+ socket.on('connect', function(data) {
+    socket.emit('join', 'Hello World from client');
+ });
+ socket.on('broad', function(data) {
+         $('#future').html(data);
+   });
+
+ $('form').submit(function(e){
+    console.log("submit");
+     e.preventDefault();
+     var message = $('#chat_input').val();
+     socket.emit('messages', message);
+ });
+</script>
+
 </html>

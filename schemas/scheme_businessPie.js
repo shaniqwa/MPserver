@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var businessPieSchema = new Schema({
 	businessPieId: {type: Number,index: true },
+    preferences: [{ type: String}],
     genres: [
         {
         	category : String,

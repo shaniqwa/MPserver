@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var pleasurePieSchema = new Schema({
 	pleasurePieId: {type: Number,index: true },
+    preferences: [{ type: String}],
     genres: [
         {
         	category: String,

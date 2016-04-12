@@ -9,6 +9,7 @@ mongoose.connect(configDB.url); // connect to our database
 
 var async = require("async");
 var request = require('request');
+var math = require('mathjs');
 
 //SCHEMAS
 // load up the user model
@@ -57,56 +58,56 @@ module.exports = function(passport) {
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
 
-    passport.use('local-signup', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField : 'email',
-        passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
-    },
-    function(req, email, password, done) {
-        // asynchronous
-        // User.findOne wont fire unless data is sent back
-        process.nextTick(function() {
+    // passport.use('local-signup', new LocalStrategy({
+    //     // by default, local strategy uses username and password, we will override with email
+    //     usernameField : 'email',
+    //     passwordField : 'password',
+    //     passReqToCallback : true // allows us to pass back the entire request to the callback
+    // },
+    // function(req, email, password, done) {
+    //     // asynchronous
+    //     // User.findOne wont fire unless data is sent back
+    //     process.nextTick(function() {
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
-            // if there are any errors, return the error
-            if (err)
-                return done(err);
+    //     // find a user whose email is the same as the forms email
+    //     // we are checking to see if the user trying to login already exists
+    //     User.findOne({ 'email' :  email }, function(err, user) {
+    //         // if there are any errors, return the error
+    //         if (err)
+    //             return done(err);
 
-            // check to see if theres already a user with that email
-            if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            } else {
+    //         // check to see if theres already a user with that email
+    //         if (user) {
+    //             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+    //         } else {
 
-                // if there is no user with that email
-                // create the user
-                var newUser = new User();
+    //             // if there is no user with that email
+    //             // create the user
+    //             var newUser = new User();
 
-                // set the user's local credentials
-                newUser.email    = email;
-                newUser.password = newUser.generateHash(password);
-                newUser.username = req.body.username;
-                newUser.firstName = req.body.firstName;
-                newUser.lastName = req.body.lastName;
-                newUser.ageGroup = req.body.ageGroup;
-                newUser.country = req.body.country;
+    //             // set the user's local credentials
+    //             newUser.email    = email;
+    //             newUser.password = newUser.generateHash(password);
+    //             newUser.username = req.body.username;
+    //             newUser.firstName = req.body.firstName;
+    //             newUser.lastName = req.body.lastName;
+    //             newUser.ageGroup = req.body.ageGroup;
+    //             newUser.country = req.body.country;
 
 
-                // save the user
-                newUser.save(function(err) {
-                    if (err)
-                        throw err;
-                    return done(null, newUser);
-                });
-            }
+    //             // save the user
+    //             newUser.save(function(err) {
+    //                 if (err)
+    //                     throw err;
+    //                 return done(null, newUser);
+    //             });
+    //         }
 
-        });    
+    //     });    
 
-        });
+    //     });
 
-    }));
+    // }));
 
      // =========================================================================
     // LOCAL LOGIN =============================================================
@@ -114,34 +115,34 @@ module.exports = function(passport) {
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
 
-    passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField : 'email',
-        passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
-    },
-    function(req, email, password, done) { // callback with email and password from our form
+    // passport.use('local-login', new LocalStrategy({
+    //     // by default, local strategy uses username and password, we will override with email
+    //     usernameField : 'email',
+    //     passwordField : 'password',
+    //     passReqToCallback : true // allows us to pass back the entire request to the callback
+    // },
+    // function(req, email, password, done) { // callback with email and password from our form
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
-            // if there are any errors, return the error before anything else
-            if (err)
-                return done(err);
+    //     // find a user whose email is the same as the forms email
+    //     // we are checking to see if the user trying to login already exists
+    //     User.findOne({ 'email' :  email }, function(err, user) {
+    //         // if there are any errors, return the error before anything else
+    //         if (err)
+    //             return done(err);
 
-            // if no user is found, return the message
-            if (!user)
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+    //         // if no user is found, return the message
+    //         if (!user)
+    //             return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
 
-            // if the user is found but the password is wrong
-            if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+    //         // if the user is found but the password is wrong
+    //         if (!user.validPassword(password))
+    //             return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
-            // all is well, return successful user
-            return done(null, user);
-        });
+    //         // all is well, return successful user
+    //         return done(null, user);
+    //     });
 
-    }));
+    // }));
 
 
     // =========================================================================
@@ -193,15 +194,20 @@ module.exports = function(passport) {
                 user.save(function(err) {
                     if (err)
                         throw err;
-                    if(user.FB_AT != null){
-                        UpdateMP(user, function(err,callback){
-                            if(err){
-                                return console.log(err);
-                            }
-                            return done(null, user);    
-                        });                        
+                    if(user.is_New == 1){
+                            return done(null, user);
+                    }else{
+                        if(user.FB_AT != null){
+                            UpdateMP(user, function(err,callback){
+                                if(err){
+                                    return console.log(err);
+                                }
+                                return done(null, user);    
+                            }); 
+                        }
                     }
                 });
+                //done save user
             }
         });
 
@@ -217,14 +223,14 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields   : ['id','photos', 'emails', 'displayName', 'name'],
+        profileFields   : ['id','picture.type(large)', 'emails', 'displayName', 'name'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
 
     // facebook will send back the token and profile
     function(req,token, refreshToken, profile, done) {
-        console.log(profile);
+        // console.log(profile);
         // asynchronous
         process.nextTick(function() {
         // check if the user is already logged in
@@ -255,13 +261,14 @@ module.exports = function(passport) {
                 // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
-                console.log("fb token: " + token);
+                // console.log("fb token: " + token);
                 user.FB_RT = refreshToken;
                  if(typeof profile.emails !== 'undefined'){
                     user.FB_email = profile.emails[0].value; 
                 }
                 if(!user.profileImage){
                     user.profileImage = profile.photos[0].value; 
+                    //get a larger photo from facebook : https://graph.facebook.com/<facebook-id>/picture?width=200&height=200&access_token=<facebook-token>
                 }
 
 
@@ -269,15 +276,20 @@ module.exports = function(passport) {
                 user.save(function(err) {
                     if (err)
                         throw err;
-
-                        UpdateMP(user, function(err,callback){
-                            if(err){
-                                return console.log(err);
-                            }
-                            return done(null, user);    
-                        });                        
-
+                    if(user.is_New == 1){
+                            return done(null, user);
+                    }else{
+                        if(user.YT_AT != null){
+                            UpdateMP(user, function(err,callback){
+                                if(err){
+                                    return console.log(err);
+                                }
+                                return done(null, user);    
+                            }); 
+                        }
+                    }
                 });
+                //done save user
             }
         });
 
@@ -290,8 +302,16 @@ module.exports = function(passport) {
 registerNewUser = function(platform, profile, token , refreshToken , NewUserCallback){
     var newUser = new User();
     var url;
+
+    //same for both platforms
+    newUser.mode = 1;
+    newUser.country = "Israel";         //should not be hard coded
+    newUser.typeOfUser = "Consumer";    //should not be hard coded
+    newUser.is_New = 1;
+
+    //google
     if(platform == "google"){
-        url = "http://localhost:8080/MP/null/" + token;
+        url = "http://52.35.9.144:8082/MP/null/" + token;
         // set all of the relevant information
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
@@ -302,11 +322,8 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.firstName = profile.name.givenName;
         newUser.lastName = profile.name.familyName;
         newUser.profileImage = profile._json.picture;
-        newUser.typeOfUser = "Consumer";
-        newUser.mode = 1;
-    // newUser.country = profile._json.picture;    
     }else if(platform == "facebook"){
-        url = "http://localhost:8080/MP/" + token + "/null";
+        url = "http://52.35.9.144:8082/MP/" + token + "/null";
         // set all of the facebook information in our user model
         newUser.FB_id    = profile.id; // set the users facebook id                   
         newUser.FB_AT = token; // we will save the token that facebook provides to the user   
@@ -319,8 +336,6 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.firstName = profile.name.givenName;
         newUser.lastName = profile.name.familyName;
         newUser.profileImage = profile.photos[0].value; 
-        newUser.typeOfUser = "Consumer";
-        newUser.mode = 1;
     }
     
 
@@ -338,63 +353,14 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
             return console.error(err);
           }
             userid = doc.userId;
-            console.log("userid:" + userid);
+            // console.log("userid:" + userid);
             callback();
         });
     },  
-    //step 2 : build MP
-    function(callback) {
-
-        request.get(url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            //fix result to match our pie schema
-            var obj = body.toString();
-                obj = JSON.parse(obj);
-            for(i in obj){
-                obj[i].genreName = obj[i].genre;
-                delete obj[i].genre;
-                delete obj[i].counter;
-                obj[i].producers = [];
-            }
-            // console.log(body); // Show the HTML for the Google homepage. 
-            body = JSON.stringify([obj]);
-            MP.business.businessPieId = userid;
-            MP.business.genres = obj;
-            MP.pleasure.pleasurePieId = userid;
-            MP.pleasure.genres = obj;
-            console.log(MP);
-            callback();
-          }else if(error){
-            return console.error(error);
-          }
-        });
-    },
-     //step 3 : create user's business pie, pleasure pie, favorites list and black list.
+     //step 2 : create user's favorites list and black list.
     function(callback) {
 
         async.parallel([
-            function(callback) {
-                var business_pie = new BusinessPie(MP.business);
-                //Save user's business pie
-                business_pie.save(function (err, doc) {
-                  if (err) {
-                    res.status(200).json("error saving user business pie: " + err.message);
-                    return console.error(err);
-                  }
-                  callback();
-                });
-            },
-            function(callback) {
-                var pleasure_pie = new PleasurePie(MP.pleasure);
-                //Save user's pleasure pie
-                pleasure_pie.save(function (err, doc) {
-                  if (err) {
-                    res.status(200).json("error saving user pleasure pie: " + err.message);
-                    return console.error(err);
-                  }
-                  callback();
-                });
-            },
             function(callback) {
                 var favorites = new Favorites({ userId : userid });
                 //create ampty favorites 
@@ -431,7 +397,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 }//end of function 
 
 UpdateMP = function(user,UpdateMPcallback){
-    request.get('http://localhost:8080/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
+    request.get('http://52.35.9.144:8082/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
             var obj = body.toString();
@@ -442,8 +408,15 @@ UpdateMP = function(user,UpdateMPcallback){
                 delete obj[i].counter;
                 obj[i].producers = [];
             }
-            // console.log(body); // Show the HTML for the Google homepage. 
             body = JSON.stringify([obj]);
+
+            var arrB = [];
+            var arrP = [];
+
+            for(i in obj){
+                arrB.push(obj[i]);
+                arrP.push(obj[i]);
+            }
 
             async.parallel([
                 function(callback) {
@@ -453,14 +426,43 @@ UpdateMP = function(user,UpdateMPcallback){
                             callback(err);
                           } 
                           //found pie
-                          doc.genres = obj; //update pie
-                          doc.save(function (err, doc) {    //save pie
-                           if (err) {
-                             res.status(200).json("error saving user business pie: " + err.message);
-                             return console.error(err);
-                           }
-                           callback();
-                        });
+                          
+                          //update pie: compare data found in initial MP with user's preferences
+                          for(var i = arrB.length - 1; i >= 0; i--){
+                                //check if category is in prefs
+                                if (doc.preferences.indexOf(arrB[i].category) > -1) {
+                                    //In the array! all good
+                                    console.log("in business array: "+ arrB[i].category);
+                                } else {
+                                    //Not in the array, take this genre out of pie
+                                    console.log("NOT in business array: "+ arrB[i].category);
+                                    arrB.splice(i, 1);  
+                                }
+                            }
+
+                            //calc new percentages for each genre
+                            var Btotal = 0, Ptotal = 0;
+                            for(i in arrB){
+                                Btotal+= arrB[i].artists.length;
+                            }
+                            console.log("b total: " + Btotal);
+
+                            var len = arrB.length;
+                            for(var k = 0; k<len; k++){
+                                arrB[k].percent = (arrB[k].artists.length / Btotal) * 100;
+                                arrB[k].percent = math.round(arrB[k].percent, 2);
+                            }//done calc
+
+                            //update genres in pie
+                            doc.genres = arrB; 
+                            //save pie
+                            doc.save(function (err, doc) {    
+                               if (err) {
+                                 res.status(200).json("error saving user business pie: " + err.message);
+                                 return console.error(err);
+                               }
+                                callback();
+                            });
                     });
                 },  
                 function(callback) {
@@ -470,8 +472,36 @@ UpdateMP = function(user,UpdateMPcallback){
                             callback(err);
                           } 
                           //found pie
-                          doc.genres = obj; //update pie
-                          doc.save(function (err, doc) {    //save pie
+                        //update pie: compare data found in initial MP with user's preferences
+                          for(var i = arrP.length - 1; i >= 0; i--){
+                                //check if category is in prefs
+                                if (doc.preferences.indexOf(arrP[i].category) > -1) {
+                                    //In the array! all good
+                                    console.log("in business array: "+ arrP[i].category);
+                                } else {
+                                    //Not in the array, take this genre out of pie
+                                    console.log("NOT in business array: "+ arrP[i].category);
+                                    arrP.splice(i, 1);  
+                                }
+                            }
+
+                            //calc new percentages for each genre
+                            var Btotal = 0, Ptotal = 0;
+                            for(i in arrP){
+                                Btotal+= arrP[i].artists.length;
+                            }
+                            console.log("b total: " + Btotal);
+
+                            var len = arrP.length;
+                            for(var k = 0; k<len; k++){
+                                arrP[k].percent = (arrP[k].artists.length / Btotal) * 100;
+                                arrP[k].percent = math.round(arrP[k].percent, 2);
+                            }//done calc
+                            
+                            //update genres in pie
+                            doc.genres = arrP; 
+                            //save pie
+                          doc.save(function (err, doc) {    
                            if (err) {
                              res.status(200).json("error saving user pleasure pie: " + err.message);
                              return console.error(err);

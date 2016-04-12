@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+    <title>Music Profile</title>
+    <%- include head %>
+    <style>
+        body        { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="col-sm-12 text-center">
+        <div class="well">
+            <h1>Business Pleasure Wizard</h1>
+        </div>
+    </div>
+
+    <!-- BEGIN FORM -->
+    <form action="/processWizardForm" method="post" id="wizard">
+    <div class="col-sm-6">
+        <div class="well">
+            <h2>Business</h2>
+            <hr />
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_rock" value="Rock" checked>Rock</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_pop"  value="Pop" checked>Pop</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_rnb"  value="R&amp;B" checked>R&amp;B</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_classical"  value="Classical" checked>Classical</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_country"  value="Country" checked>Country</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_elctronic"  value="Electronic" checked>Electronic</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_latin"  value="Latin" checked>Latin</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_blues" value="Blues" checked>Blues</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_world"  value="World" checked>World</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_punk"  value="Punk" checked>Punk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_metal"  value="Metal" checked>Metal</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_jazz"  value="Jazz" checked>Jazz</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_folk"  value="Folk" checked>Folk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_reggae"  value="Reggae" checked>Reggae</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_hiphop"  value="Hip Hop" checked>Hip Hop</label>
+                </div>
+        </div>
+    </div>
+
+        <div class="col-sm-6">
+        <div class="well">
+            <h2>Pleasure</h2>
+            <hr />
+            <!-- begin form -->
+            
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_rock" value="Rock" checked>Rock</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_pop"  value="Pop" checked>Pop</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_rnb"  value="R&amp;B" checked>R&amp;B</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_classical"  value="Classical" checked>Classical</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_country"  value="Country" checked>Country</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_elctronic"  value="Electronic" checked>Electronic</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_latin"  value="Latin" checked>Latin</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_blues" value="Blues" checked>Blues</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_world"  value="World" checked>World</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_punk"  value="Punk" checked>Punk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_metal"  value="Metal" checked>Metal</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_jazz"  value="Jazz" checked>Jazz</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_folk"  value="Folk" checked>Folk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_reggae"  value="Reggae" checked>Reggae</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_hiphop"  value="Hip Hop" checked>Hip Hop</label>
+                </div>
+        </div>
+    </div>
+    <input type="hidden" name="userID" value="<%= userID %>">
+    </form>
+    <button type="submit" form="wizard" value="Submit">Submit</button>
+    <!-- END FORM -->
+</div>
+<%- include jsFiles %>
+</body>
+</html>

@@ -1,7 +1,11 @@
 var express = require('express'),
 	app = express(),
 	Controller = require('./Controller'),
+    ProducerController = require('./ProducerController'),
     DJ = require('./dj');
+
+var server = require('http').createServer(app);  
+var io = require('socket.io')(server);
 
 var mongoose = require('mongoose');
 
@@ -19,6 +23,10 @@ var session      = require('express-session');
 
 var async = require("async");
 
+
+
+
+    //===============SCHEMAS================
 var businessPieSchema = require("./schemas/scheme_businessPie.js").businessPieSchema; 
 var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
 
@@ -43,6 +51,26 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 	app.use('/', express.static('./views'));
 
 
+    //===============SOCKET.IO EVENTS===============
+
+io.on('connection', function(client) {  
+    console.log('Client connected...');
+
+    client.on('join', function(data) {
+        console.log(data);
+         // client.emit('messages', 'Hello from server');
+    });
+
+    client.on('messages', function(data) {
+           client.emit('broad', data);
+           client.broadcast.emit('broad',data);
+    });
+
+});
+
+
+
+
 
 	//===============ROUTES===============
 
@@ -59,35 +87,34 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // LOGIN ===============================
     // =====================================
     // show the login form
-    app.get('/login', function(req, res) {
+    // app.get('/login', function(req, res) {
+    //     // render the page and pass in any flash data if it exists
+    //     res.render('login.ejs', { message: req.flash('loginMessage') }); 
+    // });
 
-        // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { message: req.flash('loginMessage') }); 
-    });
+    // // process the login form
+    // app.post('/login', passport.authenticate('local-login', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 
-    // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // // =====================================
+    // // SIGNUP ==============================
+    // // =====================================
+    // // show the signup form
+    // app.get('/signup', function(req, res) {
 
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
-    app.get('/signup', function(req, res) {
+    //     // render the page and pass in any flash data if it exists
+    //     res.render('signup.ejs', { message: req.flash('signupMessage') });
+    // });
 
-        // render the page and pass in any flash data if it exists
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
-    });
-
-    // process the signup form
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // // process the signup form
+    // app.post('/signup', passport.authenticate('local-signup', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 
     // =====================================
     // PROFILE SECTION =====================
@@ -95,34 +122,43 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-    	var business;
- 		async.waterfall([
-                    //step1 : create user and get his id
-                    function(callback) {
-                        //create user
-                        BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
-				            // if there are any errors, return the error
-				            if (err){
-				                return console.log(err);
-				            }
-				            business = businessPie;
-				            callback();
-				        });
-                    }
-                    ], function(err) {
-                        if (err) {
-                            throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-                        }
-                        console.log('all done');
-  						res.render('profile.ejs', {
-				            user : req.user, // get the user out of session and pass to template
-				            business: business
-				            // pleasure: pleasure;
-				        });
-                    });
+    	var business, pleasure;
 
-    	
-        
+ 		async.waterfall([
+        //find user's pies
+        function(callback) {
+            //create user
+            BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
+	            // if there are any errors, return the error
+	            if (err){
+	                return console.log(err);
+	            }
+	            business = businessPie;
+	            callback();
+	        });
+        },
+        function(callback) {
+            //create user
+            PleasurePie.findOne({ 'pleasurePieId' :  req.user.userId }, function(err, pleasurePie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                pleasure = pleasurePie;
+                callback();
+            });
+        }
+        ], function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('all done');
+				res.render('profile.ejs', {
+	            user : req.user, // get the user out of session and pass to template
+	            business: business,
+	            pleasure: pleasure
+	        });
+        });        
     });
 
     // =====================================
@@ -150,7 +186,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // facebook -------------------------------
 
         // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email'] }));
+        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes'] }));
 
         // handle the callback after facebook has authorized the user
         app.get('/connect/facebook/callback',
@@ -170,6 +206,8 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
                 successRedirect : '/profile',
                 failureRedirect : '/'
             }));
+
+
 // =============================================================================
 // UNLINK ACCOUNTS =============================================================
 // =============================================================================
@@ -178,18 +216,18 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 // user account will stay active in case they want to reconnect in the future
 
     // local -----------------------------------
-    app.get('/unlink/local', function(req, res) {
-        var user            = req.user;
-        user.email    = undefined;
-        user.password = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
+    // app.get('/unlink/local', function(req, res) {
+    //     var user            = req.user;
+    //     user.email    = undefined;
+    //     user.password = undefined;
+    //     user.save(function(err) {
+    //         res.redirect('/profile');
+    //     });
+    // });
 
     // facebook -------------------------------
     app.get('/unlink/facebook', function(req, res) {
-        var user            = req.user;
+        var user = req.user;
         user.FB_AT = undefined;
         user.save(function(err) {
             res.redirect('/profile');
@@ -198,7 +236,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 
     // google ---------------------------------
     app.get('/unlink/google', function(req, res) {
-        var user          = req.user;
+        var user = req.user;
         user.YT_AT = undefined;
         user.save(function(err) {
            res.redirect('/profile');
@@ -221,7 +259,7 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
             }));
 
 
-     // =====================================
+    // =====================================
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
@@ -230,9 +268,12 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect : '/profile',
             failureRedirect : '/'
-        }));
+        }),function(req, res){
+            console.log(req.user.is_New);
+            if (req.user.is_New) { return res.redirect('/BPwizard'); }
+            res.redirect('/profile');
+        });
 
 
 	// route middleware to make sure a user is logged in
@@ -246,17 +287,12 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 	    res.redirect('/');
 	}
 
-	//Rgister Consumer
-	app.post('/registerConsumer', function (req, res){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		app.set('json spaces', 4);
-		res.set("Content-Type", "application/json");
-		res.status(200);
-
-		var data = {};
-		data = req.body;
-		Controller.registerConsumer(res,data);
+	//Business Pleasure Wizard - a step in registration
+	app.get('/BPwizard', function (req, res){
+        console.log("user id: " +req.user.userId);
+            res.render('BPwizard.ejs', {
+                userID : req.user.userId
+            });
 	});
 
 	//Add Song to Favorites
@@ -344,7 +380,93 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
         DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre);
     });
 
+
+    //***********************************************************************//
+    //**************************ProducerController***************************//
+    //***********************************************************************//
+    //getProducerStatistics
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
+    //route that recives parameter using defined parameters
+    app.get('/getProducerStatistics/:prodID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for getProducerStatistics with user id " +req.params.prodID);
+            ProducerController.getProducerStatistics(res,req.params.prodID);
+    });
+
+
+     //getProducerSongs
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+    // getProducerSongs
+     app.get('/getProducerSongs/:prodID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for getProducerStatistics with user id " +req.params.prodID);
+            ProducerController.getProducerSongs(res,req.params.prodID);
+    });
+
+      //updateCounters
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+       //updateCounters
+     app.param('songID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+    // updateCounters
+     app.get('/updateCounters/:prodID/:songID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for updateCounters with user id " +req.params.prodID + " song id " + req.params.songID);
+            ProducerController.updateCounters(res,req.params.prodID, req.params.songID);
+    });
+     //***********************************************************************//
+     //**************************ProducerController  END**********************//
+     //***********************************************************************//
+
+
+    //process Wizard Form
+    app.post('/processWizardForm', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.processWizardForm(req,res,data);
+    });
+
+
 //===============PORT=================
-	app.listen(process.env.PORT || 3000);
+	server.listen(process.env.PORT || 3000);
 	console.log("The magic happens on port 3000");
 
