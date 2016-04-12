@@ -9,6 +9,7 @@ mongoose.connect(configDB.url); // connect to our database
 
 var async = require("async");
 var request = require('request');
+var math = require('mathjs');
 
 //SCHEMAS
 // load up the user model
@@ -193,15 +194,20 @@ module.exports = function(passport) {
                 user.save(function(err) {
                     if (err)
                         throw err;
-                    if(user.FB_AT != null){
-                        UpdateMP(user, function(err,callback){
-                            if(err){
-                                return console.log(err);
-                            }
-                            return done(null, user);    
-                        });                        
+                    if(user.is_New == 1){
+                            return done(null, user);
+                    }else{
+                        if(user.FB_AT != null){
+                            UpdateMP(user, function(err,callback){
+                                if(err){
+                                    return console.log(err);
+                                }
+                                return done(null, user);    
+                            }); 
+                        }
                     }
                 });
+                //done save user
             }
         });
 
@@ -273,14 +279,17 @@ module.exports = function(passport) {
                     if(user.is_New == 1){
                             return done(null, user);
                     }else{
-                        UpdateMP(user, function(err,callback){
-                            if(err){
-                                return console.log(err);
-                            }
-                            return done(null, user);    
-                        });      
+                        if(user.YT_AT != null){
+                            UpdateMP(user, function(err,callback){
+                                if(err){
+                                    return console.log(err);
+                                }
+                                return done(null, user);    
+                            }); 
+                        }
                     }
                 });
+                //done save user
             }
         });
 
@@ -348,37 +357,10 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
             callback();
         });
     },  
-    //step 2 : build MP
-    // function(callback) {
-
-
-    // },
-     //step 3 : create user's business pie, pleasure pie, favorites list and black list.
+     //step 2 : create user's favorites list and black list.
     function(callback) {
 
         async.parallel([
-            // function(callback) {
-            //     var business_pie = new BusinessPie(MP.business);
-            //     //Save user's business pie
-            //     business_pie.save(function (err, doc) {
-            //       if (err) {
-            //         res.status(200).json("error saving user business pie: " + err.message);
-            //         return console.error(err);
-            //       }
-            //       callback();
-            //     });
-            // },
-            // function(callback) {
-            //     var pleasure_pie = new PleasurePie(MP.pleasure);
-            //     //Save user's pleasure pie
-            //     pleasure_pie.save(function (err, doc) {
-            //       if (err) {
-            //         res.status(200).json("error saving user pleasure pie: " + err.message);
-            //         return console.error(err);
-            //       }
-            //       callback();
-            //     });
-            // },
             function(callback) {
                 var favorites = new Favorites({ userId : userid });
                 //create ampty favorites 
@@ -428,6 +410,14 @@ UpdateMP = function(user,UpdateMPcallback){
             }
             body = JSON.stringify([obj]);
 
+            var arrB = [];
+            var arrP = [];
+
+            for(i in obj){
+                arrB.push(obj[i]);
+                arrP.push(obj[i]);
+            }
+
             async.parallel([
                 function(callback) {
                     //findOndAndUpdate :  business pies
@@ -436,14 +426,43 @@ UpdateMP = function(user,UpdateMPcallback){
                             callback(err);
                           } 
                           //found pie
-                          doc.genres = obj; //update pie
-                          doc.save(function (err, doc) {    //save pie
-                           if (err) {
-                             res.status(200).json("error saving user business pie: " + err.message);
-                             return console.error(err);
-                           }
-                           callback();
-                        });
+                          
+                          //update pie: compare data found in initial MP with user's preferences
+                          for(var i = arrB.length - 1; i >= 0; i--){
+                                //check if category is in prefs
+                                if (doc.preferences.indexOf(arrB[i].category) > -1) {
+                                    //In the array! all good
+                                    console.log("in business array: "+ arrB[i].category);
+                                } else {
+                                    //Not in the array, take this genre out of pie
+                                    console.log("NOT in business array: "+ arrB[i].category);
+                                    arrB.splice(i, 1);  
+                                }
+                            }
+
+                            //calc new percentages for each genre
+                            var Btotal = 0, Ptotal = 0;
+                            for(i in arrB){
+                                Btotal+= arrB[i].artists.length;
+                            }
+                            console.log("b total: " + Btotal);
+
+                            var len = arrB.length;
+                            for(var k = 0; k<len; k++){
+                                arrB[k].percent = (arrB[k].artists.length / Btotal) * 100;
+                                arrB[k].percent = math.round(arrB[k].percent, 2);
+                            }//done calc
+
+                            //update genres in pie
+                            doc.genres = arrB; 
+                            //save pie
+                            doc.save(function (err, doc) {    
+                               if (err) {
+                                 res.status(200).json("error saving user business pie: " + err.message);
+                                 return console.error(err);
+                               }
+                                callback();
+                            });
                     });
                 },  
                 function(callback) {
@@ -453,8 +472,36 @@ UpdateMP = function(user,UpdateMPcallback){
                             callback(err);
                           } 
                           //found pie
-                          doc.genres = obj; //update pie
-                          doc.save(function (err, doc) {    //save pie
+                        //update pie: compare data found in initial MP with user's preferences
+                          for(var i = arrP.length - 1; i >= 0; i--){
+                                //check if category is in prefs
+                                if (doc.preferences.indexOf(arrP[i].category) > -1) {
+                                    //In the array! all good
+                                    console.log("in business array: "+ arrP[i].category);
+                                } else {
+                                    //Not in the array, take this genre out of pie
+                                    console.log("NOT in business array: "+ arrP[i].category);
+                                    arrP.splice(i, 1);  
+                                }
+                            }
+
+                            //calc new percentages for each genre
+                            var Btotal = 0, Ptotal = 0;
+                            for(i in arrP){
+                                Btotal+= arrP[i].artists.length;
+                            }
+                            console.log("b total: " + Btotal);
+
+                            var len = arrP.length;
+                            for(var k = 0; k<len; k++){
+                                arrP[k].percent = (arrP[k].artists.length / Btotal) * 100;
+                                arrP[k].percent = math.round(arrP[k].percent, 2);
+                            }//done calc
+                            
+                            //update genres in pie
+                            doc.genres = arrP; 
+                            //save pie
+                          doc.save(function (err, doc) {    
                            if (err) {
                              res.status(200).json("error saving user pleasure pie: " + err.message);
                              return console.error(err);

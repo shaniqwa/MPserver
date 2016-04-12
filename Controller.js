@@ -213,7 +213,7 @@ exports.processWizardForm = function(req,res,data) {
           }
         });
     },
-    //step 3: save preferences and calculate new pies
+    //step 3: save preferences recived in form and calculate new pies
      function(callback) {
      	// MP.business.preferences
 		if(data.b_rock){
@@ -315,8 +315,6 @@ exports.processWizardForm = function(req,res,data) {
 		var arrB = [];
 		var arrP = [];
 
-		// arrP = MP.pleasure.genres;
-		// arrB = MP.business.genres;
 		for(i in MP.business.genres){
 			arrB.push(MP.business.genres[i]);
 			arrP.push(MP.business.genres[i]);
