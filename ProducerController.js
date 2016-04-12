@@ -12,7 +12,7 @@ var producerSongsGeneralSchema = require("./schemas/scheme_producerSongsGeneral.
 var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSongsGeneralSchema, 'Producer_songs_general');
 
 var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerSongsSchema; 
-var ProducerSongs = mongoose.model('Producers_songs_list', producerSongsSchema, 'Produces_songs_list');
+var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
 
 
 
@@ -33,6 +33,18 @@ exports.getProducerStatistics = function(res,prodId){
 	ProducerSongsGeneral.findOne({ userId : prodId}, function (err, doc) {
 	  if (err){
 	  	res.status(200).json("error getProducerStatistics: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json(doc);
+	});
+} 
+
+exports.updateCounters = function(res,prodId,songId){
+	//from general schema
+	ProducerSongsGeneral.findOneAndUpdate({ userId: prodId}, {$inc: { totalCounter:1, internalCounter:1, ageGroup1Coutner:1 , ageGroup2Counter:1 ,counterLocal:1 } } ,{new: true}, function (err, doc) {
+	  if (err){            
+	  	res.status(200).json("error updateCounters: " + err.message);
 	  	return err;
 	  } 
 	  // done!

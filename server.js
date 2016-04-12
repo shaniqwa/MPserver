@@ -367,6 +367,9 @@ io.on('connection', function(client) {
     });
 
 
+    //***********************************************************************//
+    //**************************ProducerController***************************//
+    //***********************************************************************//
     //getProducerStatistics
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
@@ -387,7 +390,7 @@ io.on('connection', function(client) {
     });
 
 
-     //getProducerStatistics
+     //getProducerSongs
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -405,6 +408,35 @@ io.on('connection', function(client) {
             console.log("request for getProducerStatistics with user id " +req.params.prodID);
             ProducerController.getProducerSongs(res,req.params.prodID);
     });
+
+      //updateCounters
+     app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+       //updateCounters
+     app.param('songID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+    // updateCounters
+     app.get('/updateCounters/:prodID/:songID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+            console.log("request for updateCounters with user id " +req.params.prodID + " song id " + req.params.songID);
+            ProducerController.updateCounters(res,req.params.prodID, req.params.songID);
+    });
+     //***********************************************************************//
+     //**************************ProducerController  END**********************//
+     //***********************************************************************//
+
 
     //process Wizard Form
     app.post('/processWizardForm', function (req, res){

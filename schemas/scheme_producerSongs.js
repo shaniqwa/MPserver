@@ -5,7 +5,7 @@ var producerSongsSchema = new Schema({
 	prodId : {type: Number, index: true},
     songs: [
         {
-            songId: Number,
+            songId: {type: Number, index: true},
             name: String,
             albumName: String,
             duration: Number,
