@@ -24,7 +24,7 @@ var youTube = new YouTube();
 
 youTube.setKey('AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk');
 // constructor
-function nextSong(currGenre, user, mode,userGraph, startGenre) {
+function nextSong(currGenre, user, mode, userGraph, startGenre) {
     this.currGenre = currGenre;
     this.user = parseInt(user);
     this.mode = parseInt(mode);
@@ -33,55 +33,32 @@ function nextSong(currGenre, user, mode,userGraph, startGenre) {
     this.playlist = [];
     this.flagFinish = 0;
     ng = currGenre;
-    //console.log("[]initialized");
 }
 
 
-nextSong.prototype.getPlaylistLength = function(){
-  return playlist.length;
+nextSong.prototype.getPlaylistLength = function() {
+    return playlist.length;
 };
 
-nextSong.prototype.getPlaylist = function(){
-  return playlist;
+nextSong.prototype.getPlaylist = function() {
+    return playlist;
 };
-nextSong.prototype.clearPlaylist = function(){
-  playlist.length = 0;
-  playlist = [];
+nextSong.prototype.clearPlaylist = function() {
+    playlist.length = 0;
+    playlist = [];
 };
 
 // methods
 nextSong.prototype.getNextSong = function(NScallback) {
-    //console.log("[]getting next song,connecting to DB");
-    //console.log("[]checking if existing genre..");
-    this.connectDB(this.currGenre, this.user, this.mode,this.userGraph, this.startGenre, function(err){
-        if(err){
+    this.connectDB(this.currGenre, this.user, this.mode, this.userGraph, this.startGenre, function(err) {
+        if (err) {
             NScallback(err);
-        }else{
+        } else {
             NScallback();
         }
     });
 }
-/*
-function buildPlaylist(playlist) {
-    //var playlistLength = playlist.length;
-    var artist;
-    var song;
-    var finalPlaylist = [];
-    for (song in playlist) {
-        if(typeof playlist.artist === 'Object'){
-            //finalPlaylist[song].push({ artist : playlist.artist.name })
-            artist = playlist.artist.name;
-        } else {
-            artist = playlist.
-            
-        }
-        
-    }
-    
-    
-    
-}
-*/
+
 
 function pickChoice(choice) {
     var sum = 0;
@@ -129,25 +106,39 @@ function pickChoice(choice) {
 
 };
 
-var pushSong =  function (song,callback){
-    //console.log("pushing song : ");
+var pushSong = function(song, typeAP, callback) { 
     var songFull = song.artist.name + " - " + song.name;
     console.log("full song " + songFull);
-    //console.log(song
-	
-    youTube.search(songFull, 2,  function(error, result) {
+	youTube.addParam('type', 'video');
+    youTube.search(songFull, 2, function(error, result) {
         if (error) {
             console.log(error);
-        } else {
-
-			console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
-			playlist.push({artistName : song.artist.name, songName : song.name, url : "https://www.youtube.com/watch?v=" + result.items[0].id.videoId });
-			callback();
-        }
+        } else { // no error
+            if (result.items.length == 0) { // if no results on search TODO: make another call replace dummy
+                console.log("search on youtube : 0 results, pushing without url..");
+                playlist.push({
+                    artistName: song.artist.name,
+                    songName: song.name,
+                    url: "no_url" // todo something more intelligent
+                });
+                callback();
+            } else { // there are results from youtube
+                console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
+                playlist.push({
+                    artistName: song.artist.name,
+                    songName: song.name,
+                    url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
+					type: typeAP
+                });
+                callback();
+				}
+            }
+        
     });
-	
+
 
 }
+
 function pickProducerConsumer() {
     var relations = [
         [20, "producers"],
@@ -166,61 +157,52 @@ function pickArtistOrSimiliar() {
 
 
 function getRandArtist(type, userObject, currGenre) {
-    //console.log("this is the user object : ");
-    //console.log(userObject);
+
     for (obj in userObject) {
-        if(userObject[obj][type].length == 0) { return "almog.einattt@gmail.com"; } // todo: will return from findMatch
-        //console.log(userObject[obj].genreName); // for tests
+        if (userObject[obj][type].length == 0) {
+            return "almog.einattt@gmail.com";
+        } // todo: will return from findMatch
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
             return userObject[obj][type][distribution(engine)];
         }
     }
-    //console.log(userObject);
 };
 
 
 function getRandTrack(artist) { // todo validations
-    //console.log("[]sending request for top tracks");
-    if(typeof artist === 'object'){
-            //finalPlaylist[song].push({ artist : playlist.artist.name })
-            artist = artist.name;
-        }
+    if (typeof artist === 'object') {
+        artist = artist.name;
+    }
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=1000&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
-    //console.log(JSON.parse(res.getBody('utf8')));
-    // console.log("getRandTrack:: the artist sent :" + artist.name);
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
-    // console.log("getRandTrack:: the song :" + JSON.stringify(theSong));
     return theSong;
 };
 
 function getSimilarArtist(artist) {
-    // console.log("getSimilarArtist:: the artist sent :" + artist.name);
-    //console.log("[]sending request for similiar artists");
     var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=50&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
-    //console.log(JSON.parse(res.getBody('utf8')));
-    
+
     var artists = JSON.parse(res.getBody('utf8')).similarartists.artist;
     var theArtist = Random.pick(engine, artists, 0, artists.length);
     return theArtist;
 };
 
 function getRandTrackProducer(arrSongs) {
-    //var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, arrSongs, 0, arrSongs.length);
+	theSong['type'] =  'producer';
     return theSong;
 };
 
-nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGenre, callback) {
+nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startGenre, callback) {
     if ((runs != 0) && (typeof prevNG !== 'undefined')) {
-        if (prevNG == false) { currGenre = ng; 
-        }else{
+        if (prevNG == false) {
+            currGenre = ng;
+        } else {
             currGenre = prevNG;
         }
     }
-    //this.currGenre = (prevNG == false) ?  ng : prevNG; currGenre = this.currGenre;}
-    
+
     runs = parseInt(runs) + 1;
     //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
@@ -236,9 +218,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                     throw err;
                 } else { //found user
                     if (mode == 1) { // pleasure, now extract all data of pie
-                       // //console.log(document);
                         uId = document.userId;
-                        //console.log("[]extracting pleasurePieId of ID : " + document.userId);
                         collection = db.collection('Pleasure_pie');
                         collection.findOne({
                             pleasurePieId: document.userId
@@ -246,71 +226,32 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                             if (err) { // didn't found pie datadddd
                                 throw err;
                             } else { //found pie data
-                                //console.log("[]extracting pie data :");
-                                 // to declare as private attr
-                                //console.log("this is the uid:" + uId);
                                 var count = document.genres.length;
                                 var results = [];
                                 for (var i = 0; i < count; i++) {
-                                    //console.log("- found percents:" + Math.floor(document.genres[i].percent));
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
-                                //console.log("[]picked randomaly by percents: " + newGenre);
                                 if (currGenre == newGenre) {
-                                    //console.log("same genre choosen"); //if stay in same genre
-                                    //choose producer or known artist
                                     var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
                                     if (prodOrConsumer == "artists") { // known artist
-                                        //choose random artist
-                                        //console.log(document.genres);
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("this is the rand artist: " + randArtist);
-                                        // choose song of this one or similiar
                                         var artistOrSimiliar = pickArtistOrSimiliar();
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-
-                                            //console.log("getting song from picked artist: " + randArtist);
                                             var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            console.log("the artist:: "+ chsnSongArtist);
-                                            pushSong(chsnSongArtist, function() {
-                                            callback();
-											});
-                                            
-                                            //console.log("length of playlist:" + playlist.length);
-                                            //console.log("the playlist:");
-                                            //console.log(playlist);
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-                                            
-                                            
+                                            console.log("the artist:: " + chsnSongArtist);
+                                            pushSong(chsnSongArtist,"artist", function() {
+                                                callback();
+                                            });
                                         } else { // find similar artist
-                                            //console.log("getting similar artist of randartistname: " + randArtist);
                                             var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("this is the artist similar:");
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                            //console.log("song choosen : ");
-                                            //console.log(chsnSongSimilar);
-                                            pushSong(chsnSongSimilar, function() {
-                                            callback();
-											});
-                                            //console.log("length of playlist:" + playlist.length);
-                                            //console.log("the playlist:");
-                                            //console.log(playlist);
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-
+                                            pushSong(chsnSongSimilar,"artist", function() {
+                                                callback();
+                                            });
                                         }
                                     } else { // producer
-                                        //console.log("implement if producer");
                                         var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
                                         var collection = db.collection('Users');
                                         collection.findOne({
                                             username: randArtistProducer
@@ -318,7 +259,6 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             if (err) { //user not found
                                                 throw err;
                                             } else {
-                                                //console.log(document.userId); 
                                                 collection = db.collection('Producer_songs_list');
                                                 collection.findOne({
                                                     prodId: document.userId
@@ -326,240 +266,137 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                                     if (err) { //user not found
                                                         throw err;
                                                     } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
                                                         playlist.push(getRandTrackProducer(document.songs));
                                                         callback();
-                                                        //console.log("the playlist:");
-                                                        //console.log(playlist);
-                                                        //console.log("**changing flag");
-                                                        //flagFinish = 1;
-
                                                     }
                                                 });
                                             }
                                         });
                                     }
                                 } else {
-                                    //console.log("getting next genre from graph");
-                                    //console.log("the graph********");
-                                    //console.log(this.currGenre);
-                                    //console.log(userGraph.getGraph());
-                                    console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
-                                    var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
+                                    console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
+                                    var pickedGenre = userGraph.nextGenre(user, startGenre, currGenre);
                                     prevNG = pickedGenre;
-                                      //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
-                                    //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
                                     console.log("# the returned value is: " + pickedGenre);
                                     if (pickedGenre == false) { //switch genre and get song
-                                        //console.log("cant find genre" + pickedGenre);
-                                        
-                                        // if rafi returned false
-                                //console.log(document);
-                                //console.log("extracting pleasurePieId of ID aa : " + uId);
-                                collection = db.collection('Pleasure_pie');
-                                collection.findOne({
-                                pleasurePieId: uId
-                                }, function(err, document) {
-                                if (err) { // didn't found pie data
-                                throw err;
-                                } else { //found pie data
-                                //console.log("extracting pie data :");
-                                //console.log(document);
-                                var count = document.genres.length;
-                                var results = [];
-                                for (var i = 0; i < count; i++) {
-                                    //console.log("found percents:" + Math.floor(document.genres[i].percent));
-                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
-                                }
-                                var newGenre = pickChoice(results);
-                                ng = newGenre;
-                                //console.log("picked randomaly by percents after rafi returned false: " + newGenre);
-                                
-                            
-                                    //choose producer or known artist
-                                    var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
-                                    if (prodOrConsumer == "artists") { // known artist
-                                    //console.log(document.genres);
-                                        //choose random artist
-                                        var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random artist : ");
-                                        //console.log("this is the rand artist: " + randArtist);
-                                        // choose song of this one or similiar
-                                        var artistOrSimiliar = pickArtistOrSimiliar();
-                                        if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-                                            //console.log("getting song from picked artist: " + randArtist);
-                                            var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            
-                                            //console.log(chsnSongArtist);
-                                            pushSong(chsnSongArtist, function() {
-                                            callback();
-											});
-                                            //playlist.push( { genrename : currGenre});
-                                            //console.log("length of playlist:" + playlist.length);
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-                                            //console.log("the playlist:");
-                                            //console.log(playlist);
-                                        } else { // find similar artist
-                                            //console.log("picking song of similiar artist:");
-                                            //console.log(randArtist);
-                                            var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
-                                            var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                            //console.log("song choosen : ");
-                                            //console.log(chsnSongSimilar);
-                                            pushSong(chsnSongSimilar, function() {
-                                            callback();
-											});
-                                            //playlist.push( { genrename : currGenre});
-                                            //console.log("length of playlist:" + playlist.length);
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-                                            //console.log("the playlist:");
-                                            //console.log(playlist);
-                                            }
-                                            } else { // producer
-                             
-                                        var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
-                                        var collection = db.collection('Users');
+                                        collection = db.collection('Pleasure_pie');
                                         collection.findOne({
-                                            username: randArtistProducer
+                                            pleasurePieId: uId
                                         }, function(err, document) {
-                                            if (err) { //user not found
+                                            if (err) { // didn't found pie data
                                                 throw err;
-                                            } else {
-                                                //console.log(document.userId); 
-                                                collection = db.collection('Producer_songs_list');
-                                                collection.findOne({
-                                                    prodId: document.userId
-                                                }, function(err, document) {
-                                                    if (err) { //user not found
-                                                        throw err;
-                                                    } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
-                                                        playlist.push(getRandTrackProducer(document.songs));
-                                                        callback();
-                                                        //console.log("the playlist:");
-                                                        //console.log(playlist);
-
+                                            } else { //found pie data
+                                                var count = document.genres.length;
+                                                var results = [];
+                                                for (var i = 0; i < count; i++) {
+                                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+                                                }
+                                                var newGenre = pickChoice(results);
+                                                ng = newGenre;
+                                                //choose producer or known artist
+                                                var prodOrConsumer = pickProducerConsumer();
+                                                if (prodOrConsumer == "artists") { // known artist
+                                                    //choose random artist
+                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var artistOrSimiliar = pickArtistOrSimiliar();
+                                                    if (artistOrSimiliar == "thisArtist") { // find song of this artist 
+                                                        var chsnSongArtist = getRandTrack(randArtist);
+                                                        pushSong(chsnSongArtist,"artist", function() {
+                                                            callback();
+                                                        });
+                                                    } else { // find similar artist
+                                                        var artistSimiliar = getSimilarArtist(randArtist);
+                                                        var chsnSongSimilar = getRandTrack(artistSimiliar);
+                                                        pushSong(chsnSongSimilar,"artist", function() {
+                                                            callback();
+                                                        });
                                                     }
-                                                });
+                                                } else { // producer
+
+                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var collection = db.collection('Users');
+                                                    collection.findOne({
+                                                        username: randArtistProducer
+                                                    }, function(err, document) {
+                                                        if (err) { //user not found
+                                                            throw err;
+                                                        } else {
+                                                            collection = db.collection('Producer_songs_list');
+                                                            collection.findOne({
+                                                                prodId: document.userId
+                                                            }, function(err, document) {
+                                                                if (err) { //user not found
+                                                                    throw err;
+                                                                } else {
+                                                                    playlist.push(getRandTrackProducer(document.songs));
+                                                                    callback();
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+
                                             }
                                         });
-                                    }
-                                
-                                
-                                }
-                                });
-                                
-                                
-                                
-                                        
-                                        
+
+
+
+
                                     } else { // get song of returned genre
-                                        //console.log("the returned genre from rafi is " + pickedGenre);
-                                        
-                                        
-                                        
-                                        
-                                        
-                                     //choose producer or known artist
-                                    var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
-                                    if (prodOrConsumer == "artists") { // known artist
-                                        //choose random artist
-                                        var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random artist : ");
-                                        //console.log(randArtist);
-                                        // choose song of this one or similiar
-                                        var artistOrSimiliar = pickArtistOrSimiliar();
-                                        if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-                                            //console.log("getting song from picked artist: " + randArtist);
-                                            var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            //console.log(chsnSongArtist);
-                                            pushSong(chsnSongArtist, function() {
-                                            callback();
-											});
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-                                            //console.log("the playlist:");
-                                            //console.log(playlist);
-                                        } else { // find similar artist
-                                            //console.log("picking song of similiar artist");
-                                            //console.log(randArtist.artistName);
-                                            var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
-                                            var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                            //console.log("song choosen : ");
-                                            pushSong(chsnSongSimilar, function() {
-                                            callback();
-											});
-                                            //console.log("**changing flag");
-                                            //flagFinish = 1;
-                                            //console.log("the playlist*****:" + playlist.length);
-                                            //console.log(playlist);
-                                            //console.log(chsnSongSimilar);
-                                            }
-                                            } else { // producer
-                             
-                                        var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
-                                        var collection = db.collection('Users');
-                                        collection.findOne({
-                                            username: randArtistProducer
-                                        }, function(err, document) {
-                                            if (err) { //user not found
-                                                throw err;
-                                            } else {
-                                                //console.log(document.userId); 
-                                                collection = db.collection('Producer_songs_list');
-                                                collection.findOne({
-                                                    prodId: document.userId
-                                                }, function(err, document) {
-                                                    if (err) { //user not found
-                                                        throw err;
-                                                    } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
-                                                        playlist.push(getRandTrackProducer(document.songs));
-                                                        callback();
-                                                        //console.log("**changing flag");
-                                                        //flagFinish = 1;
-                                                        //console.log("the playlist:" + playlist.length);
-                                                        //console.log(playlist);
-
-                                                    }
+                                        //choose producer or known artist
+                                        var prodOrConsumer = pickProducerConsumer();
+                                        if (prodOrConsumer == "artists") { // known artist
+                                            //choose random artist
+                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            // choose song of this one or similiar
+                                            var artistOrSimiliar = pickArtistOrSimiliar();
+                                            if (artistOrSimiliar == "thisArtist") { // find song of this artist 
+                                                var chsnSongArtist = getRandTrack(randArtist);
+                                                pushSong(chsnSongArtist,"artist", function() {
+                                                    callback();
+                                                });
+                                            } else { // find similar artist
+                                                var artistSimiliar = getSimilarArtist(randArtist);
+                                                var chsnSongSimilar = getRandTrack(artistSimiliar);
+                                                pushSong(chsnSongSimilar,"artist", function() {
+                                                    callback();
                                                 });
                                             }
-                                        });
+                                        } else { // producer
+
+                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            var collection = db.collection('Users');
+                                            collection.findOne({
+                                                username: randArtistProducer
+                                            }, function(err, document) {
+                                                if (err) { //user not found
+                                                    throw err;
+                                                } else {
+                                                    collection = db.collection('Producer_songs_list');
+                                                    collection.findOne({
+                                                        prodId: document.userId
+                                                    }, function(err, document) {
+                                                        if (err) { //user not found
+                                                            throw err;
+                                                        } else {
+                                                            playlist.push(getRandTrackProducer(document.songs));
+                                                            callback();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+
+
+
                                     }
-                                        
-                                        
-                                        
-                                    }
-                                } 
+                                }
                             }
                         });
 
                     } else { //business, now extract all data of pie 
                         uId = document.userId;
-                    
-                        //console.log("extracting businessePieId of ID : " + uId);
                         collection = db.collection('Business_pie');
                         collection.findOne({
                             businessPieId: uId
@@ -571,49 +408,29 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                 var count = document.genres.length;
                                 var results = [];
                                 for (var i = 0; i < count; i++) {
-                                    //console.log("- found percents:" + Math.floor(document.genres[i].percent));
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
-                                //console.log("picked randomaly by percents: " + newGenre);
-                                if (currGenre == newGenre) {
-                                    //console.log("same genre choosen"); //if stay in same genre
-                                    //choose producer or known artist
+                                if (currGenre == newGenre) { //stay in same genre
                                     var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
                                     if (prodOrConsumer == "artists") { // known artist
-                                        //choose random artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random artist : ");
-                                        //console.log(randArtist);
-                                        // choose song of this one or similiar
-                                        var artistOrSimiliar = pickArtistOrSimiliar();
+                                        var artistOrSimiliar = pickArtistOrSimiliar(); // choose song of this one or similiar
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-                                            //console.log("getting song from picked artist: " + randArtist);
                                             var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            playlist.push(chsnSongArtist);
-                                            callback();
-                                            //console.log(chsnSongArtist);
+                                            pushSong(chsnSongArtist,"artist", function() {
+                                                callback();
+                                            });
                                         } else { // find similar artist
-                                            //console.log("picking song of similiar artist");
-                                            //console.log(randArtist.artistName);
                                             var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                            //console.log("song choosen : ");
-                                            playlist.push(chsnSongSimilar);
-                                            callback();
-                                            //console.log(chsnSongSimilar);
-
+                                            pushSong(chsnSongSimilar,"artist", function() {
+                                                callback();
+                                            });
                                         }
                                     } else { // producer
                                         var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
                                         var collection = db.collection('Users');
                                         collection.findOne({
                                             username: randArtistProducer
@@ -621,7 +438,6 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                             if (err) { //user not found
                                                 throw err;
                                             } else {
-                                                //console.log(document.userId); 
                                                 collection = db.collection('Producer_songs_list');
                                                 collection.findOne({
                                                     prodId: document.userId
@@ -629,12 +445,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                                     if (err) { //user not found
                                                         throw err;
                                                     } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
                                                         playlist.push(getRandTrackProducer(document.songs));
                                                         callback();
-
                                                     }
                                                 });
 
@@ -642,196 +454,133 @@ nextSong.prototype.connectDB = function(currGenre, user, mode,userGraph,startGen
                                         });
                                     }
                                 } else {
-                                    //console.log("getting next genre from graph");
-                                    //console.log("the graph********");
-                                    //console.log(userGraph.getGraph());
-                                    console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: "+ startGenre);
-                                    var pickedGenre = userGraph.nextGenre(user,startGenre,currGenre);
+                                    console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
+                                    var pickedGenre = userGraph.nextGenre(user, startGenre, currGenre);
                                     prevNG = pickedGenre;
-                                    //console.log("prevNG = pickedGenre  ==>" + prevNG + "=" + pickedGenre);
-                                    //connectDB(pickedGenre, this.user, this.mode,this.userGraph, this.startGenre);
-                                    //console.log("# the returned value is: " + pickedGenre);
-                                    //pickedGenre = "electro"; // for tests only!!
                                     if (pickedGenre == false) { //switch genre and get song
-                                        //console.log("cant find genre" + pickedGenre);
-                                        
-                                        // if rafi returned false
-                                //console.log("extracting businessPieId of ID : " + uId);
-                                collection = db.collection('Business_pie');
-                                collection.findOne({
-                                businessPieId: uId
-                                }, function(err, document) {
-                                if (err) { // didn't found pie data
-                                throw err;
-                                } else { //found pie data
-                                //console.log("extracting pie data :");
-                                var count = document.genres.length;
-                                var results = [];
-                                for (var i = 0; i < count; i++) {
-                                    //console.log("found percents:" + Math.floor(document.genres[i].percent));
-                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
-                                }
-                                var newGenre = pickChoice(results);
-                                ng = newGenre;
-                                //console.log("picked randomaly by percents after rafi returned false: " + newGenre);
-                                
-                            
-                                    //choose producer or known artist
-                                    var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
-                                    if (prodOrConsumer == "artists") { // known artist
-                                        //choose random artist
-                                        var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random artist : ");
-                                        //console.log(randArtist);
-                                        // choose song of this one or similiar
-                                        var artistOrSimiliar = pickArtistOrSimiliar();
-                                        if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-                                            //console.log("getting song from picked artist: " + randArtist);
-                                            var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            playlist.push(chsnSongArtist);
-                                            callback();
-                                            //console.log(chsnSongArtist);
-                                        } else { // find similar artist
-                                            //console.log("picking song of similiar artist");
-                                            //console.log(randArtist.artistName);
-
-                                            var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
-                                            var chsnSongSimilar = getRandTrack(artistSimiliar.name);
-                                            //console.log("song choosen : ");
-                                            playlist.push(chsnSongSimilar);
-                                            callback();
-                                            //console.log(chsnSongSimilar);
-                                            }
-                                            } else { // producer
-                             
-                                        var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
-                                        var collection = db.collection('Users');
+                                        collection = db.collection('Business_pie');
                                         collection.findOne({
-                                            username: randArtistProducer
+                                            businessPieId: uId
                                         }, function(err, document) {
-                                            if (err) { //user not found
+                                            if (err) { // didn't found pie data
                                                 throw err;
-                                            } else {
-                                                //console.log(document.userId); 
-                                                collection = db.collection('Producer_songs_list');
-                                                collection.findOne({
-                                                    prodId: document.userId
-                                                }, function(err, document) {
-                                                    if (err) { //user not found
-                                                        throw err;
-                                                    } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
-                                                        playlist.push(getRandTrackProducer(document.songs));
-                                                        callback();
-
+                                            } else { //found pie data
+                                                var count = document.genres.length;
+                                                var results = [];
+                                                for (var i = 0; i < count; i++) {
+                                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+                                                }
+                                                var newGenre = pickChoice(results);
+                                                ng = newGenre;
+                                                //choose producer or known artist
+                                                var prodOrConsumer = pickProducerConsumer();
+                                                if (prodOrConsumer == "artists") { // known artist
+                                                    //choose random artist
+                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre); // choose song of this one or similiar
+                                                    var artistOrSimiliar = pickArtistOrSimiliar();
+                                                    if (artistOrSimiliar == "thisArtist") { // find song of this artist 
+                                                        var chsnSongArtist = getRandTrack(randArtist);
+                                                        pushSong(chsnSongArtist,"artist", function() {
+                                                            callback();
+                                                        });
+                                                    } else { // find similar artist
+                                                        var artistSimiliar = getSimilarArtist(randArtist);
+                                                        var chsnSongSimilar = getRandTrack(artistSimiliar.name);
+                                                        pushSong(chsnSongSimilar,"artist", function() {
+                                                            callback();
+                                                        });
                                                     }
-                                                });
+                                                } else { // producer
+
+                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var collection = db.collection('Users');
+                                                    collection.findOne({
+                                                        username: randArtistProducer
+                                                    }, function(err, document) {
+                                                        if (err) { //user not found
+                                                            throw err;
+                                                        } else {
+                                                            collection = db.collection('Producer_songs_list');
+                                                            collection.findOne({
+                                                                prodId: document.userId
+                                                            }, function(err, document) {
+                                                                if (err) { //user not found
+                                                                    throw err;
+                                                                } else {
+                                                                    playlist.push(getRandTrackProducer(document.songs));
+                                                                    callback();
+
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+
                                             }
                                         });
-                                    }
-                                
-                                
-                                }
-                                });
-                                
-                                
-                                
-                                        
-                                        
+
+
+
+
                                     } else { // get song of returned genre
-                                        //console.log("the returned genre from rafi is " + pickedGenre);
-                                        
-                                        
-                                        
-                                        
-                                        
-                                     //choose producer or known artist
-                                    var prodOrConsumer = pickProducerConsumer();
-                                    //console.log("picked : " + prodOrConsumer);
-                                    if (prodOrConsumer == "artists") { // known artist
-                                        //choose random artist
-                                        var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random artist : ");
-                                        //console.log(randArtist);
-                                        // choose song of this one or similiar
-                                        var artistOrSimiliar = pickArtistOrSimiliar();
-                                        if (artistOrSimiliar == "thisArtist") { // find song of this artist 
-                                            //console.log("getting song from picked artist: " + randArtist);
-                                            var chsnSongArtist = getRandTrack(randArtist);
-                                            //console.log("song choosen : ");
-                                            //console.log(chsnSongArtist);
-                                            playlist.push(chsnSongArtist);
-                                            callback();
-                                        } else { // find similar artist
-                                            //console.log("picking song of similiar artist");
-                                            //console.log(randArtist.artistName);
-                                            var artistSimiliar = getSimilarArtist(randArtist);
-                                            //console.log("getting song of artist similar: ");
-                                            //console.log(artistSimiliar);
-                                            var chsnSongSimilar = getRandTrack(artistSimiliar.name);
-                                            //console.log("song choosen : ");
-                                            //console.log(chsnSongSimilar);
-                                            playlist.push(chsnSongSimilar);
-                                            callback();
-                                            }
-                                            } else { // producer
-                             
-                                        var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        //console.log("choosen random producer : ");
-                                        //console.log(randArtistProducer);
-
-                                        var collection = db.collection('Users');
-                                        collection.findOne({
-                                            username: randArtistProducer
-                                        }, function(err, document) {
-                                            if (err) { //user not found
-                                                throw err;
-                                            } else {
-                                                //console.log(document.userId); 
-                                                collection = db.collection('Producer_songs_list');
-                                                collection.findOne({
-                                                    prodId: document.userId
-                                                }, function(err, document) {
-                                                    if (err) { //user not found
-                                                        throw err;
-                                                    } else {
-                                                        //console.log(document.songs);
-                                                        //console.log("picked rand song of producer: ");
-                                                        //console.log(getRandTrackProducer(document.songs));
-                                                        playlist.push(getRandTrackProducer(document.songs));
-                                                        callback();
-
-
-                                                    }
+                                        //choose producer or known artist
+                                        var prodOrConsumer = pickProducerConsumer();
+                                        if (prodOrConsumer == "artists") { // known artist
+                                            //choose random artist
+                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre); // choose song of this one or similiar
+                                            var artistOrSimiliar = pickArtistOrSimiliar();
+                                            if (artistOrSimiliar == "thisArtist") { // find song of this artist 
+                                                var chsnSongArtist = getRandTrack(randArtist);
+                                                pushSong(chsnSongArtist,"artist", function() {
+                                                    callback();
+                                                });
+                                            } else { // find similar artist
+                                                var artistSimiliar = getSimilarArtist(randArtist);
+                                                var chsnSongSimilar = getRandTrack(artistSimiliar.name);
+                                                pushSong(chsnSongSimilar,"artist", function() {
+                                                    callback();
                                                 });
                                             }
-                                        });
+                                        } else { // producer
+                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            var collection = db.collection('Users');
+                                            collection.findOne({
+                                                username: randArtistProducer
+                                            }, function(err, document) {
+                                                if (err) { //user not found
+                                                    throw err;
+                                                } else {
+                                                    //console.log(document.userId); 
+                                                    collection = db.collection('Producer_songs_list');
+                                                    collection.findOne({
+                                                        prodId: document.userId
+                                                    }, function(err, document) {
+                                                        if (err) { //user not found
+                                                            throw err;
+                                                        } else {
+                                                            playlist.push(getRandTrackProducer(document.songs));
+                                                            callback();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+
+
+
                                     }
-                                        
-                                        
-                                        
-                                    }
-                                } 
+                                }
                             }
                         });
 
 
-                }
+                    }
                 }
             });
         }
-    });//console.log("this is second currGenre: " + this.currGenre);
+    });
 }
 
-//module.exports = playlist;
 module.exports = playlist;
 module.exports = nextSong;
