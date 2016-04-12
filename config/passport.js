@@ -301,7 +301,7 @@ module.exports = function(passport) {
 //by google
 registerNewUser = function(platform, profile, token , refreshToken , NewUserCallback){
     var newUser = new User();
-    var url;
+    // var url;
 
     //same for both platforms
     newUser.mode = 1;
@@ -311,8 +311,9 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 
     //google
     if(platform == "google"){
-        url = "http://52.35.9.144:8082/MP/null/" + token;
+        // url = "http://52.35.9.144:8082/MP/null/" + token;
         // set all of the relevant information
+        console.log("registering new user with google platform");
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
         newUser.YT_RT = refreshToken;
@@ -323,7 +324,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.lastName = profile.name.familyName;
         newUser.profileImage = profile._json.picture;
     }else if(platform == "facebook"){
-        url = "http://52.35.9.144:8082/MP/" + token + "/null";
+        // url = "http://52.35.9.144:8082/MP/" + token + "/null";
         // set all of the facebook information in our user model
         newUser.FB_id    = profile.id; // set the users facebook id                   
         newUser.FB_AT = token; // we will save the token that facebook provides to the user   
@@ -340,9 +341,9 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
     
 
     var userid;
-    var MP = {};
-    MP.business = {};
-    MP.pleasure = {};
+    // var MP = {};
+    // MP.business = {};
+    // MP.pleasure = {};
 
     async.waterfall([
     //step1 : create user and get his id
@@ -397,6 +398,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 }//end of function 
 
 UpdateMP = function(user,UpdateMPcallback){
+    console.log("updating user MP.....");
     request.get('http://52.35.9.144:8082/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
@@ -432,20 +434,20 @@ UpdateMP = function(user,UpdateMPcallback){
                                 //check if category is in prefs
                                 if (doc.preferences.indexOf(arrB[i].category) > -1) {
                                     //In the array! all good
-                                    console.log("in business array: "+ arrB[i].category);
+                                    // console.log("in business array: "+ arrB[i].category);
                                 } else {
                                     //Not in the array, take this genre out of pie
-                                    console.log("NOT in business array: "+ arrB[i].category);
+                                    // console.log("NOT in business array: "+ arrB[i].category);
                                     arrB.splice(i, 1);  
                                 }
                             }
 
                             //calc new percentages for each genre
-                            var Btotal = 0, Ptotal = 0;
+                            var Btotal = 0;
                             for(i in arrB){
                                 Btotal+= arrB[i].artists.length;
                             }
-                            console.log("b total: " + Btotal);
+                            // console.log("b total: " + Btotal);
 
                             var len = arrB.length;
                             for(var k = 0; k<len; k++){
@@ -477,24 +479,24 @@ UpdateMP = function(user,UpdateMPcallback){
                                 //check if category is in prefs
                                 if (doc.preferences.indexOf(arrP[i].category) > -1) {
                                     //In the array! all good
-                                    console.log("in business array: "+ arrP[i].category);
+                                    // console.log("in business array: "+ arrP[i].category);
                                 } else {
                                     //Not in the array, take this genre out of pie
-                                    console.log("NOT in business array: "+ arrP[i].category);
+                                    // console.log("NOT in business array: "+ arrP[i].category);
                                     arrP.splice(i, 1);  
                                 }
                             }
 
                             //calc new percentages for each genre
-                            var Btotal = 0, Ptotal = 0;
+                            var Ptotal = 0;
                             for(i in arrP){
-                                Btotal+= arrP[i].artists.length;
+                                Ptotal+= arrP[i].artists.length;
                             }
-                            console.log("b total: " + Btotal);
+                            console.log("p total: " + Ptotal);
 
                             var len = arrP.length;
                             for(var k = 0; k<len; k++){
-                                arrP[k].percent = (arrP[k].artists.length / Btotal) * 100;
+                                arrP[k].percent = (arrP[k].artists.length / Ptotal) * 100;
                                 arrP[k].percent = math.round(arrP[k].percent, 2);
                             }//done calc
                             

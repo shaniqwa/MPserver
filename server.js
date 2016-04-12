@@ -145,6 +145,7 @@ io.on('connection', function(client) {
                     return console.log(err);
                 }
                 pleasure = pleasurePie;
+                console.log(pleasure);
                 callback();
             });
         }
@@ -254,9 +255,13 @@ io.on('connection', function(client) {
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
             passport.authenticate('google', {
-                    successRedirect : '/profile',
-                    failureRedirect : '/'
-            }));
+                   failureRedirect : '/'
+            }),function(req, res){
+                console.log(req.user.is_New);
+                if (req.user.is_New) { return res.redirect('/BPwizard'); }
+                res.redirect('/profile');
+            });
+
 
 
     // =====================================
