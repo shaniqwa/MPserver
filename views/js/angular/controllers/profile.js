@@ -6,27 +6,31 @@ var model = {
 var user;
 profile.controller('profileCtrl', function ($scope, $http) {
 	$scope.mod = model;
-	$scope.init = function(data){
+	
+  $scope.init = function(data){
        user = JSON.parse(data);
        // console.log(user); 
+  }; 
 
-    }; 
-
-   
-       
-
+   $scope.data = {
+    select: 'P',
+    option1: 'P',
+    option2: 'B',
+   };
     //console.log(" rafi print---->" + $scope.currGenre);
-   $scope.bringMePlaylist = function($event){
+    $scope.bringMePlaylist = function($event){
    	$scope.track = [];
+    console.log("my select is: " + $scope.data.select);
+    var myMode = ($scope.data.select == 'P') ? 1 : 2;
    	//$scope.mod.currGenre = currGenre;
          // console.log(" rafi print---->" + $scope.mod.currGenre );
          var genre = $event.currentTarget.innerHTML;
          console.log(genre);
-         var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + user.mode + "/" + 10 + "/" + genre;
+         var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          console.log(url);
         // alert(currGenre.toString() + $scope.currGenre)
           //console.log(currGenre);
-         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + user.mode + '/' + 6 + '/' + genre).success(function(data){
+         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
            if(typeof data === 'undefined'){
 
