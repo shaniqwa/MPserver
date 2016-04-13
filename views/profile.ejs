@@ -6,17 +6,9 @@
      <script src="js/pie.js"></script>
 </head>
 <body>
+<%- include header %>
 <div class="container" ng-controller="profileCtrl">
-    <div class="page-header text-center">
-        <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-<!--         <form>
-            <input type="text"></input>
-            <button>Search</button>
-        </form> -->
-    </div>
-
+<div ng-init="init('<%= JSON.stringify(user) %>')"></div>
     <div class="row">
         <!-- PLAYLIST -->
          <div class="col-sm-4">
@@ -46,117 +38,91 @@
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-8">
             <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
-                    <p>
-                        <!--if local login -->
-                        <% if (user.profileImage) { %>
-                            <img src=" <%= user.profileImage %> " width="60"><br><br>
-                        <% } %>
-                        <strong>id</strong>: <%= user._id %><br>
-                        <strong>Fist Name</strong>: <%= user.firstName %><br>
-                        <strong>Last Name</strong>: <%= user.lastName %><br>
-                        <strong>email</strong>: <%= user.email %><br>
-                        
-                        <% if (business) { 
-                            business.genres.sort(function(a, b){
-                                if(a.category < b.category) return -1;
-                                if(a.category > b.category) return 1;
-                                return 0;
-                            });
+                <% if (business) { 
+                    business.genres.sort(function(a, b){
+                        if(a.category < b.category) return -1;
+                        if(a.category > b.category) return 1;
+                        return 0;
+                    });
 
 
-                        %>
+                %>
+                 <div class="">
+                 
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a href="#profile">Profile</a></li>
+                    <li><a href="#favorites">Favorites</a></li>
+                    <li><a href="#following">Following</a></li>
+                    <li><a href="#followers">Followers</a></li>
+                    <li><a href="#recommended">Recommended</a></li>
+                    <li><a href="#statistics">Statistics</a></li>
+                    <li><a href="#mySongs">My Songs</a></li>
+                  </ul>
 
-
-                        
-                         <div class="">
-                         
-                          <ul class="nav nav-tabs">
-                            <li class="active"><a href="#profile">Profile</a></li>
-                            <li><a href="#favorites">Favorites</a></li>
-                            <li><a href="#following">Following</a></li>
-                            <li><a href="#followers">Followers</a></li>
-                            <li><a href="#recommended">Recommended</a></li>
-                            <li><a href="#statistics">Statistics</a></li>
-                            <li><a href="#mySongs">My Songs</a></li>
-                          </ul>
-
-                          <div class="tab-content">
-                             <div id="profile" class="tab-pane fade in active">
-                              <h3>profile</h3>
-                            <br>
-                            <select id="list" ng-model="data.select">
-                                <option value="P" selected="selected">Pleasure</option>
-                                <option value="B">Business</option>
-                            </select>
-                              <div id="container" style=" height: 500px; margin: 0 auto"></div>
-                                <script type='text/javascript'>
-                                    var data =<%-JSON.stringify( business.genres)%>
-                                    drawPie(data);
-                                </script>
-                            </div>
-                            <div id="favorites" class="tab-pane fade">
-                              <h3>favorites</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div id="following" class="tab-pane fade">
-                              <h3>following</h3>
-                              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            </div>
-                            <div id="followers" class="tab-pane fade">
-                              <h3>Followers</h3>
-                              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                            </div>
-                            <div id="recommended" class="tab-pane fade">
-                              <h3>Recommended</h3>
-                              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                            </div>
-
-                             <div id="statistics" class="tab-pane fade">
-                              <h3>statistics</h3>
-                             <select ng-model="selectedSong">
-                                <option ng-repeat="x in songDetails" value="{{x.id}}">{{x.name}}</option>
-                             </select>
-                              <div>name: {{songDetails[selectedSong].name}}</div>
-                              <div>albumName: {{songDetails[selectedSong].albumName}}</div>
-                              <div>artwork: {{songDetails[selectedSong].artwork}}</div>
-                              <div>duration: {{songDetails[selectedSong].duration}}</div>
-                              <div>songId: {{songDetails[selectedSong].songId}}</div>
-                              <div>year: {{songDetails[selectedSong].year}}</div>
-                              <div>id: {{songDetails[selectedSong].id}}</div>
-                              <div>counterAgeGroup1: {{songCounters[selectedSong].counterAgeGroup1}}</div>
-                            </div>
-
-                             <div id="mySongs" class="tab-pane fade">
-                              <h3>mySongs</h3>
-                              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <script>
-                        $(document).ready(function(){
-                            $(".nav-tabs a").click(function(){
-                                $(this).tab('show');
-                            });
-                        });
+                  <div class="tab-content">
+                     <div id="profile" class="tab-pane fade in active">
+                      <h3>profile</h3>
+                    <br>
+                    <select id="list" ng-model="data.select">
+                        <option value="P" selected="selected">Pleasure</option>
+                        <option value="B">Business</option>
+                    </select>
+                      <div id="container" style=" height: 500px; margin: 0 auto"></div>
+                        <script type='text/javascript'>
+                            var data =<%-JSON.stringify( business.genres)%>
+                            drawPie(data);
                         </script>
+                    </div>
+                    <div id="favorites" class="tab-pane fade">
+                      <h3>favorites</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div id="following" class="tab-pane fade">
+                      <h3>following</h3>
+                      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                    <div id="followers" class="tab-pane fade">
+                      <h3>Followers</h3>
+                      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                    </div>
+                    <div id="recommended" class="tab-pane fade">
+                      <h3>Recommended</h3>
+                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    </div>
 
+                     <div id="statistics" class="tab-pane fade">
+                      <h3>statistics</h3>
+                     <select ng-model="selectedSong">
+                        <option ng-repeat="x in songDetails" value="{{x.id}}">{{x.name}}</option>
+                     </select>
+                      <div>name: {{songDetails[selectedSong].name}}</div>
+                      <div>albumName: {{songDetails[selectedSong].albumName}}</div>
+                      <div>artwork: {{songDetails[selectedSong].artwork}}</div>
+                      <div>duration: {{songDetails[selectedSong].duration}}</div>
+                      <div>songId: {{songDetails[selectedSong].songId}}</div>
+                      <div>year: {{songDetails[selectedSong].year}}</div>
+                      <div>id: {{songDetails[selectedSong].id}}</div>
+                      <div>counterAgeGroup1: {{songCounters[selectedSong].counterAgeGroup1}}</div>
+                    </div>
 
-                        
-<!--                             <table>
-                            <% for(var i=0; i < business.genres.length; i++) { %>
-                               <tr>
-                                 <td><%= business.genres[i].category %></td>
-                                 <td ng-click="getSong($event)"><%= business.genres[i].genreName %></td>
-                                 <td><%= business.genres[i].percent %></td>
-                               </tr>
-                            <% } %>
-                            </table> -->
-                        <% } %>
-                    </p>
-            </div>
-        </div>
+                     <div id="mySongs" class="tab-pane fade">
+                      <h3>mySongs</h3>
+                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <script>
+                $(document).ready(function(){
+                    $(".nav-tabs a").click(function(){
+                        $(this).tab('show');
+                    });
+                });
+                </script>
+                <% } %>
+            </p>
+    </div>
+</div>
         <!-- GOOGLE INFORMATION -->
          <div class="col-sm-4">
             <div class="well">
@@ -209,7 +175,25 @@
             <div id="future"></div>
         </div>
     </div>
+
+    <div class="col-sm-4">
+        <div class="well">
+            <h3><span class="fa fa-user"></span> Local</h3>
+                <p>
+                    <!--if local login -->
+                    <% if (user.profileImage) { %>
+                        <img src=" <%= user.profileImage %> " width="60"><br><br>
+                    <% } %>
+
+                    <strong>Fist Name</strong>: <%= user.firstName %><br>
+                    <strong>Last Name</strong>: <%= user.lastName %><br>
+                    <strong>email</strong>: <%= user.email %><br>
+                </p>
+        </div>
     </div>
+
+    
+</div>
 
 </div>
  <%- include jsFiles %>
