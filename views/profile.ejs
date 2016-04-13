@@ -4,21 +4,6 @@
     <title>Music Profile</title>
      <%- include head %>
      <script src="js/pie.js"></script>
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-        .nav-tabs li a{
-           color:#ffffff;
-        }
-        .tab-content div{
-            position: relative;
-        }
-        .highcharts-container{
-            margin: 0 auto;
-        }
-         select{
-            color:black;
-         }
-    </style>
 </head>
 <body>
 <div class="container" ng-controller="profileCtrl">
@@ -82,11 +67,7 @@
 
                         %>
 
-                        <br><br>
-                        <select id="list" ng-model="data.select">
-                            <option value="P" selected="selected">Pleasure</option>
-                            <option value="B">Business</option>
-                        </select>
+
                         
                          <div class="">
                          
@@ -103,6 +84,11 @@
                           <div class="tab-content">
                              <div id="profile" class="tab-pane fade in active">
                               <h3>profile</h3>
+                            <br>
+                            <select id="list" ng-model="data.select">
+                                <option value="P" selected="selected">Pleasure</option>
+                                <option value="B">Business</option>
+                            </select>
                               <div id="container" style=" height: 500px; margin: 0 auto"></div>
                                 <script type='text/javascript'>
                                     var data =<%-JSON.stringify( business.genres)%>

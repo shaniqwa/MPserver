@@ -7,6 +7,8 @@ body{
 	color: #E0E0E3 !important;
 	font-family: 'Unica One', sans-serif;
 	background-color: #a4a4a6;
+	padding-top:80px; 
+	word-wrap:break-word; 
 }
 
 h1,h2,h3,h4{
@@ -20,4 +22,16 @@ h1,h2,h3,h4{
 }
 .height-800{
 	min-height: 770px;
+}       
+.nav-tabs li a{
+   color:#ffffff;
 }
+.tab-content div{
+    position: relative;
+}
+.highcharts-container{
+    margin: 0 auto;
+}
+ select{
+    color:black;
+ }
