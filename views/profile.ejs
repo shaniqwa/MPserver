@@ -67,11 +67,29 @@
                         <option value="P" selected="selected">Pleasure</option>
                         <option value="B">Business</option>
                     </select>
-                      <div id="container" style=" height: 500px; margin: 0 auto"></div>
+
+                        <!-- MP pie container -->
+                      <div id="MPcontainer" style=" height: 500px; margin: 0 auto"></div>
+                      <!-- user profile picture container -->
+                      <div id="addImg" style="position:relative; top:-225px; margin: 0 auto"></div>
+
+                        <!-- draw pie -->
                         <script type='text/javascript'>
                             var data =<%-JSON.stringify( business.genres)%>
                             drawPie(data);
+                            // img = $('#pieChartInfoText');
                         </script>
+
+                        <!-- if user img exists, draw it in the middle of the pie -->
+                     <% if (user.profileImage) { %>
+                        <script type="text/javascript">
+                            var profileImg =<%-JSON.stringify( user.profileImage )%>
+                            var img = '<img src='+ profileImg +' id="profileImg" class="img-circle" width=120>';
+                            $("#addImg").append(img);
+                        </script>
+                    <% } %>
+
+
                     </div>
                     <div id="favorites" class="tab-pane fade">
                       <h3>favorites</h3>
@@ -192,7 +210,7 @@
         </div>
     </div>
 
-    
+
 </div>
 
 </div>

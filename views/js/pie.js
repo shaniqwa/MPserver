@@ -290,8 +290,11 @@ Highcharts.setOptions(Highcharts.theme);
         }
     }
 
+
+
+
     // Create the chart
-    $('#container').highcharts({
+    $('#MPcontainer').highcharts({
         chart: {
             type: 'pie'
         },
