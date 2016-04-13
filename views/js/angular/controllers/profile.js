@@ -11,10 +11,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.ageGroupCounters = [];
   $scope.songCounters = [];
   $scope.counter = 0;
+  $scope.userId;
   $scope.init = function(data){
        user = JSON.parse(data);
        // console.log(user); 
-        
+        $scope.userId = user.userId;
        $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
             console.log(data); 
            for(i in data.songs){
@@ -50,6 +51,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     //console.log(" rafi print---->" + $scope.currGenre);
     $scope.bringMePlaylist = function($event){
    	$scope.track = [];
+    $scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
    	//$scope.mod.currGenre = currGenre;
@@ -81,8 +83,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     };
     
     $scope.nextSong = function(){
-          
-          
           console.log($scope.track.length);
           if ($scope.counter < $scope.track.length){
             var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
@@ -101,7 +101,27 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
           }
          
     };
+    
+    $scope.addToFav = function(){
+     
+      var data = $.param({
+            json: JSON.stringify({
+                
+                userId : $scope.userId,
+                songData : {
+                   song: $scope.track[$scope.counter - 1].songName,
+                   artist: $scope.track[$scope.counter - 1].artistName,
+                   duration: "3:43"
+                }
 
+            })
+      });
+      console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+      $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
+           console.log(data);
+      });
+    };
 	/*$scope.getSong = function($event){
        var genre = $event.currentTarget.innerHTML;
         console.log($event.currentTarget.innerHTML);
