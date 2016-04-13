@@ -492,7 +492,7 @@ UpdateMP = function(user,UpdateMPcallback){
                             for(i in arrP){
                                 Ptotal+= arrP[i].artists.length;
                             }
-                            console.log("p total: " + Ptotal);
+                            // console.log("p total: " + Ptotal);
 
                             var len = arrP.length;
                             for(var k = 0; k<len; k++){
