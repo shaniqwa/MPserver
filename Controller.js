@@ -321,8 +321,8 @@ exports.processWizardForm = function(req,res,data) {
 			MP.pleasure.preferences.push(data.p_hiphop);
 		}
 
-		console.log("business pref: " + MP.business.preferences);
-		console.log("pleasure pref: " + MP.pleasure.preferences);
+		// console.log("business pref: " + MP.business.preferences);
+		// console.log("pleasure pref: " + MP.pleasure.preferences);
 		
 		var arrB = [];
 		var arrP = [];
@@ -336,10 +336,10 @@ exports.processWizardForm = function(req,res,data) {
 			//check if category is in prefs
 			if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
 			    //In the array! all good
-			    console.log("in business array: "+ arrB[i].category);
+			    // console.log("in business array: "+ arrB[i].category);
 			} else {
 			    //Not in the array, take this genre out of pie
-			    console.log("NOT in business array: "+ arrB[i].category);
+			    // console.log("NOT in business array: "+ arrB[i].category);
 			    arrB.splice(i, 1);	
 			}
 		}
@@ -350,10 +350,10 @@ exports.processWizardForm = function(req,res,data) {
 				//check jf category js jn prefs
 				if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
 				    //jn the array! all good
-				    console.log("in pleasure array: "+ arrP[j].category);
+				    // console.log("in pleasure array: "+ arrP[j].category);
 				} else {
 				    //Not jn the array, take thjs genre out of pje
-				    console.log("NOT in pleasure array: "+ arrP[j].category);
+				    // console.log("NOT in pleasure array: "+ arrP[j].category);
 				    arrP.splice(j, 1);	
 				}
 		}
@@ -363,12 +363,12 @@ exports.processWizardForm = function(req,res,data) {
 		for(i in arrB){
 			Btotal+= arrB[i].artists.length;
 		}
-		console.log("b total: " + Btotal);
+		// console.log("b total: " + Btotal);
 
 		for(i in arrP){
 			Ptotal+= arrP[i].artists.length;
 		}
-		console.log("p total: " + Ptotal);
+		// console.log("p total: " + Ptotal);
 
 
 		var len = arrB.length;
@@ -385,13 +385,12 @@ exports.processWizardForm = function(req,res,data) {
 		MP.business.genres = arrB;
 		MP.pleasure.genres = arrP;
 
-		console.log("BusinessPie");
-		console.log(arrB);
-		console.log("PleasurePie");
-		console.log(arrP);
+		// console.log("BusinessPie");
+		// console.log(arrB);
+		// console.log("PleasurePie");
+		// console.log(arrP);
         callback();
-    }
-    ,
+    },
 
     //step 4:  save new pies to db
    	function(callback) {
