@@ -69,10 +69,10 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            }
            for(i in data){
            	   if(typeof data[i].artistName === 'undefined'){
-	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork});
+	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
 	           }
 	           else{
-	             $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url});
+	             $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
 	           }
 	           	 
 	       }
@@ -81,20 +81,26 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     };
     
     $scope.returnUrl = function(){
+          
+          
           console.log($scope.track.length);
-          var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-          url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
-          console.log(url);
-          $scope.myVideo = $sce.trustAsResourceUrl(url);
-           $scope.clickMe(); 
-          $scope.counter = $scope.counter++;
+          if ($scope.counter < $scope.track.length){
+            var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
+            url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
+            console.log(url);
+            $scope.myVideo = $sce.trustAsResourceUrl(url);
+            $scope.track[$scope.counter].active = 1;
+            if($scope.counter != 0){
+              $scope.track[$scope.counter - 1].active = 0;
+            }
+            $scope.counter++;
+          }
+          else{
+            //bring me newplaylist
+            $scope.counter = 0;
+          }
          
     };
- 
-    $scope.clickMe = function(){
-       $("iframe").click()[0];
-       $("embed").click()[0];
-    }
 
 	/*$scope.getSong = function($event){
        var genre = $event.currentTarget.innerHTML;
