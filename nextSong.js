@@ -164,6 +164,7 @@ function getRandArtist(type, userObject, currGenre) {
         } // todo: will return from findMatch
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
+             console.log(userObject[obj][type][distribution(engine)]);
             return userObject[obj][type][distribution(engine)];
         }
     }
