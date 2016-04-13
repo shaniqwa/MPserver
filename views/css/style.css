@@ -37,6 +37,9 @@ h1,h2,h3,h4{
  select{
     color:black;
  }
+ .cursor:hover{
+    cursor: pointer;
+ }
 
  /*SEARCH FORM*/
 .search-form {
