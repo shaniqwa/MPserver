@@ -76,11 +76,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 	           }
 	           	 
 	       }
-        $scope.returnUrl();  });
+        $scope.nextSong();  });
 	     
     };
     
-    $scope.returnUrl = function(){
+    $scope.nextSong = function(){
           
           
           console.log($scope.track.length);
