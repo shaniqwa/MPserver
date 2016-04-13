@@ -13,6 +13,9 @@ body{
 h1,h2,h3,h4{
 	font-family: 'Unica One', sans-serif;
 }
+.container{
+	width: 100%;
+}
 .highcharts-tooltip tspan{
 	font-size: 16px !important;
 }
@@ -44,6 +47,10 @@ h1,h2,h3,h4{
  .search-btn {
     border-radius: 0px 30px 30px 0px;
     cursor:pointer;
+}
+.search-custom{
+	display: inline-block;
+	width: 88%;
 }
 
 #profileImg{

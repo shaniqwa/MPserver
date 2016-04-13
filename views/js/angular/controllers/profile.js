@@ -83,7 +83,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     $scope.returnUrl = function(){
           console.log($scope.track.length);
           var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-          url += "?autoplay=1&cc_load_policy=1";
+          url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
           console.log(url);
           $scope.myVideo = $sce.trustAsResourceUrl(url);
            $scope.clickMe(); 
