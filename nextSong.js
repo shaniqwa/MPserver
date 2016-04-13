@@ -376,7 +376,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 } else {
                                                     collection = db.collection('Producer_songs_list');
                                                     collection.findOne({
-                                                        prodId: document.userId
+                                                        prodId: document.userId //STAT : please debug this line is creating a bug : "cannot read propery userId of null"
                                                     }, function(err, document) {
                                                         if (err) { //user not found
                                                             throw err;
