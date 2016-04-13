@@ -313,6 +313,26 @@ io.on('connection', function(client) {
 		Controller.addToFavorites(res,data);
 	});
 
+    //Get User's Favorites list
+    app.param('userID', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\nRequest to delete user with userID: " + value);
+        next();
+    });
+
+    //route that recives parameter using defined parameters
+    app.get('/getFavorites/:userID', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        Controller.getFavorites(res,req.params.userID);
+    });
+
 	//Add Song to Blacklist
 	app.post('/addToBlackList', function (req, res){
 		res.header("Access-Control-Allow-Origin", "*");

@@ -119,6 +119,7 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 // 	});
 // }
 
+
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -131,6 +132,17 @@ exports.addToFavorites = function(res,data) {
 	});
 }
 
+exports.getFavorites = function(res,userId) {
+	//addToSet make sure there are no duplicates is songs array.
+	Favorites.findOne({ userId: userId }, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error getting favorites: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json(doc.songs);
+	});
+}
 exports.addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
