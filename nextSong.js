@@ -203,7 +203,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
             currGenre = prevNG;
         }
     }
-
+	
     runs = parseInt(runs) + 1;
     //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
@@ -233,7 +233,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
-                                if (currGenre == newGenre) {
+                                if ((currGenre == newGenre) || (runs == 1) ) { // if same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
                                     if (prodOrConsumer == "artists") { // known artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
@@ -413,7 +413,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
-                                if (currGenre == newGenre) { //stay in same genre
+                                if (currGenre == newGenre || (runs == 1) { //stay in same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
                                     if (prodOrConsumer == "artists") { // known artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
