@@ -15,13 +15,9 @@
             <div class="well height-800">
             <iframe width="100%" height="200" frameborder="0" allowfullscreen ng-src="{{myVideo}}">
             </iframe>
-            <span class="cursor fa fa-fast-forward" ng-click="nextSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-pause" ng-click="pauseSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-play" ng-click="playSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-heart-o" ng-click="addToFav()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-frown-o" ng-click="adToBlacklist()"></span>
-            <h3><span class="fa fa-play-circle" ng-click="clickMe()"></span> Playlist</h3>
 
+            <h3><span class="fa fa-play-circle" ng-click="clickMe()"></span> Playlist</h3>
+             <div ng-show="loading" class="loading"><img src="images/loader.gif"></div>
             <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
             
              <div ng-repeat="x in track"> 
@@ -207,7 +203,7 @@
                     <% if (user.profileImage) { %>
                         <img src=" <%= user.profileImage %> " width="60"><br><br>
                     <% } %>
-                    <strong>Fist Name</strong>: <%= user.userId %><br>
+
                     <strong>Fist Name</strong>: <%= user.firstName %><br>
                     <strong>Last Name</strong>: <%= user.lastName %><br>
                     <strong>email</strong>: <%= user.email %><br>

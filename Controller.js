@@ -119,7 +119,6 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 // 	});
 // }
 
-
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -132,17 +131,6 @@ exports.addToFavorites = function(res,data) {
 	});
 }
 
-exports.getFavorites = function(res,userId) {
-	//addToSet make sure there are no duplicates is songs array.
-	Favorites.findOne({ userId: userId }, function (err, doc) {
-	  if (err){
-	  	res.status(200).json("error getting favorites: " + err.message);
-	  	return err;
-	  } 
-	  // done!
-	  res.status(200).json(doc.songs);
-	});
-}
 exports.addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -154,6 +142,91 @@ exports.addToBlackList = function(res,data) {
 	  res.status(200).json("New song has been added to blacklist successfully for user " + data.userId);
 	});
 }
+//search
+exports.searchuser = function(res,data) {
+
+	User.findOne({ username: data }, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error searching user: " + err.message);
+	  } 
+	  // done!
+	  console.log("doc "+doc);
+	  var result = {username: doc.username, type: doc.typeOfUser, profileImage: doc.profileImage, firstName: doc.firstName, lastName: doc.lastName};
+	  console.log(result);
+	  res.status(200).json(result);
+	});
+}
+
+//recommandation
+exports.recommandation = function(res, userID){
+	var producers = [];
+	PleasurePie.findOne({ pleasurePieId: userID }, function (err, data) {
+	  if (err){
+	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
+	  } 
+	  for(var i=0; i<data.genres.length; i++){
+	  	console.log(data.genres[i].producers);
+	  	producers.push.apply(producers, data.genres[i].producers);
+	  	//console.log(producers);
+	  }	
+	  console.log("done pleasure");
+
+	  BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
+		  if (err){
+		  	res.status(200).json("error finding buisness pie for user: " + err.message);
+		  } 
+		  for(var i=0; i<data.genres.length; i++){
+		  	console.log(data.genres[i].producers);
+		  	producers.push.apply(producers, data.genres[i].producers);
+		  	//console.log(producers);
+		  }
+		  console.log("done business");
+
+		  console.log("producers:");
+			console.log(producers);
+			var result = [];
+
+			User.find({}, function (err, data) {
+				
+			  if (err){
+			  	res.status(200).json("error finding producers type: " + err.message);
+			  } 
+			  
+			  console.log("data");
+		      //console.log(data);
+
+		      data.forEach(function(user){
+		      	console.log("user");
+		      	console.log(user.username +" " + user.typeOfUser);
+
+		      	for(var i=0; i<producers.length; i++){
+		      		console.log("producers[i] "+producers[i]);
+		      		if(producers[i] === user.username && user.typeOfUser === "Producer"){
+		      			console.log("success "+user.username)
+			  			result.push({username: user.username, profileImage: user.profileImage});
+			  		}
+		      	}
+		      });
+			  console.log(result);
+			  // for(var i=0; i<producers.length; i++){
+			  // 	console.log("producers[i] "+producers[i]);
+			  // 	for(var j=0; j<data.length; j++){
+			  // 		if(producers[i].username === data[j].username){
+			  // 			result.push({username: data[j].username, profileImage: data[j].profileImage});
+			  // 		}
+			  // 	}
+			  	
+			  // }
+			  res.status(200).json(result);
+			});
+
+				  
+		});
+	});
+
+	
+}
+
 
 //safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
