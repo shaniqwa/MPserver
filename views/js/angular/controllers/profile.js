@@ -16,6 +16,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
        user = JSON.parse(data);
        // console.log(user); 
         $scope.userId = user.userId;
+        console.log($scope.userId);
        $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
             console.log(data); 
            for(i in data.songs){
