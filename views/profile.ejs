@@ -98,14 +98,21 @@
                     <!-- FAVORITES -->
                     <div id="favorites" class="tab-pane fade">
                       <h3>favorites</h3>
-                          <div ng-repeat="x in favorits">                        
-                                <div style="padding-top:10px">
-                                    <div class="name">Artist: {{x.artistName}}</div>
-                                    <div class="location">Song: {{x.songName}}</div>
-                                    <!-- <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div> -->
-                                    <hr>
-                                </div>
-                            </div>  
+                        <table class="table table-inverse table-hover">
+                            <tbody>
+<!--                                 <thead>
+                                <th class="col-md-3"></th>
+                                <th class="col-md-6"></th>
+                                <th class="col-md-3"></th>
+                                </thead> -->
+
+                                <tr ng-repeat="x in favorits">
+                                    <td class="col-md-3"> {{x.artistName}}</td>
+                                    <td class="col-md-6 song">{{x.songName}}</td>
+                                    <td class="col-md-3 duration">{{x.duration}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <!-- FOLLOWING -->

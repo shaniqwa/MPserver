@@ -198,6 +198,7 @@ module.exports = function(passport) {
                             return done(null, user);
                     }else{
                         if(user.FB_AT != null){
+                            console.log("call update pie");
                             UpdateMP(user, function(err,callback){
                                 if(err){
                                     return console.log(err);
@@ -280,6 +281,7 @@ module.exports = function(passport) {
                             return done(null, user);
                     }else{
                         if(user.YT_AT != null){
+                            console.log("call update pie");
                             UpdateMP(user, function(err,callback){
                                 if(err){
                                     return console.log(err);

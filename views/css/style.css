@@ -1,3 +1,5 @@
+/* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
+
 *{
 	margin: 0;
 	padding: 0;
@@ -5,8 +7,10 @@
 
 body{
 	color: #E0E0E3 !important;
-	font-family: 'Unica One', sans-serif;
-	background-color: #a4a4a6;
+	/*font-family: 'Unica One', sans-serif;*/
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+	background-color: #333335;
 	word-wrap:break-word; 
 }
 
@@ -55,6 +59,23 @@ h1,h2,h3,h4{
 	display: inline-block;
 	width: 88%;
 }
+
+/*FAVORITES TABLE*/
+.song{
+    font-weight: 600;
+    text-align: center;   
+}
+.duration{
+    text-align: right;      
+}
+.table-hover tbody tr td{
+  border-color: #8900fe;
+}
+.table-hover tbody tr:hover td{
+  background-color: #8900fe;
+  border-color: #8900fe;
+}
+
 
 #profileImg{
     position: absolute;

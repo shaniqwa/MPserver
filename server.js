@@ -57,7 +57,7 @@ io.on('connection', function(client) {
     console.log('Client connected...');
 
     client.on('join', function(data) {
-        console.log(data);
+        // console.log(data);
          // client.emit('messages', 'Hello from server');
     });
 
@@ -145,7 +145,6 @@ io.on('connection', function(client) {
                     return console.log(err);
                 }
                 pleasure = pleasurePie;
-                console.log(pleasure);
                 callback();
             });
         }
@@ -257,7 +256,7 @@ io.on('connection', function(client) {
             passport.authenticate('google', {
                    failureRedirect : '/'
             }),function(req, res){
-                console.log(req.user.is_New);
+                // console.log(req.user.is_New);
                 if (req.user.is_New) { return res.redirect('/BPwizard'); }
                 res.redirect('/profile');
             });
@@ -275,7 +274,6 @@ io.on('connection', function(client) {
         passport.authenticate('facebook', {
             failureRedirect : '/'
         }),function(req, res){
-            console.log(req.user.is_New);
             if (req.user.is_New) { return res.redirect('/BPwizard'); }
             res.redirect('/profile');
         });
@@ -294,7 +292,7 @@ io.on('connection', function(client) {
 
 	//Business Pleasure Wizard - a step in registration
 	app.get('/BPwizard', function (req, res){
-        console.log("user id: " +req.user.userId);
+        // console.log("user id: " +req.user.userId);
             res.render('BPwizard.ejs', {
                 userID : req.user.userId
             });
@@ -317,7 +315,6 @@ io.on('connection', function(client) {
     app.param('userID', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        console.log("\nRequest to delete user with userID: " + value);
         next();
     });
 
@@ -352,7 +349,6 @@ io.on('connection', function(client) {
 	app.param('userID', function ( req, res, next, value){
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		console.log("\nRequest to delete user with userID: " + value);
 		next();
 	});
 
