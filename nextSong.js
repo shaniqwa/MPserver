@@ -160,7 +160,7 @@ function getRandArtist(type, userObject, currGenre) {
 
     for (obj in userObject) {
         if (userObject[obj][type].length == 0) {
-            return "almog.einattt@gmail.com";
+            return "shaniqwa11";
         } // todo: will return from findMatch
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
