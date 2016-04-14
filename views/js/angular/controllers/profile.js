@@ -1,12 +1,12 @@
 var profile = angular.module('profile',[]);
 
 var model = {
-	
+  
 }
 var user;
 var prodId = 63;
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
-	$scope.mod = model;
+  $scope.mod = model;
   $scope.songDetails = [];
   $scope.ageGroupCounters = [];
   $scope.songCounters = [];
@@ -17,16 +17,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.init = function(data){
        user = JSON.parse(data);
        // console.log(user); 
-<<<<<<< HEAD:views/js/angular/profile.js
-<<<<<<< HEAD
         $scope.userId = user.userId;
-        console.log($scope.userId);
-=======
-        
->>>>>>> 3d6ea99b43d840328a985d4c5f7aec88896722cf
-=======
-        $scope.userId = user.userId;
->>>>>>> parent of 408b1e9... Merge branch 'dev' of https://github.com/shaniqwa/MPserver into dev:views/js/angular/controllers/profile.js
        $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
             console.log(data); 
            for(i in data.songs){
@@ -68,11 +59,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    
     //console.log(" rafi print---->" + $scope.currGenre);
     $scope.bringMePlaylist = function($event){
-   	$scope.track = [];
+    $scope.track = [];
     $scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
-   	//$scope.mod.currGenre = currGenre;
+    //$scope.mod.currGenre = currGenre;
          // console.log(" rafi print---->" + $scope.mod.currGenre );
          var genre = $event.currentTarget.innerHTML;
          console.log(genre);
@@ -88,15 +79,15 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
            }
            for(i in data){
-           	   if(typeof data[i].artistName === 'undefined'){
-	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
-	             }
-	             else{
-	               $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
-	             }
-	         }
+               if(typeof data[i].artistName === 'undefined'){
+                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+               }
+               else{
+                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+               }
+           }
         $scope.nextSong();  });
-	     
+       
     };
     
     $scope.nextSong = function(){
@@ -146,7 +137,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            console.log(data);
       });
     };
-	/*$scope.getSong = function($event){
+  /*$scope.getSong = function($event){
        var genre = $event.currentTarget.innerHTML;
         console.log($event.currentTarget.innerHTML);
          $http.get('http://localhost:3000/getPlaylist/' + 59 + '/' + 1 + '/' + 10 + '/' + genre).success(function(data){
