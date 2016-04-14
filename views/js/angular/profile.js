@@ -11,21 +11,35 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.ageGroupCounters = [];
   $scope.songCounters = [];
   $scope.counter = 0;
+  $scope.userId;
+  $scope.favorits = [];
+  $scope.heart = "fa-heart-o";
   $scope.init = function(data){
        user = JSON.parse(data);
        // console.log(user); 
+<<<<<<< HEAD:views/js/angular/profile.js
 <<<<<<< HEAD
         $scope.userId = user.userId;
         console.log($scope.userId);
 =======
         
 >>>>>>> 3d6ea99b43d840328a985d4c5f7aec88896722cf
+=======
+        $scope.userId = user.userId;
+>>>>>>> parent of 408b1e9... Merge branch 'dev' of https://github.com/shaniqwa/MPserver into dev:views/js/angular/controllers/profile.js
        $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
             console.log(data); 
            for(i in data.songs){
              $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
            }
-       });$scope.selectedSong = 0;
+       });
+       $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
+            for(i in data){
+              $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
+           }
+       });
+
+       $scope.selectedSong = 0;
         $http.get('http://localhost:3000/getProducerStatistics/' + prodId).success(function(data){
            console.log(data);
            $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
@@ -54,8 +68,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    
     //console.log(" rafi print---->" + $scope.currGenre);
     $scope.bringMePlaylist = function($event){
-    $scope.loading = true;
    	$scope.track = [];
+    $scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
    	//$scope.mod.currGenre = currGenre;
@@ -75,34 +89,63 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            }
            for(i in data){
            	   if(typeof data[i].artistName === 'undefined'){
-	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork});
-	           }
-	           else{
-	             $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url});
-	           }
-	           	 
-	       }
-         $scope.loading = false;
-        $scope.returnUrl();  });
+	               $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+	             }
+	             else{
+	               $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+	             }
+	         }
+        $scope.nextSong();  });
 	     
     };
     
-    $scope.returnUrl = function(){
-          console.log($scope.track.length);
-          var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-          url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
-          console.log(url);
-          $scope.myVideo = $sce.trustAsResourceUrl(url);
-           $scope.clickMe(); 
-          $scope.counter = $scope.counter++;
+    $scope.nextSong = function(){
+      //TODO: check it the comming song is already in favorits
+      if($scope.heart == "fa-heart"){
+        $scope.heart = "fa-heart-o";
+      }
+          if ($scope.counter < $scope.track.length){
+            var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
+            url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
+            console.log(url);
+            $scope.myVideo = $sce.trustAsResourceUrl(url);
+            $scope.track[$scope.counter].active = 1;
+            if($scope.counter != 0){
+              $scope.track[$scope.counter - 1].active = 0;
+            }
+            $scope.counter++;
+          }
+          else{
+            //bring me newplaylist
+            $scope.counter = 0;
+          }
          
     };
- 
-    $scope.clickMe = function(){
-       $("iframe").click()[0];
-       $("embed").click()[0];
-    }
+    
+    $scope.addToFav = function(){
+       $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43"});
+      if($scope.heart == "fa-heart-o"){
+        $scope.heart = "fa-heart";
+      }else{
+        $scope.heart == "fa-heart-o"
+      }
 
+     
+      var data = JSON.stringify({
+                userId : $scope.userId,
+                songData : {
+                   song: $scope.track[$scope.counter - 1].songName,
+                   artist: $scope.track[$scope.counter - 1].artistName,
+                   duration: "3:43"
+                }
+            });
+
+      console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      $http.defaults.headers.post["Content-Type"] = "application/json";
+      $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
+           console.log(data);
+      });
+    };
 	/*$scope.getSong = function($event){
        var genre = $event.currentTarget.innerHTML;
         console.log($event.currentTarget.innerHTML);

@@ -139,10 +139,10 @@ var pushSong = function(song, typeAP, callback) {
 
 }
 
-function pickProducerConsumer() {
+function pickProducerConsumer() { 
     var relations = [
-        [20, "producers"],
-        [80, "artists"]
+        [0, "producers"],
+        [100, "artists"]
     ];
     return pickChoice(relations);
 };
@@ -164,6 +164,7 @@ function getRandArtist(type, userObject, currGenre) {
         } // todo: will return from findMatch
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
+            console.log("####################### " + userObject[obj][type][distribution(engine)]);
             return userObject[obj][type][distribution(engine)];
         }
     }
@@ -202,7 +203,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
             currGenre = prevNG;
         }
     }
-
+	
     runs = parseInt(runs) + 1;
     //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
@@ -232,7 +233,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
                                 }
                                 var newGenre = pickChoice(results);
-                                if (currGenre == newGenre) {
+                                if ((currGenre == newGenre) || (runs == 1) ) { // if same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
                                     if (prodOrConsumer == "artists") { // known artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
@@ -375,7 +376,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 } else {
                                                     collection = db.collection('Producer_songs_list');
                                                     collection.findOne({
-                                                        prodId: document.userId
+                                                        prodId: document.userId //STAT : please debug this line is creating a bug : "cannot read propery userId of null"
                                                     }, function(err, document) {
                                                         if (err) { //user not found
                                                             throw err;
@@ -412,7 +413,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
-                                if (currGenre == newGenre) { //stay in same genre
+                                if ((currGenre == newGenre) || (runs == 1)) { //stay in same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
                                     if (prodOrConsumer == "artists") { // known artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);

@@ -119,6 +119,7 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 // 	});
 // }
 
+
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -131,6 +132,17 @@ exports.addToFavorites = function(res,data) {
 	});
 }
 
+exports.getFavorites = function(res,userId) {
+	//addToSet make sure there are no duplicates is songs array.
+	Favorites.findOne({ userId: userId }, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error getting favorites: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json(doc.songs);
+	});
+}
 exports.addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -142,91 +154,6 @@ exports.addToBlackList = function(res,data) {
 	  res.status(200).json("New song has been added to blacklist successfully for user " + data.userId);
 	});
 }
-//search
-exports.searchuser = function(res,data) {
-
-	User.findOne({ username: data }, function (err, doc) {
-	  if (err){
-	  	res.status(200).json("error searching user: " + err.message);
-	  } 
-	  // done!
-	  console.log("doc "+doc);
-	  var result = {username: doc.username, type: doc.typeOfUser, profileImage: doc.profileImage, firstName: doc.firstName, lastName: doc.lastName};
-	  console.log(result);
-	  res.status(200).json(result);
-	});
-}
-
-//recommandation
-exports.recommandation = function(res, userID){
-	var producers = [];
-	PleasurePie.findOne({ pleasurePieId: userID }, function (err, data) {
-	  if (err){
-	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
-	  } 
-	  for(var i=0; i<data.genres.length; i++){
-	  	console.log(data.genres[i].producers);
-	  	producers.push.apply(producers, data.genres[i].producers);
-	  	//console.log(producers);
-	  }	
-	  console.log("done pleasure");
-
-	  BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
-		  if (err){
-		  	res.status(200).json("error finding buisness pie for user: " + err.message);
-		  } 
-		  for(var i=0; i<data.genres.length; i++){
-		  	console.log(data.genres[i].producers);
-		  	producers.push.apply(producers, data.genres[i].producers);
-		  	//console.log(producers);
-		  }
-		  console.log("done business");
-
-		  console.log("producers:");
-			console.log(producers);
-			var result = [];
-
-			User.find({}, function (err, data) {
-				
-			  if (err){
-			  	res.status(200).json("error finding producers type: " + err.message);
-			  } 
-			  
-			  console.log("data");
-		      //console.log(data);
-
-		      data.forEach(function(user){
-		      	console.log("user");
-		      	console.log(user.username +" " + user.typeOfUser);
-
-		      	for(var i=0; i<producers.length; i++){
-		      		console.log("producers[i] "+producers[i]);
-		      		if(producers[i] === user.username && user.typeOfUser === "Producer"){
-		      			console.log("success "+user.username)
-			  			result.push({username: user.username, profileImage: user.profileImage});
-			  		}
-		      	}
-		      });
-			  console.log(result);
-			  // for(var i=0; i<producers.length; i++){
-			  // 	console.log("producers[i] "+producers[i]);
-			  // 	for(var j=0; j<data.length; j++){
-			  // 		if(producers[i].username === data[j].username){
-			  // 			result.push({username: data[j].username, profileImage: data[j].profileImage});
-			  // 		}
-			  // 	}
-			  	
-			  // }
-			  res.status(200).json(result);
-			});
-
-				  
-		});
-	});
-
-	
-}
-
 
 //safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
@@ -394,8 +321,8 @@ exports.processWizardForm = function(req,res,data) {
 			MP.pleasure.preferences.push(data.p_hiphop);
 		}
 
-		console.log("business pref: " + MP.business.preferences);
-		console.log("pleasure pref: " + MP.pleasure.preferences);
+		// console.log("business pref: " + MP.business.preferences);
+		// console.log("pleasure pref: " + MP.pleasure.preferences);
 		
 		var arrB = [];
 		var arrP = [];
@@ -409,10 +336,10 @@ exports.processWizardForm = function(req,res,data) {
 			//check if category is in prefs
 			if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
 			    //In the array! all good
-			    console.log("in business array: "+ arrB[i].category);
+			    // console.log("in business array: "+ arrB[i].category);
 			} else {
 			    //Not in the array, take this genre out of pie
-			    console.log("NOT in business array: "+ arrB[i].category);
+			    // console.log("NOT in business array: "+ arrB[i].category);
 			    arrB.splice(i, 1);	
 			}
 		}
@@ -423,10 +350,10 @@ exports.processWizardForm = function(req,res,data) {
 				//check jf category js jn prefs
 				if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
 				    //jn the array! all good
-				    console.log("in pleasure array: "+ arrP[j].category);
+				    // console.log("in pleasure array: "+ arrP[j].category);
 				} else {
 				    //Not jn the array, take thjs genre out of pje
-				    console.log("NOT in pleasure array: "+ arrP[j].category);
+				    // console.log("NOT in pleasure array: "+ arrP[j].category);
 				    arrP.splice(j, 1);	
 				}
 		}
@@ -436,12 +363,12 @@ exports.processWizardForm = function(req,res,data) {
 		for(i in arrB){
 			Btotal+= arrB[i].artists.length;
 		}
-		console.log("b total: " + Btotal);
+		// console.log("b total: " + Btotal);
 
 		for(i in arrP){
 			Ptotal+= arrP[i].artists.length;
 		}
-		console.log("p total: " + Ptotal);
+		// console.log("p total: " + Ptotal);
 
 
 		var len = arrB.length;
@@ -458,13 +385,12 @@ exports.processWizardForm = function(req,res,data) {
 		MP.business.genres = arrB;
 		MP.pleasure.genres = arrP;
 
-		console.log("BusinessPie");
-		console.log(arrB);
-		console.log("PleasurePie");
-		console.log(arrP);
+		// console.log("BusinessPie");
+		// console.log(arrB);
+		// console.log("PleasurePie");
+		// console.log(arrP);
         callback();
-    }
-    ,
+    },
 
     //step 4:  save new pies to db
    	function(callback) {

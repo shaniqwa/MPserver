@@ -15,21 +15,23 @@
             <div class="well height-800">
             <iframe width="100%" height="200" frameborder="0" allowfullscreen ng-src="{{myVideo}}">
             </iframe>
-
+            <span class="cursor fa fa-fast-forward" ng-click="nextSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-pause" ng-click="pauseSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-play" ng-click="playSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa {{heart}}" ng-click="addToFav()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-frown-o" ng-click="adToBlacklist()"></span>
             <h3><span class="fa fa-play-circle" ng-click="clickMe()"></span> Playlist</h3>
-             <div ng-show="loading" class="loading"><img src="images/loader.gif"></div>
+
             <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
             
-             <div ng-repeat="x in track"> 
-                       
-                        <div style="padding-top:10px">
-                            <div class="name">Artist: {{x.artistName}}</div>
-                            <div class="location">Song: {{x.songName}}</div>
-                            <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div>
-                            <hr>
-                        </div>
-                       
-              </div>     
+            <div ng-repeat="x in track">                        
+                <div style="padding-top:10px">
+                    <div class="name">Artist: {{x.artistName}}</div>
+                    <div class="location">Song: {{x.songName}}</div>
+                    <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div>
+                    <hr>
+                </div>
+            </div>     
 
 
 
@@ -92,14 +94,28 @@
 
 
                     </div>
+
+                    <!-- FAVORITES -->
                     <div id="favorites" class="tab-pane fade">
                       <h3>favorites</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                          <div ng-repeat="x in favorits">                        
+                                <div style="padding-top:10px">
+                                    <div class="name">Artist: {{x.artistName}}</div>
+                                    <div class="location">Song: {{x.songName}}</div>
+                                    <!-- <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div> -->
+                                    <hr>
+                                </div>
+                            </div>  
                     </div>
+
+                    <!-- FOLLOWING -->
                     <div id="following" class="tab-pane fade">
                       <h3>following</h3>
                       <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                     </div>
+
+
+                    <!-- FOLLOWERS -->
                     <div id="followers" class="tab-pane fade">
                       <h3>Followers</h3>
                       <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
@@ -203,7 +219,7 @@
                     <% if (user.profileImage) { %>
                         <img src=" <%= user.profileImage %> " width="60"><br><br>
                     <% } %>
-
+                    <strong>Fist Name</strong>: <%= user.userId %><br>
                     <strong>Fist Name</strong>: <%= user.firstName %><br>
                     <strong>Last Name</strong>: <%= user.lastName %><br>
                     <strong>email</strong>: <%= user.email %><br>
