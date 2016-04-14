@@ -17,6 +17,7 @@
             </iframe>
 
             <h3><span class="fa fa-play-circle" ng-click="clickMe()"></span> Playlist</h3>
+             <div ng-show="loading" class="loading"><img src="images/loader.gif"></div>
             <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
             
              <div ng-repeat="x in track"> 

@@ -49,6 +49,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    
     //console.log(" rafi print---->" + $scope.currGenre);
     $scope.bringMePlaylist = function($event){
+    $scope.loading = true;
    	$scope.track = [];
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
@@ -76,6 +77,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 	           }
 	           	 
 	       }
+         $scope.loading = false;
         $scope.returnUrl();  });
 	     
     };
