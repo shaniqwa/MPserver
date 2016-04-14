@@ -139,7 +139,7 @@ var pushSong = function(song, typeAP, callback) {
 
 }
 
-function pickProducerConsumer() {
+function pickProducerConsumer() { 
     var relations = [
         [0, "producers"],
         [100, "artists"]
@@ -413,7 +413,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
-                                if (currGenre == newGenre || (runs == 1) { //stay in same genre or first run
+                                if ((currGenre == newGenre) || (runs == 1)) { //stay in same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
                                     if (prodOrConsumer == "artists") { // known artist
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
