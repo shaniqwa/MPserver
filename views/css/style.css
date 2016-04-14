@@ -85,7 +85,7 @@ h1,h2,h3,h4{
     right: 0;
     bottom: 0;
     z-index: 999;
-    border: 2px dotted white;
+    border: 3px dotted white;
     padding: 10px;
 
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
