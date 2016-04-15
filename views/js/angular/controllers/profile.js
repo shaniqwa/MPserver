@@ -22,6 +22,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     option1: 'P',
     option2: 'B',
    };
+   $scope.track = [];
 
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
@@ -67,8 +68,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
     $scope.bringMePlaylist = function($event){
-    $scope.track = [];
-    $scope.counter = 0;
+     //$scope.track = [];
+     //$scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
          if(typeof $event === 'undefined'){
@@ -99,6 +100,40 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
 
 /***********************************************************/
+/*****************updatePlaylist FUNCTION*******************/
+/***********************************************************/
+    $scope.updatePlaylist = function($event){
+     //$scope.track = [];
+     //$scope.counter = 0;
+    console.log("my select is: " + $scope.data.select);
+    var myMode = ($scope.data.select == 'P') ? 1 : 2;
+         if(typeof $event === 'undefined'){
+            var genre =  $scope.defaultGenre;
+         }
+         else{
+           var genre = $event.currentTarget.innerHTML;
+           $scope.defaultGenre = genre;
+         }
+         console.log(genre);
+         var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+         console.log(url);
+         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+           console.log(data);
+           for(i in data){
+               if(typeof data[i].artistName === 'undefined'){
+                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+               }
+               else{
+                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+               }
+           }
+      });
+    };
+/***********************************************************/
+/*****************updatePlaylist FUNCTION*******************/
+/***********************************************************/
+
+/***********************************************************/
 /********************nextSong FUNCTION**********************/
 /***********************************************************/
     $scope.nextSong = function(){
@@ -114,6 +149,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             $scope.track[$scope.counter].active = 1;
             if($scope.counter != 0){
               $scope.track[$scope.counter - 1].active = 0;
+              $scope.track.splice([$scope.counter - 1],1);
+              $scope.counter--;
               var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
               myEl.remove();
             }
@@ -121,8 +158,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
           }
           else{
             //bring me newplaylist
-            $scope.counter = 0;
-            $scope.bringMePlaylist();
+            //$scope.counter = 0;
+            
+          }
+          if($scope.track.length == 5){
+              $scope.updatePlaylist();
           }
     };
 /***********************************************************/

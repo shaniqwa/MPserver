@@ -17,6 +17,36 @@
 /************************CONFIGURATIONS*********************/
 /***********************************************************/
 
+
+/***********************************************************/
+/***************************MIXINS**************************/
+/***********************************************************/
+.transform-rotate(@radius){
+  -ms-transform: rotate(@radius); /* IE 9 */
+  -webkit-transform: rotate(@radius); /* Chrome, Safari, Opera */
+  transform: rotate(@radius);
+}
+
+.transition(@sec){
+    -webkit-transition: all @sec ease;  /* WebKit */
+       -moz-transition: all @sec ease;  /* Firefox */
+         -ms-animation: all @sec ease; /* Internet Explorer */
+         -o-transition: all @sec ease;  /* Opera */
+            transition: all @sec ease;  /* Standard */
+}
+
+.animation(@sec){
+    -webkit-animation: fadein @sec; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein @sec; /* Firefox < 16 */
+        -ms-animation: fadein @sec; /* Internet Explorer */
+         -o-animation: fadein @sec; /* Opera < 12.1 */
+            animation: fadein @sec;
+}
+
+/***********************************************************/
+/***************************MIXINS**************************/
+/***********************************************************/
+
 /* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
 
 *{
@@ -111,12 +141,7 @@ h1,h2,h3,h4{
 #profileImg{
     border: 3px dotted @white;
     padding: 10px;
-
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 2s; /* Firefox < 16 */
-        -ms-animation: fadein 2s; /* Internet Explorer */
-         -o-animation: fadein 2s; /* Opera < 12.1 */
-            animation: fadein 2s;
+    .animation(2s);
 }
 /*END PIE*/
 
@@ -148,6 +173,17 @@ h1,h2,h3,h4{
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+.img{
+    background-image: url("https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg");
+    height:100px;
+    width:100px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+} 
 
 /***********************************************************/
 /******************REGION: PLAYLIST STYLE*******************/
@@ -187,7 +223,17 @@ h1,h2,h3,h4{
 }
 
 .yellow{
+  //color: #FFBB1B;
   color: #FFBB1B;
+  &:hover{
+    .transform-rotate(360deg);
+    .transition(1s);
+  }
+}
+
+.font-size{
+  font-size: 40px;
+  
 }
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
