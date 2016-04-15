@@ -1,3 +1,29 @@
+/***********************************************************/
+/************************CONFIGURATIONS*********************/
+/***********************************************************/
+@white: #ffffff;
+@black: #000000;
+@sea: #06befe;
+@hard-sea: #3872f8;
+@purple: #8900fe;
+@hard-purple: #d120a6;
+@pink: #ff166f;
+@dark-gray: #333335;
+
+//theme colors
+@main-color: @dark-gray;
+
+/***********************************************************/
+/************************CONFIGURATIONS*********************/
+/***********************************************************/
+
+
+
+
+
+
+
+
 /* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
 
 *{
@@ -10,7 +36,7 @@ body{
 	/*font-family: 'Unica One', sans-serif;*/
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 300;
-	background-color: #333335;
+	background-color: @main-color;
 	word-wrap:break-word; 
 }
 
@@ -24,13 +50,13 @@ h1,h2,h3,h4{
 	font-size: 16px !important;
 }
 .well{
-	background-color : #333335 !important;
+	background-color : @main-color !important;
 }
 .height-800{
 	min-height: 770px;
 }       
 .nav-tabs li a{
-   color:#ffffff;
+   color:@white;
 }
 .tab-content div{
     position: relative;
@@ -69,11 +95,11 @@ h1,h2,h3,h4{
     text-align: right;      
 }
 .table-hover tbody tr td{
-  border-color: #8900fe;
+  border-color: @purple;
 }
 .table-hover tbody tr:hover td{
-  background-color: #8900fe;
-  border-color: #8900fe;
+  background-color: @purple;
+  border-color: @purple;
 }
 
 
@@ -85,7 +111,7 @@ h1,h2,h3,h4{
     right: 0;
     bottom: 0;
     z-index: 999;
-    border: 3px dotted white;
+    border: 3px dotted @white;
     padding: 10px;
 
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
@@ -130,26 +156,24 @@ h1,h2,h3,h4{
 .repeatClass{
    padding-left: 24px;
    padding-top: 8px;
-}
-
-.repeatClass:first-of-type{
-   background-color: #E0E0E3;
-   padding-left: 24px;
-   padding-top: 8px;
-   border-radius: 2em;
-   font-weight: bold;
-}
-
-.repeatClass:first-of-type div{
-    color:#333335;
-}
-
-.repeatClass:first-of-type hr{
-    border-top: 1px solid transparent;
-}
-
-.repeatClass:first-of-type div .location a{
-    color:#23527c;
+   &:first-of-type{
+     background-color: #E0E0E3;
+     padding-left: 24px;
+     padding-top: 8px;
+     border-radius: 2em;
+     font-weight: bold;
+     div{
+       color:@main-color;
+       .location{
+          a{
+            color:#23527c;
+          }
+       }
+     }
+     hr{
+       border-top: 1px solid transparent;
+     }
+   }
 }
 /***********************************************************/
 /***************END REGION: PLAYLIST STYLE******************/

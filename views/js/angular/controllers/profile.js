@@ -13,7 +13,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.counter = 0;
   $scope.userId;
   $scope.favorits = [];
+  $scope.defaultGenre = [];
   $scope.heart = "fa-heart-o";
+  $scope.red = [];
   $scope.init = function(data){
        user = JSON.parse(data);
        // console.log(user); 
@@ -65,7 +67,15 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
     //$scope.mod.currGenre = currGenre;
          // console.log(" rafi print---->" + $scope.mod.currGenre );
-         var genre = $event.currentTarget.innerHTML;
+         if(typeof $event === 'undefined'){
+            var genre =  $scope.defaultGenre;
+           
+         }
+         else{
+           var genre = $event.currentTarget.innerHTML;
+           $scope.defaultGenre = genre;
+         }
+        
          console.log(genre);
          var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          console.log(url);
@@ -92,6 +102,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
+      
       if($scope.heart == "fa-heart"){
         $scope.heart = "fa-heart-o";
       }
@@ -103,12 +114,15 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             $scope.track[$scope.counter].active = 1;
             if($scope.counter != 0){
               $scope.track[$scope.counter - 1].active = 0;
+              var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
+              myEl.remove();
             }
             $scope.counter++;
           }
           else{
             //bring me newplaylist
             $scope.counter = 0;
+            $scope.bringMePlaylist();
           }
          
     };
@@ -120,7 +134,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
       }else{
         $scope.heart == "fa-heart-o"
       }
-
+      $scope.red = "red";
      
       var data = JSON.stringify({
                 userId : $scope.userId,
@@ -136,6 +150,13 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
       $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
       });
+    };
+
+    $scope.pauseSong = function(){
+         var myEl = angular.element( document.querySelector( ".fa-pause" ) );
+         var myIframe = angular.element( document.querySelector( "iframe" ).contentWindow.document );
+         myIframe.find("#player").triggerHandler('click');
+         //myEl.remove();
     };
   /*$scope.getSong = function($event){
        var genre = $event.currentTarget.innerHTML;
