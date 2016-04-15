@@ -56,10 +56,11 @@ function callNextSong(times,ns, callNextSongCallback) {
 		require('deasync').sleep(100);
 }
 	    ns.getNextSong(function(err) {
-		
-	      if( err ) {
-	        console.log('error: '+err);
-	        callNextSongCallback(err);
+		  
+	      if( err == "no_url" ) {
+	        console.log('error(skipping one itter): '+err);
+			i = i -1;
+	        //callNextSongCallback(err);
 	      }
 	      else {
 	      	console.log("finished running getNextSong, i = " + i);

@@ -116,12 +116,12 @@ var pushSong = function(song, typeAP, callback) {
         } else { // no error
             if (result.items.length == 0) { // if no results on search TODO: make another call replace dummy
                 console.log("search on youtube : 0 results, pushing without url..");
-                playlist.push({
-                    artistName: song.artist.name,
-                    songName: song.name,
-                    url: "no_url" // todo something more intelligent
-                });
-                callback();
+              //  playlist.push({
+              //      artistName: song.artist.name,
+              //      songName: song.name,
+              //      url: "no_url" // todo something more intelligent
+              //  });
+                callback("no_url");
             } else { // there are results from youtube
                 console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
                 playlist.push({
@@ -130,7 +130,7 @@ var pushSong = function(song, typeAP, callback) {
                     url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
 					type: typeAP
                 });
-                callback();
+                callback("ok");
 				}
             }
         
@@ -241,14 +241,25 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                             var chsnSongArtist = getRandTrack(randArtist);
                                             console.log("the artist:: " + chsnSongArtist);
-                                            pushSong(chsnSongArtist,"artist", function() {
+                                            pushSong(chsnSongArtist,"artist", function(stat) {
+												if (stat == "ok") {
                                                 callback();
+												} else {
+													callback("no_url");
+													
+												}
                                             });
                                         } else { // find similar artist
                                             var artistSimiliar = getSimilarArtist(randArtist);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                            pushSong(chsnSongSimilar,"artist", function() {
+                                            pushSong(chsnSongSimilar,"artist", function(stat) {
+											if (stat == "ok") {
                                                 callback();
+												} else {
+													callback("no_url");
+													
+												}
+                                                
                                             });
                                         }
                                     } else { // producer
@@ -302,14 +313,24 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist = getRandTrack(randArtist);
-                                                        pushSong(chsnSongArtist,"artist", function() {
-                                                            callback();
+                                                        pushSong(chsnSongArtist,"artist", function(stat) {
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                         });
                                                     } else { // find similar artist
                                                         var artistSimiliar = getSimilarArtist(randArtist);
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                                        pushSong(chsnSongSimilar,"artist", function() {
-                                                            callback();
+                                                        pushSong(chsnSongSimilar,"artist", function(stat) {
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                         });
                                                     }
                                                 } else { // producer
@@ -354,14 +375,24 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistOrSimiliar = pickArtistOrSimiliar();
                                             if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                 var chsnSongArtist = getRandTrack(randArtist);
-                                                pushSong(chsnSongArtist,"artist", function() {
-                                                    callback();
+                                                pushSong(chsnSongArtist,"artist", function(stat) {
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                 });
                                             } else { // find similar artist
                                                 var artistSimiliar = getSimilarArtist(randArtist);
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar);
-                                                pushSong(chsnSongSimilar,"artist", function() {
-                                                    callback();
+                                                pushSong(chsnSongSimilar,"artist", function(stat) {
+                                                 if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                 });
                                             }
                                         } else { // producer
@@ -420,14 +451,24 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         var artistOrSimiliar = pickArtistOrSimiliar(); // choose song of this one or similiar
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                             var chsnSongArtist = getRandTrack(randArtist);
-                                            pushSong(chsnSongArtist,"artist", function() {
+                                            pushSong(chsnSongArtist,"artist", function(stat) {
+                                                if (stat == "ok") {
                                                 callback();
+												} else {
+													callback("no_url");
+													
+												}
                                             });
                                         } else { // find similar artist
                                             var artistSimiliar = getSimilarArtist(randArtist);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
                                             pushSong(chsnSongSimilar,"artist", function() {
+                                                if (stat == "ok") {
                                                 callback();
+												} else {
+													callback("no_url");
+													
+												}
                                             });
                                         }
                                     } else { // producer
@@ -481,14 +522,24 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist = getRandTrack(randArtist);
-                                                        pushSong(chsnSongArtist,"artist", function() {
-                                                            callback();
+                                                        pushSong(chsnSongArtist,"artist", function(stat) {
+                                                        if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                         });
                                                     } else { // find similar artist
                                                         var artistSimiliar = getSimilarArtist(randArtist);
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar.name);
-                                                        pushSong(chsnSongSimilar,"artist", function() {
-                                                            callback();
+                                                        pushSong(chsnSongSimilar,"artist", function(stat) {
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                         });
                                                     }
                                                 } else { // producer
@@ -533,14 +584,24 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistOrSimiliar = pickArtistOrSimiliar();
                                             if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                 var chsnSongArtist = getRandTrack(randArtist);
-                                                pushSong(chsnSongArtist,"artist", function() {
-                                                    callback();
+                                                pushSong(chsnSongArtist,"artist", function(stat) {
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                 });
                                             } else { // find similar artist
                                                 var artistSimiliar = getSimilarArtist(randArtist);
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar.name);
                                                 pushSong(chsnSongSimilar,"artist", function() {
-                                                    callback();
+                                                if (stat == "ok") {
+                                                callback();
+												} else {
+													callback("no_url");
+													
+												}
                                                 });
                                             }
                                         } else { // producer
