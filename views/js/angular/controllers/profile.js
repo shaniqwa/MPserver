@@ -13,12 +13,21 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.counter = 0;
   $scope.userId;
   $scope.favorits = [];
+  $scope.BL = [];
   $scope.defaultGenre = [];
   $scope.heart = "fa-heart-o";
   $scope.red = [];
+  $scope.data = {
+    select: 'P',
+    option1: 'P',
+    option2: 'B',
+   };
+
+/***********************************************************/
+/***************INIT FUNCTION - ON LOAD PAGE****************/
+/***********************************************************/
   $scope.init = function(data){
        user = JSON.parse(data);
-       // console.log(user); 
         $scope.userId = user.userId;
        $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
             console.log(data); 
@@ -31,7 +40,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
               $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
            }
        });
-
        $scope.selectedSong = 0;
         $http.get('http://localhost:3000/getProducerStatistics/' + prodId).success(function(data){
            console.log(data);
@@ -51,43 +59,30 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
        });
   }; 
+/***********************************************************/
+/***************INIT FUNCTION - ON LOAD PAGE****************/
+/***********************************************************/
 
-   $scope.data = {
-    select: 'P',
-    option1: 'P',
-    option2: 'B',
-   };
-
-   
-    //console.log(" rafi print---->" + $scope.currGenre);
+/***********************************************************/
+/****************bringMePlaylist FUNCTION*******************/
+/***********************************************************/
     $scope.bringMePlaylist = function($event){
     $scope.track = [];
     $scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
-    //$scope.mod.currGenre = currGenre;
-         // console.log(" rafi print---->" + $scope.mod.currGenre );
          if(typeof $event === 'undefined'){
             var genre =  $scope.defaultGenre;
-           
          }
          else{
            var genre = $event.currentTarget.innerHTML;
            $scope.defaultGenre = genre;
          }
-        
          console.log(genre);
          var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          console.log(url);
-        // alert(currGenre.toString() + $scope.currGenre)
-          //console.log(currGenre);
          $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
-           if(typeof data === 'undefined'){
-
-           }else{
-
-           }
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
                  $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
@@ -96,13 +91,18 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                }
            }
-        $scope.nextSong();  });
-       
+        $scope.nextSong();  
+      });
     };
-    
+/***********************************************************/
+/****************bringMePlaylist FUNCTION*******************/
+/***********************************************************/
+
+/***********************************************************/
+/********************nextSong FUNCTION**********************/
+/***********************************************************/
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
-      
       if($scope.heart == "fa-heart"){
         $scope.heart = "fa-heart-o";
       }
@@ -124,9 +124,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             $scope.counter = 0;
             $scope.bringMePlaylist();
           }
-         
     };
-    
+/***********************************************************/
+/********************nextSong FUNCTION**********************/
+/***********************************************************/
+
+/***********************************************************/
+/********************addToFav FUNCTION**********************/
+/***********************************************************/
     $scope.addToFav = function(){
        $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43"});
       if($scope.heart == "fa-heart-o"){
@@ -134,37 +139,57 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
       }else{
         $scope.heart == "fa-heart-o"
       }
-      $scope.red = "red";
-     
       var data = JSON.stringify({
-                userId : $scope.userId,
-                songData : {
-                   song: $scope.track[$scope.counter - 1].songName,
-                   artist: $scope.track[$scope.counter - 1].artistName,
-                   duration: "3:43"
-                }
-            });
-
+                      userId : $scope.userId,
+                      songData : {
+                         song: $scope.track[$scope.counter - 1].songName,
+                         artist: $scope.track[$scope.counter - 1].artistName,
+                         duration: "3:43"
+                      }
+                 });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
       $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
       });
     };
+/***********************************************************/
+/********************addToFav FUNCTION**********************/
+/***********************************************************/
 
+/***********************************************************/
+/*****************addToBlacklist FUNCTION*******************/
+/***********************************************************/
+    $scope.addToBlacklist = function(){
+       $scope.BL.push({songName:  $scope.track[$scope.counter - 1].songName, artisrName: $scope.track[$scope.counter - 1].artistName});
+      var data = JSON.stringify({
+                    userId : $scope.userId,
+                    songData : {
+                       artist: $scope.track[$scope.counter - 1].artistName,
+                       song: $scope.track[$scope.counter - 1].songName
+                    }
+                 });
+      console.log("black: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      $http.defaults.headers.post["Content-Type"] = "application/json";
+      $http.post('http://localhost:3000/addToBlackList/',data).success(function(data,status){
+           console.log(data);
+      });
+    };
+/***********************************************************/
+/*****************addToBlacklist FUNCTION*******************/
+/***********************************************************/
+
+/***********************************************************/
+/********************pauseSong FUNCTION*********************/
+/***********************************************************/
     $scope.pauseSong = function(){
          var myEl = angular.element( document.querySelector( ".fa-pause" ) );
          var myIframe = angular.element( document.querySelector( "iframe" ).contentWindow.document );
          myIframe.find("#player").triggerHandler('click');
          //myEl.remove();
     };
-  /*$scope.getSong = function($event){
-       var genre = $event.currentTarget.innerHTML;
-        console.log($event.currentTarget.innerHTML);
-         $http.get('http://localhost:3000/getPlaylist/' + 59 + '/' + 1 + '/' + 10 + '/' + genre).success(function(data){
-           console.log(data);
-         });
-    };*/
-    
+/***********************************************************/
+/********************pauseSong FUNCTION*********************/
+/***********************************************************/
 });
 
