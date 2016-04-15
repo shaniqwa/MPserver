@@ -19,12 +19,12 @@
             <div class="well height-800">
             <iframe width="100%" height="200" frameborder="0" allowfullscreen ng-src="{{myVideo}}">
             </iframe>
-            <span class="cursor fa fa-fast-forward" ng-click="nextSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-pause" ng-click="pauseSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-play" ng-click="playSong()"></span>&nbsp;&nbsp;
-            <span class="cursor fa {{heart}} red" ng-click="addToFav()"></span>&nbsp;&nbsp;
-            <span class="cursor fa fa-frown-o yellow" ng-click="addToBlacklist()"></span>
-            <h3><span class="fa fa-play-circle" ng-click="clickMe()"></span> Playlist</h3>
+            <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-pause font-size" ng-click="pauseSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-play font-size" ng-click="playSong()"></span>&nbsp;&nbsp;
+            <span class="cursor fa {{heart}} red font-size" ng-click="addToFav()"></span>&nbsp;&nbsp;
+            <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
+            <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3>
 
             <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
             
@@ -74,9 +74,9 @@
                         <option value="P" selected="selected">Pleasure</option>
                         <option value="B">Business</option>
                     </select>
-
                         <!-- MP pie container -->
                       <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
+
                       </div>
                     </div>
 
