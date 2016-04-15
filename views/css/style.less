@@ -46,9 +46,6 @@ h1,h2,h3,h4{
 .container{
 	width: 100%;
 }
-.highcharts-tooltip tspan{
-	font-size: 16px !important;
-}
 .well{
 	background-color : @main-color !important;
 }
@@ -60,9 +57,6 @@ h1,h2,h3,h4{
 }
 .tab-content div{
     position: relative;
-}
-.highcharts-container{
-    margin: 0 auto;
 }
  select{
     color:black;
@@ -102,15 +96,26 @@ h1,h2,h3,h4{
   border-color: @purple;
 }
 
-
+/*PIE*/
+.highcharts-container{
+    margin: 0 auto;
+    position: inherit !important;
+}
+.highcharts-tooltip {
+  z-index: 9999 !important;
+}
+.highcharts-tooltip tspan{
+  font-size: 16px !important;
+}
+.custom-tooltip{
+  width: 135px;
+  height: 135px;
+  line-height: 50px;
+  border-radius: 50%;
+  z-index: 9999 !important;
+  text-align: center;
+}
 #profileImg{
-    position: absolute;
-    margin: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999;
     border: 3px dotted @white;
     padding: 10px;
 
@@ -120,6 +125,7 @@ h1,h2,h3,h4{
          -o-animation: fadein 2s; /* Opera < 12.1 */
             animation: fadein 2s;
 }
+/*END PIE*/
 
 @keyframes fadein {
     from { opacity: 0; }

@@ -76,27 +76,8 @@
                     </select>
 
                         <!-- MP pie container -->
-                      <div id="MPcontainer" style=" height: 500px; margin: 0 auto"></div>
-                      <!-- user profile picture container -->
-                      <div id="addImg" style="position:relative; top:-225px; margin: 0 auto"></div>
-
-                        <!-- draw pie -->
-                        <script type='text/javascript'>
-                            var data =<%-JSON.stringify( business.genres)%>
-                            drawPie(data);
-                            // img = $('#pieChartInfoText');
-                        </script>
-
-                        <!-- if user img exists, draw it in the middle of the pie -->
-                     <% if (user.profileImage) { %>
-                        <script type="text/javascript">
-                            var profileImg =<%-JSON.stringify( user.profileImage )%>
-                            var img = '<img src='+ profileImg +' id="profileImg" class="img-circle" width=160>';
-                            $("#addImg").append(img);
-                        </script>
-                    <% } %>
-
-
+                      <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
+                      </div>
                     </div>
 
                     <!-- FAVORITES -->
@@ -234,6 +215,25 @@
                     <strong>Fist Name</strong>: <%= user.firstName %><br>
                     <strong>Last Name</strong>: <%= user.lastName %><br>
                     <strong>email</strong>: <%= user.email %><br>
+                    <strong>Age Group</strong>: 
+                    <% if (user.ageGroup == 1) { %>
+                       Under 14
+                    <% } %>
+                    <% if (user.ageGroup == 2) { %>
+                       15-25
+                    <% } %>
+                    <% if (user.ageGroup == 3) { %>
+                       24-35
+                    <% } %>
+                    <% if (user.ageGroup == 4) { %>
+                       35-44
+                    <% } %>
+                    <% if (user.ageGroup == 5) { %>
+                       44-55
+                    <% } %>
+                    <% if (user.ageGroup == 6) { %>
+                       55+
+                    <% } %>
                 </p>
         </div>
     </div>
@@ -248,6 +248,10 @@
 <script> 
 setTimeout(function(){ 
 $(function () {
+    var data =<%-JSON.stringify( business.genres)%>
+    var profileImg =<%-JSON.stringify( user.profileImage )%>
+    console.log("call drawPie with img : " + profileImg);
+    drawPie(data,profileImg);
 
     var businessData =<%-JSON.stringify( business.genres)%>
     var pleasureData =<%-JSON.stringify( pleasure.genres)%>
@@ -281,6 +285,6 @@ $(function () {
      socket.emit('messages', message);
  });
 
-}, 170); 
+}, 270); 
 </script>
 </html>

@@ -123,7 +123,36 @@
                 </div>
         </div>
     </div>
-    <input type="hidden" name="userID" value="<%= userID %>">
+    
+    <input type="hidden" name="userID" value="<%= user.userId %>">
+    <% if (user.typeOfUser == "Consumer") { %>
+       <input type="hidden" name="UserType" value="Consumer">
+    <% } %>
+    <% if (user.typeOfUser == "Producer") { %>
+       <input type="hidden" name="UserType" value="Producer">
+    <% } %>
+
+
+<!-- ADDITIONAL MISSING INFORMATION -->
+<div class="col-sm-12">
+        <div class="well">
+        <h3>Additional Information</h3>
+        user id : <%= user.userId %>
+        <p>Please complete some missing basic information</p>
+        <% if (user.ageGroup == null) { %>
+        <strong>Age Group: </strong>
+        <select name="ageGroup">
+            <option value="1" selected="selected">Under 14</option>
+            <option value="2">15-24</option>
+            <option value="3">25-34</option>
+            <option value="4">35-44</option>
+            <option value="5">45-54</option>
+            <option value="6">55+</option>
+        </select>
+    <% } %>
+    </div>
+</div>
+    
     </form>
     <button type="submit" form="wizard" value="Submit">Submit</button>
     <!-- END FORM -->

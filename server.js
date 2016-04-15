@@ -249,7 +249,9 @@ io.on('connection', function(client) {
     // send to google to do the authentication
     // profile gets us their basic information including their name
     // email gets their emails
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+
+    // 'https://www.googleapis.com/auth/youtube'
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
 
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
@@ -267,7 +269,7 @@ io.on('connection', function(client) {
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes'] }));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes','user_birthday'] }));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
@@ -294,7 +296,7 @@ io.on('connection', function(client) {
 	app.get('/BPwizard', function (req, res){
         // console.log("user id: " +req.user.userId);
             res.render('BPwizard.ejs', {
-                userID : req.user.userId
+                user : req.user
             });
 	});
 

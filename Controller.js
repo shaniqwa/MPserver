@@ -183,7 +183,12 @@ exports.processWizardForm = function(req,res,data) {
 	async.waterfall([
     //step1 : get user from db
     function(callback) {
-        User.findOneAndUpdate({ 'userId' : data.userID },{is_New: 0} ,function(err, user) {
+    	var update = {is_New: 0};
+    	if (typeof data.ageGroup != 'undefined') {
+        	update.ageGroup = data.ageGroup;
+        	console.log("updated user age group to : " + update.ageGroup);
+		}
+        User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
 		    if (err)
 		        console.log(err);
 
@@ -194,6 +199,7 @@ exports.processWizardForm = function(req,res,data) {
 		        }else if(req.user.YT_AT){
 		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
 		        }
+
 		        callback();
 		    } 
 		});

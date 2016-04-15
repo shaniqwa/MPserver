@@ -1,5 +1,8 @@
-function drawPie(pieData) {
-    // console.log(pieData);
+function drawPie(pieData,profileImg) {
+    // console.log("profileImg " + profileImg);
+
+
+
 
 /**
  * Dark theme for Highcharts JS
@@ -77,16 +80,34 @@ Highcharts.theme = {
       }
    },
    tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      // backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      useHTML: true,
       animation: true,
-      // positioner: function () {      //fixed tooltip position
-      //           return { x: 80, y: 50 };
-      //       },
       style: {
          color: '#F0F0F0',
          fontSize: '16px',
-         padding: '10px'
-      }
+         padding: '0px'
+      },
+      shape: 'circle',
+      style: {
+        zIndex: 9999,
+        opacity: 0.6 
+      },
+      positioner: function () {
+        var tooltipX, tooltipY;
+        tooltipX = $("#MPcontainer").width()/2-77.5;
+        tooltipY = 250-50;
+            return { x: tooltipX, y: tooltipY };
+        },
+        formatter: function () {
+          var color = this.color;
+          color = color.replace("rgb", "rgba");
+          color = color.replace(")", ",0.7)");
+
+
+          // console.log(color);
+        return '<div class="custom-tooltip" style="background-color:' + color + '"><p>' + this.point.name + '</p>' + '<b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></div>';
+    }
    },
    plotOptions: {
       series: {
@@ -293,6 +314,9 @@ Highcharts.setOptions(Highcharts.theme);
 
 
 
+
+
+
     // Create the chart
     $('#MPcontainer').highcharts({
         chart: {
@@ -336,11 +360,20 @@ Highcharts.setOptions(Highcharts.theme);
             size: '100%',
             innerSize: '95%',
             cursor: 'pointer',
+            renderTo: 'container',
             events: {
                     click: function (event) {
                         // console.log(event.point.name);
                         sendEvent(event.point.name);
-                    }
+                    },
+                    load: function () {
+                      // console.log("this");
+                      //   this.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', 160, 160, 100, 100)
+                      //   .attr({
+                      //       zIndex: 1
+                      //   })
+                      //   .add();
+                      }
             },
             dataLabels: {
                 formatter: function () {
@@ -349,7 +382,23 @@ Highcharts.setOptions(Highcharts.theme);
                 }
             }
         }]
-    });
+    }
+    , function(chart) { // on complete
+      var imgX = $("#MPcontainer").width()/2-77.5,
+          imgY = 250-50;
+    chart.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', imgX, imgY, 150, 150)
+        .attr({
+              zIndex: 100,
+              class: 'img-circle',
+              id: 'profileImg'
+          })
+        .css({
+
+          })
+        .add();   
+    
+});
+
 
 // document.addEventListener("getPlaylist", getPlaylistHandler, false);
 };
@@ -373,6 +422,17 @@ function sendEvent(currGenre){
     // );
     // document.getElementById("currGenre").dispatchEvent(event);
     
+}
+
+
+function convertHex(hex,opacity){
+    hex = hex.replace('#','');
+    r = parseInt(hex.substring(0,2), 16);
+    g = parseInt(hex.substring(2,4), 16);
+    b = parseInt(hex.substring(4,6), 16);
+
+    result = 'rgba('+r+','+g+','+b+','+opacity/100+')';
+    return result;
 }
 
 // function getPlaylistHandler(event){

@@ -224,14 +224,14 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields   : ['id','picture.type(large)', 'emails', 'displayName', 'name'],
+        profileFields   : ['id','picture.type(large)', 'emails', 'displayName', 'name','birthday'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
 
     // facebook will send back the token and profile
     function(req,token, refreshToken, profile, done) {
-        // console.log(profile);
+        console.log(profile);
         // asynchronous
         process.nextTick(function() {
         // check if the user is already logged in
@@ -328,6 +328,42 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
     }else if(platform == "facebook"){
         // url = "http://52.35.9.144:8082/MP/" + token + "/null";
         // set all of the facebook information in our user model
+        console.log(profile._json.birthday);
+        var birthday = profile._json.birthday.split("/");
+        var birthdayDate =  new Date(birthday[2], (birthday[1] - 1), birthday[0]);
+
+        var today = new Date();
+        var age = today.getFullYear() - birthdayDate.getFullYear();
+        var m = today.getMonth() - birthdayDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthdayDate.getDate())) 
+        {
+            age--;
+        }
+        console.log(age);
+        age = parseInt(age);
+
+            if (age <= 14)  {
+                newUser.ageGroup = 1;
+            }
+            if (age >= 15 && age <= 24)  {
+                newUser.ageGroup = 2;
+            }
+            if (age >= 25 && age <= 34) {
+                newUser.ageGroup = 3;
+            }
+            if (age >= 35 && age <= 44)  {
+                newUser.ageGroup = 4;
+            }
+            if (age >= 45 && age <= 54)  {
+                newUser.ageGroup = 5;
+            }
+            if (age >= 55)  {
+                newUser.ageGroup = 6;
+            }
+        
+        console.log("ageGroup: " + newUser.ageGroup);
+
+
         newUser.FB_id    = profile.id; // set the users facebook id                   
         newUser.FB_AT = token; // we will save the token that facebook provides to the user   
         newUser.FB_RT = refreshToken;
