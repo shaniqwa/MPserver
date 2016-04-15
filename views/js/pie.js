@@ -346,7 +346,7 @@ Highcharts.setOptions(Highcharts.theme);
         series: [{
             name: ' ',
             data: browserData,
-            size: '85%',
+            size: '70%',
             dataLabels: {
                 formatter: function () {
                     return this.y > 5 ? this.point.name : null;
@@ -357,23 +357,17 @@ Highcharts.setOptions(Highcharts.theme);
         }, {
             name: ' ',
             data: versionsData,
-            size: '100%',
+            size: '85%',
             innerSize: '95%',
             cursor: 'pointer',
-            renderTo: 'container',
             events: {
                     click: function (event) {
                         // console.log(event.point.name);
                         sendEvent(event.point.name);
                     },
-                    load: function () {
-                      // console.log("this");
-                      //   this.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', 160, 160, 100, 100)
-                      //   .attr({
-                      //       zIndex: 1
-                      //   })
-                      //   .add();
-                      }
+                    redraw: function(){
+                      drawCircle(this);
+                    }
             },
             dataLabels: {
                 formatter: function () {
@@ -385,18 +379,36 @@ Highcharts.setOptions(Highcharts.theme);
     }
     , function(chart) { // on complete
       var imgX = $("#MPcontainer").width()/2-77.5,
-          imgY = 250-50;
-    chart.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', imgX, imgY, 150, 150)
-        .attr({
-              zIndex: 100,
-              class: 'img-circle',
-              id: 'profileImg'
-          })
-        .css({
+          imgY = 200;
+    // chart.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', imgX, imgY, 150, 150)
+    //     .attr({
+    //           zIndex: 100,
+    //           class: 'img-circle',
+    //           id: 'profileImg'
+    //       })
+    //     .css({
 
-          })
-        .add();   
+    //       })
+    //     .add();   
     
+    var pixelX = 438;
+    var pixelY = 276;
+    var pixelR = 70;
+
+    // add my circle
+    chart.renderer.circle(pixelX, pixelY, pixelR)
+    .attr({
+        zIndex: 100,
+        align: 'center',
+        // fill: 'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)',
+        color: 'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)',
+        stroke: 'black',
+        'stroke-width': 2
+        })
+    .css({
+      backgroundImage :'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)'
+    })
+    .add();        
 });
 
 
