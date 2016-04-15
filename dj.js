@@ -50,6 +50,7 @@ function callNextSong(times,ns, callNextSongCallback) {
 	 var inserted = 0;
   for(var i = 0; i < times; i++) {
     (function(i) {
+		
 		while(ns.getPlaylistLength()  != i) 
 		{ //while prev not finished
 		console.log("waiting prev iter to finish");
@@ -57,10 +58,8 @@ function callNextSong(times,ns, callNextSongCallback) {
 }
 	    ns.getNextSong(function(err) {
 		  
-	      if( err == "no_url" ) {
-	        console.log('error(skipping one itter): '+err);
-			i = i -1;
-	        //callNextSongCallback(err);
+	      if( err ) {
+	        callNextSongCallback(err);
 	      }
 	      else {
 	      	console.log("finished running getNextSong, i = " + i);
