@@ -114,7 +114,7 @@ var pushSong = function(song, typeAP, callback) {
         if (error) {
             console.log(error);
         } else { // no error
-            if (result.items.length == 0) { // if no results on search TODO: make another call replace dummy
+            if (result.items.length == 0) { // skip iter
                 console.log("search on youtube : 0 results, pushing without url..");
               //  playlist.push({
               //      artistName: song.artist.name,
@@ -595,7 +595,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             } else { // find similar artist
                                                 var artistSimiliar = getSimilarArtist(randArtist);
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar.name);
-                                                pushSong(chsnSongSimilar,"artist", function() {
+                                                pushSong(chsnSongSimilar,"artist", function(stat) {
                                                 if (stat == "ok") {
                                                 callback();
 												} else {
