@@ -106,23 +106,71 @@ function pickChoice(choice) {
 
 };
 
-var pushSong = function(song, typeAP, callback) { 
+var pushSong = function(song, typeAP, artistOrg, callback) {
 
     var songFull = song.artist.name + " - " + song.name + " | " + song.artist.name + " | " + song.name;
     console.log("full song " + songFull);
-	youTube.addParam('type', 'video');
+    youTube.addParam('type', 'video');
     youTube.search(songFull, 2, function(error, result) {
         if (error) {
             console.log(error);
         } else { // no error
             if (result.items.length == 0) { // skip iter
-                console.log("search on youtube : 0 results, keep looping");
-				runs++;
-              //  playlist.push({
-              //      artistName: song.artist.name,
-              //      songName: song.name,
-              //      url: "no_url" // todo something more intelligent
-              //  });
+                console.log("****search on youtube : 0 results, keep looping");
+				var i = 0;
+				var runsYT = 0;
+				var finYT = 0;
+                while (true) {
+					while(runsYT != i) {
+					if (finYT == 1) { return; }
+					console.log("waiting for YT iter to finish");
+					   
+					   require('deasync').sleep(1000);
+					}
+					
+                    var chsnSongNew = getRandTrack(artistOrg);
+                    console.log("*new song: " + chsnSongNew)
+
+
+                    var songFullNew = chsnSongNew.artist.name + " - " + chsnSongNew.name + " | " + chsnSongNew.artist.name + " | " + chsnSongNew.name;
+                    console.log("full song " + songFullNew);
+                    youTube.addParam('type', 'video');
+                    youTube.search(songFullNew, 2, function(error, result) {
+                        if (error) {
+                            console.log(error);
+                        } else { // no error
+                            if (result.items.length == 0) { // skip iter
+                                console.log("***again no results");
+								runsYT++;
+
+                            } else { // there are results from youtube
+                                console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
+                                playlist.push({
+                                    artistName: chsnSongNew.artist.name,
+                                    songName: chsnSongNew.name,
+                                    url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
+                                    type: typeAP
+                                });
+								finYT = 1;
+                                callback();
+                            }
+                        }
+
+                    });
+				++i;
+
+
+
+                } //endssssssss
+
+
+
+
+                //  playlist.push({
+                //      artistName: song.artist.name,
+                //      songName: song.name,
+                //      url: "no_url" // todo something more intelligent
+                //  });
                 //callback("no_url");
             } else { // there are results from youtube
                 console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
@@ -130,12 +178,12 @@ var pushSong = function(song, typeAP, callback) {
                     artistName: song.artist.name,
                     songName: song.name,
                     url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
-					type: typeAP
+                    type: typeAP
                 });
                 callback("ok");
-				}
             }
-        
+        }
+
     });
 
 
@@ -244,7 +292,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var chsnSongArtist = getRandTrack(randArtist);
 										
                                             console.log("the artist:: " + chsnSongArtist);
-                                            pushSong(chsnSongArtist,"artist", function(stat) {
+                                            pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
 											
@@ -260,7 +308,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 											var chsnSongSimilar = getRandTrack(artistSimiliar);
 
 											console.log("the artist:: " + chsnSongSimilar);
-                                            pushSong(chsnSongSimilar,"artist", function(stat) {
+                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
 											
@@ -324,7 +372,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist = getRandTrack(randArtist);
 														console.log("the artist:: " + chsnSongArtist);
-														pushSong(chsnSongArtist,"artist", function(stat) {
+														pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
 														if (stat == "no_url") {
 														console.log("no url!!!!!");
 									
@@ -340,7 +388,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar);
 													
 															console.log("the artist:: " + chsnSongSimilar);
-															 pushSong(chsnSongSimilar,"artist", function(stat) {
+															 pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
 															if (stat == "no_url") {
 															console.log("no url!!!!!");
 										
@@ -396,7 +444,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                 var chsnSongArtist = getRandTrack(randArtist);
 
-												pushSong(chsnSongArtist,"artist", function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 					
@@ -411,7 +459,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 var artistSimiliar = getSimilarArtist(randArtist);
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar);
 											
-												pushSong(chsnSongSimilar,"artist", function(stat) {
+												pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 								
@@ -480,7 +528,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                             var chsnSongArtist = getRandTrack(randArtist);
 
-												pushSong(chsnSongArtist,"artist", function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 									
@@ -495,7 +543,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistSimiliar = getSimilarArtist(randArtist);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
 				
-                                            pushSong(chsnSongSimilar,"artist", function() {
+                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function() {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 									
@@ -558,7 +606,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist  = getRandTrack(randArtist);
 								
-														pushSong(chsnSongArtist,"artist", function(stat) {
+														pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
                                                         if (stat == "no_url") {
 														console.log("no url!!!!!");
 												
@@ -571,9 +619,10 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 													
                                                     } else { // find similar artist
                                                         var artistSimiliar = getSimilarArtist(randArtist);
-                                                        var chsnSongSimilar = getRandTrack(artistSimiliar.name);
+														artistSimiliar = artistSimiliar.name;
+                                                        var chsnSongSimilar = getRandTrack(artistSimiliar);
 
-														pushSong(chsnSongSimilar,"artist", function(stat) {
+														pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
 														if (stat == "no_url") {
 														console.log("no url!!!!!");
 												
@@ -629,7 +678,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 var chsnSongArtist = getRandTrack(randArtist);
 											
 
-												pushSong(chsnSongArtist,"artist", function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 										
@@ -642,9 +691,10 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 												
                                             } else { // find similar artist
                                                 var artistSimiliar = getSimilarArtist(randArtist);
-                                                var chsnSongSimilar = getRandTrack(artistSimiliar.name);
+												artistSimiliar = artistSimiliar.name;
+                                                var chsnSongSimilar = getRandTrack(artistSimiliar);
 
-												pushSong(chsnSongSimilar,"artist", function(stat) {
+												pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 
