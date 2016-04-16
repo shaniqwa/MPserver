@@ -26,7 +26,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.toggle = true;
    $scope.videoFrame = false;
    $scope.nowPlaying = [];
-
+   $scope.msg = [];
+   $scope.elementToFadeInAndOut = '';
 
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
@@ -231,6 +232,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /********************addToFav FUNCTION**********************/
 /***********************************************************/
     $scope.addToFav = function(){
+      $scope.elementToFadeInAndOut = '';
        $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43"});
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
@@ -249,6 +251,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
       $http.defaults.headers.post["Content-Type"] = "application/json";
       $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
+           $scope.msg = "Added successfuly to your Favorites";
+           $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
 /***********************************************************/
@@ -259,6 +263,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /*****************addToBlacklist FUNCTION*******************/
 /***********************************************************/
     $scope.addToBlacklist = function(){
+       $scope.elementToFadeInAndOut = '';
        $scope.BL.push({songName:  $scope.track[$scope.counter - 1].songName, artisrName: $scope.track[$scope.counter - 1].artistName});
       var data = JSON.stringify({
                     userId : $scope.userId,
@@ -271,6 +276,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
       $http.defaults.headers.post["Content-Type"] = "application/json";
       $http.post('http://localhost:3000/addToBlackList/',data).success(function(data,status){
            console.log(data);
+           $scope.msg = "Added successfuly to your Blacklist";
+           $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
 /***********************************************************/

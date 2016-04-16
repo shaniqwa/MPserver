@@ -9,10 +9,11 @@
 @hard-purple: #d120a6;
 @pink: #ff166f;
 @dark-gray: #333335;
+@easy-gray: #E0E0E3;
 
 //theme colors
 @main-color: @dark-gray;
-
+@text-color: @easy-gray;
 /***********************************************************/
 /************************CONFIGURATIONS*********************/
 /***********************************************************/
@@ -44,7 +45,6 @@
          -o-animation: fadein @sec; /* Opera < 12.1 */
             animation: fadein @sec;
 }
-
 /***********************************************************/
 /***************************MIXINS**************************/
 /***********************************************************/
@@ -254,6 +254,38 @@ h1,h2,h3,h4{
 .one-line-videoname{
   display: inline-block;
   font-size: 25px;
+}
+
+.msgBlock{
+   background-color: @text-color;
+   color: @main-color;
+   padding: 15px;
+   position: fixed;
+   bottom:10px;
+   left:10px;
+   z-index: 9999;
+   font-size: 25px;
+   font-weight: bold;
+   border-radius: 20px;
+   border:2px solid @main-color;
+   opacity: 0;
+}
+
+.elementToFadeInAndOut {
+    -webkit-animation: fadeinout 5s linear 1 forwards;
+    animation: fadeinout 5s linear 1 forwards;
+}
+
+@-webkit-keyframes fadeinout {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fadeinout {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
