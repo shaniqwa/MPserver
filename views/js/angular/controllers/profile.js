@@ -23,6 +23,10 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     option2: 'B',
    };
    $scope.track = [];
+   $scope.toggle = true;
+   $scope.videoFrame = false;
+   $scope.nowPlaying = [];
+
 
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
@@ -59,10 +63,48 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            }
 
        });
+       onYouTubePlayerAPIReady();
   }; 
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
+
+
+    // create youtube player
+    var player;
+    function onYouTubePlayerAPIReady() {
+         player = new YT.Player('player', {
+          height: '250',
+          width: '100%',
+          videoId: '',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          },
+          playerVars: { 
+            'autoplay': 0,
+            'controls': 0, 
+            'rel' : 0,
+            'showinfo': 0
+          }
+        });
+
+        
+    }
+    
+
+     // autoplay video
+     function onPlayerReady(event) {
+        console.log("player ready");
+        event.target.playVideo();
+    }
+
+    // when video ends
+     function onPlayerStateChange(event) {        
+        if(event.data === 0) {            
+            $scope.nextSong();
+        }
+    }
 
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
@@ -138,21 +180,27 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
+      $scope.videoFrame = true;
       if($scope.heart == "fa-heart"){
         $scope.heart = "fa-heart-o";
       }
           if ($scope.counter < $scope.track.length){
             var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-            url += "?autoplay=1&cc_load_policy=1&showinfo=0&controls=0";
+            url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
             console.log(url);
             $scope.myVideo = $sce.trustAsResourceUrl(url);
+            player.cueVideoByUrl(url);
             $scope.track[$scope.counter].active = 1;
+            console.log($scope.counter);
+            $scope.nowPlaying = $scope.track[$scope.counter];
             if($scope.counter != 0){
               $scope.track[$scope.counter - 1].active = 0;
               $scope.track.splice([$scope.counter - 1],1);
               $scope.counter--;
               var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
               myEl.remove();
+              var myPlay = angular.element( document.querySelector(".fa-play") );
+              //myPlay.triggerHandler('click');
             }
             $scope.counter++;
           }
@@ -164,6 +212,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
           if($scope.track.length == 5){
               $scope.updatePlaylist();
           }
+          player.playVideo();
+          
     };
 /***********************************************************/
 /********************nextSong FUNCTION**********************/
@@ -223,13 +273,22 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /********************pauseSong FUNCTION*********************/
 /***********************************************************/
     $scope.pauseSong = function(){
-         var myEl = angular.element( document.querySelector( ".fa-pause" ) );
-         var myIframe = angular.element( document.querySelector( "iframe" ).contentWindow.document );
-         myIframe.find("#player").triggerHandler('click');
-         //myEl.remove();
+      player.pauseVideo();
+      $scope.toggle = false;
     };
 /***********************************************************/
 /********************pauseSong FUNCTION*********************/
+/***********************************************************/
+
+/***********************************************************/
+/********************playSong FUNCTION**********************/
+/***********************************************************/
+    $scope.playSong = function(){
+         player.playVideo();
+         $scope.toggle = true;
+    };
+/***********************************************************/
+/********************playSong FUNCTION**********************/
 /***********************************************************/
 });
 

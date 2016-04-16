@@ -22,9 +22,11 @@
 /***************************MIXINS**************************/
 /***********************************************************/
 .transform-rotate(@radius){
-  -ms-transform: rotate(@radius); /* IE 9 */
-  -webkit-transform: rotate(@radius); /* Chrome, Safari, Opera */
-  transform: rotate(@radius);
+     -webkit-transform: rotate(@radius); /* Chrome, Safari, Opera */ 
+       -moz-transition: rotate(@radius); /* Firefox */
+         -ms-transform: rotate(@radius); /* IE 9 */
+         -o-transition: rotate(@radius);  /* Opera */
+             transform: rotate(@radius);
 }
 
 .transition(@sec){
@@ -191,8 +193,10 @@ h1,h2,h3,h4{
 .repeatClass{
    padding-left: 24px;
    padding-top: 8px;
-   &:first-of-type{
-     background-color: #E0E0E3;
+}
+
+.first-item{
+  background-color: #E0E0E3;
      padding-left: 24px;
      padding-top: 8px;
      border-radius: 2em;
@@ -208,7 +212,10 @@ h1,h2,h3,h4{
      hr{
        border-top: 1px solid transparent;
      }
-   }
+}
+
+.bold{
+  font-weight: 700;
 }
 /***********************************************************/
 /***************END REGION: PLAYLIST STYLE******************/
@@ -234,6 +241,19 @@ h1,h2,h3,h4{
 .font-size{
   font-size: 40px;
   
+}
+
+.loader{
+   background-image: url("../images/loader.gif");
+   height:200px;
+   width:100%;
+   background-repeat: no-repeat;
+   background-position: center center;
+}
+
+.one-line-videoname{
+  display: inline-block;
+  font-size: 25px;
 }
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
