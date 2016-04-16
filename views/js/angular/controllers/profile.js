@@ -213,7 +213,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             else{
               //bring me newplaylist
               //$scope.counter = 0;
-               $scope.updatePlaylist();
+               //$scope.updatePlaylist();
               
             }
             if($scope.track.length == 5){
