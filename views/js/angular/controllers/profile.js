@@ -29,6 +29,49 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.msg = [];
    $scope.elementToFadeInAndOut = '';
 
+   // create youtube player
+    var player;
+    function onYouTubePlayerAPIReady() {
+         player = new YT.Player('player', {
+          height: '250',
+          width: '100%',
+          videoId: '',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          },
+          playerVars: { 
+            'autoplay': 0,
+            'controls': 0, 
+            'rel' : 0,
+            'showinfo': 0
+          }
+        });
+
+        
+    }
+    
+
+     // autoplay video
+     function onPlayerReady(event) {
+        console.log("player ready");
+        //event.target.playVideo();
+        $scope.nextSong(); 
+        event.target.playVideo();
+        console.log("end of ready");
+        $scope.$apply(function() {
+          $scope.videoFrame = true;
+        });
+    }
+
+    // when video ends
+     function onPlayerStateChange(event) {        
+        if(event.data === 0) {            
+            var next = angular.element( document.querySelector(".fa-fast-forward") );
+            next.triggerHandler('click');
+        }
+    }
+
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
@@ -64,49 +107,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            }
 
        });
-       onYouTubePlayerAPIReady();
+       //onYouTubePlayerAPIReady();
   }; 
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
-
-
-    // create youtube player
-    var player;
-    function onYouTubePlayerAPIReady() {
-         player = new YT.Player('player', {
-          height: '250',
-          width: '100%',
-          videoId: '',
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          },
-          playerVars: { 
-            'autoplay': 0,
-            'controls': 0, 
-            'rel' : 0,
-            'showinfo': 0
-          }
-        });
-
-        
-    }
-    
-
-     // autoplay video
-     function onPlayerReady(event) {
-        console.log("player ready");
-        event.target.playVideo();
-    }
-
-    // when video ends
-     function onPlayerStateChange(event) {        
-        if(event.data === 0) {            
-            var next = angular.element( document.querySelector(".fa-fast-forward") );
-            next.triggerHandler('click');
-        }
-    }
 
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
@@ -136,7 +141,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                }
            }
-        $scope.nextSong();  
+           onYouTubePlayerAPIReady();
+         
       });
     };
 /***********************************************************/
@@ -182,7 +188,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
-        $scope.videoFrame = true;
+        
         if($scope.heart == "fa-heart"){
           $scope.heart = "fa-heart-o";
         }
