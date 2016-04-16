@@ -102,7 +102,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     // when video ends
      function onPlayerStateChange(event) {        
         if(event.data === 0) {            
-            $scope.nextSong();
+            var next = angular.element( document.querySelector(".fa-fast-forward") );
+            next.triggerHandler('click');
         }
     }
 
@@ -180,43 +181,47 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
-      $scope.videoFrame = true;
-      if($scope.heart == "fa-heart"){
-        $scope.heart = "fa-heart-o";
-      }
-          if ($scope.counter < $scope.track.length){
-            var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-            url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
-            console.log(url);
-            $scope.myVideo = $sce.trustAsResourceUrl(url);
-            player.cueVideoByUrl(url);
-            $scope.track[$scope.counter].active = 1;
-            console.log($scope.counter);
-            $scope.nowPlaying = $scope.track[$scope.counter];
-            if($scope.counter != 0){
-              $scope.track[$scope.counter - 1].active = 0;
-              $scope.track.splice([$scope.counter - 1],1);
-              $scope.counter--;
-              var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
-              myEl.remove();
-              var myPlay = angular.element( document.querySelector(".fa-play") );
-              //myPlay.triggerHandler('click');
-               $scope.$apply();
+        $scope.videoFrame = true;
+        if($scope.heart == "fa-heart"){
+          $scope.heart = "fa-heart-o";
+        }
+            if ($scope.counter < $scope.track.length){
+              var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
+              url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
+              console.log(url);
+              $scope.myVideo = $sce.trustAsResourceUrl(url);
+              player.cueVideoByUrl(url);
+              $scope.track[$scope.counter].active = 1;
+              console.log($scope.counter);
+              $scope.nowPlaying = $scope.track[$scope.counter];
+              if($scope.counter != 0){
+                $scope.track[$scope.counter - 1].active = 0;
+                $scope.track.splice([$scope.counter - 1],1);
+                $scope.counter--;
+                var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
+                myEl.remove();
+                //var myPause = angular.element( document.querySelector(".fa-pause") );
+                //myPause.triggerHandler('click');
+                //var myPlay = angular.element( document.querySelector(".fa-play") );
+                //myPlay.triggerHandler('click');
+                 //$scope.$apply();
+                 player.pauseVideo();
+                 player.playVideo();
+              }
+              $scope.counter++;
             }
-            $scope.counter++;
-          }
-          else{
-            //bring me newplaylist
-            //$scope.counter = 0;
-             $scope.updatePlaylist();
-            
-          }
-          if($scope.track.length == 5){
-              $scope.updatePlaylist();
-          }
-          player.pauseVideo();
-          player.playVideo();
-          
+            else{
+              //bring me newplaylist
+              //$scope.counter = 0;
+               $scope.updatePlaylist();
+              
+            }
+            if($scope.track.length == 5){
+                $scope.updatePlaylist();
+            }
+            player.pauseVideo();
+            player.playVideo();
+            //$scope.$apply();
     };
 /***********************************************************/
 /********************nextSong FUNCTION**********************/
