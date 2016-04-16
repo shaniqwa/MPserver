@@ -201,12 +201,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
               myEl.remove();
               var myPlay = angular.element( document.querySelector(".fa-play") );
               //myPlay.triggerHandler('click');
+               $scope.$apply();
             }
             $scope.counter++;
           }
           else{
             //bring me newplaylist
             //$scope.counter = 0;
+             $scope.updatePlaylist();
             
           }
           if($scope.track.length == 5){
