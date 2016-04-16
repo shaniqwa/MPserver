@@ -212,6 +212,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
           if($scope.track.length == 5){
               $scope.updatePlaylist();
           }
+          player.pauseVideo();
           player.playVideo();
           
     };
