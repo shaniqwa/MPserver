@@ -1,5 +1,4 @@
 function drawPie(pieData,profileImg) {
-    // console.log("profileImg " + profileImg);
 
 Highcharts.Renderer.prototype.color = function (color, elem, prop) {
 
@@ -148,35 +147,16 @@ Highcharts.theme = {
       // backgroundColor: 'rgba(0, 0, 0, 0.85)',
       useHTML: true,
       animation: true,
+      borderWidth: 0,
       style: {
          color: '#F0F0F0',
-         fontSize: '16px',
-         padding: '0px'
+         fontSize: '16px'
       },
       shape: 'circle',
       style: {
         zIndex: 9999,
-        opacity: 0.6 
-      },
-      positioner: function (chart) {
-        var tooltipX, tooltipY;
-        tooltipX = $("#MPcontainer").width()/2-77;
-        tooltipY = 202;
-        // tooltipX = chart.plotLeft + (chart.plotWidth  * 0.5) - (1  * 0.5);
-        // tooltipY = chart.plotTop  + (chart.plotHeight * 0.5) + (1 * 0.25);
-            return { x: tooltipX, y: tooltipY };
-        },
-        formatter: function () {
-          var color = this.color;
-          color = color.replace("rgb", "rgba");
-          color = color.replace(")", ",0.6)");
-
-          var name = toTitleCase(this.point.name);
-
-
-          // console.log(color);
-        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p>' + name + '</p>' + '<p><b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
-    }
+        opacity: 0
+      }
    },
    plotOptions: {
       series: {
@@ -387,7 +367,8 @@ Highcharts.setOptions(Highcharts.theme);
 
     var circleX = 438;
     var circleY = 276;
-    var circleR = 66;
+    var circleR = 67;
+
 function addCircle(chart){
     if (this.circle){
         // on a redraw, remove old circle
@@ -444,7 +425,24 @@ function addCircle(chart){
             }
         },
         tooltip: {
-            valueSuffix: '%'
+            valueSuffix: '%',
+            positioner: function () {
+        var tooltipX, tooltipY;
+        tooltipX = this.chart.plotLeft + (this.chart.plotWidth  * 0.5)  - (152  * 0.5);;
+        tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (150 * 0.5);;
+            return { x: tooltipX, y: tooltipY };
+        },
+        formatter: function () {
+          var color = this.color;
+          color = color.replace("rgb", "rgba");
+          color = color.replace(")", ",0.6)");
+
+          var name = toTitleCase(this.point.name);
+
+
+          // console.log(color);
+        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p>' + name + '</p>' + '<p><b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
+    },
         },
         series: [{
             name: ' ',
@@ -529,7 +527,7 @@ function addCircle(chart){
        .attr('fill', '#ddd')
        .add(pattern);
     
-   r.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg',0,0,135,135)
+   r.image(profileImg,0,0,135,135)
        .add(pattern);
 });
 

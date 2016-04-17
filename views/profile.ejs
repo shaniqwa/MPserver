@@ -256,22 +256,19 @@
 <script> 
 setTimeout(function(){ 
 $(function () {
-    var data =<%-JSON.stringify( business.genres)%>
-    var profileImg =<%-JSON.stringify( user.profileImage )%>
-    console.log("call drawPie with img : " + profileImg);
-    drawPie(data,profileImg);
 
+    var profileImg =<%-JSON.stringify( user.profileImage )%>
     var businessData =<%-JSON.stringify( business.genres)%>
     var pleasureData =<%-JSON.stringify( pleasure.genres)%>
-
-    drawPie(pleasureData);
+    console.log("call drawPie with img : " + profileImg);
+    drawPie(pleasureData,profileImg);
 
     $("#list").change(function() {
         if ($("#list").val() == "P") {
-            drawPie(pleasureData);
+            drawPie(pleasureData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=month'
         } else {
-            drawPie(businessData);
+            drawPie(businessData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=newmode'
         }   
     });
