@@ -384,9 +384,9 @@ function addCircle(chart){
     this.circle = chart.renderer.circle(pixelX, pixelY, pixelR).attr({
         zIndex: 100,
         align: 'center',
-        fill: 'url(#pattern)',
-        stroke: 'black',
-        'stroke-width': 0
+        fill: 'url(#pattern)'
+        // stroke: 'white',
+        // 'stroke-width': 2
         });
     this.circle.add();        
 }
@@ -419,7 +419,8 @@ function addCircle(chart){
         },
         plotOptions: {
             pie: {
-                borderColor: '#3e3e40',
+                borderColor: '#333335',
+                borderWidth: 0,
                 shadow: false,
                 center: ['50%', '50%']
             }
@@ -476,49 +477,24 @@ function addCircle(chart){
         }]
     }
     , function(chart) { // on complete
-
-      var imgX = $("#MPcontainer").width()/2-77.5,
-          imgY = 200;
-    // chart.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', imgX, imgY, 150, 150)
-    //     .attr({
-    //           zIndex: 100,
-    //           class: 'img-circle',
-    //           id: 'profileImg'
-    //       })
-    //     .css({
-
-    //       })
-    //     .add();   
-    
-    // var pixelX = 438;
-    // var pixelY = 276;
-    // var pixelR = 70;
-
-    // // add my circle
-    // chart.renderer.circle(pixelX, pixelY, pixelR)
-    // .attr({
-    //     zIndex: 100,
-    //     align: 'center',
-    //     fill: 'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)',
-    //     stroke: 'black',
-    //     'stroke-width': 2
-    //     })
-    // .add();        
-
-
-
-
-
-
     var r = chart.renderer,
         pattern = r.createElement('pattern')
+            // .attr({
+            //     id: 'pattern',
+            //     patternUnits: 'userSpaceOnUse',
+            //     x: 0,
+            //     y: 0,
+            //     width: 180,
+            //     height: 190,
+            //     viewBox: '0 0 135 135'
+            // })
             .attr({
                 id: 'pattern',
-                patternUnits: 'userSpaceOnUse',
+                patternUnits: 'objectBoundingBox',
                 x: 0,
                 y: 0,
-                width: 180,
-                height: 190,
+                width: '100%',
+                height: '100%',
                 viewBox: '0 0 135 135'
             })
             .add(r.defs);
