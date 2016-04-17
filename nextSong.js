@@ -543,7 +543,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistSimiliar = getSimilarArtist(randArtist);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
 				
-                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function() {
+                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 									
