@@ -310,6 +310,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
     newUser.country = "Israel";         //should not be hard coded
     newUser.typeOfUser = "Consumer";    //should not be hard coded
     newUser.is_New = 1;
+    newUser.activityToken = newUser.generateHash(genStirng());
 
     //google
     if(platform == "google"){
@@ -563,5 +564,14 @@ UpdateMP = function(user,UpdateMPcallback){
     });
 }
 
+function genStirng()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    for( var i=0; i < 10; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
