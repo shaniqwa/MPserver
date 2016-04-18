@@ -186,7 +186,7 @@ io.on('connection', function(client) {
     // facebook -------------------------------
 
         // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes'] }));
+        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location'] }));
 
         // handle the callback after facebook has authorized the user
         app.get('/connect/facebook/callback',
@@ -269,7 +269,7 @@ io.on('connection', function(client) {
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes','user_birthday'] }));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes','user_birthday','user_location'] }));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
