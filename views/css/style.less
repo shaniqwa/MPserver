@@ -133,15 +133,30 @@ h1,h2,h3,h4{
   font-size: 16px !important;
 }
 .custom-tooltip{
+  font-family: 'Source Sans Pro', sans-serif;
   width: 135px;
   height: 135px;
-  line-height: 50px;
+  color: white;
+  line-height: 130px;
   border-radius: 50%;
   z-index: 9999 !important;
   text-align: center;
 }
+.custom-tooltip > span{
+  display:inline-block;
+  line-height:20px;
+  vertical-align:middle;
+}
+
+.custom-tooltip p {
+    font-weight: 500;
+    margin: auto auto;
+
+}
 #profileImg{
     border: 3px dotted @white;
+    background-color: white;
+    border-radius: 50%;
     padding: 10px;
     .animation(2s);
 }
@@ -226,11 +241,11 @@ h1,h2,h3,h4{
 /*************REGION: PLAYER CONTROLS STYLE*****************/
 /***********************************************************/
 .red{
-    color: #C61E1E;
+    color: @pink;
 }
 
 .yellow{
-  //color: #FFBB1B;
+  /*color: #FFBB1B;*/
   color: #FFBB1B;
   &:hover{
     .transform-rotate(360deg);
@@ -239,7 +254,7 @@ h1,h2,h3,h4{
 }
 
 .font-size{
-  font-size: 40px;
+  font-size: 20px;
   
 }
 
@@ -253,7 +268,8 @@ h1,h2,h3,h4{
 
 .one-line-videoname{
   display: inline-block;
-  font-size: 25px;
+  line-height: 40px;
+  font-size: 17px;
 }
 
 .msgBlock{

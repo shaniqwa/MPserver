@@ -1,7 +1,71 @@
 function drawPie(pieData,profileImg) {
-    // console.log("profileImg " + profileImg);
+
+Highcharts.Renderer.prototype.color = function (color, elem, prop) {
+
+    if (color && color.pattern && prop === 'fill') {
+        // SVG renderer
+        if (this.box.tagName == 'svg') {
+            var patternA,
+                patternB,
+                bgColor,
+                bgPattern,
+                image,
+                id;
+
+            id = 'highcharts-pattern-' + idCounter++;
+
+            patternA = this.createElement('pattern')
+            .attr({
+                id: id,
+                patternUnits: 'userSpaceOnUse',
+                width: '100%',
+                height: '100%'
+            })
+            .add(this.defs);
+
+            patternB = this.createElement('pattern')
+            .attr({
+                id: id + '-image',
+                patternUnits: 'userSpaceOnUse',
+                width: color.width,
+                height: color.width
+            })
+            .add(this.defs);
+
+            image = this.image(color.pattern, 0, 0, 6, 6)
+            .add(patternB);
 
 
+            bgColor = this.rect(0, 0, 0, 0, 0, 0)
+            .attr({
+                fill: color.fill,
+                width: '100%',
+                height: '100%'
+            })
+            .add(patternA);
+
+
+            bgPattern = this.rect(0, 0, 0, 0, 0, 0)
+            .attr({
+                fill: 'url(' + this.url + '#' + id + '-image)',
+                width: '100%',
+                height: '100%'
+            })
+            .add(patternA);
+
+            return 'url(' + this.url + '#' + id + ')';
+
+            // VML renderer
+        } else {
+            var markup = ['<', prop, ' type="tile" src="', color.pattern, '" />'];
+            elem.appendChild(
+            document.createElement(this.prepVML(markup)));
+        }
+
+    } else {
+        return base.apply(this, arguments);
+    }
+};
 
 
 /**
@@ -11,7 +75,7 @@ function drawPie(pieData,profileImg) {
 
 // Load the fonts
 Highcharts.createElement('link', {
-   href: '//fonts.googleapis.com/css?family=Unica+One',
+   href: '//fonts.googleapis.com/css?family=Source+Sans+Pro',
    rel: 'stylesheet',
    type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
@@ -28,7 +92,7 @@ Highcharts.theme = {
       // },
       backgroundColor: '#333335',
       style: {
-         fontFamily: "'Unica One', sans-serif"
+         fontFamily: "'Source Sans Pro', sans-serif"
       },
       plotBorderColor: '#606063'
    },
@@ -83,31 +147,16 @@ Highcharts.theme = {
       // backgroundColor: 'rgba(0, 0, 0, 0.85)',
       useHTML: true,
       animation: true,
+      borderWidth: 0,
       style: {
          color: '#F0F0F0',
-         fontSize: '16px',
-         padding: '0px'
+         fontSize: '16px'
       },
       shape: 'circle',
       style: {
         zIndex: 9999,
-        opacity: 0.6 
-      },
-      positioner: function () {
-        var tooltipX, tooltipY;
-        tooltipX = $("#MPcontainer").width()/2-77.5;
-        tooltipY = 250-50;
-            return { x: tooltipX, y: tooltipY };
-        },
-        formatter: function () {
-          var color = this.color;
-          color = color.replace("rgb", "rgba");
-          color = color.replace(")", ",0.7)");
-
-
-          // console.log(color);
-        return '<div class="custom-tooltip" style="background-color:' + color + '"><p>' + this.point.name + '</p>' + '<b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></div>';
-    }
+        opacity: 0
+      }
    },
    plotOptions: {
       series: {
@@ -312,15 +361,50 @@ Highcharts.setOptions(Highcharts.theme);
     }
 
 
+// var pixelX = 438;
+// var pixelY = 276;
+// var pixelR = 70;
 
+    var circleX = 438;
+    var circleY = 276;
+    var circleR = 67;
 
+function addCircle(chart){
+    if (this.circle){
+        // on a redraw, remove old circle
+        $(this.circle.element).remove();
+    }
 
+    // translate my coordinates to pixel values
+    var pixelX = chart.plotLeft + (chart.plotWidth  * 0.5) - (1  * 0.5);
+    var pixelY = chart.plotTop  + (chart.plotHeight * 0.5) + (1 * 0.25);
+    var pixelR = circleR;     
+
+    // add my circle
+    this.circle = chart.renderer.circle(pixelX, pixelY, pixelR).attr({
+        zIndex: 100,
+        align: 'center',
+        fill: 'url(#pattern)'
+        // stroke: 'white',
+        // 'stroke-width': 2
+        });
+    this.circle.add();        
+}
 
 
     // Create the chart
     $('#MPcontainer').highcharts({
         chart: {
-            type: 'pie'
+            type: 'pie',
+            events:{
+              load: function(){
+                addCircle(this); 
+              },
+              redraw: function(){
+                addCircle(this); 
+              }
+          }
+                   
         },
         title: {
             text: 'Music Profile'
@@ -335,13 +419,31 @@ Highcharts.setOptions(Highcharts.theme);
         },
         plotOptions: {
             pie: {
-                borderColor: '#3e3e40',
+                borderColor: '#333335',
+                borderWidth: 0,
                 shadow: false,
                 center: ['50%', '50%']
             }
         },
         tooltip: {
-            valueSuffix: '%'
+            valueSuffix: '%',
+            positioner: function () {
+        var tooltipX, tooltipY;
+        tooltipX = this.chart.plotLeft + (this.chart.plotWidth  * 0.5)  - (152  * 0.5);;
+        tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (150 * 0.5);;
+            return { x: tooltipX, y: tooltipY };
+        },
+        formatter: function () {
+          var color = this.color;
+          color = color.replace("rgb", "rgba");
+          color = color.replace(")", ",0.6)");
+
+          var name = toTitleCase(this.point.name);
+
+
+          // console.log(color);
+        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p>' + name + '</p>' + '<p><b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
+    },
         },
         series: [{
             name: ' ',
@@ -364,9 +466,6 @@ Highcharts.setOptions(Highcharts.theme);
                     click: function (event) {
                         // console.log(event.point.name);
                         sendEvent(event.point.name);
-                    },
-                    redraw: function(){
-                      drawCircle(this);
                     }
             },
             dataLabels: {
@@ -378,42 +477,42 @@ Highcharts.setOptions(Highcharts.theme);
         }]
     }
     , function(chart) { // on complete
-      var imgX = $("#MPcontainer").width()/2-77.5,
-          imgY = 200;
-    // chart.renderer.image('https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg', imgX, imgY, 150, 150)
-    //     .attr({
-    //           zIndex: 100,
-    //           class: 'img-circle',
-    //           id: 'profileImg'
-    //       })
-    //     .css({
+    var r = chart.renderer,
+        pattern = r.createElement('pattern')
+            // .attr({
+            //     id: 'pattern',
+            //     patternUnits: 'userSpaceOnUse',
+            //     x: 0,
+            //     y: 0,
+            //     width: 180,
+            //     height: 190,
+            //     viewBox: '0 0 135 135'
+            // })
+            .attr({
+                id: 'pattern',
+                patternUnits: 'objectBoundingBox',
+                x: 0,
+                y: 0,
+                width: '100%',
+                height: '100%',
+                viewBox: '0 0 135 135'
+            })
+            .add(r.defs);
 
-    //       })
-    //     .add();   
+   r.rect(0, 0, 135, 135, 0)
+       .attr('fill', '#ddd')
+       .add(pattern);
     
-    var pixelX = 438;
-    var pixelY = 276;
-    var pixelR = 70;
-
-    // add my circle
-    chart.renderer.circle(pixelX, pixelY, pixelR)
-    .attr({
-        zIndex: 100,
-        align: 'center',
-        // fill: 'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)',
-        color: 'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)',
-        stroke: 'black',
-        'stroke-width': 2
-        })
-    .css({
-      backgroundImage :'url(https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg)'
-    })
-    .add();        
+   r.image(profileImg,0,0,135,135)
+       .add(pattern);
 });
 
 
 // document.addEventListener("getPlaylist", getPlaylistHandler, false);
 };
+
+
+
 
 
 
@@ -445,6 +544,11 @@ function convertHex(hex,opacity){
 
     result = 'rgba('+r+','+g+','+b+','+opacity/100+')';
     return result;
+}
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
 // function getPlaylistHandler(event){
