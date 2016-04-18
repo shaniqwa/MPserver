@@ -310,7 +310,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
     newUser.country = "Israel";
     newUser.typeOfUser = "Consumer";    //should not be hard coded
     newUser.is_New = 1;
-    newUser.activityToken = newUser.generateHash(genStirng());
+    newUser.activityToken = genStirng(); // edited by stas - hash wasn't valid.
 
     //google
     if(platform == "google"){
@@ -577,7 +577,7 @@ function genStirng()
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 10; i++ )
+    for( var i=0; i < 15; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
