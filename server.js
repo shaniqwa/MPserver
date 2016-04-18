@@ -1,6 +1,7 @@
 var express = require('express'),
 	app = express(),
 	Controller = require('./Controller'),
+    ControllerB = require('./ControllerB'),
     ProducerController = require('./ProducerController'),
     DJ = require('./dj');
 
@@ -365,6 +366,67 @@ io.on('connection', function(client) {
 		function (req, res) {
 		Controller.deleteUser(res,req.params.userID);
 	});
+
+
+    //Find match
+    app.param('userIDM', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+
+    //route that recives parameter using defined parameters
+    app.get('/findMatch/:userIDM', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        ControllerB.findMatch(res,req.params.userIDM);
+    });
+
+      //search User
+    app.param('username', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\n username: " + value);
+        next();
+    });
+
+    //route that recives parameter using defined parameters
+    app.get('/searchuser/:username', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        ControllerB.searchuser(res,req.params.username);
+    });       
+
+    //recommandation
+    app.param('userIDR', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log("\n userID: " + value);
+        next();
+    });
+
+    //route that recives parameter using defined parameters
+    app.get('/recommandation/:userIDR', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        ControllerB.recommandation(res,req.params.userIDR);
+    });       
+
 
 
     //Get Playlist
