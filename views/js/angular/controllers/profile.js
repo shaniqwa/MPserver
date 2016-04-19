@@ -25,6 +25,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.track = [];
    $scope.toggle = true;
    $scope.videoFrame = false;
+   $scope.videoFrame2 = false;
    $scope.nowPlaying = [];
    $scope.msg = [];
    $scope.elementToFadeInAndOut = '';
@@ -61,6 +62,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         console.log("end of ready");
         $scope.$apply(function() {
           $scope.videoFrame = true;
+          $scope.videoFrame2 = false;
         });
     }
 
@@ -119,6 +121,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     $scope.bringMePlaylist = function($event){
      //$scope.track = [];
      //$scope.counter = 0;
+     $scope.videoFrame2 = true;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
          if(typeof $event === 'undefined'){
