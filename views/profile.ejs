@@ -25,8 +25,9 @@
             frameborder="0"/></iframe>
 
             <!-- player controllers -->
+            
+            <div ng-show="videoFrame" class="one-line-videoname"> {{nowPlaying.artistName }} -</div>
             <div class="one-line-videoname"> {{ nowPlaying.songName}}</div>
-            <div ng-show="videoFrame" class="one-line-videoname"> {{nowPlaying.artistName }}</div>
             <div></div>
             <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
             <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
