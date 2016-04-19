@@ -252,7 +252,20 @@ io.on('connection', function(client) {
     // email gets their emails
 
     // 'https://www.googleapis.com/auth/youtube'
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+    app.get('/auth/google', function(req, res){
+        console.log("auth with google, user type: " + req.query.type);
+        passport.authenticate(
+            'google', 
+            { 
+                scope : [
+                            'profile', 
+                            'email' , 
+                            'https://www.googleapis.com/auth/youtube.readonly', 
+                            'https://www.googleapis.com/auth/youtubepartner'
+                        ],
+                state: req.query.type
+                })(req,res);
+        });
 
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
@@ -270,14 +283,32 @@ io.on('connection', function(client) {
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes','user_birthday','user_location'] }));
+    app.get('/auth/facebook', function(req, res){
+        console.log("auth with facebook, user type: " + req.query.type);
+        passport.authenticate(
+            'facebook', 
+            { scope :   [
+                            'email',
+                            'user_actions.music', 
+                            'user_likes',
+                            'user_birthday',
+                            'user_location'
+                        ],
+              state: req.query.type
+            })(req,res);
+        });
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
             failureRedirect : '/'
         }),function(req, res){
-            if (req.user.is_New) { return res.redirect('/BPwizard'); }
+            if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
+                return res.redirect('/BPwizard'); 
+            }
+            if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+                return res.redirect('/ProducerWizard'); 
+            }
             res.redirect('/profile');
         });
 
@@ -300,6 +331,14 @@ io.on('connection', function(client) {
                 user : req.user
             });
 	});
+
+    //Producer Wizard - a step in Producer registration
+    app.get('/ProducerWizard', function (req, res){
+        // console.log("user id: " +req.user.userId);
+            res.render('ProducerWizard.ejs', {
+                user : req.user
+            });
+    });
 
 	//Add Song to Favorites
 	app.post('/addToFavorites', function (req, res){

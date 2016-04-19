@@ -231,7 +231,8 @@ module.exports = function(passport) {
 
     // facebook will send back the token and profile
     function(req,token, refreshToken, profile, done) {
-        // console.log(profile);
+        console.log("state: " + req.query.state);
+        profile.type = req.query.state;
         // asynchronous
         process.nextTick(function() {
         // check if the user is already logged in
@@ -304,19 +305,19 @@ module.exports = function(passport) {
 registerNewUser = function(platform, profile, token , refreshToken , NewUserCallback){
     var newUser = new User();
     // var url;
-
+    console.log(profile.type);
     //same for both platforms
     newUser.mode = 1;
-    newUser.country = "Israel";
-    newUser.typeOfUser = "Consumer";    //should not be hard coded
+    newUser.typeOfUser = profile.type;
     newUser.is_New = 1;
     newUser.activityToken = genStirng(); // edited by stas - hash wasn't valid.
 
     //google
     if(platform == "google"){
-        // url = "http://52.35.9.144:8082/MP/null/" + token;
-        // set all of the relevant information
+
+        // set all of the relevant information from google to our user
         console.log("registering new user with google platform");
+        newUser.country = "Israel";
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
         newUser.YT_RT = refreshToken;
@@ -330,12 +331,16 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         }
         
     }else if(platform == "facebook"){
-        // url = "http://52.35.9.144:8082/MP/" + token + "/null";
         // set all of the facebook information in our user model
+        
+
+        //location
         if(profile._json.location.name !== 'undefined'){
             var country = profile._json.location.name.split(', ')[1];
             newUser.country = country;    
         }
+        
+        //age group
         if(profile._json.birthday !== 'undefined'){
             //calculate user age from his birthday
             var birthday = profile._json.birthday.split("/");
