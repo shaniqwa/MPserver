@@ -449,6 +449,7 @@ function addCircle(chart){
             name: ' ',
             data: browserData,
             size: '70%',
+            innerSize: '70%',
             dataLabels: {
                 formatter: function () {
                     return this.y > 5 ? this.point.name : null;
@@ -457,6 +458,7 @@ function addCircle(chart){
                 distance: -30
             }
         }, {
+
             name: ' ',
             data: versionsData,
             size: '85%',
