@@ -256,7 +256,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
                          artist: $scope.track[$scope.counter - 1].artistName,
-                         duration: "3:43"
+                         duration: "3:43",
+                         url:  $scope.track[$scope.counter - 1].url
                       }
                  });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
