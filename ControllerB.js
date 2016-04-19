@@ -40,7 +40,7 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 exports.findMatch = function(res, userID){
 	var genres = [];
 	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
-	  if (err){
+	  if (err || pleasureUser === null){
 	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
 	  for(var i=0; i<pleasureUser.genres.length; i++){
@@ -52,7 +52,7 @@ exports.findMatch = function(res, userID){
 	  console.log("done pleasure");
 
 	  BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
-		  if (err){
+		  if (err || buisnessUser === null){
 		  	res.status(200).json("error finding buisness pie for user: " + err.message);
 		  } 
 		  for(var i=0; i<buisnessUser.genres.length; i++){
@@ -63,12 +63,12 @@ exports.findMatch = function(res, userID){
 		  }
 		  console.log("done business");
 
-		  console.log("categories:");
-		  console.log(categories);
+		  console.log("genres:");
+		  console.log(genres);
 
 			ArtistPie.find({}, function (err, artists) {
 				
-			  if (err){
+			  if (err || artists === null){
 			  	res.status(200).json("error finding artists: " + err.message);
 			  } 
 			  
@@ -86,12 +86,12 @@ exports.findMatch = function(res, userID){
 		      	}
 		      	if(matchGeners.length >= 3){
 		      		for(var i=0; i< matchGeners.length; i++){
-		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.producers': artist.artistPieId }} ,{new: true}, function (err, doc) {
+		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 						  if (err){
 						  	res.status(200).json("error adding producer to BusinessPie: " + err.message);
 						  	return err;
 						  } 
-						  PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.producers': artist.artistPieId }} ,{new: true}, function (err, doc) {
+						  PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 							  if (err){
 							  	res.status(200).json("error adding producer to PleasurePie: " + err.message);
 							  	return err;
@@ -114,10 +114,10 @@ exports.findMatch = function(res, userID){
 }
 
 //search
-exports.searchuser = function(res,data) {
+exports.searchSpecificUser = function(res,data) {
 
 	User.findOne({ username: data }, function (err, doc) {
-	  if (err){
+	  if (err || doc === null){
 	  	res.status(200).json("error searching user: " + err.message);
 	  } 
 	  // done!
@@ -128,11 +128,37 @@ exports.searchuser = function(res,data) {
 	});
 }
 
+//search
+exports.searchuser = function(res,data) {
+
+	User.find({ username: {$regex: data} }, function (err, doc) {
+	  if (err || doc === null){
+	  	res.status(200).json("error searching substring user: " + err.message);
+	  } 
+	  // done!
+	  console.log("doc "+doc);
+
+	  var result = [];
+	  doc.forEach(function(user){
+	  	result.push({username: user.username, type: user.typeOfUser, profileImage: user.profileImage, firstName: user.firstName, lastName: user.lastName});
+	  });
+	  //console.log(result);
+	  res.status(200).json(result);
+	});
+}
+
+
+//safe delete of a favorite
+exports.removeFav = function(res, data){
+	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } });
+	res.status(200).json("Songs has been deleted " + userID);
+}
+
 //recommandation
 exports.recommandation = function(res, userID){
 	var producers = [];
 	PleasurePie.findOne({ pleasurePieId: userID }, function (err, data) {
-	  if (err){
+	  if (err || data === null){
 	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
 	  for(var i=0; i<data.genres.length; i++){
@@ -143,7 +169,7 @@ exports.recommandation = function(res, userID){
 	  console.log("done pleasure");
 
 	  BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
-		  if (err){
+		  if (err || data === null){
 		  	res.status(200).json("error finding buisness pie for user: " + err.message);
 		  } 
 		  for(var i=0; i<data.genres.length; i++){
@@ -157,16 +183,16 @@ exports.recommandation = function(res, userID){
 			console.log(producers);
 			var result = [];
 
-			User.find({}, function (err, data) {
+			User.find({}, function (err, users) {
 				
-			  if (err){
+			  if (err || users === null){
 			  	res.status(200).json("error finding producers type: " + err.message);
 			  } 
 			  
-			  console.log("data");
+			  console.log("users");
 		      //console.log(data);
 
-		      data.forEach(function(user){
+		      users.forEach(function(user){
 		      	console.log("user");
 		      	console.log(user.username +" " + user.typeOfUser);
 
@@ -179,15 +205,6 @@ exports.recommandation = function(res, userID){
 		      	}
 		      });
 			  console.log(result);
-			  // for(var i=0; i<producers.length; i++){
-			  // 	console.log("producers[i] "+producers[i]);
-			  // 	for(var j=0; j<data.length; j++){
-			  // 		if(producers[i].username === data[j].username){
-			  // 			result.push({username: data[j].username, profileImage: data[j].profileImage});
-			  // 		}
-			  // 	}
-			  	
-			  // }
 			  res.status(200).json(result);
 			});
 
