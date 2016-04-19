@@ -148,7 +148,7 @@ exports.searchuser = function(res,data) {
 }
 
 
-//safe delete of a favorite
+//delete song from favorite
 exports.removeFav = function(res, data){
 	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } });
 	res.status(200).json("Songs has been deleted " + userID);
