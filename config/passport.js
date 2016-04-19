@@ -231,7 +231,7 @@ module.exports = function(passport) {
 
     // facebook will send back the token and profile
     function(req,token, refreshToken, profile, done) {
-        // console.log(profile);
+        console.log("state: " + req.query.state);
         // asynchronous
         process.nextTick(function() {
         // check if the user is already logged in

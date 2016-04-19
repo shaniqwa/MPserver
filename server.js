@@ -252,7 +252,20 @@ io.on('connection', function(client) {
     // email gets their emails
 
     // 'https://www.googleapis.com/auth/youtube'
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+    app.get('/auth/google', function(req, res){
+        console.log("auth with google, user type: " + req.query.type);
+        passport.authenticate(
+            'google', 
+            { 
+                scope : [
+                            'profile', 
+                            'email' , 
+                            'https://www.googleapis.com/auth/youtube.readonly', 
+                            'https://www.googleapis.com/auth/youtubepartner'
+                        ],
+                state: req.query.type
+                })(req,res);
+        });
 
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
@@ -270,7 +283,20 @@ io.on('connection', function(client) {
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email','user_actions.music', 'user_likes','user_birthday','user_location'] }));
+    app.get('/auth/facebook', function(req, res){
+        console.log("auth with facebook, user type: " + req.query.type);
+        passport.authenticate(
+            'facebook', 
+            { scope :   [
+                            'email',
+                            'user_actions.music', 
+                            'user_likes',
+                            'user_birthday',
+                            'user_location'
+                        ],
+              state: req.query.type
+            })(req,res);
+        });
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
