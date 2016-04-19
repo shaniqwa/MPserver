@@ -84,38 +84,7 @@ io.on('connection', function(client) {
         res.render('index.ejs'); // load the index.ejs file
     });
 
-    // =====================================
-    // LOGIN ===============================
-    // =====================================
-    // show the login form
-    // app.get('/login', function(req, res) {
-    //     // render the page and pass in any flash data if it exists
-    //     res.render('login.ejs', { message: req.flash('loginMessage') }); 
-    // });
 
-    // // process the login form
-    // app.post('/login', passport.authenticate('local-login', {
-    //     successRedirect : '/profile', // redirect to the secure profile section
-    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
-    //     failureFlash : true // allow flash messages
-    // }));
-
-    // // =====================================
-    // // SIGNUP ==============================
-    // // =====================================
-    // // show the signup form
-    // app.get('/signup', function(req, res) {
-
-    //     // render the page and pass in any flash data if it exists
-    //     res.render('signup.ejs', { message: req.flash('signupMessage') });
-    // });
-
-    // // process the signup form
-    // app.post('/signup', passport.authenticate('local-signup', {
-    //     successRedirect : '/profile', // redirect to the secure profile section
-    //     failureRedirect : '/signup', // redirect back to the signup page if there is an error
-    //     failureFlash : true // allow flash messages
-    // }));
 
     // =====================================
     // PROFILE SECTION =====================
@@ -170,79 +139,15 @@ io.on('connection', function(client) {
         res.redirect('/');
     });
 
-// =============================================================================
-// AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-// =============================================================================
-
-    // locally --------------------------------
-        // app.get('/connect/local', function(req, res) {
-        //     res.render('connect-local.ejs', { message: req.flash('loginMessage') });
-        // });
-        // app.post('/connect/local', passport.authenticate('local-signup', {
-        //     successRedirect : '/profile', // redirect to the secure profile section
-        //     failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-        //     failureFlash : true // allow flash messages
-        // }));
-
-    // facebook -------------------------------
-
-        // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location'] }));
-
-        // handle the callback after facebook has authorized the user
-        app.get('/connect/facebook/callback',
-            passport.authorize('facebook', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-    // google ---------------------------------
-
-        // send to google to do the authentication
-        app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
-
-        // the callback after google has authorized the user
-        app.get('/connect/google/callback',
-            passport.authorize('google', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
 
 
-// =============================================================================
-// UNLINK ACCOUNTS =============================================================
-// =============================================================================
-// used to unlink accounts. for social accounts, just remove the token
-// for local account, remove email and password
-// user account will stay active in case they want to reconnect in the future
 
-    // local -----------------------------------
-    // app.get('/unlink/local', function(req, res) {
-    //     var user            = req.user;
-    //     user.email    = undefined;
-    //     user.password = undefined;
-    //     user.save(function(err) {
-    //         res.redirect('/profile');
-    //     });
-    // });
 
-    // facebook -------------------------------
-    app.get('/unlink/facebook', function(req, res) {
-        var user = req.user;
-        user.FB_AT = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
 
-    // google ---------------------------------
-    app.get('/unlink/google', function(req, res) {
-        var user = req.user;
-        user.YT_AT = undefined;
-        user.save(function(err) {
-           res.redirect('/profile');
-        });
-    });
+    // =====================================
+    // LOGIN/SIGNUP ========================
+    // =====================================
+
 
     // =====================================
     // GOOGLE ROUTES =======================
@@ -267,6 +172,10 @@ io.on('connection', function(client) {
                 })(req,res);
         });
 
+
+
+
+
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
             passport.authenticate('google', {
@@ -276,6 +185,32 @@ io.on('connection', function(client) {
                 if (req.user.is_New) { return res.redirect('/BPwizard'); }
                 res.redirect('/profile');
             });
+
+
+
+    // connect google ---------------------------------
+    // send to google to do the authentication
+    app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+
+    // the callback after google has authorized the user
+    app.get('/connect/google/callback',
+        passport.authorize('google', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }));
+
+
+    // unlink google ---------------------------------
+    app.get('/unlink/google', function(req, res) {
+        var user = req.user;
+        user.YT_AT = undefined;
+        user.save(function(err) {
+           res.redirect('/profile');
+        });
+    });
+
+
+
 
 
 
@@ -313,6 +248,32 @@ io.on('connection', function(client) {
         });
 
 
+
+
+
+    // connect facebook -------------------------------
+    // send to facebook to do the authentication
+    app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location'] }));
+
+    // handle the callback after facebook has authorized the user
+    app.get('/connect/facebook/callback',
+        passport.authorize('facebook', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }));
+
+
+
+    // unlink facebook -------------------------------
+    app.get('/unlink/facebook', function(req, res) {
+        var user = req.user;
+        user.FB_AT = undefined;
+        user.save(function(err) {
+            res.redirect('/profile');
+        });
+    });
+
+
 	// route middleware to make sure a user is logged in
 	function isLoggedIn(req, res, next) {
 
@@ -324,6 +285,14 @@ io.on('connection', function(client) {
 	    res.redirect('/');
 	}
 
+
+
+
+
+    // =====================================
+    // WIZARDS ========================
+    // =====================================
+
 	//Business Pleasure Wizard - a step in registration
 	app.get('/BPwizard', function (req, res){
         // console.log("user id: " +req.user.userId);
@@ -331,6 +300,26 @@ io.on('connection', function(client) {
                 user : req.user
             });
 	});
+
+
+
+
+    //process BPWizard Form
+    app.post('/processWizardForm', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.processWizardForm(req,res,data);
+    });
+
+
+
+
 
     //Producer Wizard - a step in Producer registration
     app.get('/ProducerWizard', function (req, res){
@@ -340,20 +329,13 @@ io.on('connection', function(client) {
             });
     });
 
-	//Add Song to Favorites
-	app.post('/addToFavorites', function (req, res){
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		app.set('json spaces', 4);
-		res.set("Content-Type", "application/json");
-		res.status(200);
+    //***********************************************************************//
+    //*******************************User Funcs******************************//
+    //***********************************************************************//
 
-		var data = {};
-		data = req.body;
-		Controller.addToFavorites(res,data);
-	});
 
     //Get User's Favorites list
+    // getFavorites/:userID
     app.param('userID', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -372,6 +354,47 @@ io.on('connection', function(client) {
         Controller.getFavorites(res,req.params.userID);
     });
 
+
+
+
+
+
+    //Add Song to Favorites
+    app.post('/addToFavorites', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.addToFavorites(res,data);
+    });
+
+
+
+
+
+        //Remove Song from favorites
+    app.post('/removeFav', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        ControllerB.removeFav(res,data);
+    });
+
+
+
+
+
+
+
 	//Add Song to Blacklist
 	app.post('/addToBlackList', function (req, res){
 		res.header("Access-Control-Allow-Origin", "*");
@@ -385,18 +408,11 @@ io.on('connection', function(client) {
 		Controller.addToBlackList(res,data);
 	});
 
-    //Remove Song from favorites
-    app.post('/removeFav', function (req, res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        app.set('json spaces', 4);
-        res.set("Content-Type", "application/json");
-        res.status(200);
 
-        var data = {};
-        data = req.body;
-        ControllerB.removeFav(res,data);
-    });
+
+
+
+
 
 
 	//Delete User
@@ -419,6 +435,14 @@ io.on('connection', function(client) {
 	});
 
 
+
+
+
+
+
+
+
+
     //Find match
     app.param('userIDM', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
@@ -438,7 +462,16 @@ io.on('connection', function(client) {
         ControllerB.findMatch(res,req.params.userIDM);
     });
 
-      //search User
+
+
+
+
+
+
+
+
+
+      //Search User
     app.param('username', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -458,7 +491,15 @@ io.on('connection', function(client) {
         ControllerB.searchuser(res,req.params.username);
     });       
 
-    //recommandation
+
+
+
+
+
+
+
+
+    //Get list of recommandation (producers that match the consumer)
     app.param('userIDR', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -477,6 +518,13 @@ io.on('connection', function(client) {
         function (req, res) {
         ControllerB.recommandation(res,req.params.userIDR);
     });       
+
+
+
+
+    //***********************************************************************//
+    //*****************************Playlist**********************************//
+    //***********************************************************************//
 
 
 
@@ -520,6 +568,7 @@ io.on('connection', function(client) {
     //***********************************************************************//
     //**************************ProducerController***************************//
     //***********************************************************************//
+
     //getProducerStatistics
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
@@ -540,13 +589,19 @@ io.on('connection', function(client) {
     });
 
 
+
+
+
+
+
+
      //getProducerSongs
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
      });
-    // getProducerSongs
+
      app.get('/getProducerSongs/:prodID', 
         function (req, res, next){
             res.header("Access-Control-Allow-Origin", "*");
@@ -559,19 +614,27 @@ io.on('connection', function(client) {
             ProducerController.getProducerSongs(res,req.params.prodID);
     });
 
+
+
+
+
+
+
+
+
       //updateCounters
      app.param('prodID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
      });
-       //updateCounters
+
      app.param('songID', function ( req, res, next, value){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
      });
-    // updateCounters
+
      app.get('/updateCounters/:prodID/:songID', 
         function (req, res, next){
             res.header("Access-Control-Allow-Origin", "*");
@@ -583,23 +646,9 @@ io.on('connection', function(client) {
             console.log("request for updateCounters with user id " +req.params.prodID + " song id " + req.params.songID);
             ProducerController.updateCounters(res,req.params.prodID, req.params.songID);
     });
-     //***********************************************************************//
-     //**************************ProducerController  END**********************//
-     //***********************************************************************//
 
 
-    //process Wizard Form
-    app.post('/processWizardForm', function (req, res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        app.set('json spaces', 4);
-        res.set("Content-Type", "application/json");
-        res.status(200);
 
-        var data = {};
-        data = req.body;
-        Controller.processWizardForm(req,res,data);
-    });
 
 
 //===============PORT=================
