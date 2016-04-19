@@ -303,7 +303,12 @@ io.on('connection', function(client) {
         passport.authenticate('facebook', {
             failureRedirect : '/'
         }),function(req, res){
-            if (req.user.is_New) { return res.redirect('/BPwizard'); }
+            if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
+                return res.redirect('/BPwizard'); 
+            }
+            if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+                return res.redirect('/ProducerWizard'); 
+            }
             res.redirect('/profile');
         });
 
@@ -326,6 +331,14 @@ io.on('connection', function(client) {
                 user : req.user
             });
 	});
+
+    //Producer Wizard - a step in Producer registration
+    app.get('/ProducerWizard', function (req, res){
+        // console.log("user id: " +req.user.userId);
+            res.render('ProducerWizard.ejs', {
+                user : req.user
+            });
+    });
 
 	//Add Song to Favorites
 	app.post('/addToFavorites', function (req, res){
