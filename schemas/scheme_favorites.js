@@ -8,7 +8,8 @@ var favoritesSchema = new Schema({
         	_id:false,
             song: String,
             artist: String,
-            duration: String
+            duration: String,
+            url: String
         }
     ]
 });
