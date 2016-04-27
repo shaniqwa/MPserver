@@ -4,6 +4,7 @@ var db = mongoose.createConnection(configDB.url); // connect to our database
 
 var autoIncrement = require('mongoose-auto-increment');
 var async = require("async");
+var request = require('request');
 autoIncrement.initialize(db);
 
 
@@ -49,6 +50,38 @@ exports.updateCounters = function(res,prodId,songId){
 	  } 
 	  // done!
 	  res.status(200).json(doc);
+	});
+} 
+
+exports.getFacebookStatistics = function(res,prodId){
+   async.parallel({
+	    facebook: function(callback) {
+	    	var url = "https://graph.facebook.com/me?insights&access_token=EAACEdEose0cBANqaFZAvHeDDhdZAHCgLB2oiZADpujXSYpZCFSuL3UHPJqiiCFYbP33Grwy16hY33MWfptfi5bFOZAPTk70HsfUWmEY6e5gATlcJUzZBuMGAkDDIautxLCoWX3elmvDt3jOfmTu0XYzmD1LUSSiInHESMPv1xSPhwbXV00Dr1r";
+			request.get(url, function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+				    var obj = body.toString();
+				    obj = JSON.parse(obj);
+				    callback(null, obj);
+				    }else if(error){
+				         return console.error(error);
+				    }
+			});
+	    },
+	    youtube: function(callback) {
+	        var url = "https://graph.facebook.com/me?insights&access_token=EAACEdEose0cBANqaFZAvHeDDhdZAHCgLB2oiZADpujXSYpZCFSuL3UHPJqiiCFYbP33Grwy16hY33MWfptfi5bFOZAPTk70HsfUWmEY6e5gATlcJUzZBuMGAkDDIautxLCoWX3elmvDt3jOfmTu0XYzmD1LUSSiInHESMPv1xSPhwbXV00Dr1r";
+			request.get(url, function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+				    var obj = body.toString();
+				    obj = JSON.parse(obj);
+				    callback(null, obj);
+				    }else if(error){
+				         return console.error(error);
+				    }
+			});
+	    }
+	}, function(err, results) {
+	    // results is now equals to: {one: 'abc\n', two: 'xyz\n'}
+	    res.status(200).json(results);
 	});
 } 
 

@@ -648,6 +648,26 @@ io.on('connection', function(client) {
     });
 
 
+      
+      //getFacebookStatistics
+       app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+       });
+
+       app.get('/getFacebookStatistics/:prodID', 
+            function (req, res, next){
+                res.header("Access-Control-Allow-Origin", "*");
+                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                next(); 
+            },
+
+            function (req, res) {
+                console.log("getFacebookStatistics with id: " + req.params.prodID);
+                ProducerController.getFacebookStatistics(res,req.params.prodID);
+       });
+
 
 
 
