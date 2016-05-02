@@ -32,8 +32,23 @@
 <div class="col-sm-6">
         <div class="well">
         <h3>Additional Information</h3>
-        user id : <%= user.userId %>
-        <p>Please complete some missing basic information</p>
+         Band/Artist Name:<br>
+        <input type="text" name="artistName">
+        <br><br>
+
+
+        <p>In order to get your music out there, you need to upload your songs to a youtube playlist. We will keep track of that playlist, so you will not have to update and upload your songs again. </p>
+        Choose Playlist : <br>
+        <% for(var i=0; i < list.length; i++) { %>
+        <div class="checkbox">
+          <label><input type="radio" name="b_rock" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
+        </div>
+        <% } %>
+        <br>
+        user id : <%= user.userId %><br>
+        google token: <%= user.YT_AT%><br>
+
+
         <% if (user.ageGroup == null) { %>
         <strong>Age Group: </strong>
         <select name="ageGroup">
