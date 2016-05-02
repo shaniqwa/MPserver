@@ -6,6 +6,9 @@ var model = {
 var user;
 var prodId = 63;
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
+  $scope.searchText="";
+  $scope.fixedSearchText = "";
+  $scope.searchResults = [];
   $scope.mod = model;
   $scope.songDetails = [];
   $scope.ageGroupCounters = [];
@@ -25,11 +28,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.track = [];
    $scope.toggle = true;
    $scope.videoFrame = false;
-   $scope.videoFrame2 = false;
    $scope.nowPlaying = [];
    $scope.msg = [];
    $scope.elementToFadeInAndOut = '';
-   $scope.loaderStatus = "invisible-loader";
 
    // create youtube player
     var player;
@@ -63,8 +64,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         console.log("end of ready");
         $scope.$apply(function() {
           $scope.videoFrame = true;
-          $scope.videoFrame2 = true;
-          $scope.loaderStatus = "invisible-loader";
         });
     }
 
@@ -111,6 +110,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            }
 
        });
+        $scope.fixedSearchText = $(".search-form").text();
        //onYouTubePlayerAPIReady();
   }; 
 /***********************************************************/
@@ -123,8 +123,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     $scope.bringMePlaylist = function($event){
      //$scope.track = [];
      //$scope.counter = 0;
-     $scope.videoFrame2 = false;
-     $scope.loaderStatus = "visible-loader";
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
          if(typeof $event === 'undefined'){
@@ -154,6 +152,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
+
+$scope.search = function(text){
+  $http.get('http://localhost:3000/searchuser/' + text).success(function(data){
+    console.log(data);
+    $scope.searchResults = data;
+  });
+};
+
 
 /***********************************************************/
 /*****************updatePlaylist FUNCTION*******************/
@@ -256,8 +262,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
                          artist: $scope.track[$scope.counter - 1].artistName,
-                         duration: "3:43",
-                         url:  $scope.track[$scope.counter - 1].url
+                         duration: "3:43"
                       }
                  });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
