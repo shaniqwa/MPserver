@@ -197,7 +197,9 @@ exports.processWizardForm = function(req,res,data) {
 		        if(req.user.FB_AT){
 		        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
 		        }else if(req.user.YT_AT){
+		        	console.log("register with google, token: " + req.user.YT_AT);
 		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
+		        	console.log(url);
 		        }
 
 		        callback();
@@ -227,7 +229,7 @@ exports.processWizardForm = function(req,res,data) {
             // console.log(MP);
             callback();
           }else if(error){
-            return console.error(error);
+            return console.error("ERROR with request to WS: " + error);
           }
         });
     },
@@ -435,13 +437,6 @@ exports.processWizardForm = function(req,res,data) {
 		res.redirect('/profile'); 
     });
 
-    
-
-
-
-
-
-
 
 	
 	//addToSet make sure there are no duplicates is songs array.
@@ -456,5 +451,36 @@ exports.processWizardForm = function(req,res,data) {
 }
 
 
-//TODO: register as producer - regular regisntration like consumer, but then we need to access the producer's YouTube authorized playlist
-//and insert add songs to scheme_producerSongs.js
+exports.getProducerPlaylists = function(YT_AT){
+	var list = [];
+	request("https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var temp = JSON.parse(body);
+			for(i=0; i<temp.items.length; i++){
+				list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+			}
+			console.log("the list:");
+			console.log(list);
+			return list;	
+		}
+	});
+}
+
+getProducerPlaylistItems = function(playlistID, YT_AT){
+	var list = [];
+	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var temp = JSON.parse(body);
+			for(i=0; i<temp.items.length; i++){
+				list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+			}
+			console.log("the list:");
+			console.log(list);
+			return list;	
+		}
+	});
+}
+
+exports.processProducerWizardForm = function(){
+
+}

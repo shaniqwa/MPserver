@@ -5,6 +5,7 @@ var express = require('express'),
     ProducerController = require('./ProducerController'),
     DJ = require('./dj');
 
+var request = require('request');
 var server = require('http').createServer(app);  
 var io = require('socket.io')(server);
 
@@ -181,8 +182,12 @@ io.on('connection', function(client) {
             passport.authenticate('google', {
                    failureRedirect : '/'
             }),function(req, res){
-                // console.log(req.user.is_New);
-                if (req.user.is_New) { return res.redirect('/BPwizard'); }
+                if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
+                    return res.redirect('/BPwizard'); 
+                }
+                if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+                    return res.redirect('/ProducerWizard'); 
+                }
                 res.redirect('/profile');
             });
 
@@ -323,10 +328,38 @@ io.on('connection', function(client) {
 
     //Producer Wizard - a step in Producer registration
     app.get('/ProducerWizard', function (req, res){
-        // console.log("user id: " +req.user.userId);
-            res.render('ProducerWizard.ejs', {
-                user : req.user
+        var list = [];
+        async.series([
+            function(callback){
+                request("https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token="+req.user.YT_AT, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var temp = JSON.parse(body);
+                        for(i=0; i<temp.items.length; i++){
+                            list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+                        }
+                        console.log("the list:");
+                        console.log(list);
+                        callback(null, 'list is full'); 
+                    }
+                });
+            }
+            // ,
+            // function(callback){
+            //     // do some more stuff ...
+            //     callback(null, 'two');
+            // }
+        ],
+        // optional callback
+        function(err, results){
+            // all done
+             res.render('ProducerWizard.ejs', {
+                user : req.user,
+                list: list
             });
+        });
+            // var list = [];
+            // list = Controller.getProducerPlaylists(req.user.YT_AT);
+            // console.log(list);
     });
 
     //***********************************************************************//
