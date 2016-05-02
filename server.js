@@ -648,6 +648,26 @@ io.on('connection', function(client) {
     });
 
 
+      
+      //getFacebookYoutubeStatistics
+       app.param('prodID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+       });
+
+       app.get('/getFacebookYoutubeStatistics/:prodID', 
+            function (req, res, next){
+                res.header("Access-Control-Allow-Origin", "*");
+                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                next(); 
+            },
+
+            function (req, res) {
+                console.log("getFacebookYoutubeStatistics with id: " + req.params.prodID);
+                ProducerController.getFacebookYoutubeStatistics(res,req.params.prodID);
+       });
+
 
 
 
