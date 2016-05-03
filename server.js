@@ -35,6 +35,9 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
+var genresSchema = require('./schemas/scheme_genres.js').genresSchema;
+var GenreS = mongoose.model('actionM', genresSchema);
+
 	//===============EXPRESS================
 	require('./config/passport')(passport);
 	app.use(morgan('dev')); // log every request to the console
@@ -329,7 +332,8 @@ io.on('connection', function(client) {
     //Producer Wizard - a step in Producer registration
     app.get('/ProducerWizard', function (req, res){
         var list = [];
-        async.series([
+        var genres = [];
+        async.parallel([
             function(callback){
                 request("https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token="+req.user.YT_AT, function(error, response, body) {
                     if (!error && response.statusCode == 200) {
@@ -343,18 +347,26 @@ io.on('connection', function(client) {
                     }
                 });
             }
-            // ,
-            // function(callback){
-            //     // do some more stuff ...
-            //     callback(null, 'two');
-            // }
+            ,
+            function(callback){
+                GenreS.find({ category: { $exists: true } },function (err, docs) {
+                      if (err) {
+                        callback(err);
+                        return;
+                      }
+                      genres = docs;
+                      console.log(genres);
+                      callback();
+                });
+            }
         ],
         // optional callback
         function(err, results){
             // all done
              res.render('ProducerWizard.ejs', {
                 user : req.user,
-                list: list
+                list: list,
+                genres: genres
             });
         });
             // var list = [];

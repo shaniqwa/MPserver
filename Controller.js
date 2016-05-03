@@ -466,14 +466,15 @@ exports.getProducerPlaylists = function(YT_AT){
 	});
 }
 
+//get all songs from a youtube playlist and insert to DB
 getProducerPlaylistItems = function(playlistID, YT_AT){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var temp = JSON.parse(body);
-			for(i=0; i<temp.items.length; i++){
-				list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
-			}
+			// for(i=0; i<temp.items.length; i++){
+			// 	list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+			// }
 			console.log("the list:");
 			console.log(list);
 			return list;	

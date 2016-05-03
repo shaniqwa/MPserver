@@ -41,7 +41,7 @@
         Choose Playlist : <br>
         <% for(var i=0; i < list.length; i++) { %>
         <div class="checkbox">
-          <label><input type="radio" name="b_rock" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
+          <label><input type="radio" name="i" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
         </div>
         <% } %>
         <br>
@@ -62,11 +62,23 @@
     <% } %>
     </div>
 </div>
+
+<!-- ARTIST PIE -->
+<div class="col-sm-6">
+        <div class="well">
+        <% for(var i=0; i < genres.length; i++) { %>
+          <p>  <%= genres[i].name %> </p>
+        <% } %>
+          <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+
+        </div>
+</div>
     
     </form>
     <button type="submit" form="wizard" value="Submit">Submit</button>
     <!-- END FORM -->
 </div>
 <%- include jsFiles %>
+<script src="js/producerWizard.js"></script>
 </body>
 </html>
