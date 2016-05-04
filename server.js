@@ -341,8 +341,6 @@ io.on('connection', function(client) {
                         for(i=0; i<temp.items.length; i++){
                             list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
                         }
-                        console.log("the list:");
-                        console.log(list);
                         callback(null, 'list is full'); 
                     }
                 });
