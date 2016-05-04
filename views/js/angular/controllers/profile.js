@@ -123,7 +123,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     $scope.bringMePlaylist = function($event){
      //$scope.track = [];
      //$scope.counter = 0;
+     if($scope.videoFrame == false)
      $scope.videoFrame2 = false;
+   
      $scope.loaderStatus = "visible-loader";
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
