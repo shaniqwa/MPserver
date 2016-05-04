@@ -225,7 +225,8 @@ function getRandTrack(artist) { // todo validations
     if (typeof artist === 'object') {
         artist = artist.name;
     }
-    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=1000&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
+    console.log("getRandTrack: calling last fm...");
+    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=100&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
     return theSong;
@@ -255,12 +256,12 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
     }
 	
     runs = parseInt(runs) + 1;
-    //console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
+    console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
         if (err) {
             throw err;
         } else {
-            //console.log("[]successfully connected to the database");
+            console.log("[]successfully connected to the database");
             var collection = db.collection('Users');
             collection.findOne({
                 userId: user
@@ -512,7 +513,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                             if (err) { // didn't found pie data
                                 throw err;
                             } else { //found pie data
-                                //console.log("extracting pie data :");
+                                console.log("extracting pie data :");
                                 var count = document.genres.length;
                                 var results = [];
                                 for (var i = 0; i < count; i++) {
@@ -714,7 +715,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 if (err) { //user not found
                                                     throw err;
                                                 } else {
-                                                    //console.log(document.userId); 
+                                                    // console.log(document.userId); 
                                                     collection = db.collection('Producer_songs_list');
                                                     collection.findOne({
                                                         prodId: document.userId

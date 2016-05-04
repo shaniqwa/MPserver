@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var usersSchema = new Schema({
     userId: { type: Number, index: true },
-    username:  { type: String, unique: true },
+    username:  String,
     firstName: String,
     lastName: String,
     ageGroup: Number,
@@ -23,7 +23,25 @@ var usersSchema = new Schema({
     mode: Number,
     registered: {type : Date, default : Date.now},
     typeOfUser: String,
-    is_New: Number
+    is_New: Number,
+    following: [
+        {
+            userId: {type: Number, index: true},
+            username: String,
+            profileImg: String,
+            first: String,
+            last: String
+        }
+    ],
+    followers: [
+    {
+        userId: {type: Number, index: true},
+        username: String,
+        profileImg: String,
+        first: String,
+        last: String
+    }
+]
 });
 
 // methods ======================
