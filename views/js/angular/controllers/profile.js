@@ -155,8 +155,13 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
 $scope.search = function(text){
   $http.get('http://localhost:3000/searchuser/' + text).success(function(data){
-    console.log(data);
-    $scope.searchResults = data;
+   // console.log(data);
+    for (i=0 ; i <data.length; i++)
+    {
+       $scope.searchResults.push(data[i]);
+    }
+    console.log($scope.searchResults);
+   
   });
 };
 
@@ -276,6 +281,41 @@ $scope.search = function(text){
 /***********************************************************/
 /********************addToFav FUNCTION**********************/
 /***********************************************************/
+
+/***********************************************************/
+/********************addToFollowers FUNCTION****************/
+/***********************************************************/
+
+ $scope.addToFollowers = function(){
+      // $scope.elementToFadeInAndOut = '';
+      //  $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43"});
+      // if($scope.heart == "fa-heart-o"){
+      //   $scope.heart = "fa-heart";
+      // }else{
+      //   $scope.heart == "fa-heart-o"
+      // }
+      // var data = JSON.stringify({
+      //                 userId : $scope.userId,
+      //                 songData : {
+      //                    song: $scope.track[$scope.counter - 1].songName,
+      //                    artist: $scope.track[$scope.counter - 1].artistName,
+      //                    duration: "3:43"
+      //                 }
+      //            });
+      // console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      // $http.defaults.headers.post["Content-Type"] = "application/json";
+      // $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
+      //      console.log(data);
+      //      $scope.msg = "Added successfuly to your Favorites";
+      //      $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+      // });
+    };
+/***********************************************************/
+/********************addToFollowers FUNCTION****************/
+/***********************************************************/
+
+
+
 
 /***********************************************************/
 /*****************addToBlacklist FUNCTION*******************/

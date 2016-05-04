@@ -13,16 +13,16 @@
 <%- include header %>
 <div class="container" ng-controller="profileCtrl">
 <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
-{{fixedSearchText}}
-<div ng-show="{{fixedSearchText!==''}}">
+<h3>search results</h3>
   <div ng-repeat="res in searchResults">
     <img ng-src="{{res.profileImage}}" />
-    <h3>res.firstName res.lastName</h3>
-    <h4>res.username</h4>
-    <h4>res.type</h4>
-  </div>
+    <h3>{{res.firstName}}</h3>
+    <h4>{{res.username}}</h4>
+    <h4>{{res.type}}</h4>
+ </div>
+ <div ng-bind="searchResults" | searchResults: res.lastName ></div>
 </div>
-    <div class="row" ng-show="{{fixedSearchText===''}}">
+    <div class="row">
         <!-- PLAYLIST -->
          <div class="col-sm-4">
             <div class="well height-800">

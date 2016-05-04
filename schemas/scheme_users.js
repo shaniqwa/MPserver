@@ -23,6 +23,20 @@ var usersSchema = new Schema({
     mode: Number,
     registered: {type : Date, default : Date.now},
     typeOfUser: String,
+    followers:[
+        {
+            userID: Number,
+            username: String,
+            profileImage: String
+        }
+    ],
+    following:[
+        {
+            userID: Number,
+            username: String,
+            profileImage: String
+        }
+    ],
     is_New: Number
 });
 

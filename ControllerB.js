@@ -64,7 +64,7 @@ exports.findMatch = function(res, userID){
 		  console.log("done business");
 
 		  console.log("genres:");
-		  console.log(genres);
+		  //console.log(genres);
 
 			ArtistPie.find({}, function (err, artists) {
 				
@@ -146,6 +146,18 @@ exports.searchuser = function(res,data) {
 	  res.status(200).json(result);
 	});
 }
+// exports.addToFollowers = function(res,data) {
+// 	//addToSet make sure there are no duplicates is  array.
+// 	Users.findOneAndUpdate({ userId: data.userId }, {$addToSet: { 'followers[username]': data.username , 'followers[userID]': data.userID, 'followers[profileImage]': data.profileImage }, function (err, doc) {
+// 	  if (err){
+// 	  	res.status(200).json("error adding song to followers: " + err.message);
+// 	  	return err;
+// 	  } 
+// 	  // done!
+// 	  res.status(200).json("New song has been added to followers successfully for user " + data.userId);
+// 	});
+// }
+
 
 
 //delete song from favorite
