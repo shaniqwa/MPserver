@@ -1,0 +1,375 @@
+{
+	"userInfo": {
+		"username": "shaniqwa",
+		"firstName": "shani",
+		"lastName": "almog",
+		"password": "test",
+		"ageGroup": 20,
+		"email": "test@com",
+		"FB_AT": "test",
+		"FB_RT": "test",
+		"YT_AT": "test",
+		"YT_RT": "test",
+		"country": "test",
+		"profileImage": "test",
+		"mode": 1,
+		"typeOfUser": "Consumer"
+	},
+	"BusinessPie": {
+      "businessPieId" : 0,
+		"genres": [{
+			"genre": "80s",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"David Bowie"
+			]
+		}, {
+			"genre": "alternative",
+			"counter": 4,
+			"percent": 5.405405405405405,
+			"artists": [
+				"David Bowie",
+				"Nirvana",
+				"James Blunt",
+				"Radiohead"
+			]
+		}, {
+			"genre": "alternative rock",
+			"counter": 3,
+			"percent": 4.054054054054054,
+			"artists": [
+				"איפה הילד",
+				"Nirvana",
+				"Radiohead"
+			]
+		}, {
+			"genre": "black metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"FROZEN"
+			]
+		}, {
+			"genre": "blues",
+			"counter": 3,
+			"percent": 4.054054054054054,
+			"artists": [
+				"Janis Joplin",
+				"The Doors",
+				"Eric Clapton"
+			]
+		}, {
+			"genre": "blues rock",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"Janis Joplin",
+				"Eric Clapton"
+			]
+		}, {
+			"genre": "britpop",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"James Blunt",
+				"Radiohead"
+			]
+		}, {
+			"genre": "classic rock",
+			"counter": 5,
+			"percent": 6.756756756756757,
+			"artists": [
+				"David Bowie",
+				"Janis Joplin",
+				"The Doors",
+				"David Gilmour",
+				"Eric Clapton"
+			]
+		}, {
+			"genre": "death metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"FROZEN"
+			]
+		}, {
+			"genre": "electronic",
+			"counter": 3,
+			"percent": 4.054054054054054,
+			"artists": [
+				"DIE ANTWOORD",
+				"Man With No Name",
+				"Radiohead"
+			]
+		}, {
+			"genre": "glam rock",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"David Bowie"
+			]
+		}, {
+			"genre": "goa",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Man With No Name"
+			]
+		}, {
+			"genre": "hard rock",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Metallica"
+			]
+		}, {
+			"genre": "glam",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"David Bowie"
+			]
+		}, {
+			"genre": "Goa Trance",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Man With No Name"
+			]
+		}, {
+			"genre": "indie rock",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Radiohead"
+			]
+		}, {
+			"genre": "Grunge",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Nirvana"
+			]
+		}, {
+			"genre": "heavy metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Metallica"
+			]
+		}, {
+			"genre": "Hip-Hop",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"DIE ANTWOORD",
+				"Karmin"
+			]
+		}, {
+			"genre": "indie",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"James Blunt",
+				"Radiohead"
+			]
+		}, {
+			"genre": "Progressive rock",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"David Gilmour"
+			]
+		}, {
+			"genre": "metal",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"Metallica",
+				"FROZEN"
+			]
+		}, {
+			"genre": "progressive death metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"FROZEN"
+			]
+		}, {
+			"genre": "psychedelic",
+			"counter": 3,
+			"percent": 4.054054054054054,
+			"artists": [
+				"Man With No Name",
+				"The Doors",
+				"David Gilmour"
+			]
+		}, {
+			"genre": "pop",
+			"counter": 4,
+			"percent": 5.405405405405405,
+			"artists": [
+				"David Bowie",
+				"Amy Winehouse",
+				"Karmin",
+				"James Blunt"
+			]
+		}, {
+			"genre": "psytrance",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"Spacecat",
+				"Man With No Name"
+			]
+		}, {
+			"genre": "Progressive metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"FROZEN"
+			]
+		}, {
+			"genre": "Psychedelic Rock",
+			"counter": 3,
+			"percent": 4.054054054054054,
+			"artists": [
+				"Janis Joplin",
+				"The Doors",
+				"David Gilmour"
+			]
+		}, {
+			"genre": "rock",
+			"counter": 10,
+			"percent": 13.513513513513514,
+			"artists": [
+				"David Bowie",
+				"איפה הילד",
+				"Janis Joplin",
+				"The Doors",
+				"Metallica",
+				"Nirvana",
+				"David Gilmour",
+				"James Blunt",
+				"Eric Clapton",
+				"Radiohead"
+			]
+		}, {
+			"genre": "psychedelic trance",
+			"counter": 2,
+			"percent": 2.7027027027027026,
+			"artists": [
+				"Spacecat",
+				"Man With No Name"
+			]
+		}, {
+			"genre": "thrash metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Metallica"
+			]
+		}, {
+			"genre": "raw black metal",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"FROZEN"
+			]
+		}, {
+			"genre": "trance",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Man With No Name"
+			]
+		}, {
+			"genre": "jazz",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Amy Winehouse"
+			]
+		}, {
+			"genre": "soul",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"Amy Winehouse"
+			]
+		}, {
+			"genre": "hip hop",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"DIE ANTWOORD"
+			]
+		}, {
+			"genre": "rap",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"DIE ANTWOORD"
+			]
+		}, {
+			"genre": "Rave",
+			"counter": 1,
+			"percent": 1.3513513513513513,
+			"artists": [
+				"DIE ANTWOORD"
+			]
+		}]
+	},
+	"PleasurePie": {
+      "pleasurePieId" : 0,
+		"genres": [{
+			"genreName": "rock",
+			"counter": 9,
+			"percent": 52.94117647058824,
+			"artists": [
+				"David Bowie",
+				"איפה הילד",
+				"Nirvana",
+				"David Gilmour",
+				"Janis Joplin",
+				"The Doors",
+				"James Blunt",
+				"Metallica",
+				"Eric Clapton"
+			]
+		}, {
+			"genreName": "pop",
+			"counter": 3,
+			"percent": 17.647058823529413,
+			"artists": [
+				"David Bowie",
+				"Karmin",
+				"James Blunt"
+			]
+		}, {
+			"genreName": "psytrance",
+			"counter": 2,
+			"percent": 11.76470588235294,
+			"artists": [
+				"Spacecat",
+				"Man With No Name"
+			]
+		}, {
+			"genreName": "metal",
+			"counter": 2,
+			"percent": 11.76470588235294,
+			"artists": [
+				"FROZEN",
+				"Metallica"
+			]
+		}, {
+			"genreName": "electronic",
+			"counter": 1,
+			"percent": 5.88235294117647,
+			"artists": [
+				"Man With No Name"
+			]
+		}]
+	}
+}

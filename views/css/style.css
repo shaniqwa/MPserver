@@ -1,0 +1,319 @@
+/***********************************************************/
+/************************CONFIGURATIONS*********************/
+/***********************************************************/
+/***********************************************************/
+/************************CONFIGURATIONS*********************/
+/***********************************************************/
+/***********************************************************/
+/***************************MIXINS**************************/
+/***********************************************************/
+/***********************************************************/
+/***************************MIXINS**************************/
+/***********************************************************/
+/* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  color: #E0E0E3 !important;
+  /*font-family: 'Unica One', sans-serif;*/
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  background-color: #333335;
+  word-wrap: break-word;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Unica One', sans-serif;
+}
+.container {
+  width: 100%;
+}
+.well {
+  background-color: #333335 !important;
+}
+.height-800 {
+  min-height: 770px;
+}
+.nav-tabs li a {
+  color: #ffffff;
+}
+.tab-content div {
+  position: relative;
+}
+select {
+  color: black;
+}
+.cursor:hover {
+  cursor: pointer;
+}
+/*SEARCH FORM*/
+.search-form {
+  border-radius: 30px 0px 0px 30px;
+  border-radius: Top-left, Top-right, Bottom-right, Bottom-left;
+}
+/*to cange only one form and not all give unique class name like  class="search-form" */
+.search-btn {
+  border-radius: 0px 30px 30px 0px;
+  cursor: pointer;
+}
+.search-custom {
+  display: inline-block;
+  width: 88%;
+}
+/*FAVORITES TABLE*/
+.song {
+  font-weight: 600;
+  text-align: center;
+}
+.duration {
+  text-align: right;
+}
+.table-hover tbody tr td {
+  border-color: #8900fe;
+}
+.table-hover tbody tr:hover td {
+  background-color: #8900fe;
+  border-color: #8900fe;
+}
+/*PIE*/
+.highcharts-container {
+  margin: 0 auto;
+  position: inherit !important;
+}
+.highcharts-tooltip {
+  z-index: 9999 !important;
+}
+.highcharts-tooltip tspan {
+  font-size: 16px !important;
+}
+.custom-tooltip {
+  font-family: 'Source Sans Pro', sans-serif;
+  width: 135px;
+  height: 135px;
+  color: white;
+  line-height: 130px;
+  border-radius: 50%;
+  z-index: 9999 !important;
+  text-align: center;
+}
+.custom-tooltip > span {
+  display: inline-block;
+  line-height: 20px;
+  vertical-align: middle;
+}
+.custom-tooltip p {
+  font-weight: 500;
+  margin: auto auto;
+}
+#profileImg {
+  border: 3px dotted #ffffff;
+  background-color: white;
+  border-radius: 50%;
+  padding: 10px;
+  -webkit-animation: fadein 2s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s;
+  /* Firefox < 16 */
+  -ms-animation: fadein 2s;
+  /* Internet Explorer */
+  -o-animation: fadein 2s;
+  /* Opera < 12.1 */
+  animation: fadein 2s;
+}
+/*END PIE*/
+#ex1Slider .slider-selection {
+  background: #BABABA;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.img {
+  background-image: url("https://lh6.googleusercontent.com/-gaAgFzRLxQQ/AAAAAAAAAAI/AAAAAAAAAjc/ies0iU4BEqU/photo.jpg");
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+/***********************************************************/
+/******************REGION: PLAYLIST STYLE*******************/
+/***********************************************************/
+.repeatClass {
+  padding-left: 24px;
+  padding-top: 8px;
+}
+.first-item {
+  background-color: #E0E0E3;
+  padding-left: 24px;
+  padding-top: 8px;
+  border-radius: 2em;
+  font-weight: bold;
+}
+.first-item div {
+  color: #333335;
+}
+.first-item div .location a {
+  color: #23527c;
+}
+.first-item hr {
+  border-top: 1px solid transparent;
+}
+.bold {
+  font-weight: 700;
+}
+/***********************************************************/
+/***************END REGION: PLAYLIST STYLE******************/
+/***********************************************************/
+/***********************************************************/
+/*************REGION: PLAYER CONTROLS STYLE*****************/
+/***********************************************************/
+.red {
+  color: #ff166f;
+}
+@media only screen and (min-width: 720px) and (max-width: 959px) {
+  .red {
+    color: #ffffff;
+  }
+}
+@media only screen and (min-width: 1px) and (max-width: 719px) {
+  .red {
+    color: #8900fe;
+  }
+}
+.yellow {
+  /*color: #FFBB1B;*/
+  color: #FFBB1B;
+}
+.yellow:hover {
+  -webkit-transform: rotate(360deg);
+  /* Chrome, Safari, Opera */
+  -moz-transition: rotate(360deg);
+  /* Firefox */
+  -ms-transform: rotate(360deg);
+  /* IE 9 */
+  -o-transition: rotate(360deg);
+  /* Opera */
+  transform: rotate(360deg);
+  -webkit-transition: all 1s ease;
+  /* WebKit */
+  -moz-transition: all 1s ease;
+  /* Firefox */
+  -ms-animation: all 1s ease;
+  /* Internet Explorer */
+  -o-transition: all 1s ease;
+  /* Opera */
+  transition: all 1s ease;
+  /* Standard */
+}
+.font-size {
+  font-size: 20px;
+}
+.loader {
+  background-image: url("../images/loader.gif");
+  height: 200px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 200px;
+  display: block;
+}
+.invisible-loader {
+  visibility: hidden;
+}
+.visible-loader {
+  visibility: visible;
+}
+.one-line-videoname {
+  display: inline-block;
+  font-size: 17px;
+}
+.msgBlock {
+  background-color: #E0E0E3;
+  color: #333335;
+  padding: 15px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 9999;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 2px solid #333335;
+  opacity: 0;
+}
+.elementToFadeInAndOut {
+  -webkit-animation: fadeinout 5s linear 1 forwards;
+  animation: fadeinout 5s linear 1 forwards;
+}
+@-webkit-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/***********************************************************/
+/***********END REGION: PLAYER CONTROLS STYLE***************/
+/***********************************************************/
