@@ -186,9 +186,11 @@ io.on('connection', function(client) {
                    failureRedirect : '/'
             }),function(req, res){
                 if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
+                    console.log("auth with google, reg as consumer");
                     return res.redirect('/BPwizard'); 
                 }
                 if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+                    console.log("auth with google, reg as producer");
                     return res.redirect('/ProducerWizard'); 
                 }
                 res.redirect('/profile');
@@ -323,6 +325,23 @@ io.on('connection', function(client) {
         var data = {};
         data = req.body;
         Controller.processWizardForm(req,res,data);
+    });
+
+
+
+
+
+        //process Producer Wizard Form 
+    app.post('/processProducerWizardForm', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.processProducerWizardForm(req,res,data);
     });
 
 
