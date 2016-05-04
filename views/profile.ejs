@@ -10,9 +10,21 @@
 
 </head>
 <body>
+<div ng-controller="profileCtrl">
 <%- include header %>
-<div class="container" ng-controller="profileCtrl">
+<div class="container">
 <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
+
+<h3>search results</h3>
+
+ <table class="table table-inverse table-hover">
+    <tbody>
+        <tr ng-repeat="x in searchResults">
+            <td class="col-md-3"> {{x.firstName}}</td>
+        </tr>
+    </tbody>
+</table>
+  </div>
     <div class="row">
         <!-- PLAYLIST -->
          <div class="col-sm-4">
@@ -100,12 +112,6 @@
                       <h3>Favorites</h3>
                         <table class="table table-inverse table-hover">
                             <tbody>
-<!--                                 <thead>
-                                <th class="col-md-3"></th>
-                                <th class="col-md-6"></th>
-                                <th class="col-md-3"></th>
-                                </thead> -->
-
                                 <tr ng-repeat="x in favorits">
                                     <td class="col-md-3"> {{x.artistName}}</td>
                                     <td class="col-md-6 song">{{x.songName}}</td>
@@ -113,7 +119,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
 
                     <!-- FOLLOWING -->
                     <div id="following" class="tab-pane fade">
@@ -261,6 +266,7 @@
 
 </div>
  <%- include jsFiles %>
+</div>
 </body>
 
 <script> 

@@ -156,7 +156,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
-
+$scope.search = function(text){
+  $scope.searchResults = [];  
+  $http.get('http://localhost:3000/searchuser/' + text).success(function(data){ 
+    for (i in data){
+       $scope.searchResults.push({firstName : data[i].firstName});
+    }
+  });
+};
 /***********************************************************/
 /*****************updatePlaylist FUNCTION*******************/
 /***********************************************************/
