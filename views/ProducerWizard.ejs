@@ -2,12 +2,108 @@
 <html>
 <head>
     <title>Music Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
     <%- include head %>
+    
     <style>
         body        { padding-top:80px; }
     </style>
 </head>
 <body>
+<script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1188683537828357',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+</script>
+
+<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+
+
+
+
+
+
+
 <div class="container">
 
     <div class="col-sm-12 text-center">
@@ -38,13 +134,24 @@
 
 
         <p>In order to get your music out there, you need to upload your songs to a youtube playlist. We will keep track of that playlist, so you will not have to update and upload your songs again. </p>
+        
         Choose Playlist : <br>
         <% for(var i=0; i < list.length; i++) { %>
         <div class="checkbox">
-          <label><input type="radio" name="b_rock" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
+          <label><input type="radio" name="i" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
         </div>
         <% } %>
         <br>
+
+
+        <!-- connect facebook page -->
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button>
+
+        <div id="status">
+        </div>
+        <br>
+
         user id : <%= user.userId %><br>
         google token: <%= user.YT_AT%><br>
 
@@ -62,11 +169,72 @@
     <% } %>
     </div>
 </div>
+
+<!-- ARTIST PIE -->
+<div class="col-sm-6">
+        <div class="well">
+           <h3>Your Music</h3>
+          <!-- dropdown with autocomplete init -->
+        <script type="text/javascript">
+        $(document).ready(function() {
+          $(".js-example-basic-single").select2();
+        });
+        </script>
+
+
+        <form>
+
+         <label for="genre1">Genre 1</label><br>
+        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <% for(var i=0; i < genres.length; i++) { %>
+           <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
+        <% } %>
+        </select>
+                  <input id="slider1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+        <br>
+        <label for="genre1">Genre 2</label><br>
+        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <% for(var i=0; i < genres.length; i++) { %>
+           <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
+        <% } %>
+        </select>
+                  <input id="slider2" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+          <br>
+         <label for="genre1">Genre 3</label><br>
+        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <% for(var i=0; i < genres.length; i++) { %>
+           <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
+        <% } %>
+        </select>
+                  <input id="slider3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+          <br>
+         <label for="genre1">Genre 4</label><br>
+        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <% for(var i=0; i < genres.length; i++) { %>
+           <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
+        <% } %>
+        </select>
+                  <input id="slider4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+          <br>
+         <label for="genre1">Genre 5</label><br>
+        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <% for(var i=0; i < genres.length; i++) { %>
+           <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
+        <% } %>
+        </select>
+                <input id="slider5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+
+        </form>
+
+        </div>
+</div>
     
     </form>
     <button type="submit" form="wizard" value="Submit">Submit</button>
     <!-- END FORM -->
 </div>
 <%- include jsFiles %>
+<script src="js/producerWizard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
 </body>
 </html>
