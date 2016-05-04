@@ -15,6 +15,21 @@
   margin: 0;
   padding: 0;
 }
+textarea:focus, input:focus{
+    outline: none;
+}
+*:focus {
+    outline: none;
+    outline-width: 0;
+}
+input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 0 rgba(81, 203, 238, 1);
+  /*padding: 3px 0px 3px 3px;*/
+  /*margin: 5px 1px 3px 0px;*/
+  border: 0px solid rgba(81, 203, 238, 1);
+}
+
+
 body {
   color: #E0E0E3 !important;
   /*font-family: 'Unica One', sans-serif;*/
@@ -56,13 +71,31 @@ select {
   border-radius: Top-left, Top-right, Bottom-right, Bottom-left;
 }
 /*to cange only one form and not all give unique class name like  class="search-form" */
+.btn{
+  padding: 4px 9px !important;
+  line-height: 1 !important;
+  font-size: 11px !important;
+}
 .search-btn {
+  height:20px;
   border-radius: 0px 30px 30px 0px;
   cursor: pointer;
+  background-color: #4a4a4a;
+  border: 0px;
+
+}
+.search-wrapper{
+  margin-top: 6px;
 }
 .search-custom {
   display: inline-block;
+  height:20px;
   width: 88%;
+  background-color: #4a4a4a;
+  border: 0px;
+}
+.search-custom:focus{
+  outline: 0;
 }
 /*FAVORITES TABLE*/
 .song {
