@@ -29,9 +29,18 @@ input[type=text]:focus, textarea:focus {
   border: 0px solid rgba(81, 203, 238, 1);
 }
 
+html{
 
+}
 body {
-  color: #E0E0E3 !important;
+  color: #ffffff !important;
+  background-image: url("../images/background.jpg"); 
+  background-repeat: no-repeat;
+  background-position: center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   /*font-family: 'Unica One', sans-serif;*/
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
@@ -48,10 +57,11 @@ h4 {
   width: 100%;
 }
 .well {
-  background-color: #333335 !important;
+  background-color: rgba(0, 0, 0,0.6);
+  border: 0px;
 }
 .height-800 {
-  min-height: 770px;
+  min-height: 620px;
 }
 .nav-tabs li a {
   color: #ffffff;

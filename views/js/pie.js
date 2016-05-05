@@ -90,7 +90,12 @@ Highcharts.theme = {
       //       [1, '#3e3e40']
       //    ]
       // },
-      backgroundColor: '#333335',
+
+      // ###############    BACKGROUND COLOR   ###############
+      // backgroundColor: '#333335',
+      backgroundColor: 'rgba(51, 51, 53,0',  
+
+
       style: {
          fontFamily: "'Source Sans Pro', sans-serif"
       },
@@ -394,6 +399,12 @@ function addCircle(chart){
 
     // Create the chart
     $('#MPcontainer').highcharts({
+        credits: {
+            enabled: false
+        },
+        exporting: {
+         enabled: false
+        },
         chart: {
             type: 'pie',
             events:{
@@ -407,11 +418,11 @@ function addCircle(chart){
                    
         },
         title: {
-            text: 'Music Profile'
+            text: ' '
         },
-        subtitle: {
-            text: 'Explore your pie'
-        },
+        // subtitle: {
+        //     text: 'Explore your pie'
+        // },
         yAxis: {
             title: {
                 text: 'Total percent market share'

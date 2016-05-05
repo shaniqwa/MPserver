@@ -1,0 +1,96 @@
+                <!-- GOOGLE INFORMATION -->
+                 <div class="col-sm-4">
+                    <div class="well">
+                        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+
+                        <!-- check if the user has this token (is the user authenticated with this social account) -->
+                        <% if (user.YT_AT) { %>
+                            <p>
+                                <strong>id</strong>: <%= user.YT_id %><br>
+                                <strong>token</strong>: <%= user.YT_AT %><br>
+                                <strong>email</strong>: <%= user.YT_email %><br>
+
+                            </p>
+
+                            <a href="/unlink/google" class="btn btn-danger">Unlink</a>
+                        <% } else { %>
+                            <a href="/connect/google" class="btn btn-danger">Connect Google</a>
+                        <% } %>
+
+                    </div>
+                </div>
+                 <!-- END GOOGLE INFORMATION -->
+
+                 <!-- FACEBOOK INFORMATION -->
+                <div class="col-sm-4">
+                    <div class="well">
+                        <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+
+                        <!-- check if the user has this token (is the user authenticated with this social account) -->
+                        <% if (user.FB_AT) { %>
+                            <p>
+                                <strong>id</strong>: <%= user.FB_id %><br>
+                                <strong>token</strong>: <%= user.FB_AT %><br>
+                                <strong>email</strong>: <%= user.FB_email %><br>
+                            </p>
+
+                            <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
+                        <% } else { %>
+                            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
+                        <% } %>
+
+                    </div>
+                </div>
+                <!--END FACEBOOK INFORMATION -->
+
+            <!-- CHAT TEST -->
+            <div class="col-sm-4">
+                <div class="well">
+                    <form id="form1">
+                        <input type="text" id="chat_input"></input>
+                    </form>
+                    <button type="submit" form="form1" value="Submit">Submit</button>
+                    <div id="future"></div>
+                </div>
+            </div>
+            <!-- END CHAT TEST -->
+
+            <!-- USER DETAILS -->
+            <div class="col-sm-4">
+                <div class="well">
+                    <h3><span class="fa fa-user"></span> Local</h3>
+                        <p>
+                            <!--if local login -->
+                            <% if (user.profileImage) { %>
+                                <img src=" <%= user.profileImage %> " width="60"><br><br>
+                            <% } %>
+                            <strong>ID</strong>: <%= user.userId %><br>
+                            <strong>Activity Token</strong>: <%= user.activityToken %><br>
+                            <strong>User Type</strong>: <%= user.typeOfUser %><br>
+                            <strong>Fist Name</strong>: <%= user.firstName %><br>
+                            <strong>Last Name</strong>: <%= user.lastName %><br>
+                            <strong>email</strong>: <%= user.email %><br>
+                            <strong>Country</strong>: <%= user.country %><br>
+                            <strong>Age Group</strong>: 
+                            <% if (user.ageGroup == 1) { %>
+                               Under 14
+                            <% } %>
+                            <% if (user.ageGroup == 2) { %>
+                               15-25
+                            <% } %>
+                            <% if (user.ageGroup == 3) { %>
+                               24-35
+                            <% } %>
+                            <% if (user.ageGroup == 4) { %>
+                               35-44
+                            <% } %>
+                            <% if (user.ageGroup == 5) { %>
+                               44-55
+                            <% } %>
+                            <% if (user.ageGroup == 6) { %>
+                               55+
+                            <% } %>
+                        </p>
+                </div>
+            </div>
+            <!-- END USER DETAILS -->
