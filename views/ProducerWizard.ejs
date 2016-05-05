@@ -4,12 +4,9 @@
     <title>Music Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
     <%- include head %>
-    
-    <style>
-        body        { padding-top:80px; }
-    </style>
 </head>
 <body>
+<%- include header %>
 <script>
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -113,7 +110,7 @@
     </div>
 
     <!-- BEGIN FORM -->
-    <form action="/processWizardForm" method="post" id="wizard">
+    <form action="/processProducerWizardForm" method="post" id="wizard">
     
     <input type="hidden" name="userID" value="<%= user.userId %>">
     <% if (user.typeOfUser == "Consumer") { %>
@@ -138,7 +135,7 @@
         Choose Playlist : <br>
         <% for(var i=0; i < list.length; i++) { %>
         <div class="checkbox">
-          <label><input type="radio" name="i" value="<%= list[i].title %>" >  <%= list[i].title %> (id: <%= list[i].id %>)</label>
+          <label><input type="radio" name="playlistID" value="<%= list[i].id %>" >  <%= list[i].title %></label>
         </div>
         <% } %>
         <br>
@@ -182,7 +179,7 @@
         </script>
 
 
-        <form>
+        
 
          <label for="genre1">Genre 1</label><br>
         <select id="genre1" name="genre1" class="js-example-basic-single">
@@ -192,39 +189,39 @@
         </select>
                   <input id="slider1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
         <br>
-        <label for="genre1">Genre 2</label><br>
-        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <label for="genre2">Genre 2</label><br>
+        <select id="genre2" name="genre2" class="js-example-basic-single">
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
         <% } %>
         </select>
                   <input id="slider2" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br>
-         <label for="genre1">Genre 3</label><br>
-        <select id="genre1" name="genre1" class="js-example-basic-single">
+         <label for="genre3">Genre 3</label><br>
+        <select id="genre3" name="genre3" class="js-example-basic-single">
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
         <% } %>
         </select>
                   <input id="slider3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br>
-         <label for="genre1">Genre 4</label><br>
-        <select id="genre1" name="genre1" class="js-example-basic-single">
+         <label for="genre4">Genre 4</label><br>
+        <select id="genre4" name="genre4" class="js-example-basic-single">
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
         <% } %>
         </select>
                   <input id="slider4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br>
-         <label for="genre1">Genre 5</label><br>
-        <select id="genre1" name="genre1" class="js-example-basic-single">
+         <label for="genre5">Genre 5</label><br>
+        <select id="genre5" name="genre5" class="js-example-basic-single">
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>"> <%= genres[i].name %></option>
         <% } %>
         </select>
                 <input id="slider5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
 
-        </form>
+        
 
         </div>
 </div>

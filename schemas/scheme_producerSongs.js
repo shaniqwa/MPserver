@@ -5,13 +5,10 @@ var producerSongsSchema = new Schema({
 	prodId : {type: Number, index: true},
     songs: [
         {
-            songId: {type: Number, index: true},
-            name: String,
-            albumName: String,
-            duration: Number,
-            year: Number,
-            artwork: String,
-            url: String
+            // _id:false,
+            // songId: {type: Number, index: true},
+            title: String,
+            videoId: String
         }
     ]
 });
