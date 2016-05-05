@@ -21,6 +21,10 @@
     <tbody>
         <tr ng-repeat="x in searchResults">
             <td class="col-md-3"> {{x.firstName}}</td>
+            <td class="col-md-3"> {{x.lastName}}</td>
+            <td class="col-md-3"> {{x.username}}</td>
+            <td class="col-md-3"> {{x.type}}</td>
+            <td class="col-md-3"><img ng-src="{{x.profileImage}}" /></td>
         </tr>
     </tbody>
 </table>

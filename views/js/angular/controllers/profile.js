@@ -160,7 +160,7 @@ $scope.search = function(text){
   $scope.searchResults = [];  
   $http.get('http://localhost:3000/searchuser/' + text).success(function(data){ 
     for (i in data){
-       $scope.searchResults.push({firstName : data[i].firstName});
+       $scope.searchResults.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
   });
 };
