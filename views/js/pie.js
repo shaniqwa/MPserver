@@ -406,6 +406,9 @@ function addCircle(chart){
          enabled: false
         },
         chart: {
+            style: {
+               fontFamily: "font-family: 'Source Sans Pro', sans-serif"
+            },
             type: 'pie',
             events:{
               load: function(){
@@ -466,6 +469,9 @@ function addCircle(chart){
                     return this.y > 5 ? this.point.name : null;
                 },
                 color: '#ffffff',
+                style: {
+                        fontWeight: '400'
+                    },
                 distance: -30
             }
         }, {
@@ -484,7 +490,11 @@ function addCircle(chart){
             dataLabels: {
                 formatter: function () {
                     // display only if larger than 1
-                    return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+                    return this.y > 1 ?  this.point.name + '  ' + this.y + '%' : null;
+                },
+                color: '#d8d8d8',
+                style: {
+                        fontWeight: '400'
                 }
             }
         }]
@@ -492,15 +502,6 @@ function addCircle(chart){
     , function(chart) { // on complete
     var r = chart.renderer,
         pattern = r.createElement('pattern')
-            // .attr({
-            //     id: 'pattern',
-            //     patternUnits: 'userSpaceOnUse',
-            //     x: 0,
-            //     y: 0,
-            //     width: 180,
-            //     height: 190,
-            //     viewBox: '0 0 135 135'
-            // })
             .attr({
                 id: 'pattern',
                 patternUnits: 'objectBoundingBox',
