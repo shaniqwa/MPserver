@@ -334,8 +334,8 @@ Highcharts.setOptions(Highcharts.theme);
             }
         }
 
-        var browserData = [],
-            versionsData = [],
+        var Category= [],
+            genres = [],
             i,
             j,
             dataLen = data.length,
@@ -347,7 +347,7 @@ Highcharts.setOptions(Highcharts.theme);
     for (i = 0; i < dataLen; i += 1) {
 
         // add browser data
-        browserData.push({
+        Category.push({
             name: categories[i],
             y: data[i].y,
             color: data[i].color
@@ -357,7 +357,7 @@ Highcharts.setOptions(Highcharts.theme);
         drillDataLen = data[i].drilldown.data.length;
         for (j = 0; j < drillDataLen; j += 1) {
             brightness = 0.2 - (j / drillDataLen) / 2;
-            versionsData.push({
+            genres.push({
                 name: data[i].drilldown.categories[j],
                 y: data[i].drilldown.data[j],
                 color: Highcharts.Color(data[i].color).brighten(brightness).get()
@@ -461,8 +461,8 @@ function addCircle(chart){
         },
         series: [{
             name: ' ',
-            data: browserData,
-            size: '70%',
+            data: Category,
+            size: '60%',
             innerSize: '70%',
             dataLabels: {
                 formatter: function () {
@@ -477,8 +477,8 @@ function addCircle(chart){
         }, {
 
             name: ' ',
-            data: versionsData,
-            size: '85%',
+            data: genres,
+            size: '70%',
             innerSize: '95%',
             cursor: 'pointer',
             events: {
