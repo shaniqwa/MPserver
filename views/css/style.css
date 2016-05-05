@@ -26,6 +26,7 @@
   margin: 0;
   padding: 0;
 }
+
 textarea:focus, input:focus{
     outline: none;
 }
@@ -381,6 +382,15 @@ select {
 .artistName {
   text-align: center;
   font-size: 14px;
+}
+.producerForm{
+  width: 200px;
+  height: 30px;
+  padding: 10px;
+  color: #222;
+  border-radius: 3em;
+  border: 0;
+  background-color: rgba(255,255, 255,0.20);
 }
 .msgBlock {
   background-color: #E0E0E3;
