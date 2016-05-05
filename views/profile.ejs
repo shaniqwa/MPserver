@@ -185,6 +185,8 @@
 
 
                       <!-- IF PRODUCER : -->
+                      <% if (user.typeOfUser == "Producer") { %>
+                            
 
                       <!-- STATISTICS -->
                      <div id="statistics" class="tab-pane fade">
@@ -222,6 +224,8 @@
                     </div>
                     <!-- END MY SONGS -->
 
+                    <% } %>
+                    <!-- END IF PRODUCER -->
 
                     <!-- SEARCH RESULTS -->
                     <div id="search" class="tab-pane fade">
