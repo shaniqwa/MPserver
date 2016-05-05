@@ -16,16 +16,6 @@
 <div ng-init="init('<%= JSON.stringify(user) %>')"></div>
 
 
-<!-- SEARCH RESULTS -->
- <table class="table table-inverse table-hover">
-    <tbody>
-        <tr ng-repeat="x in searchResults">
-            <td class="col-md-3"> {{x.firstName}}</td>
-        </tr>
-    </tbody>
-</table>
-<!--END SEARCH RESULTS -->
-
     <!-- LEFT SIDE BAR -->
 
     <!-- <div class="row"> -->
@@ -38,10 +28,14 @@
               src="http://www.youtube.com/embed/S1o41_oHSAg?enablejsapi=1"
               frameborder="0"/></iframe>
 
+<!--               <div class="one-line-videoname"> {{ nowPlaying.songName}}</div>
+              <br>
+              <div ng-show="videoFrame" class="one-line-videoname"> {{nowPlaying.artistName }} -</div> -->
+
+              <p class="songName"> {{ nowPlaying.songName}}</p>
+              <p class="artistName">{{nowPlaying.artistName }} </p>
+              <br>
               <!-- player controllers -->
-              <div ng-show="videoFrame" class="one-line-videoname"> {{nowPlaying.artistName }} -</div>
-              <div class="one-line-videoname"> {{ nowPlaying.songName}}</div>
-              <div></div>
               <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
               <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
               <span class="cursor fa fa-play font-size" ng-hide="toggle" ng-click="playSong()"></span>&nbsp;&nbsp;
@@ -86,6 +80,7 @@
                      <% if (user.typeOfUser == "Producer") {  %>
                     <li><a href="#statistics">Statistics</a></li>
                     <li><a href="#mySongs">My Songs</a></li>
+                    <li><a href="#search">Search</a></li>
                     <% } %>
                   </ul>
 
@@ -103,6 +98,43 @@
                         <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
 
                         </div>
+
+                    <!-- USER DETAILS -->
+                    <h3><span class="fa fa-user"></span> Local</h3>
+                        <p>
+                            <!--if local login -->
+                            <% if (user.profileImage) { %>
+                                <img src=" <%= user.profileImage %> " width="60"><br><br>
+                            <% } %>
+                            <strong>ID</strong>: <%= user.userId %><br>
+                            <strong>Activity Token</strong>: <%= user.activityToken %><br>
+                            <strong>User Type</strong>: <%= user.typeOfUser %><br>
+                            <strong>Fist Name</strong>: <%= user.firstName %><br>
+                            <strong>Last Name</strong>: <%= user.lastName %><br>
+                            <strong>email</strong>: <%= user.email %><br>
+                            <strong>Country</strong>: <%= user.country %><br>
+                            <strong>Age Group</strong>: 
+                            <% if (user.ageGroup == 1) { %>
+                               Under 14
+                            <% } %>
+                            <% if (user.ageGroup == 2) { %>
+                               15-25
+                            <% } %>
+                            <% if (user.ageGroup == 3) { %>
+                               24-35
+                            <% } %>
+                            <% if (user.ageGroup == 4) { %>
+                               35-44
+                            <% } %>
+                            <% if (user.ageGroup == 5) { %>
+                               44-55
+                            <% } %>
+                            <% if (user.ageGroup == 6) { %>
+                               55+
+                            <% } %>
+                        </p>
+                    <!-- END USER DETAILS -->
+
                       </div>
                   <!-- END PROFILE TAB -->
 
@@ -175,10 +207,34 @@
 
                       <!-- MY SONGS -->
                      <div id="mySongs" class="tab-pane fade">
-                      <h3>mySongs</h3>
-                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                          <h3>My Songs</h3>
+                          <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                           <table class="table table-inverse table-hover">
+                                <tbody>
+                                 <% for(var i=0; i< songs.length; i++) { %>
+                                      <tr>
+                                          <td class="col-md-12"><%= songs[i].title %></td>
+                                          <!-- <td class="col-md-6"> <%=  songs[i].videoId %></td> -->
+                                      </tr>
+                                <% } %>
+                                </tbody>
+                          </table>
                     </div>
                     <!-- END MY SONGS -->
+
+
+                    <!-- SEARCH RESULTS -->
+                    <div id="search" class="tab-pane fade">
+                          <h3>Search Results</h3>
+                       <table class="table table-inverse table-hover">
+                          <tbody>
+                              <tr ng-repeat="x in searchResults">
+                                  <td class="col-md-3"> {{x.firstName}}</td>
+                              </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                    <!--END SEARCH RESULTS -->
 
                 </div>
                 <!-- END TAB CONTENT -->
