@@ -33,92 +33,13 @@ var BusinessGraph = mongoose.model('Business_graph', BusinessGraphSchema, 'Busin
 var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureGraphSchema; 
 var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
 
+var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerSongsSchema; 
+var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
+
+producerSongsSchema.plugin(autoIncrement.plugin, { model: 'Producer_songs_list', field: 'songs.songId' });
+
 
 //===============FUNCTIONS===============
-
-
-//HAS BEEN RELOCATED to passport.js!!!
-// exports.registerConsumer = function(res,data) {
-// 	var newUser = new User(data.userInfo);
-// 	var userid;
-
-// 	async.waterfall([
-// 	//step1 : create user and get his id
-//     function(callback) {
-// 		//create user
-// 		newUser.save(function (err, doc) {
-// 		  if (err) {
-// 		  	res.status(200).json("error creating user: " + err.message);
-// 		  	return console.error(err);
-// 		  }
-// 		  	userid = doc.userId;
-// 		  	console.log("userid:" + userid);
-// 		  	console.log(data.BusinessPie.businessPieId);
-// 		  	data.BusinessPie.businessPieId = userid;
-// 			data.PleasurePie.pleasurePieId = userid;
-// 			callback();
-// 		});
-//     },	
-
-//     //step 2 : create user's business pie, pleasure pie, favorites list and black list.
-//     function(callback) {
-
-// 		async.parallel([
-// 		    function(callback) {
-// 		    	var business_pie = new BusinessPie(data.BusinessPie);
-// 				//Save user's business pie
-// 				business_pie.save(function (err, doc) {
-// 				  if (err) {
-// 				  	res.status(200).json("error saving user business pie: " + err.message);
-// 				  	return console.error(err);
-// 				  }
-// 				  callback();
-// 				});
-// 		    },
-// 		    function(callback) {
-// 		    	var pleasure_pie = new PleasurePie(data.PleasurePie);
-// 				//Save user's pleasure pie
-// 				pleasure_pie.save(function (err, doc) {
-// 				  if (err) {
-// 				  	res.status(200).json("error saving user pleasure pie: " + err.message);
-// 				  	return console.error(err);
-// 				  }
-// 				  callback();
-// 				});
-// 		    },
-// 		   	function(callback) {
-// 		    	var favorites = new Favorites({ userId : userid });
-// 				//Save user's pleasure pie
-// 				favorites.save(function (err, doc) {
-// 				  if (err) {
-// 				  	res.status(200).json("error saving favorites list: " + err.message);
-// 				  	return console.error(err);
-// 				  }
-// 				  callback();
-// 				});
-// 		    },
-// 		    function(callback) {
-// 		    	var blacklist = new BlackList({ userId : userid });
-// 				//Save user's pleasure pie
-// 				blacklist.save(function (err, doc) {
-// 				  if (err) {
-// 				  	res.status(200).json("error saving user blacklist pie: " + err.message);
-// 				  	return console.error(err);
-// 				  }
-// 				  callback();
-// 				});
-// 		    }
-// 		],callback);
-//     }
-// 	], function(err) {
-// 	    if (err) {
-// 	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
-// 	    }
-// 	    console.log('New user has been added successfully');
-// 	    res.status(200).json("New user has been added successfully");
-// 	});
-// }
-
 
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
@@ -164,6 +85,7 @@ exports.deleteUser = function(res, userID){
 	BlackList.findOne({ userId: userID }).remove().exec();
 	BusinessGraph.findOne({ pieId: userID }).remove().exec();
 	PleasureGraph.findOne({ pieId: userID }).remove().exec();
+	ProducerSongs.findOne({ prodId: userID }).remove().exec();
 	res.status(200).json("User has been deleted " + userID);
 }
 
@@ -186,7 +108,7 @@ exports.processWizardForm = function(req,res,data) {
     	var update = {is_New: 0};
     	if (typeof data.ageGroup != 'undefined') {
         	update.ageGroup = data.ageGroup;
-        	console.log("updated user age group to : " + update.ageGroup);
+        	// console.log("updated user age group to : " + update.ageGroup);
 		}
         User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
 		    if (err)
@@ -329,8 +251,6 @@ exports.processWizardForm = function(req,res,data) {
 			MP.pleasure.preferences.push(data.p_hiphop);
 		}
 
-		// console.log("business pref: " + MP.business.preferences);
-		// console.log("pleasure pref: " + MP.pleasure.preferences);
 		
 		var arrB = [];
 		var arrP = [];
@@ -344,24 +264,18 @@ exports.processWizardForm = function(req,res,data) {
 			//check if category is in prefs
 			if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
 			    //In the array! all good
-			    // console.log("in business array: "+ arrB[i].category);
 			} else {
 			    //Not in the array, take this genre out of pie
-			    // console.log("NOT in business array: "+ arrB[i].category);
 			    arrB.splice(i, 1);	
 			}
 		}
-		// console.log("BusinessPie");
-		// console.log(arrB);
 
 		for(var j = arrP.length - 1; j >= 0; j--){
 				//check jf category js jn prefs
 				if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
 				    //jn the array! all good
-				    // console.log("in pleasure array: "+ arrP[j].category);
 				} else {
 				    //Not jn the array, take thjs genre out of pje
-				    // console.log("NOT in pleasure array: "+ arrP[j].category);
 				    arrP.splice(j, 1);	
 				}
 		}
@@ -371,13 +285,10 @@ exports.processWizardForm = function(req,res,data) {
 		for(i in arrB){
 			Btotal+= arrB[i].artists.length;
 		}
-		// console.log("b total: " + Btotal);
 
 		for(i in arrP){
 			Ptotal+= arrP[i].artists.length;
 		}
-		// console.log("p total: " + Ptotal);
-
 
 		var len = arrB.length;
 		for(var k = 0; k<len; k++){
@@ -393,10 +304,6 @@ exports.processWizardForm = function(req,res,data) {
 		MP.business.genres = arrB;
 		MP.pleasure.genres = arrP;
 
-		// console.log("BusinessPie");
-		// console.log(arrB);
-		// console.log("PleasurePie");
-		// console.log(arrP);
         callback();
     },
 
@@ -433,21 +340,9 @@ exports.processWizardForm = function(req,res,data) {
         if (err) {
 			console.log(err);  
         }
-        console.log('New user has been added successfully');
+        console.log('New Consumer has been added successfully');
 		res.redirect('/profile'); 
     });
-
-
-	
-	//addToSet make sure there are no duplicates is songs array.
-	// Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
-	//   if (err){
-	//   	res.status(200).json("error adding song to favorites: " + err.message);
-	//   	return err;
-	//   } 
-	//   // done!
-	//   res.status(200).json("New song has been added to favorites successfully for user " + data.userId);
-	// });
 }
 
 
@@ -467,21 +362,122 @@ exports.getProducerPlaylists = function(YT_AT){
 }
 
 //get all songs from a youtube playlist and insert to DB
-getProducerPlaylistItems = function(playlistID, YT_AT){
+getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var temp = JSON.parse(body);
-			// for(i=0; i<temp.items.length; i++){
-			// 	list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
-			// }
-			console.log("the list:");
-			console.log(list);
-			return list;	
+			console.log(temp);
+			for(i=0; i<temp.items.length; i++){
+				list.push({
+					title: temp.items[i].snippet.title,
+					videoId: temp.items[i].snippet.resourceId.videoId
+				});
+			}
+			PlaylistItemsCallback(null,list);	
+		}else{
+			PlaylistItemsCallback(error,null);	
 		}
 	});
 }
 
-exports.processProducerWizardForm = function(){
+exports.processProducerWizardForm = function(req,res,data){
+
+	async.parallel([
+
+		//save artist name -> username
+		//save age group
+	    function(callback){
+		var update = {username: data.artistName};
+    	if (typeof data.ageGroup != 'undefined') {
+        	update.ageGroup = data.ageGroup;
+        	// console.log("updated user age group to : " + update.ageGroup);
+		}
+        User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
+		    if (err)
+		        console.log(err);
+		    if (user) {
+		        req.user = user;
+		    }
+
+		    callback();
+		});
+	    },
+
+	    //call getProducerPlaylistItems - populate all songs from youtube 
+	    function(callback){
+	    	console.log("selected playlist id: ");
+	    	console.log(data.playlistID);
+	    	var playlistID = data.playlistID;
+			getProducerPlaylistItems(playlistID, req.user.YT_AT,function(error, list){
+				if(error){
+					console.log(error);
+				}
+				var ProducerSongsDoc = {};
+				ProducerSongsDoc.songs = list;
+				ProducerSongsDoc.prodId = req.user.userId;
+				//create new ProducerSongs document with the producer's id
+				var temp = new ProducerSongs(ProducerSongsDoc);
+				 temp.save(function (err, doc) {
+	                  if (err) {
+	                    console.log("error saving user business pie: " + err.message);
+	                  }
+	                  console.log("new ProducerSongsDoc is created");
+	                  callback();
+	                 // add all items to ProducerSong collection (addToSet make sure there are no duplicates is songs array)
+					// ProducerSongs.findOneAndUpdate({ prodId: req.user.userId }, {$addToSet: { songs: list }} ,{new: true}, function (err, doc) {
+					//   if (err){
+					//   	console.log("error adding song to ProducerSongs: " + err.message);
+					//   } 
+					//   // done!
+					//   console.log("songs added to ProducerSongs successfully for Producer " + req.user.userId);
+					//   callback();
+					// });
+                });
+
+			});
+	    },
+
+	    //calculate artist pie and save it
+	    function(callback){
+	    	callback();
+	    }
+	],
+	// optional callback
+	function(err, results){
+	    // all done
+	    console.log('New Producer has been added successfully');
+		res.redirect('/BPwizard'); 
+	});
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

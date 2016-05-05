@@ -38,6 +38,9 @@ var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pi
 var genresSchema = require('./schemas/scheme_genres.js').genresSchema;
 var GenreS = mongoose.model('actionM', genresSchema);
 
+var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerSongsSchema; 
+var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
+
 	//===============EXPRESS================
 	require('./config/passport')(passport);
 	app.use(morgan('dev')); // log every request to the console
@@ -96,7 +99,9 @@ io.on('connection', function(client) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-    	var business, pleasure;
+    	var business, 
+            pleasure, 
+            songs;
 
  		async.waterfall([
         //find user's pies
@@ -121,17 +126,46 @@ io.on('connection', function(client) {
                 pleasure = pleasurePie;
                 callback();
             });
+        },
+        function(callback) {
+            //if Producer - load also ProducerSongs
+            if(req.user.typeOfUser == "Producer"){
+                ProducerSongs.findOne({ 'prodId' :  req.user.userId }, function(err, doc) {
+                    if (err){
+                        return console.log(err);
+                    }
+                    console.log("doc:");
+                    console.log(doc);
+                    
+                    songs = doc.songs;
+                    console.log("songs:");
+                    console.log(songs);
+                    callback();
+                });    
+            }else{
+                callback();
+            }
+            
         }
         ], function(err) {
             if (err) {
                 throw err;
             }
             console.log('all done');
-				res.render('profile.ejs', {
-	            user : req.user, // get the user out of session and pass to template
-	            business: business,
-	            pleasure: pleasure
-	        });
+              if(req.user.typeOfUser == "Consumer"){
+    				res.render('profile.ejs', {
+    	            user : req.user, // get the user out of session and pass to template
+    	            business: business,
+    	            pleasure: pleasure
+    	        });
+            }else{
+                res.render('profile.ejs', {
+                    user : req.user, // get the user out of session and pass to template
+                    business: business,
+                    pleasure: pleasure,
+                    songs: songs
+                });                
+            }
         });        
     });
 
@@ -361,6 +395,9 @@ io.on('connection', function(client) {
                             list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
                         }
                         callback(null, 'list is full'); 
+                        console.log("list of playlists is back from youtube");
+                    }else{
+                        console.log(response);
                     }
                 });
             }
@@ -372,7 +409,7 @@ io.on('connection', function(client) {
                         return;
                       }
                       genres = docs;
-                      console.log(genres);
+                      console.log("got all genres from DB");
                       callback();
                 });
             }
@@ -380,15 +417,13 @@ io.on('connection', function(client) {
         // optional callback
         function(err, results){
             // all done
+            console.log("all done, render page");
              res.render('ProducerWizard.ejs', {
                 user : req.user,
                 list: list,
                 genres: genres
             });
         });
-            // var list = [];
-            // list = Controller.getProducerPlaylists(req.user.YT_AT);
-            // console.log(list);
     });
 
     //***********************************************************************//

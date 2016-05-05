@@ -53,12 +53,17 @@ h3,
 h4 {
   font-family: 'Unica One', sans-serif;
 }
+.navbar{
+  margin-bottom: 0px !important;
+}
 .container {
   width: 100%;
+  padding: 0px !important;
 }
 .well {
   background-color: rgba(0, 0, 0,0.6);
   border: 0px;
+  border-radius: 0px;
 }
 .height-800 {
   min-height: 620px;
@@ -313,9 +318,17 @@ select {
 .visible-loader {
   visibility: visible;
 }
-.one-line-videoname {
-  display: inline-block;
+#player{
+  margin-bottom: 10px;
+}
+.songName {
+  text-align: center;
   font-size: 17px;
+  line-height: 0.5;
+}
+.artistName {
+  text-align: center;
+  font-size: 14px;
 }
 .msgBlock {
   background-color: #E0E0E3;
