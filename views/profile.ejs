@@ -19,48 +19,51 @@
     <!-- LEFT SIDE BAR -->
 
     <!-- <div class="row"> -->
-         <div class="col-sm-4">
-            <div class="well height-800">
+         <div class="col-sm-3">
+            <div class="well leftSidebar">
+                <div class="player-container">
+                    <!-- the video -->
+                    <div ng-hide="videoFrame2" class="loader {{loaderStatus}}"></div>
+                    <iframe ng-show="videoFrame" id="player" type="text/html" width="100%" height="200" 
+                    src="http://www.youtube.com/embed/S1o41_oHSAg?enablejsapi=1"
+                    frameborder="0"/></iframe>
 
-              <!-- the video -->
-              <div ng-hide="videoFrame2" class="loader {{loaderStatus}}"></div>
-              <iframe ng-show="videoFrame" id="player" type="text/html" width="100%" height="200" 
-              src="http://www.youtube.com/embed/S1o41_oHSAg?enablejsapi=1"
-              frameborder="0"/></iframe>
-
-<!--               <div class="one-line-videoname"> {{ nowPlaying.songName}}</div>
-              <br>
-              <div ng-show="videoFrame" class="one-line-videoname"> {{nowPlaying.artistName }} -</div> -->
-
-              <p class="songName"> {{ nowPlaying.songName}}</p>
-              <p class="artistName">{{nowPlaying.artistName }} </p>
-              <br>
-              <!-- player controllers -->
-              <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
-              <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
-              <span class="cursor fa fa-play font-size" ng-hide="toggle" ng-click="playSong()"></span>&nbsp;&nbsp;
-              <span class="cursor fa {{heart}} red font-size" ng-click="addToFav()"></span>&nbsp;&nbsp;
-              <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
-              <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div>
+                    <!-- current song  -->
+                    <p class="songName"> {{ nowPlaying.songName}}</p>
+                    <p class="artistName">{{nowPlaying.artistName }} </p>
+                    <!-- player controllers -->
+                    <div class="playerControllers">
+                        <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
+                        <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
+                        <span class="cursor fa fa-play font-size" ng-hide="toggle" ng-click="playSong()"></span>&nbsp;&nbsp;
+                        <span class="cursor fa {{heart}} red font-size" ng-click="addToFav()"></span>&nbsp;&nbsp;
+                        <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
+                        <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div>
+                    </div>
+                </div>
 
               <!-- the playlist -->
-              <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3>
-              <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
-              <div ng-repeat="x in track track by $index" class="repeatClass repeatClass{{$index}}" ng-class="{'first-item': $first}">                        
-                  <div style="padding-top:10px" class="element{{$index}}">
-                      <div class="name">Artist: {{x.artistName}}</div>
-                      <div class="location">Song: {{x.songName}}</div>
-                      <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div>
-                      <hr>
-                  </div>
-              </div>     
+               <div class="playlist-container">
+                    <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
+                    <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
+                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}">                        
+                        <div style="padding-top:10px" class="element{{$index}}">
+                            <div class="location"><strong>{{x.songName}}</strong></div>
+                            <div class="name">{{x.artistName}}</div>
+                            <!-- <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div> -->
+                            <hr>
+                        </div>
+                    </div>   
+                </div>  
+                <!-- end playlist -->
+
           </div>
       </div>
       <!-- END LEFT SIDE BAR -->
 
         <!-- CONTENT -->
-        <div class="col-sm-8">
-            <div class="well">
+        <div class="col-sm-6">
+            <div class="well content">
                 <% if (business) { 
                     business.genres.sort(function(a, b){
                         if(a.category < b.category) return -1;
@@ -68,7 +71,7 @@
                         return 0;
                     });
                 %>
-                 <div class="">
+                 <!-- <div class=""> -->
                  
                  <!-- tabs -->
                   <ul class="nav nav-tabs">
@@ -99,41 +102,7 @@
 
                         </div>
 
-                    <!-- USER DETAILS -->
-                    <h3><span class="fa fa-user"></span> Local</h3>
-                        <p>
-                            <!--if local login -->
-                            <% if (user.profileImage) { %>
-                                <img src=" <%= user.profileImage %> " width="60"><br><br>
-                            <% } %>
-                            <strong>ID</strong>: <%= user.userId %><br>
-                            <strong>Activity Token</strong>: <%= user.activityToken %><br>
-                            <strong>User Type</strong>: <%= user.typeOfUser %><br>
-                            <strong>Fist Name</strong>: <%= user.firstName %><br>
-                            <strong>Last Name</strong>: <%= user.lastName %><br>
-                            <strong>email</strong>: <%= user.email %><br>
-                            <strong>Country</strong>: <%= user.country %><br>
-                            <strong>Age Group</strong>: 
-                            <% if (user.ageGroup == 1) { %>
-                               Under 14
-                            <% } %>
-                            <% if (user.ageGroup == 2) { %>
-                               15-25
-                            <% } %>
-                            <% if (user.ageGroup == 3) { %>
-                               24-35
-                            <% } %>
-                            <% if (user.ageGroup == 4) { %>
-                               35-44
-                            <% } %>
-                            <% if (user.ageGroup == 5) { %>
-                               44-55
-                            <% } %>
-                            <% if (user.ageGroup == 6) { %>
-                               55+
-                            <% } %>
-                        </p>
-                    <!-- END USER DETAILS -->
+                   
 
                       </div>
                   <!-- END PROFILE TAB -->
@@ -210,7 +179,6 @@
                       <!-- MY SONGS -->
                      <div id="mySongs" class="tab-pane fade">
                           <h3>My Songs</h3>
-                          <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                            <table class="table table-inverse table-hover">
                                 <tbody>
                                  <% for(var i=0; i< songs.length; i++) { %>
@@ -255,9 +223,56 @@
 
                 </div>
                 <!-- END TAB CONTENT -->
+
+                    <!-- extra blank space-->
+                    <div class="space"></div>
             </div>
           </div>
           <!-- END CONTENT -->
+
+
+
+          <!-- RIGHT SIDEBAR -->
+           <div class="col-sm-3">
+                <div class="well rightSidebar">
+                    <!-- USER DETAILS -->
+                    <h3><span class="fa fa-user"></span> Local</h3>
+                        <p>
+                            <!--if local login -->
+                            <% if (user.profileImage) { %>
+                                <img src=" <%= user.profileImage %> " width="60"><br><br>
+                            <% } %>
+                            <strong>ID</strong>: <%= user.userId %><br>
+                            <strong>Activity Token</strong>: <%= user.activityToken %><br>
+                            <strong>User Type</strong>: <%= user.typeOfUser %><br>
+                            <strong>Fist Name</strong>: <%= user.firstName %><br>
+                            <strong>Last Name</strong>: <%= user.lastName %><br>
+                            <strong>email</strong>: <%= user.email %><br>
+                            <strong>Country</strong>: <%= user.country %><br>
+                            <strong>Age Group</strong>: 
+                            <% if (user.ageGroup == 1) { %>
+                               Under 14
+                            <% } %>
+                            <% if (user.ageGroup == 2) { %>
+                               15-25
+                            <% } %>
+                            <% if (user.ageGroup == 3) { %>
+                               24-35
+                            <% } %>
+                            <% if (user.ageGroup == 4) { %>
+                               35-44
+                            <% } %>
+                            <% if (user.ageGroup == 5) { %>
+                               44-55
+                            <% } %>
+                            <% if (user.ageGroup == 6) { %>
+                               55+
+                            <% } %>
+                        </p>
+                    <!-- END USER DETAILS -->
+                </div>
+          </div>
+          <!-- END RIGHT SIDEBAR -->
     </div>
     <!-- END CONTAINER -->
 </div>
@@ -268,6 +283,7 @@
 
 <script>
 $(document).ready(function(){
+    // $('.rightSidebar').css('height', $('.content').height()+'px');
     $(".nav-tabs a").click(function(){
         $(this).tab('show');
     });

@@ -10,11 +10,23 @@
 /***********************************************************/
 /***************************MIXINS**************************/
 /***********************************************************/
+
+
+
+
+
+/*theme colors*/
+
+/*gray      #222*/
+/*white     #e4e4e4*/
 /* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
+
+
 * {
   margin: 0;
   padding: 0;
 }
+
 textarea:focus, input:focus{
     outline: none;
 }
@@ -33,7 +45,7 @@ html{
 
 }
 body {
-  color: #ffffff !important;
+  color: #e4e4e4 !important;
   background-image: url("../images/background.jpg"); 
   background-repeat: no-repeat;
   background-position: center center; 
@@ -47,26 +59,52 @@ body {
   background-color: #333335;
   word-wrap: break-word;
 }
+hr{
+    border-top: 1px solid rgba(255,255, 255,0.3);
+}
 h1,
 h2,
 h3,
 h4 {
   font-family: 'Unica One', sans-serif;
 }
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+  padding:0px;
+}
+
+
 .navbar{
   margin-bottom: 0px !important;
 }
 .container {
   width: 100%;
+  height: auto;
   padding: 0px !important;
 }
 .well {
-  background-color: rgba(0, 0, 0,0.6);
+  background-color: rgba(0, 0, 0,0.3);
   border: 0px;
   border-radius: 0px;
 }
-.height-800 {
-  min-height: 620px;
+.leftSidebar {
+  border-top: 10px solid #222;
+  border-right: 10px solid #222;
+  min-height: 920px;
+  margin-bottom: 0px;
+  padding: 0px;
+}
+.rightSidebar {
+  border-top: 10px solid #222;
+  border-left: 10px solid #222;
+  background-color: rgba(255,255, 255,0.10);
+  min-height: 920px;
+  margin-bottom: 0px;
+  padding: 10px;
+}
+.content{
+
+background: linear-gradient(rgba(0, 0, 0,0.5) 50%, rgba(0, 0, 0,0));
+  margin-bottom: 0px;
 }
 .nav-tabs li a {
   color: #ffffff;
@@ -237,11 +275,13 @@ select {
 /***********************************************************/
 /******************REGION: PLAYLIST STYLE*******************/
 /***********************************************************/
-.repeatClass {
-  padding-left: 24px;
-  padding-top: 8px;
+.playlistItem {
+  /*padding-left: 24px;*/
+  /*padding-top: 8px;*/
+  color: #cecece;
 }
 .first-item {
+  display: none;
   background-color: #E0E0E3;
   padding-left: 24px;
   padding-top: 8px;
@@ -259,6 +299,9 @@ select {
 }
 .bold {
   font-weight: 700;
+}
+.space{
+    height:200px;
 }
 /***********************************************************/
 /***************END REGION: PLAYLIST STYLE******************/
@@ -322,8 +365,18 @@ select {
 .visible-loader {
   visibility: visible;
 }
+.player-container{
+  background-color: #222;
+}
 #player{
   margin-bottom: 10px;
+}
+.playerControllers{
+  padding: 5px 0 10px 0;
+  text-align: center;
+}
+.playlist-container{
+  padding: 10px;
 }
 .songName {
   text-align: center;
@@ -333,6 +386,15 @@ select {
 .artistName {
   text-align: center;
   font-size: 14px;
+}
+.producerForm{
+  width: 200px;
+  height: 30px;
+  padding: 10px;
+  color: #222;
+  border-radius: 3em;
+  border: 0;
+  background-color: rgba(255,255, 255,0.20);
 }
 .msgBlock {
   background-color: #E0E0E3;
