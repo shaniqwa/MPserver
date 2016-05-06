@@ -108,9 +108,13 @@ select {
   width: 88%;
   background-color: #4a4a4a;
   border: 0px;
+  color:#ffffff;
 }
 .search-custom:focus{
   outline: 0;
+}
+.searchresults{
+  float: left;
 }
 /*FAVORITES TABLE*/
 .song {

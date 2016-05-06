@@ -136,8 +136,6 @@ exports.searchuser = function(res,data) {
 	  	res.status(200).json("error searching substring user: " + err.message);
 	  } 
 	  // done!
-	  console.log("doc "+doc);
-
 	  var result = [];
 	  doc.forEach(function(user){
 	  	result.push({username: user.username, type: user.typeOfUser, profileImage: user.profileImage, firstName: user.firstName, lastName: user.lastName});

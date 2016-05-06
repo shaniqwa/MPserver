@@ -230,15 +230,28 @@
                     <!-- SEARCH RESULTS -->
                     <div id="search" class="tab-pane fade">
                           <h3>Search Results</h3>
-                       <table class="table table-inverse table-hover">
-                          <tbody>
-                              <tr ng-repeat="x in searchResults">
-                                  <td class="col-md-3"> {{x.firstName}}</td>
-                              </tr>
+                      <!--  <table class="table table-inverse table-hover">
+                        <tbody>
+                            <tr ng-repeat="x in searchResults">
+                                <td class="col-md-3"> {{x.firstName}}</td>
+                                <td class="col-md-3"> {{x.lastName}}</td>
+                                <td class="col-md-3"> {{x.username}}</td>
+                                <td class="col-md-3"> {{x.type}}</td>
+                                <td class="col-md-3"><img width='100' ng-src="{{x.profileImage}}" /></td>
+                            </tr>
                           </tbody>
-                      </table>
+                        </table> -->
+                        <div class="searchresult"> 
+                          <div ng-repeat="x in searchResults">
+                             <img ng-class="list ? 'col-md-2' : 'col-md-2'" ng-src="{{x.profileImage}}" /> 
+                             <p>{{x.firstName}}</p>
+                             <p>{{x.lastName}}</p>
+                             <p>{{x.type}}</p>
+                          </div>
+                        </div>
                     </div>
                     <!--END SEARCH RESULTS -->
+
 
                 </div>
                 <!-- END TAB CONTENT -->
