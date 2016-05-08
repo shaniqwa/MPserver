@@ -338,7 +338,7 @@ io.on('connection', function(client) {
     // =====================================
 
 	//Business Pleasure Wizard - a step in registration
-	app.get('/BPwizard', function (req, res){
+	app.get('/BPwizard', isLoggedIn, function (req, res){
         // console.log("user id: " +req.user.userId);
             res.render('BPwizard.ejs', {
                 user : req.user
@@ -349,7 +349,7 @@ io.on('connection', function(client) {
 
 
     //process BPWizard Form
-    app.post('/processWizardForm', function (req, res){
+    app.post('/processWizardForm', isLoggedIn, function (req, res){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         app.set('json spaces', 4);
@@ -366,7 +366,7 @@ io.on('connection', function(client) {
 
 
         //process Producer Wizard Form 
-    app.post('/processProducerWizardForm', function (req, res){
+    app.post('/processProducerWizardForm', isLoggedIn, function (req, res){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         app.set('json spaces', 4);

@@ -21,6 +21,9 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
+var artistPieSchema = require("./schemas/scheme_artistPie.js").artistPieSchema; 
+var ArtistPie = mongoose.model('Artist_pie', artistPieSchema, 'Artist_pie');
+
 var favoritesSchema = require("./schemas/scheme_favorites.js").favoritesSchema; 
 var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
 
@@ -37,6 +40,12 @@ var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerS
 var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
 
 producerSongsSchema.plugin(autoIncrement.plugin, { model: 'Producer_songs_list', field: 'songs.songId' });
+
+
+var producerSongsGeneralSchema = require("./schemas/scheme_producerSongsGeneral.js").producerSongsGeneralSchema; 
+var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSongsGeneralSchema, 'Producer_songs_general');
+
+// producerSongsSchema.plugin(autoIncrement.plugin, { model: 'Producer_songs_list', field: 'songs.songId' });
 
 
 //===============FUNCTIONS===============
@@ -367,9 +376,10 @@ getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var temp = JSON.parse(body);
-			console.log(temp);
+			// console.log(temp);
 			for(i=0; i<temp.items.length; i++){
 				list.push({
+					songId: i,
 					title: temp.items[i].snippet.title,
 					videoId: temp.items[i].snippet.resourceId.videoId
 				});
@@ -420,19 +430,48 @@ exports.processProducerWizardForm = function(req,res,data){
 				var temp = new ProducerSongs(ProducerSongsDoc);
 				 temp.save(function (err, doc) {
 	                  if (err) {
-	                    console.log("error saving user business pie: " + err.message);
+	                    console.log("error saving Producer Songs: " + err.message);
 	                  }
-	                  console.log("new ProducerSongsDoc is created");
-	                  callback();
-	                 // add all items to ProducerSong collection (addToSet make sure there are no duplicates is songs array)
-					// ProducerSongs.findOneAndUpdate({ prodId: req.user.userId }, {$addToSet: { songs: list }} ,{new: true}, function (err, doc) {
-					//   if (err){
-					//   	console.log("error adding song to ProducerSongs: " + err.message);
-					//   } 
-					//   // done!
-					//   console.log("songs added to ProducerSongs successfully for Producer " + req.user.userId);
-					//   callback();
-					// });
+
+	                  //create  producer Songs General Document with all songs counters set to 0
+	                  var temp2 = new ProducerSongsGeneral();
+	    				temp2.userId = req.user.userID;
+	    				for(var i=0; i< doc.songs.length; i++){
+	    					console.log(doc.songs[i].title);
+	    					temp2.songs.push(
+									{
+										songId: doc.songs[i].songId,
+										counterTotal: 0,
+							            counterInternal: 0,
+							            counterAgeGroup1: 0,    //14 and less
+							            counterAgeGroup2: 0,    //15-24
+							            counterAgeGroup3: 0,    //25-34
+							            counterAgeGroup4: 0,    //35-44
+							            counterAgeGroup5: 0,    //45-54
+							            counterAgeGroup6: 0,    //55+
+							            counterLocal: 0
+
+									}
+	    						);
+	    				}
+		    				temp2.totalCounter = 0 ;
+						    temp2.internalCounter = 0 ;
+						    temp2.ageGroup1Counter = 0 ;
+						    temp2.ageGroup2Counter = 0 ;
+						    temp2.ageGroup3Counter = 0 ;
+						    temp2.ageGroup4Counter = 0 ;
+						    temp2.ageGroup5Counter = 0 ;
+						    temp2.ageGroup6Counter = 0 ;
+						    temp2.counterLocal
+
+	                  console.log("new Producer Songs Doc is created");
+	                  temp2.save(function (err, doc) {
+		                  if (err) {
+		                    console.log("error saving Producer Songs General: " + err.message);
+		                  }
+		                  callback();
+	              	});
+	                  
                 });
 
 			});
@@ -440,6 +479,7 @@ exports.processProducerWizardForm = function(req,res,data){
 
 	    //calculate artist pie and save it
 	    function(callback){
+
 	    	callback();
 	    }
 	],
