@@ -45,8 +45,9 @@
               <!-- the playlist -->
                <div class="playlist-container">
                     <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
-                    <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
-                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}">                        
+
+                    <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> <div class="abs loader {{loaderStatus2}}"></div>
+                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-if="$index < 6">                        
                         <div style="padding-top:10px" class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>
                             <div class="name">{{x.artistName}}</div>
@@ -94,14 +95,11 @@
                       <div id="profile" class="tab-pane fade in active">
                       <br>
                       <select id="list" ng-model="data.select">
-                      <% if (user.typeOfUser == "Producer") {  %>
-                          <option value="artist" selected="selected">Artist</option>
-                          <option value="B">Business</option>
-                          <option value="P">Pleasure</option>
-                      <% }else if (user.typeOfUser == "Consumer"){ %>
+                      
                           <option value="P" selected="selected">Pleasure</option>
                           <option value="B">Business</option>
-                        <% } %>
+                          <option value="A" ng-show="isProducer">Artist</option>
+                        
                       </select>
                           <!-- MP pie container -->
                         <div id="MPcontainer" style=" height: 500px; margin: 0 auto">

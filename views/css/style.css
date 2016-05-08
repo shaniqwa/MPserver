@@ -352,6 +352,10 @@ select {
   background-position: center center;
   min-height: 200px;
   display: block;
+  visibility: hidden;
+}
+.abs{
+  position: absolute;
 }
 .invisible-loader {
   visibility: hidden;
@@ -375,7 +379,7 @@ select {
 .songName {
   text-align: center;
   font-size: 17px;
-  line-height: 0.5;
+  line-height: 1.2;
 }
 .artistName {
   text-align: center;
