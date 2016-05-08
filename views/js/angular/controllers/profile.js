@@ -329,3 +329,8 @@ $scope.search = function(text){
 /***********************************************************/
 });
 
+
+
+// get song duration from youtube
+// https://www.googleapis.com/youtube/v3/videos?id=9bZkp7q19f0&part=contentDetails&key=AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk
+

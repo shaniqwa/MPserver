@@ -35,11 +35,16 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
+var artistPieSchema = require("./schemas/scheme_artistPie.js").artistPieSchema; 
+var ArtistPie = mongoose.model('Artist_pie', artistPieSchema, 'Artist_pie');
+
 var genresSchema = require('./schemas/scheme_genres.js').genresSchema;
 var GenreS = mongoose.model('actionM', genresSchema);
 
 var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerSongsSchema; 
 var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
+
+
 
 	//===============EXPRESS================
 	require('./config/passport')(passport);
@@ -101,12 +106,12 @@ io.on('connection', function(client) {
     app.get('/profile', isLoggedIn, function(req, res) {
     	var business, 
             pleasure, 
-            songs;
+            songs,
+            artistPie;
 
  		async.waterfall([
         //find user's pies
         function(callback) {
-            //create user
             BusinessPie.findOne({ 'businessPieId' :  req.user.userId }, function(err, businessPie) {
 	            // if there are any errors, return the error
 	            if (err){
@@ -117,7 +122,6 @@ io.on('connection', function(client) {
 	        });
         },
         function(callback) {
-            //create user
             PleasurePie.findOne({ 'pleasurePieId' :  req.user.userId }, function(err, pleasurePie) {
                 // if there are any errors, return the error
                 if (err){
@@ -128,7 +132,7 @@ io.on('connection', function(client) {
             });
         },
         function(callback) {
-            //if Producer - load also ProducerSongs
+            //if Producer - load also ProducerSongs and ArtistPie
             if(req.user.typeOfUser == "Producer"){
                 ProducerSongs.findOne({ 'prodId' :  req.user.userId }, function(err, doc) {
                     if (err){
@@ -140,7 +144,15 @@ io.on('connection', function(client) {
                     songs = doc.songs;
                     console.log("songs:");
                     console.log(songs);
-                    callback();
+
+                    ArtistPie.findOne({ 'artistPieId' :  req.user.userId }, function(err, doc) {
+                        // if there are any errors, return the error
+                        if (err){
+                            return console.log(err);
+                        }
+                        artistPie = doc;
+                        callback();
+                    });
                 });    
             }else{
                 callback();
@@ -159,11 +171,13 @@ io.on('connection', function(client) {
     	            pleasure: pleasure
     	        });
             }else{
+                console.log(artistPie);
                 res.render('profile.ejs', {
                     user : req.user, // get the user out of session and pass to template
                     business: business,
                     pleasure: pleasure,
-                    songs: songs
+                    songs: songs,
+                    artist: artistPie
                 });                
             }
         });        

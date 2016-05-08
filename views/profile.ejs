@@ -29,8 +29,8 @@
                     frameborder="0"/></iframe>
 
                     <!-- current song  -->
-                    <p class="songName"> {{ nowPlaying.songName}}</p>
-                    <p class="artistName">{{nowPlaying.artistName }} </p>
+                    <p class="songName"> {{nowPlaying.songName}}</p>
+                    <p class="artistName">{{nowPlaying.artistName}} </p>
                     <!-- player controllers -->
                     <div class="playerControllers">
                         <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
@@ -94,8 +94,14 @@
                       <div id="profile" class="tab-pane fade in active">
                       <br>
                       <select id="list" ng-model="data.select">
+                      <% if (user.typeOfUser == "Producer") {  %>
+                          <option value="artist" selected="selected">Artist</option>
+                          <option value="B">Business</option>
+                          <option value="P">Pleasure</option>
+                      <% }else if (user.typeOfUser == "Consumer"){ %>
                           <option value="P" selected="selected">Pleasure</option>
                           <option value="B">Business</option>
+                        <% } %>
                       </select>
                           <!-- MP pie container -->
                         <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
@@ -331,17 +337,23 @@ $(function () {
     var profileImg =<%-JSON.stringify( user.profileImage )%>
     var businessData =<%-JSON.stringify( business.genres)%>
     var pleasureData =<%-JSON.stringify( pleasure.genres)%>
-    console.log("call drawPie with img : " + profileImg);
+    <% if (user.typeOfUser == "Producer") {  %>
+    var artistData =<%-JSON.stringify( artist.genres)%>
+    drawPie(artistData,profileImg);
+    <% } else { %>
+    // console.log("call drawPie with img : " + profileImg);
     drawPie(pleasureData,profileImg);
-
+    <% } %>
     $("#list").change(function() {
         if ($("#list").val() == "P") {
             drawPie(pleasureData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=month'
-        } else {
+        } else if ($("#list").val() == "B"){
             drawPie(businessData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=newmode'
-        }   
+        } else if ($("#list").val() == "artist"){
+        drawPie(artistData,profileImg);
+        }
     });
 
 });
