@@ -35,7 +35,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.loaderStatus2 = "invisible-loader";
    $scope.firstTimePlaylist = false;
    $scope.isProducer = true;
-
+   $scope.userType;
    // create youtube player
     var player;
     function onYouTubePlayerAPIReady() {
@@ -88,35 +88,43 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.init = function(data){
        user = JSON.parse(data);
         $scope.userId = user.userId;
-       $http.get('http://localhost:3000/getProducerSongs/' + prodId).success(function(data){
-            console.log(data); 
-           for(i in data.songs){
-             $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
-           }
-       });
-       $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
+        $scope.userType = user.typeOfUser;
+        //console.log(user.typeOfUser);
+        $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
             for(i in data){
               $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
            }
        });
-       $scope.selectedSong = 0;
-        $http.get('http://localhost:3000/getProducerStatistics/' + prodId).success(function(data){
-           console.log(data);
-           $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
-           $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
-           $scope.ageGroupCounters.push({ageGroup3Counter: data.ageGroup3Counter});
-           $scope.ageGroupCounters.push({ageGroup4Counter: data.ageGroup4Counter});
-           $scope.ageGroupCounters.push({ageGroup5Counter: data.ageGroup5Counter});
-           $scope.ageGroupCounters.push({ageGroup6Counter: data.ageGroup6Counter});
-           $scope.ageGroupCounters.push({counterLocal: data.counterLocal});
-           $scope.ageGroupCounters.push({internalCounter: data.internalCounter});
-           $scope.ageGroupCounters.push({totalCounter: data.totalCounter});
-           $scope.ageGroupCounters.push({artistName: data.userId});
-           for(i in data.songs){ 
-             $scope.songCounters.push({counterAgeGroup1: data.songs[i].counterAgeGroup1, counterAgeGroup2: data.songs[i].counterAgeGroup2, counterAgeGroup3: data.songs[i].counterAgeGroup3, counterAgeGroup4: data.songs[i].counterAgeGroup4, counterAgeGroup5: data.songs[i].counterAgeGroup5, counterAgeGroup6: data.songs[i].counterAgeGroup6, counterLocal: data.songs[i].counterLocal, counterTotal: data.songs[i].counterTotal, songId: data.songs[i].songId, counterInternal: data.songs[i].counterInternal}); 
-           }
+        $scope.selectedSong = 0;
+        if(user.typeOfUser == "Producer"){
+               $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
+                    console.log(data); 
+                   for(i in data.songs){
+                     $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
+                   }
+               });
+               $http.get('http://localhost:3000/getProducerStatistics/' + $scope.userId).success(function(data){
+                   console.log(data);
+                   $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
+                   $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
+                   $scope.ageGroupCounters.push({ageGroup3Counter: data.ageGroup3Counter});
+                   $scope.ageGroupCounters.push({ageGroup4Counter: data.ageGroup4Counter});
+                   $scope.ageGroupCounters.push({ageGroup5Counter: data.ageGroup5Counter});
+                   $scope.ageGroupCounters.push({ageGroup6Counter: data.ageGroup6Counter});
+                   $scope.ageGroupCounters.push({counterLocal: data.counterLocal});
+                   $scope.ageGroupCounters.push({internalCounter: data.internalCounter});
+                   $scope.ageGroupCounters.push({totalCounter: data.totalCounter});
+                   $scope.ageGroupCounters.push({artistName: data.userId});
+                   for(i in data.songs){ 
+                     $scope.songCounters.push({counterAgeGroup1: data.songs[i].counterAgeGroup1, counterAgeGroup2: data.songs[i].counterAgeGroup2, counterAgeGroup3: data.songs[i].counterAgeGroup3, counterAgeGroup4: data.songs[i].counterAgeGroup4, counterAgeGroup5: data.songs[i].counterAgeGroup5, counterAgeGroup6: data.songs[i].counterAgeGroup6, counterLocal: data.songs[i].counterLocal, counterTotal: data.songs[i].counterTotal, songId: data.songs[i].songId, counterInternal: data.songs[i].counterInternal}); 
+                   }
 
-       });
+               });
+        }
+       
+       
+       
+        
        //onYouTubePlayerAPIReady();
   }; 
 /***********************************************************/
