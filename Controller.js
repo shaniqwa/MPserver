@@ -8,6 +8,7 @@ var async = require("async");
 var request = require('request');
 autoIncrement.initialize(db);
 var math = require('mathjs');
+var ControllerB = require('./ControllerB');
 
 //===============MODELS===============
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
@@ -346,6 +347,8 @@ exports.processWizardForm = function(req,res,data) {
             }
 
         ],callback);
+    },function(callback){
+    	ControllerB.findMatch( data.userID );
     }
     ], function(err) {
         if (err) {
