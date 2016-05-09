@@ -5,8 +5,8 @@ var producerSongsSchema = new Schema({
 	prodId : {type: Number, index: true},
     songs: [
         {
-            // _id:false,
-            // songId: {type: Number, index: true},
+            _id:false,
+            songId: Number,
             title: String,
             videoId: String
         }

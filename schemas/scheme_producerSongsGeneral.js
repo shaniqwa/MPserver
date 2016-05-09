@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var producerSongsGeneralSchema = new Schema({
-userId: {type: Number, index: true },
+    userId: {type: Number, index: true },
     songs: [
         {
             songId: Number,

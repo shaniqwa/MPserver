@@ -21,15 +21,20 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
     select: 'P',
     option1: 'P',
     option2: 'B',
+    option3: 'A'
    };
    $scope.track = [];
    $scope.toggle = true;
    $scope.videoFrame = false;
    $scope.videoFrame2 = false;
+   $scope.videoFrame3 = false;
    $scope.nowPlaying = [];
    $scope.msg = [];
    $scope.elementToFadeInAndOut = '';
    $scope.loaderStatus = "invisible-loader";
+   $scope.loaderStatus2 = "invisible-loader";
+   $scope.firstTimePlaylist = false;
+   $scope.isProducer = true;
 
    // create youtube player
     var player;
@@ -64,6 +69,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         $scope.$apply(function() {
           $scope.videoFrame = true;
           $scope.videoFrame2 = true;
+          $scope.videoFrame3 = true;
           $scope.loaderStatus = "invisible-loader";
         });
     }
@@ -121,12 +127,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
     $scope.bringMePlaylist = function($event){
-     //$scope.track = [];
-     //$scope.counter = 0;
+     $scope.track = [];
+     $scope.counter = 0;
+     $scope.videoFrame3 = false;
      if($scope.videoFrame == false)
      $scope.videoFrame2 = false;
    
      $scope.loaderStatus = "visible-loader";
+     $scope.loaderStatus2 = "visible-loader";
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
          if(typeof $event === 'undefined'){
@@ -141,6 +149,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
          console.log(url);
          $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
+           $scope.videoFrame3 = true;
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
                  $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
@@ -149,8 +158,12 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                }
            }
-           onYouTubePlayerAPIReady();
-         
+           if($scope.firstTimePlaylist == false){
+               onYouTubePlayerAPIReady();
+               $scope.firstTimePlaylist = true;
+           }
+           $scope.loaderStatus2 = "invisible-loader";
+         $scope.nextSong();
       });
     };
 /***********************************************************/
@@ -192,6 +205,8 @@ $scope.search = function(text){
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                }
            }
+           $scope.videoFrame3 = false;
+           $scope.loaderStatus2 = "invisible-loader";
       });
     };
 /***********************************************************/
@@ -240,6 +255,10 @@ $scope.search = function(text){
             }
             if($scope.track.length == 5){
                 $scope.updatePlaylist();
+            }
+            if($scope.track.length == 1){
+                $scope.videoFrame3 = true;
+                $scope.loaderStatus2 = "visible-loader";
             }
             player.pauseVideo();
             player.playVideo();
@@ -328,4 +347,9 @@ $scope.search = function(text){
 /********************playSong FUNCTION**********************/
 /***********************************************************/
 });
+
+
+
+// get song duration from youtube
+// https://www.googleapis.com/youtube/v3/videos?id=9bZkp7q19f0&part=contentDetails&key=AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk
 

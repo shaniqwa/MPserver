@@ -41,9 +41,7 @@ input[type=text]:focus, textarea:focus {
   border: 0px solid rgba(81, 203, 238, 1);
 }
 
-html{
 
-}
 body {
   color: #e4e4e4 !important;
   background-image: url("../images/background.jpg"); 
@@ -103,7 +101,7 @@ h4 {
 }
 .content{
 
-background: linear-gradient(rgba(0, 0, 0,0.5) 50%, rgba(0, 0, 0,0));
+background: linear-gradient(rgba(0, 0, 0,0.5) 90%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
 }
 .nav-tabs li a {
@@ -362,6 +360,10 @@ select {
   background-position: center center;
   min-height: 200px;
   display: block;
+  visibility: hidden;
+}
+.abs{
+  position: absolute;
 }
 .invisible-loader {
   visibility: hidden;
@@ -385,7 +387,7 @@ select {
 .songName {
   text-align: center;
   font-size: 17px;
-  line-height: 0.5;
+  line-height: 1.2;
 }
 .artistName {
   text-align: center;

@@ -21,6 +21,9 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
+var artistPieSchema = require("./schemas/scheme_artistPie.js").artistPieSchema; 
+var ArtistPie = mongoose.model('Artist_pie', artistPieSchema, 'Artist_pie');
+
 var favoritesSchema = require("./schemas/scheme_favorites.js").favoritesSchema; 
 var Favorites = mongoose.model('Favorites', favoritesSchema, 'Favorites');
 
@@ -37,6 +40,12 @@ var producerSongsSchema = require("./schemas/scheme_producerSongs.js").producerS
 var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, 'Producer_songs_list');
 
 producerSongsSchema.plugin(autoIncrement.plugin, { model: 'Producer_songs_list', field: 'songs.songId' });
+
+
+var producerSongsGeneralSchema = require("./schemas/scheme_producerSongsGeneral.js").producerSongsGeneralSchema; 
+var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSongsGeneralSchema, 'Producer_songs_general');
+
+
 
 
 //===============FUNCTIONS===============
@@ -81,11 +90,13 @@ exports.deleteUser = function(res, userID){
 	User.findOne({ userId: userID }).remove().exec();
 	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
+	ArtistPie.findOne({ artistPieId: userID }).remove().exec();
 	Favorites.findOne({ userId: userID }).remove().exec();
 	BlackList.findOne({ userId: userID }).remove().exec();
 	BusinessGraph.findOne({ pieId: userID }).remove().exec();
 	PleasureGraph.findOne({ pieId: userID }).remove().exec();
 	ProducerSongs.findOne({ prodId: userID }).remove().exec();
+	ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
 	res.status(200).json("User has been deleted " + userID);
 }
 
@@ -367,9 +378,10 @@ getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var temp = JSON.parse(body);
-			console.log(temp);
+			// console.log(temp);
 			for(i=0; i<temp.items.length; i++){
 				list.push({
+					songId: i,
 					title: temp.items[i].snippet.title,
 					videoId: temp.items[i].snippet.resourceId.videoId
 				});
@@ -406,8 +418,8 @@ exports.processProducerWizardForm = function(req,res,data){
 
 	    //call getProducerPlaylistItems - populate all songs from youtube 
 	    function(callback){
-	    	console.log("selected playlist id: ");
-	    	console.log(data.playlistID);
+	    	// console.log("selected playlist id: ");
+	    	// console.log(data.playlistID);
 	    	var playlistID = data.playlistID;
 			getProducerPlaylistItems(playlistID, req.user.YT_AT,function(error, list){
 				if(error){
@@ -420,19 +432,48 @@ exports.processProducerWizardForm = function(req,res,data){
 				var temp = new ProducerSongs(ProducerSongsDoc);
 				 temp.save(function (err, doc) {
 	                  if (err) {
-	                    console.log("error saving user business pie: " + err.message);
+	                    console.log("error saving Producer Songs: " + err.message);
 	                  }
-	                  console.log("new ProducerSongsDoc is created");
-	                  callback();
-	                 // add all items to ProducerSong collection (addToSet make sure there are no duplicates is songs array)
-					// ProducerSongs.findOneAndUpdate({ prodId: req.user.userId }, {$addToSet: { songs: list }} ,{new: true}, function (err, doc) {
-					//   if (err){
-					//   	console.log("error adding song to ProducerSongs: " + err.message);
-					//   } 
-					//   // done!
-					//   console.log("songs added to ProducerSongs successfully for Producer " + req.user.userId);
-					//   callback();
-					// });
+
+	                  //create  producer Songs General Document with all songs counters set to 0
+	                  var temp2 = new ProducerSongsGeneral();
+	    				temp2.userId = data.userID;
+	    				for(var i=0; i< doc.songs.length; i++){
+	    					// console.log(doc.songs[i].title);
+	    					temp2.songs.push(
+									{
+										songId: doc.songs[i].songId,
+										counterTotal: 0,
+							            counterInternal: 0,
+							            counterAgeGroup1: 0,    //14 and less
+							            counterAgeGroup2: 0,    //15-24
+							            counterAgeGroup3: 0,    //25-34
+							            counterAgeGroup4: 0,    //35-44
+							            counterAgeGroup5: 0,    //45-54
+							            counterAgeGroup6: 0,    //55+
+							            counterLocal: 0
+
+									}
+	    						);
+	    				}
+		    				temp2.totalCounter = 0 ;
+						    temp2.internalCounter = 0 ;
+						    temp2.ageGroup1Counter = 0 ;
+						    temp2.ageGroup2Counter = 0 ;
+						    temp2.ageGroup3Counter = 0 ;
+						    temp2.ageGroup4Counter = 0 ;
+						    temp2.ageGroup5Counter = 0 ;
+						    temp2.ageGroup6Counter = 0 ;
+						    temp2.counterLocal
+
+	                  console.log("new Producer Songs Doc is created");
+	                  temp2.save(function (err, doc) {
+		                  if (err) {
+		                    console.log("error saving Producer Songs General: " + err.message);
+		                  }
+		                  callback();
+	              	});
+	                  
                 });
 
 			});
@@ -440,7 +481,83 @@ exports.processProducerWizardForm = function(req,res,data){
 
 	    //calculate artist pie and save it
 	    function(callback){
-	    	callback();
+	    	var total = 0,
+	    		num_of_genres = 0;
+
+	    	var temp = new ArtistPie();
+
+	    	temp.artistPieId = data.userID;
+	    	console.log("artist pie id: " + temp.artistPieId);
+
+	    	if(data.genre1 != "null"){
+	    		num_of_genres++;
+	    		var values = data.genre1.split('|');
+	    		var genre = values[0];
+	    		var category = values[1];
+	    		console.log(genre);
+	    		console.log(category);
+	    		console.log(data.slider1);
+	    		total += parseInt(data.slider1);	
+	    		temp.genres.push({category: category, genreName: genre, percent: data.slider1});
+	    	}
+	    	if(data.genre2 != "null"){
+	    		num_of_genres++;
+	    		var values = data.genre2.split('|');
+	    		var genre = values[0];
+	    		var category = values[1];
+	    		console.log(genre);
+	    		console.log(category);
+	    		console.log(data.slider2);
+	    		total += parseInt(data.slider2);	
+	    		temp.genres.push({category: category, genreName: genre, percent: data.slider2});
+	    	}
+	    	if(data.genre3 != "null"){
+	    		num_of_genres++;
+	    		var values = data.genre3.split('|');
+	    		var genre = values[0];
+	    		var category = values[1];
+	    		console.log(genre);
+	    		console.log(category);
+	    		console.log(data.slider3);
+	    		total += parseInt(data.slider3);	
+	    		temp.genres.push({category: category, genreName: genre, percent: data.slider3});
+	    	}
+	    	if(data.genre4 != "null"){
+	    		num_of_genres++;
+	    		var values = data.genre4.split('|');
+	    		var genre = values[0];
+	    		var category = values[1];
+	    		console.log(genre);
+	    		console.log(category);
+	    		console.log(data.slider4);
+	    		total += parseInt(data.slider4);	
+	    		temp.genres.push({category: category, genreName: genre, percent: data.slider4});
+	    	}
+	    	if(data.genre5 != "null"){
+	    		num_of_genres++;
+	    		var values = data.genre5.split('|');
+	    		var genre = values[0];
+	    		var category = values[1];
+	    		console.log(genre);
+	    		console.log(category);
+	    		console.log(data.slider5);
+	    		total += parseInt(data.slider5);	
+	    		temp.genres.push({category: category, genreName: genre, percent: data.slider5});
+	    	}
+	    	console.log("total: " + total);
+	    	console.log("num_of_genres: " + num_of_genres);
+
+	    	for(var i=0; i<temp.genres.length; i++){
+	    		temp.genres[i].percent = math.round((temp.genres[i].percent/total)*100,2);
+	    		console.log(temp.genres[i]);
+	    	}
+
+	    	temp.save(function (err, doc) {
+                  if (err) {
+                    console.log("error saving ArtistPie: " + err.message);
+                  }
+                  callback();
+	        });
 	    }
 	],
 	// optional callback

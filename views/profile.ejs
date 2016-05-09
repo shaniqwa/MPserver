@@ -19,7 +19,7 @@
     <!-- LEFT SIDE BAR -->
 
     <!-- <div class="row"> -->
-         <div class="col-sm-3">
+         <div class="col-sm-2">
             <div class="well leftSidebar">
                 <div class="player-container">
                     <!-- the video -->
@@ -29,8 +29,8 @@
                     frameborder="0"/></iframe>
 
                     <!-- current song  -->
-                    <p class="songName"> {{ nowPlaying.songName}}</p>
-                    <p class="artistName">{{nowPlaying.artistName }} </p>
+                    <p class="songName"> {{nowPlaying.songName}}</p>
+                    <p class="artistName">{{nowPlaying.artistName}} </p>
                     <!-- player controllers -->
                     <div class="playerControllers">
                         <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
@@ -45,8 +45,9 @@
               <!-- the playlist -->
                <div class="playlist-container">
                     <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
-                    <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p>
-                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}">                        
+
+                    <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> <div class="abs loader {{loaderStatus2}}"></div>
+                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-if="$index < 6">                        
                         <div style="padding-top:10px" class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>
                             <div class="name">{{x.artistName}}</div>
@@ -62,7 +63,7 @@
       <!-- END LEFT SIDE BAR -->
 
         <!-- CONTENT -->
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <div class="well content">
                 <% if (business) { 
                     business.genres.sort(function(a, b){
@@ -94,8 +95,11 @@
                       <div id="profile" class="tab-pane fade in active">
                       <br>
                       <select id="list" ng-model="data.select">
+                      
                           <option value="P" selected="selected">Pleasure</option>
                           <option value="B">Business</option>
+                          <option value="A" ng-show="isProducer">Artist</option>
+                        
                       </select>
                           <!-- MP pie container -->
                         <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
@@ -240,9 +244,9 @@
                     <h3><span class="fa fa-user"></span> Local</h3>
                         <p>
                             <!--if local login -->
-                            <% if (user.profileImage) { %>
+<!--                             <% if (user.profileImage) { %>
                                 <img src=" <%= user.profileImage %> " width="60"><br><br>
-                            <% } %>
+                            <% } %> -->
                             <strong>ID</strong>: <%= user.userId %><br>
                             <strong>Activity Token</strong>: <%= user.activityToken %><br>
                             <strong>User Type</strong>: <%= user.typeOfUser %><br>
@@ -271,6 +275,53 @@
                             <% } %>
                         </p>
                     <!-- END USER DETAILS -->
+
+                                    <!-- GOOGLE INFORMATION -->
+                 <div class="col-sm-12">
+                    <div class="well">
+                        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+
+                        <!-- check if the user has this token (is the user authenticated with this social account) -->
+                        <% if (user.YT_AT) { %>
+                   <!--          <p>
+                                <strong>id</strong>: <%= user.YT_id %><br>
+                                <strong>token</strong>: <%= user.YT_AT %><br>
+                                <strong>email</strong>: <%= user.YT_email %><br>
+
+                            </p> -->
+
+                            <a href="/unlink/google" class="btn btn-danger">Unlink</a>
+                        <% } else { %>
+                            <a href="/connect/google" class="btn btn-danger">Connect Google</a>
+                        <% } %>
+
+                    </div>
+                </div>
+                 <!-- END GOOGLE INFORMATION -->
+
+                 <!-- FACEBOOK INFORMATION -->
+                <div class="col-sm-12">
+                    <div class="well">
+                        <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+
+                        <!-- check if the user has this token (is the user authenticated with this social account) -->
+                        <% if (user.FB_AT) { %>
+           <!--                  <p>
+                                <strong>id</strong>: <%= user.FB_id %><br>
+                                <strong>token</strong>: <%= user.FB_AT %><br>
+                                <strong>email</strong>: <%= user.FB_email %><br>
+                            </p> -->
+
+                            <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
+                        <% } else { %>
+                            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
+                        <% } %>
+
+                    </div>
+                </div>
+                <!--END FACEBOOK INFORMATION -->
+
+
                 </div>
           </div>
           <!-- END RIGHT SIDEBAR -->
@@ -298,17 +349,23 @@ $(function () {
     var profileImg =<%-JSON.stringify( user.profileImage )%>
     var businessData =<%-JSON.stringify( business.genres)%>
     var pleasureData =<%-JSON.stringify( pleasure.genres)%>
-    console.log("call drawPie with img : " + profileImg);
+    <% if (user.typeOfUser == "Producer") {  %>
+    var artistData =<%-JSON.stringify( artist.genres)%>
+    drawPie(artistData,profileImg);
+    <% } else { %>
+    // console.log("call drawPie with img : " + profileImg);
     drawPie(pleasureData,profileImg);
-
+    <% } %>
     $("#list").change(function() {
         if ($("#list").val() == "P") {
             drawPie(pleasureData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=month'
-        } else {
+        } else if ($("#list").val() == "B"){
             drawPie(businessData,profileImg);
             // $.get('/dough/includes/live-chart.php?mode=newmode'
-        }   
+        } else if ($("#list").val() == "artist"){
+        drawPie(artistData,profileImg);
+        }
     });
 
 });
