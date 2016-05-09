@@ -38,6 +38,10 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.firstTimePlaylist = false;
    $scope.isProducer = true;
    $scope.userType;
+   $scope.business = [];
+   $scope.pleasure = [];
+   $scope.artist;
+   $scope.songs;
    // create youtube player
     var player;
     function onYouTubePlayerAPIReady() {
@@ -96,7 +100,15 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             for(i in data){
               $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
            }
-       });
+        });
+        $http.get('http://localhost:3000/getUser/' + $scope.userId).success(function(data){
+            $scope.business = data.business.genres;
+            $scope.pleasure = data.pleasure.genres;
+            if(user.typeOfUser == "Producer"){
+                $scope.songs = data.songs;
+                $scope.artist = data.artist;
+            }
+        });
         $scope.selectedSong = 0;
         if(user.typeOfUser == "Producer"){
                $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
