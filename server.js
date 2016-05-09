@@ -545,13 +545,28 @@ io.on('connection', function(client) {
 		Controller.deleteUser(res,req.params.userID);
 	});
 
+    //following
+    app.param('userF', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    app.param('Fuser', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    //route that recives parameter using defined parameters
+    app.get('/addToFollow/:userF/:Fuser', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
 
-
-
-
-
-
-
+        function (req, res) {
+        ControllerB.addToFollow(res,req.params.userF,req.params.Fuser);
+    });
 
 
     //Find match

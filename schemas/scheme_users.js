@@ -26,6 +26,7 @@ var usersSchema = new Schema({
     is_New: Number,
     following: [
         {
+            _id: false,
             userId: {type: Number, index: true},
             username: String,
             profileImg: String,
@@ -35,6 +36,7 @@ var usersSchema = new Schema({
     ],
     followers: [
     {
+        _id: false,
         userId: {type: Number, index: true},
         username: String,
         profileImg: String,

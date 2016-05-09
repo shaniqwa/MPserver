@@ -212,3 +212,63 @@ exports.recommandation = function(res, userID){
 
 	
 }
+
+//add to followers
+exports.addToFollow = function(res,Fuser,userF) {
+var follower = {};
+
+	async.waterfall([
+		// step 1: find me
+	    function(callback) {
+	    	User.findOne({ userId: Fuser }, function (err, doc) {
+				  if (err) {
+				  	callback(err);
+				  	return;
+				  }
+				  	
+					follower.userId = doc.userId;
+	  	 			follower.username = doc.username;
+	  				follower.profileImg = doc.profileImage;
+	  				follower.first = doc.firstName;
+	  	            follower.last = doc.lastName;
+	  	            console.log(follower);
+	                callback();
+			});
+
+	    },	
+	    //step 2 : add me as a follower
+	    function(callback) {
+	    		User.findOneAndUpdate({ userId: userF }, {$addToSet: { followers: follower }} ,{new: true}, function (err, doc) {
+				  if (err) {
+				  	callback(err);
+				  	return;
+				  }
+				  
+					follower.userId = doc.userId;
+	  	 			follower.username = doc.username;
+	  				follower.profileImg = doc.profileImage;
+	  				follower.first = doc.firstName;
+	  	            follower.last = doc.lastName;
+	                callback();
+			});
+
+	    },
+	    //step 3: add other user to my following
+	    function(callback){
+	    		User.findOneAndUpdate({ userId: Fuser }, {$addToSet: { following: follower }} ,{new: true}, function (err, doc) {
+				  if (err) {
+				  	callback(err);
+				  	return;
+				  }
+	                callback();
+			});
+
+	    }
+	], function(err) {
+	    if (err) {
+	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+	    }
+	    console.log("added to following");
+	    res.status(200).json("added to following");
+	});
+}
