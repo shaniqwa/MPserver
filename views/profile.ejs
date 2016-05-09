@@ -249,13 +249,13 @@
 <!--                             <% if (user.profileImage) { %>
                                 <img src=" <%= user.profileImage %> " width="60"><br><br>
                             <% } %> -->
-                            <strong>ID</strong>: <%= user.userId %><br>
-                            <strong>Activity Token</strong>: <%= user.activityToken %><br>
-                            <strong>User Type</strong>: <%= user.typeOfUser %><br>
-                            <strong>Fist Name</strong>: <%= user.firstName %><br>
-                            <strong>Last Name</strong>: <%= user.lastName %><br>
-                            <strong>email</strong>: <%= user.email %><br>
-                            <strong>Country</strong>: <%= user.country %><br>
+                            <strong>ID</strong>: {{user.userId}} <br>
+                            <strong>Activity Token</strong>: {{user.activityToken}}<br>
+                            <strong>User Type</strong>: {{user.typeOfUser}}<br>
+                            <strong>Fist Name</strong>: {{user.firstName}}<br>
+                            <strong>Last Name</strong>: {{user.lastName}}<br>
+                            <strong>email</strong>: {{user.email}}<br>
+                            <strong>Country</strong>: {{user.country}}<br>
                             <strong>Age Group</strong>: 
                             <% if (user.ageGroup == 1) { %>
                                Under 14
