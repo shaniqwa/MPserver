@@ -153,6 +153,10 @@ select {
 }
 .searchresults{
   float: left;
+  padding-left: 10px;
+}
+.simg{
+  border-radius: 50%;
 }
 /*FAVORITES TABLE*/
 .song {
