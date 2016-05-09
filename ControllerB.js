@@ -164,7 +164,7 @@ exports.recommandation = function(res, userID){
 	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
 	  for(var i=0; i<data.genres.length; i++){
-	  	console.log(data.genres[i].producers);
+	  //	console.log(data.genres[i].producers);
 	  	producers.push.apply(producers, data.genres[i].producers);
 	  	//console.log(producers);
 	  }	
@@ -179,9 +179,9 @@ exports.recommandation = function(res, userID){
 		  	producers.push.apply(producers, data.genres[i].producers);
 		  	//console.log(producers);
 		  }
-		  console.log("done business");
+		 // console.log("done business");
 
-		  console.log("producers:");
+		 // console.log("producers:");
 			console.log(producers);
 			var result = [];
 
