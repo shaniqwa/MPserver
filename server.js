@@ -168,25 +168,13 @@ io.on('connection', function(client) {
             }
             console.log('all done');
               if(req.user.typeOfUser == "Consumer"){
-                var response = {};
-                response.user = req.user;
-                response.business = business;
-                response.pleasure = pleasure;
     				res.render('profile.ejs', {
-                    response: response;
     	            user : req.user, // get the user out of session and pass to template
     	            business: business,
     	            pleasure: pleasure
     	        });
             }else{
-                var response = {};
-                response.user = req.user;
-                response.business = business;
-                response.pleasure = pleasure;
-                response.songs = songs;
-                response.artist = artist;
                 res.render('profile.ejs', {
-                    response: response,
                     user : req.user, // get the user out of session and pass to template
                     business: business,
                     pleasure: pleasure,
