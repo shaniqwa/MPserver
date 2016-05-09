@@ -37,11 +37,12 @@ var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureG
 var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
 
 
-exports.findMatch = function(res, userID){
+exports.findMatch = function(userID){
 	var genres = [];
 	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
 	  if (err || pleasureUser === null){
-	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
+	  	return err;
+	  	// res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
 	  for(var i=0; i<pleasureUser.genres.length; i++){
 	  	if(genres.indexOf(pleasureUser.genres[i].genreName) === -1){
@@ -53,7 +54,8 @@ exports.findMatch = function(res, userID){
 
 	  BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
 		  if (err || buisnessUser === null){
-		  	res.status(200).json("error finding buisness pie for user: " + err.message);
+		  	return err;
+		  	// res.status(200).json("error finding buisness pie for user: " + err.message);
 		  } 
 		  for(var i=0; i<buisnessUser.genres.length; i++){
 		  	if(genres.indexOf(buisnessUser.genres[i].genreName) === -1){
@@ -69,7 +71,8 @@ exports.findMatch = function(res, userID){
 			ArtistPie.find({}, function (err, artists) {
 				
 			  if (err || artists === null){
-			  	res.status(200).json("error finding artists: " + err.message);
+			  	return err;
+			  	// res.status(200).json("error finding artists: " + err.message);
 			  } 
 			  
 		      artists.forEach(function(artist){
@@ -88,15 +91,16 @@ exports.findMatch = function(res, userID){
 		      		for(var i=0; i< matchGeners.length; i++){
 		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 						  if (err){
-						  	res.status(200).json("error adding producer to BusinessPie: " + err.message);
+						  	// res.status(200).json("error adding producer to BusinessPie: " + err.message);
 						  	return err;
 						  } 
 						  PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 							  if (err){
-							  	res.status(200).json("error adding producer to PleasurePie: " + err.message);
+							  	// res.status(200).json("error adding producer to PleasurePie: " + err.message);
 							  	return err;
 							  } 
-							   res.status(200).json("New producer has been added to both pies successfully for user " + userID);
+							   // res.status(200).json("New producer has been added to both pies successfully for user " + userID);
+							   return null;
 							});
 						});
 		      		}
