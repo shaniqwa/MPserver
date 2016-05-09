@@ -4,7 +4,9 @@ var model = {
   
 }
 var user;
-var prodId = 63;
+var business;
+var songs;
+var artist;
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.mod = model;
   $scope.songDetails = [];

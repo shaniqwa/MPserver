@@ -10,10 +10,11 @@
 
 </head>
 <body>
+  <script> x = "<%= user %>";</script>
 <div ng-controller="profileCtrl">
 <%- include header %>
 <div class="container">
-<div ng-init="init('<%= JSON.stringify(user) %>')"></div>
+<div ng-init="init('<%= JSON.stringify(data) %>'"></div>
 
 
     <!-- LEFT SIDE BAR -->
@@ -184,6 +185,7 @@
                       <!-- MY SONGS -->
                      <div id="mySongs" class="tab-pane fade">
                           <h3>My Songs</h3>
+                          <%= songs %>
                            <table class="table table-inverse table-hover">
                                 <tbody>
                                  <% for(var i=0; i< songs.length; i++) { %>
