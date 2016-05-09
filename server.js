@@ -173,7 +173,7 @@ io.on('connection', function(client) {
                 response.business = business;
                 response.pleasure = pleasure;
     				res.render('profile.ejs', {
-                    response: response;
+                    response: response,
     	            user : req.user, // get the user out of session and pass to template
     	            business: business,
     	            pleasure: pleasure
