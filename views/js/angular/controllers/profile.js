@@ -1,3 +1,4 @@
+
 var profile = angular.module('profile',[]);
 
 var model = {
@@ -7,6 +8,8 @@ var model = {
 var business;
 var songs;
 var artist;
+
+
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.mod = model;
   $scope.songDetails = [];
@@ -37,7 +40,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.loaderStatus2 = "invisible-loader";
    $scope.firstTimePlaylist = false;
    $scope.isProducer = true;
-   $scope.userType;
    $scope.user;
    $scope.business = [];
    $scope.pleasure = [];
@@ -92,35 +94,32 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
-  $scope.init = function(data){
-       
-       $scope.user = JSON.parse(data);
-        $scope.userId = $scope.user.userId;
-        $scope.userType = $scope.user.typeOfUser;
-        //console.log(user.typeOfUser);
-        $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
-            for(i in data){
-              $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
-           }
-        });
+  $scope.init = function(userID){
+        $scope.userId = JSON.parse(userID);
+
+        // get user info
         $http.get('http://localhost:3000/getUser/' + $scope.userId).success(function(data){
+            $scope.user = data.user;
             $scope.business = data.business.genres;
             $scope.pleasure = data.pleasure.genres;
+
+            drawPie($scope.pleasure, $scope.user.profileImage);
+
             if($scope.user.typeOfUser == "Producer"){
                 $scope.songs = data.songs;
                 $scope.artist = data.artist;
-            }
-        });
-        $scope.selectedSong = 0;
-        if($scope.user.typeOfUser == "Producer"){
-               $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
-                    console.log(data); 
-                   for(i in data.songs){
-                     $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
-                   }
-               });
+
+                for(i in data.songs){
+                       $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
+                }
+                  //TODO: remove get producer songs : already have them in $scope.songs
+                $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
+                      // console.log(data); 
+                     
+                });
+
                $http.get('http://localhost:3000/getProducerStatistics/' + $scope.userId).success(function(data){
-                   console.log(data);
+                   // console.log(data);
                    $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
                    $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
                    $scope.ageGroupCounters.push({ageGroup3Counter: data.ageGroup3Counter});
@@ -136,40 +135,64 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                    }
 
                });
-        }
-        $scope.recommandation();
+
+            }//end if producer
+
+                  // get user's favorits
+                  $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
+                      $scope.favorits = [];
+                      for(i in data){
+                        $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
+                     }
+                  });
+
+                  $scope.selectedSong = 0;
+                  // if producer: get songs and statistics
+                  if($scope.user.typeOfUser == "Producer"){
+                         
+                  }//END  if producer: get songs and statistics
+        });
+
+        
+
+        // get recommendation
+        // call recommandtation func
+       
+       
+       
+        
        //onYouTubePlayerAPIReady();
   }; 
-/***********************************************************/
-/***************INIT FUNCTION - ON LOAD PAGE****************/
-/***********************************************************/
+
 
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
-    $scope.bringMePlaylist = function($event){
-     $scope.track = [];
-     $scope.counter = 0;
-     $scope.videoFrame3 = false;
-     if($scope.videoFrame == false)
-     $scope.videoFrame2 = false;
-   
-     $scope.loaderStatus = "visible-loader";
-     $scope.loaderStatus2 = "visible-loader";
-    console.log("my select is: " + $scope.data.select);
+$scope.bringMePlaylist = function($event){
+    $scope.track = [];
+    $scope.counter = 0;
+    $scope.videoFrame3 = false;
+    if($scope.videoFrame == false){
+        $scope.videoFrame2 = false; 
+    }
+     
+    $scope.loaderStatus = "visible-loader";
+    $scope.loaderStatus2 = "visible-loader";
+    // console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
-         if(typeof $event === 'undefined'){
-            var genre =  $scope.defaultGenre;
-         }
-         else{
-           var genre = $event.currentTarget.innerHTML;
-           $scope.defaultGenre = genre;
-         }
-         console.log(genre);
-         var url = "http://localhost:3000/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-         console.log(url);
-         $http.get('http://localhost:3000/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           console.log(data);
+    
+    if(typeof $event === 'undefined'){
+        var genre =  $scope.defaultGenre;
+    }
+    else{
+        var genre = $event.currentTarget.innerHTML;
+        $scope.defaultGenre = genre;
+    }
+         // console.log(genre);
+    var url = "http://localhost:3000/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+         // console.log(url);
+    $http.get('http://localhost:3000/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+           // console.log(data);
            $scope.videoFrame3 = true;
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
@@ -183,12 +206,16 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
            }
-           $scope.loaderStatus2 = "invisible-loader";
-         $scope.nextSong();
+          $scope.loaderStatus2 = "invisible-loader";
+          $scope.nextSong();
       });
     };
+
+
+
+
 /***********************************************************/
-/****************bringMePlaylist FUNCTION*******************/
+/****************SEARCH FUNCTION*******************/
 /***********************************************************/
 $scope.search = function(text){
   $scope.searchResults = [];  
@@ -198,6 +225,11 @@ $scope.search = function(text){
     }
   });
 };
+
+
+
+
+
 /***********************************************************/
 /*****************updatePlaylist FUNCTION*******************/
 /***********************************************************/
@@ -213,11 +245,11 @@ $scope.search = function(text){
            var genre = $event.currentTarget.innerHTML;
            $scope.defaultGenre = genre;
          }
-         console.log(genre);
+         // console.log(genre);
          var url = "http://localhost:3000/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-         console.log(url);
+         // console.log(url);
          $http.get('http://localhost:3000/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           console.log(data);
+           // console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
                  $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
@@ -230,9 +262,10 @@ $scope.search = function(text){
            $scope.loaderStatus2 = "invisible-loader";
       });
     };
-/***********************************************************/
-/*****************updatePlaylist FUNCTION*******************/
-/***********************************************************/
+
+
+
+
 
 /***********************************************************/
 /********************nextSong FUNCTION**********************/
@@ -246,11 +279,11 @@ $scope.search = function(text){
             if ($scope.counter < $scope.track.length){
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
-              console.log(url);
+              // console.log(url);
               $scope.myVideo = $sce.trustAsResourceUrl(url);
               player.cueVideoByUrl(url);
               $scope.track[$scope.counter].active = 1;
-              console.log($scope.counter);
+              // console.log($scope.counter);
               $scope.nowPlaying = $scope.track[$scope.counter];
               if($scope.counter != 0){
                 $scope.track[$scope.counter - 1].active = 0;
@@ -285,9 +318,11 @@ $scope.search = function(text){
             player.playVideo();
             //$scope.$apply();
     };
-/***********************************************************/
-/********************nextSong FUNCTION**********************/
-/***********************************************************/
+
+
+
+
+
 
 /***********************************************************/
 /********************addToFav FUNCTION**********************/
@@ -317,9 +352,12 @@ $scope.search = function(text){
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
-/***********************************************************/
-/********************addToFav FUNCTION**********************/
-/***********************************************************/
+
+
+
+
+
+
 
 /***********************************************************/
 /*****************addToBlacklist FUNCTION*******************/
@@ -342,9 +380,12 @@ $scope.search = function(text){
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
-/***********************************************************/
-/*****************addToBlacklist FUNCTION*******************/
-/***********************************************************/
+
+
+
+
+
+
 
 
 /***********************************************************/
@@ -352,15 +393,15 @@ $scope.search = function(text){
 /***********************************************************/ 
 
 
-$scope.recommandation = function(){
+$scope.recommandation = function(userId){
 console.log("inside recommandation");
- $scope.reco = [1,2];  
-  // $http.get('http://localhost:3000/recommandation/' + userId).success(function(data){ 
-  //  console.log(data);
-  //   for (i in data){
-  //     $scope.reco.push({username : data[i].username , profileImage : data[i].profileImage});
-  //   }
-  // });
+ $scope.reco = [];  
+  $http.get('http://localhost:3000/recommandation/' + userId).success(function(data){ 
+    console.log(data);
+    // for (i in data){
+    //   // $scope.searchResults.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+    // }
+  });
 
 
  };
@@ -378,9 +419,11 @@ console.log("inside recommandation");
       player.pauseVideo();
       $scope.toggle = false;
     };
-/***********************************************************/
-/********************pauseSong FUNCTION*********************/
-/***********************************************************/
+
+
+
+
+
 
 /***********************************************************/
 /********************playSong FUNCTION**********************/
@@ -389,9 +432,10 @@ console.log("inside recommandation");
          player.playVideo();
          $scope.toggle = true;
     };
-/***********************************************************/
-/********************playSong FUNCTION**********************/
-/***********************************************************/
+
+
+
+
 });
 
 

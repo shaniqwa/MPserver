@@ -12,11 +12,14 @@
 <body>
 
 <div ng-controller="profileCtrl">
+<div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
 <div class="container">
-<div ng-init="init('<%= JSON.stringify(user) %>')"></div>
 
 
+<button ng-click="init(407)">submit</button>
+
+<li ng-click="init('<%= JSON.stringify(user.userId) %>')"><span class="fa fa-user"></span> Profile</li>
     <!-- LEFT SIDE BAR -->
 
     <!-- <div class="row"> -->
@@ -191,7 +194,6 @@
                       <!-- MY SONGS -->
                      <div id="mySongs" class="tab-pane fade">
                           <h3>My Songs</h3>
-                          <%= songs %>
                            <table class="table table-inverse table-hover">
                                 <tbody>
                                  <% for(var i=0; i< songs.length; i++) { %>
@@ -263,24 +265,24 @@
                             <strong>email</strong>: {{user.email}}<br>
                             <strong>Country</strong>: {{user.country}}<br>
                             <strong>Age Group</strong>: 
-                            <% if (user.ageGroup == 1) { %>
-                               Under 14
-                            <% } %>
-                            <% if (user.ageGroup == 2) { %>
-                               15-25
-                            <% } %>
-                            <% if (user.ageGroup == 3) { %>
-                               24-35
-                            <% } %>
-                            <% if (user.ageGroup == 4) { %>
-                               35-44
-                            <% } %>
-                            <% if (user.ageGroup == 5) { %>
-                               44-55
-                            <% } %>
-                            <% if (user.ageGroup == 6) { %>
-                               55+
-                            <% } %>
+                            <p ng-if="user.ageGroup == 1">
+                                Under 14
+                            </p>
+                            <p ng-if="user.ageGroup == 2">
+                                15-25
+                            </p>
+                            <div ng-if="user.ageGroup == 3">
+                                24-35
+                            </div>
+                            <div ng-if="user.ageGroup == 4">
+                                35-44
+                            </div>
+                            <div ng-if="user.ageGroup == 5">
+                                44-55
+                            </div>
+                            <div ng-if="user.ageGroup == 6">
+                                55+
+                            </div>
                         </p>
                     <!-- END USER DETAILS -->
 
@@ -354,27 +356,27 @@ $(document).ready(function(){
 setTimeout(function(){ 
 $(function () {
 
-    var profileImg =<%-JSON.stringify( user.profileImage )%>
-    var businessData =<%-JSON.stringify( business.genres)%>
-    var pleasureData =<%-JSON.stringify( pleasure.genres)%>
-    <% if (user.typeOfUser == "Producer") {  %>
-    var artistData =<%-JSON.stringify( artist.genres)%>
-    drawPie(artistData,profileImg);
-    <% } else { %>
-    // console.log("call drawPie with img : " + profileImg);
-    drawPie(pleasureData,profileImg);
-    <% } %>
-    $("#list").change(function() {
-        if ($("#list").val() == "P") {
-            drawPie(pleasureData,profileImg);
-            // $.get('/dough/includes/live-chart.php?mode=month'
-        } else if ($("#list").val() == "B"){
-            drawPie(businessData,profileImg);
-            // $.get('/dough/includes/live-chart.php?mode=newmode'
-        } else if ($("#list").val() == "artist"){
-        drawPie(artistData,profileImg);
-        }
-    });
+    // var profileImg =  <%-JSON.stringify( user.profileImage )%>
+    // var businessData =<%-JSON.stringify( business.genres)%>
+    // var pleasureData =<%-JSON.stringify( pleasure.genres)%>
+    // <% if (user.typeOfUser == "Producer") {  %>
+    // var artistData =<%-JSON.stringify( artist.genres)%>
+    // drawPie(artistData,profileImg);
+    // <% } else { %>
+    // // console.log("call drawPie with img : " + profileImg);
+    // drawPie(pleasureData,profileImg);
+    // <% } %>
+    // $("#list").change(function() {
+    //     if ($("#list").val() == "P") {
+    //         drawPie(pleasureData,profileImg);
+    //         // $.get('/dough/includes/live-chart.php?mode=month'
+    //     } else if ($("#list").val() == "B"){
+    //         drawPie(businessData,profileImg);
+    //         // $.get('/dough/includes/live-chart.php?mode=newmode'
+    //     } else if ($("#list").val() == "artist"){
+    //     drawPie(artistData,profileImg);
+    //     }
+    // });
 
 });
 //on form submmition, input field is broadcasted to all users. on broadcast, insert data to div #future to display it. 

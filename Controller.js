@@ -347,14 +347,16 @@ exports.processWizardForm = function(req,res,data) {
             }
 
         ],callback);
-    },function(callback){
-    	ControllerB.findMatch( data.userID );
     }
+
+    // ,function(callback){
+    // 	ControllerB.findMatch( data.userID );
+    // }
     ], function(err) {
         if (err) {
 			console.log(err);  
         }
-        console.log('New Consumer has been added successfully');
+        console.log('New user has been added successfully');
 		res.redirect('/profile'); 
     });
 }
@@ -490,16 +492,16 @@ exports.processProducerWizardForm = function(req,res,data){
 	    	var temp = new ArtistPie();
 
 	    	temp.artistPieId = data.userID;
-	    	console.log("artist pie id: " + temp.artistPieId);
+	    	// console.log("artist pie id: " + temp.artistPieId);
 
 	    	if(data.genre1 != "null"){
 	    		num_of_genres++;
 	    		var values = data.genre1.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		console.log(genre);
-	    		console.log(category);
-	    		console.log(data.slider1);
+	    		// console.log(genre);
+	    		// console.log(category);
+	    		// console.log(data.slider1);
 	    		total += parseInt(data.slider1);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider1});
 	    	}
@@ -508,9 +510,9 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre2.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		console.log(genre);
-	    		console.log(category);
-	    		console.log(data.slider2);
+	    		// console.log(genre);
+	    		// console.log(category);
+	    		// console.log(data.slider2);
 	    		total += parseInt(data.slider2);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider2});
 	    	}
@@ -519,9 +521,9 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre3.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		console.log(genre);
-	    		console.log(category);
-	    		console.log(data.slider3);
+	    		// console.log(genre);
+	    		// console.log(category);
+	    		// console.log(data.slider3);
 	    		total += parseInt(data.slider3);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider3});
 	    	}
@@ -530,9 +532,9 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre4.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		console.log(genre);
-	    		console.log(category);
-	    		console.log(data.slider4);
+	    		// console.log(genre);
+	    		// console.log(category);
+	    		// console.log(data.slider4);
 	    		total += parseInt(data.slider4);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider4});
 	    	}
@@ -541,18 +543,18 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre5.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		console.log(genre);
-	    		console.log(category);
-	    		console.log(data.slider5);
+	    		// console.log(genre);
+	    		// console.log(category);
+	    		// console.log(data.slider5);
 	    		total += parseInt(data.slider5);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider5});
 	    	}
-	    	console.log("total: " + total);
-	    	console.log("num_of_genres: " + num_of_genres);
+	    	// console.log("total: " + total);
+	    	// console.log("num_of_genres: " + num_of_genres);
 
 	    	for(var i=0; i<temp.genres.length; i++){
 	    		temp.genres[i].percent = math.round((temp.genres[i].percent/total)*100,2);
-	    		console.log(temp.genres[i]);
+	    		// console.log(temp.genres[i]);
 	    	}
 
 	    	temp.save(function (err, doc) {

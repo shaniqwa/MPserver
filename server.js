@@ -141,12 +141,12 @@ io.on('connection', function(client) {
                     if (err){
                         return console.log(err);
                     }
-                    console.log("doc:");
-                    console.log(doc);
+                    // console.log("doc:");
+                    // console.log(doc);
                     
                     songs = doc.songs;
-                    console.log("songs:");
-                    console.log(songs);
+                    // console.log("songs:");
+                    // console.log(songs);
 
                     ArtistPie.findOne({ 'artistPieId' :  req.user.userId }, function(err, doc) {
                         // if there are any errors, return the error
