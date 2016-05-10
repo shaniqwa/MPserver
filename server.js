@@ -28,7 +28,10 @@ var async = require("async");
 
 
 
-    //===============SCHEMAS================
+    //===============MODELS===============
+var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
+var User = mongoose.model('User', usersSchema, 'Users');
+
 var businessPieSchema = require("./schemas/scheme_businessPie.js").businessPieSchema; 
 var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pie');
 
@@ -171,7 +174,6 @@ io.on('connection', function(client) {
     	            pleasure: pleasure
     	        });
             }else{
-                console.log(artistPie);
                 res.render('profile.ejs', {
                     user : req.user, // get the user out of session and pass to template
                     business: business,
@@ -342,6 +344,119 @@ io.on('connection', function(client) {
 	    // if they aren't redirect them to the home page
 	    res.redirect('/');
 	}
+
+
+
+    // =====================================
+    // Get Other User's Profile Page =======
+    // =====================================
+    app.param('userID', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+
+
+
+
+    app.get('/getUser/:userID', function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            app.set('json spaces', 4);
+            res.set("Content-Type", "application/json");
+            next(); 
+        },
+
+        function (req, res) {
+        var user,
+            business, 
+            pleasure, 
+            songs,
+            artistPie;
+
+        async.waterfall([
+        //find user's pies
+        function(callback) {
+            User.findOne({ 'userId' :  req.params.userID }, function(err, doc) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                user = doc;
+                callback();
+            });
+        },
+        function(callback) {
+            BusinessPie.findOne({ 'businessPieId' :  req.params.userID }, function(err, businessPie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                business = businessPie;
+                callback();
+            });
+        },
+        function(callback) {
+            PleasurePie.findOne({ 'pleasurePieId' :  req.params.userID }, function(err, pleasurePie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                pleasure = pleasurePie;
+                callback();
+            });
+        },
+        function(callback) {
+            //if Producer - load also ProducerSongs and ArtistPie
+            if(user.typeOfUser == "Producer"){
+                ProducerSongs.findOne({ 'prodId' :  req.params.userID }, function(err, doc) {
+                    if (err){
+                        return console.log(err);
+                    }
+                    console.log("doc:");
+                    console.log(doc);
+                    
+                    songs = doc.songs;
+                    console.log("songs:");
+                    console.log(songs);
+
+                    ArtistPie.findOne({ 'artistPieId' :  req.params.userID }, function(err, doc) {
+                        // if there are any errors, return the error
+                        if (err){
+                            return console.log(err);
+                        }
+                        artistPie = doc;
+                        callback();
+                    });
+                });    
+            }else{
+                callback();
+            }
+            
+        }
+        ], function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('user' + user.userId + 'has been loaded');
+            //return json with user's info
+            var response = {};
+            response.user = user;
+            response.business = business;
+            response.pleasure = pleasure;
+            
+              if(user.typeOfUser == "Consumer"){
+                res.status(200).json(response);
+            }else{
+                response.songs = songs;
+                response.artist = artistPie;
+                res.status(200).json(response);          
+            }
+        });        
+    });
+
+
+
 
 
 

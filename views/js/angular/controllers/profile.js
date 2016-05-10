@@ -3,8 +3,10 @@ var profile = angular.module('profile',[]);
 var model = {
   
 }
-var user;
-var prodId = 63;
+
+var business;
+var songs;
+var artist;
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.mod = model;
   $scope.songDetails = [];
@@ -36,6 +38,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.firstTimePlaylist = false;
    $scope.isProducer = true;
    $scope.userType;
+   $scope.user;
+   $scope.business = [];
+   $scope.pleasure = [];
+   $scope.artist;
+   $scope.songs;
    // create youtube player
     var player;
     function onYouTubePlayerAPIReady() {
@@ -86,17 +93,26 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
   $scope.init = function(data){
-       user = JSON.parse(data);
-        $scope.userId = user.userId;
-        $scope.userType = user.typeOfUser;
+       
+       $scope.user = JSON.parse(data);
+        $scope.userId = $scope.user.userId;
+        $scope.userType = $scope.user.typeOfUser;
         //console.log(user.typeOfUser);
         $http.get('http://localhost:3000/getFavorites/' + $scope.userId).success(function(data){
             for(i in data){
               $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
            }
-       });
+        });
+        $http.get('http://localhost:3000/getUser/' + $scope.userId).success(function(data){
+            $scope.business = data.business.genres;
+            $scope.pleasure = data.pleasure.genres;
+            if($scope.user.typeOfUser == "Producer"){
+                $scope.songs = data.songs;
+                $scope.artist = data.artist;
+            }
+        });
         $scope.selectedSong = 0;
-        if(user.typeOfUser == "Producer"){
+        if($scope.user.typeOfUser == "Producer"){
                $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
                     console.log(data); 
                    for(i in data.songs){
@@ -153,9 +169,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
            $scope.defaultGenre = genre;
          }
          console.log(genre);
-         var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+         var url = "http://localhost:3000/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          console.log(url);
-         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+         $http.get('http://localhost:3000/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
            $scope.videoFrame3 = true;
            for(i in data){
@@ -201,9 +217,9 @@ $scope.search = function(text){
            $scope.defaultGenre = genre;
          }
          console.log(genre);
-         var url = "http://localhost:3000/getPlaylist/" + user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+         var url = "http://localhost:3000/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          console.log(url);
-         $http.get('http://localhost:3000/getPlaylist/' + user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+         $http.get('http://localhost:3000/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
