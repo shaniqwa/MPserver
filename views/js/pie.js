@@ -1,4 +1,4 @@
-function drawPie(pieData,profileImg) {
+var drawPie = function(pieData,profileImg) {
 
 Highcharts.Renderer.prototype.color = function (color, elem, prop) {
 

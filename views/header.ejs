@@ -38,7 +38,8 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <img class="img-circle" src=" <%= user.profileImage %> " width="19">  <span class="fa fa-angle-down">
           </span></a>
           <ul class="dropdown-menu">
-            <li><a href="#"><span class="fa fa-user"></span> Manage Profile</a></li>
+            <li ng-click="init('<%= JSON.stringify(user.userId) %>')"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
+            <li><a href="#"><span class="fa fa-user"></span> Manage</a></li>
             <li><a href="#"><span class="fa fa-wrench"></span> Music Preferences</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="/logout"><span class="fa fa-lock"></span> Logout</a></li>
