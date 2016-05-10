@@ -155,6 +155,12 @@
                    <div id="recommended" class="tab-pane fade">
                       <h3>Recommended</h3>
                       <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                      <button type="submit" ng-click="recommandation()" class="btn btn-warning btn-lg">rec</button>
+                      <div ng-repeat="x in reco">
+                             <img  class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                             <p>{{x.username}}</p>
+                          </div>
+
                       
                     </div>
                      <!-- END RECOMMANDED --> 

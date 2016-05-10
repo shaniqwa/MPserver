@@ -37,48 +37,54 @@ var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureG
 var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
 
 
-exports.findMatch = function(userID){
+exports.findMatch = function(res,userID){
+	var matchGeners = [];
+	console.log("insinde find findMatch");
 	var genres = [];
+	console.log(userID);
 	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
 	  if (err || pleasureUser === null){
+	  	// console.log(err);
 	  	return err;
-	  	// res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
-	  for(var i=0; i<pleasureUser.genres.length; i++){
-	  	if(genres.indexOf(pleasureUser.genres[i].genreName) === -1){
-	  		genres.push(pleasureUser.genres[i].genreName);
-	  	}
-	  	
-	  }	
-	  console.log("done pleasure");
+	  console.log("find PleasurePie");
+		  for(var i=0; i<pleasureUser.genres.length; i++){
+		  	if(genres.indexOf(pleasureUser.genres[i].genreName) === -1){
+		  		genres.push(pleasureUser.genres[i].genreName);
+		  	}	
+		  }	
+		  console.log("done pleasure");
+	});
+	  
 
-	  BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
+	BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
 		  if (err || buisnessUser === null){
 		  	return err;
 		  	// res.status(200).json("error finding buisness pie for user: " + err.message);
 		  } 
-		  for(var i=0; i<buisnessUser.genres.length; i++){
-		  	if(genres.indexOf(buisnessUser.genres[i].genreName) === -1){
-		  		genres.push(buisnessUser.genres[i].genreName);
-		  	}
-		  	
-		  }
-		  console.log("done business");
+		  console.log("find BusinessPie");
+			  for(var i=0; i<buisnessUser.genres.length; i++){
+			  	if(genres.indexOf(buisnessUser.genres[i].genreName) === -1){
+			  		genres.push(buisnessUser.genres[i].genreName);
+			  	}
+			  }
+		console.log("done business");
+	});	  
 
-		  console.log("genres:");
-		  console.log(genres);
+  	console.log("genres:");
+  	// console.log(genres);
 
-			ArtistPie.find({}, function (err, artists) {
-				
-			  if (err || artists === null){
-			  	return err;
-			  	// res.status(200).json("error finding artists: " + err.message);
-			  } 
-			  
-		      artists.forEach(function(artist){
-		      	console.log("artist");
-		      	console.log(artist);
-		      	var matchGeners = [];
+	ArtistPie.find({}, function (err, artists) {
+		console.log("find artist");
+	  if (err || artists === null){
+	  	return err;
+	  	// res.status(200).json("error finding artists: " + err.message);
+	  } 
+	  
+	      artists.forEach(function(artist){
+	      	console.log("artist");
+	      	// console.log(artist);
+	      	matchGeners = [];
 		      	for(var i=0; i<artist.genres.length; i++){
 		      		// console.log("categories[i] "+categories[i]);
 		      		if(genres.indexOf(artist.genres[i].genreName) > -1){
@@ -87,34 +93,33 @@ exports.findMatch = function(userID){
 		      			matchGeners.push(artist.genres[i].genreName);
 			  		}
 		      	}
-		      	if(matchGeners.length >= 3){
-		      		for(var i=0; i< matchGeners.length; i++){
-		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
-						  if (err){
-						  	// res.status(200).json("error adding producer to BusinessPie: " + err.message);
-						  	return err;
-						  } 
-						  PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
-							  if (err){
-							  	// res.status(200).json("error adding producer to PleasurePie: " + err.message);
-							  	return err;
-							  } 
-							   // res.status(200).json("New producer has been added to both pies successfully for user " + userID);
-							   return null;
-							});
-						});
-		      		}
-					
-		      	}
-
-		      });
-			});
-
-				  
-		});
-	});
+	      });
+	 });
 
 
+      	if(matchGeners.length >= 3){
+      		for(var i=0; i< matchGeners.length; i++){
+      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
+				  if (err){
+				  	// res.status(200).json("error adding producer to BusinessPie: " + err.message);
+				  	return err;
+				  } 
+				});
+				
+
+				PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
+					  if (err){
+					  	// res.status(200).json("error adding producer to PleasurePie: " + err.message);
+					  	return err;
+					  } 
+					   // res.status(200).json("New producer has been added to both pies successfully for user " + userID);
+					   return null;
+				});
+				
+      		}
+			
+      	}
+      	res.status(200).json("finished match");
 }
 
 //search
@@ -163,13 +168,14 @@ exports.recommandation = function(res, userID){
 	  if (err || data === null){
 	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
+	  //console.log(data);
 	  for(var i=0; i<data.genres.length; i++){
-	  	console.log(data.genres[i].producers);
+	  	//console.log(data.genres[i].producers);
 	  	producers.push.apply(producers, data.genres[i].producers);
 	  	//console.log(producers);
 	  }	
 	  console.log("done pleasure");
-
+ });
 	  BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
 		  if (err || data === null){
 		  	res.status(200).json("error finding buisness pie for user: " + err.message);
@@ -179,42 +185,52 @@ exports.recommandation = function(res, userID){
 		  	producers.push.apply(producers, data.genres[i].producers);
 		  	//console.log(producers);
 		  }
-		  console.log("done business");
-
-		  console.log("producers:");
-			console.log(producers);
+		 // console.log("done business");
+});
+// 		 // console.log("producers:");
+// 			console.log(producers);
 			var result = [];
-
-			User.find({}, function (err, users) {
-				
-			  if (err || users === null){
-			  	res.status(200).json("error finding producers type: " + err.message);
-			  } 
-			  
-			  console.log("users");
-		      //console.log(data);
-
-		      users.forEach(function(user){
-		      	console.log("user");
-		      	console.log(user.username +" " + user.typeOfUser);
-
-		      	for(var i=0; i<producers.length; i++){
+			for(var i=0; i<producers.length; i++){
 		      		console.log("producers[i] "+producers[i]);
-		      		if(producers[i] === user.username && user.typeOfUser === "Producer"){
-		      			console.log("success "+user.username)
-			  			result.push({username: user.username, profileImage: user.profileImage});
-			  		}
+		      		User.findOne({ userID: producers[i] }, function (err, data) {
+			  			result.push({usernsame: user.username, profileImage: user.profileImage});
+			  		});
 		      	}
-		      });
-			  console.log(result);
+
+			// User.find({}, function (err, users) {
+				
+			//   if (err || users === null){
+			//   	res.status(200).json("error finding producers type: " + err.message);
+			//   } 
+			  
+			//   console.log("users");
+		 //      //console.log(data);
+
+		 //      users.forEach(function(user){
+		 //      	console.log("user");
+		 //      	console.log(user.username +" " + user.typeOfUser);
+
+		 //      	for(var i=0; i<producers.length; i++){
+		 //      		console.log("producers[i] "+producers[i]);
+		 //      		if(producers[i] === user.username && user.typeOfUser === "Producer"){
+		 //      			console.log("success "+user.username)
+			//   			result.push({username: user.username, profileImage: user.profileImage});
+			//   		}
+		 //      	}
+		  
+			   console.log(result);
 			  res.status(200).json(result);
-			});
-
-				  
-		});
+}
+exports.getFollowing = function(res,userId) {
+	//addToSet make sure there are no duplicates is songs array.
+	User.findOne({ userId: userId }, function (err, doc) {
+	  if (err){
+	  	res.status(200).json("error getting following: " + err.message);
+	  	return err;
+	  } 
+	  // done!
+	  res.status(200).json(doc.following);
 	});
-
-	
 }
 
 //add to followers
