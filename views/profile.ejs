@@ -15,11 +15,6 @@
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
 <div class="container">
-
-
-<button ng-click="init(407)">submit</button>
-
-<li ng-click="init('<%= JSON.stringify(user.userId) %>')"><span class="fa fa-user"></span> Profile</li>
     <!-- LEFT SIDE BAR -->
 
     <!-- <div class="row"> -->
@@ -211,27 +206,17 @@
                     <!-- END IF PRODUCER -->
 
                     <!-- SEARCH RESULTS -->
+                    
                     <div id="search" class="tab-pane fade">
                           <h3>Search Results</h3>
-                      <!--  <table class="table table-inverse table-hover">
-                        <tbody>
-                            <tr ng-repeat="x in searchResults">
-                                <td class="col-md-3"> {{x.firstName}}</td>
-                                <td class="col-md-3"> {{x.lastName}}</td>
-                                <td class="col-md-3"> {{x.username}}</td>
-                                <td class="col-md-3"> {{x.type}}</td>
-                                <td class="col-md-3"><img width='100' ng-src="{{x.profileImage}}" /></td>
-                            </tr>
-                          </tbody>
-                        </table> -->
-                        <div> 
-                          <div class="searchresults" ng-repeat="x in searchResults">
-                             <img  class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
-                             <p>{{x.firstName}}</p>
-                             <p>{{x.lastName}}</p>
-                             <p>{{x.type}}</p>
+                          <div class="search-results-container"> 
+                            <div class="searchresults" ng-repeat="x in searchResults">
+                               <img ng-click="init(x.userID)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                               <p>{{x.firstName}}</p>
+                               <p>{{x.lastName}}</p>
+                               <p>{{x.type}}</p>
+                            </div>
                           </div>
-                        </div>
                     </div>
                     <!--END SEARCH RESULTS -->
 

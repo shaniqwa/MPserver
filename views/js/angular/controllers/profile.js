@@ -47,6 +47,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.songs;
    // create youtube player
     var player;
+
+    function activaTab(tab){
+        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+    };
+
     function onYouTubePlayerAPIReady() {
          player = new YT.Player('player', {
           height: '250',
@@ -104,6 +109,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             $scope.pleasure = data.pleasure.genres;
 
             drawPie($scope.pleasure, $scope.user.profileImage);
+            activaTab('profile');
 
             if($scope.user.typeOfUser == "Producer"){
                 $scope.songs = data.songs;
@@ -218,10 +224,12 @@ $scope.bringMePlaylist = function($event){
 /****************SEARCH FUNCTION*******************/
 /***********************************************************/
 $scope.search = function(text){
+
+activaTab('search');
   $scope.searchResults = [];  
   $http.get('http://localhost:3000/searchuser/' + text).success(function(data){ 
     for (i in data){
-       $scope.searchResults.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+       $scope.searchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
   });
 };

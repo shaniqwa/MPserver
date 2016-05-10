@@ -147,7 +147,7 @@ exports.searchuser = function(res,data) {
 	  // done!
 	  var result = [];
 	  doc.forEach(function(user){
-	  	result.push({username: user.username, type: user.typeOfUser, profileImage: user.profileImage, firstName: user.firstName, lastName: user.lastName});
+	  	result.push({userID: user.userId, username: user.username, type: user.typeOfUser, profileImage: user.profileImage, firstName: user.firstName, lastName: user.lastName});
 	  });
 	  //console.log(result);
 	  res.status(200).json(result);
