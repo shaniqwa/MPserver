@@ -372,7 +372,7 @@ Highcharts.setOptions(Highcharts.theme);
 
     var circleX = 438;
     var circleY = 276;
-    var circleR = 67;
+    var circleR = 66;
 
 function addCircle(chart){
     if (this.circle){
@@ -444,7 +444,7 @@ function addCircle(chart){
             positioner: function () {
         var tooltipX, tooltipY;
         tooltipX = this.chart.plotLeft + (this.chart.plotWidth  * 0.5)  - (152  * 0.5);;
-        tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (150 * 0.5);;
+        tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (151 * 0.5);;
             return { x: tooltipX, y: tooltipY };
         },
         formatter: function () {
@@ -456,7 +456,7 @@ function addCircle(chart){
 
 
           // console.log(color);
-        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p>' + name + '</p>' + '<p><b>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
+        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p><b>' + name + '</p>' + '<p>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
     },
         },
         series: [{

@@ -370,8 +370,8 @@ exports.getProducerPlaylists = function(YT_AT){
 			for(i=0; i<temp.items.length; i++){
 				list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
 			}
-			console.log("the list:");
-			console.log(list);
+			// console.log("the list:");
+			// console.log(list);
 			return list;	
 		}
 	});

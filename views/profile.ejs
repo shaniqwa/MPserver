@@ -47,7 +47,7 @@
 
                     <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> <div class="abs loader {{loaderStatus2}}"></div>
                     <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-if="$index < 6">                        
-                        <div style="padding-top:10px" class="element{{$index}}">
+                        <div class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>
                             <div class="name">{{x.artistName}}</div>
                             <!-- <div class="location"><a href="{{x.url}}" target="_blank" ng-model="myUrl">{{x.url}}</a></div> -->
@@ -79,7 +79,6 @@
                     <li><a href="#favorites">Favorites</a></li>
                     <li><a href="#following">Following</a></li>
                     <li><a href="#followers">Followers</a></li>
-                    <li><a href="#recommended">Recommended</a></li>
                      <% if (user.typeOfUser == "Producer") {  %>
                     <li><a href="#statistics">Statistics</a></li>
                     <li><a href="#mySongs">My Songs</a></li>
@@ -131,7 +130,14 @@
                     <!-- FOLLOWING -->
                     <div id="following" class="tab-pane fade">
                       <h3>Following</h3>
-                      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                       <div class="following-container"> 
+                            <div class="following searchresults" ng-repeat="x in user.following">
+                               <img ng-click="init(x.userId)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <p>{{x.first}}</p>
+                               <p>{{x.last}}</p>
+
+                            </div>
+                        </div>
                     </div>
                     <!-- END FOLLOWING -->
 
@@ -140,25 +146,16 @@
                     <!-- FOLLOWERS -->
                     <div id="followers" class="tab-pane fade">
                       <h3>Followers</h3>
-                      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                      <div class="followers-container"> 
+                            <div class="followers searchresults" ng-repeat="x in user.followers">
+                               <img ng-click="init(x.userId)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <p>{{x.first}}</p>
+                               <p>{{x.last}}</p>
+                            </div>
+                        </div>
                     </div>
                     <!-- END FOLLOWERS -->
 
-
-
-                     <!-- RECOMMANDED --> 
-                   <div id="recommended" class="tab-pane fade">
-                      <h3>Recommended</h3>
-                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                      <div ng-repeat="x in reco">
-                            <!--  <img  class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
-                             <p>{{x.username}}</p> -->
-                             <p>{{x}}</p>
-                          </div>
-
-                      
-                    </div>
-                     <!-- END RECOMMANDED --> 
 
 
 
@@ -171,16 +168,16 @@
                      <div id="statistics" class="tab-pane fade">
                       <h3>statistics</h3>
                      <select ng-model="selectedSong">
-                        <option ng-repeat="x in songDetails" value="{{x.id}}">{{x.name}}</option>
+                        <option ng-repeat="song in songs" value="{{song.songId}}">{{song.title}}</option>
                      </select>
-                      <div>name: {{songDetails[selectedSong].name}}</div>
-                      <div>albumName: {{songDetails[selectedSong].albumName}}</div>
-                      <div>artwork: {{songDetails[selectedSong].artwork}}</div>
-                      <div>duration: {{songDetails[selectedSong].duration}}</div>
-                      <div>songId: {{songDetails[selectedSong].songId}}</div>
-                      <div>year: {{songDetails[selectedSong].year}}</div>
-                      <div>id: {{songDetails[selectedSong].id}}</div>
+                      <div>name: {{songs[selectedSong].title}}</div>
+                      <div>songId: {{songs[selectedSong].songId}}</div>
                       <div>counterAgeGroup1: {{songCounters[selectedSong].counterAgeGroup1}}</div>
+                      <div>counterAgeGroup2: {{songCounters[selectedSong].counterAgeGroup2}}</div>
+                      <div>counterAgeGroup3: {{songCounters[selectedSong].counterAgeGroup3}}</div>
+                      <div>counterAgeGroup4: {{songCounters[selectedSong].counterAgeGroup4}}</div>
+                      <div>counterAgeGroup5: {{songCounters[selectedSong].counterAgeGroup5}}</div>
+                      <div>counterAgeGroup6: {{songCounters[selectedSong].counterAgeGroup6}}</div>
                     </div>
                     <!-- END STATISTICS -->
 
@@ -191,12 +188,9 @@
                           <h3>My Songs</h3>
                            <table class="table table-inverse table-hover">
                                 <tbody>
-                                 <% for(var i=0; i< songs.length; i++) { %>
-                                      <tr>
-                                          <td class="col-md-12"><%= songs[i].title %></td>
-                                          <!-- <td class="col-md-6"> <%=  songs[i].videoId %></td> -->
+                                       <tr ng-repeat="song in songs">
+                                          <td class="col-md-12">{{song.title}}</td>
                                       </tr>
-                                <% } %>
                                 </tbody>
                           </table>
                     </div>
@@ -223,9 +217,6 @@
 
                 </div>
                 <!-- END TAB CONTENT -->
-
-                    <!-- extra blank space-->
-                    <div class="space"></div>
             </div>
           </div>
           <!-- END CONTENT -->
@@ -271,10 +262,18 @@
                         </p>
                     <!-- END USER DETAILS -->
 
-                                    <!-- GOOGLE INFORMATION -->
-                 <div class="col-sm-12">
+                  <!-- FOLLOW INFO -->
+                  <div ng-if="myID != user.userId" class="col-sm-12">
+                      <a ng-click="follow(myID,user.userId)" class="btn btn-primary">Follow</a>
+                  </div>
+                  
+                  <!-- END FOLLOW INFO -->
+
+
+                   <!-- GOOGLE INFORMATION -->
+                 <div class="col-sm-6">
                     <div class="well">
-                        <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
+                        <h5 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h5>
 
                         <!-- check if the user has this token (is the user authenticated with this social account) -->
                         <% if (user.YT_AT) { %>
@@ -295,9 +294,9 @@
                  <!-- END GOOGLE INFORMATION -->
 
                  <!-- FACEBOOK INFORMATION -->
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <div class="well">
-                        <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+                        <h5 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h5>
 
                         <!-- check if the user has this token (is the user authenticated with this social account) -->
                         <% if (user.FB_AT) { %>
@@ -317,6 +316,21 @@
                 <!--END FACEBOOK INFORMATION -->
 
 
+                <!-- RECOMMANDED --> 
+                   <div id="recommended">
+                      <h3>Recommended</h3>
+                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                      <div ng-repeat="x in reco">
+                            <!--  <img  class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                             <p>{{x.username}}</p> -->
+                             <p>{{x}}</p>
+                          </div>
+
+                      
+                    </div>
+                <!-- END RECOMMANDED --> 
+
+
                 </div>
           </div>
           <!-- END RIGHT SIDEBAR -->
@@ -330,6 +344,7 @@
 
 <script>
 $(document).ready(function(){
+   $('.nav-tabs a[href="#search"]').hide();
     // $('.rightSidebar').css('height', $('.content').height()+'px');
     $(".nav-tabs a").click(function(){
         $(this).tab('show');

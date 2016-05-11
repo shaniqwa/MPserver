@@ -17,6 +17,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.songCounters = [];
   $scope.counter = 0;
   $scope.userId;
+  $scope.isLoggedIn = true;
+  $scope.myID;
   $scope.favorits = [];
   $scope.BL = [];
   $scope.defaultGenre = [];
@@ -39,7 +41,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.loaderStatus = "invisible-loader";
    $scope.loaderStatus2 = "invisible-loader";
    $scope.firstTimePlaylist = false;
-   $scope.isProducer = true;
    $scope.user;
    $scope.business = [];
    $scope.pleasure = [];
@@ -75,11 +76,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
      // autoplay video
      function onPlayerReady(event) {
-        console.log("player ready");
+        // console.log("player ready");
         //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
-        console.log("end of ready");
+        // console.log("end of ready");
         $scope.$apply(function() {
           $scope.videoFrame = true;
           $scope.videoFrame2 = true;
@@ -101,6 +102,10 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***********************************************************/
   $scope.init = function(userID){
         $scope.userId = JSON.parse(userID);
+        if($scope.isLoggedIn == true){
+          $scope.myID = $scope.userId;
+          $scope.isLoggedIn = false;
+        }
 
         // get user info
         $http.get('http://localhost:3000/getUser/' + $scope.userId).success(function(data){
@@ -114,15 +119,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             if($scope.user.typeOfUser == "Producer"){
                 $scope.songs = data.songs;
                 $scope.artist = data.artist;
-
-                for(i in data.songs){
-                       $scope.songDetails.push({albumName: data.songs[i].albumName, artwork: data.songs[i].artwork, duration: data.songs[i].duration, name: data.songs[i].name, songId: data.songs[i].songId, year: data.songs[i].year, id:i}); 
-                }
-                  //TODO: remove get producer songs : already have them in $scope.songs
-                $http.get('http://localhost:3000/getProducerSongs/' + $scope.userId).success(function(data){
-                      // console.log(data); 
-                     
-                });
 
                $http.get('http://localhost:3000/getProducerStatistics/' + $scope.userId).success(function(data){
                    // console.log(data);
@@ -233,6 +229,23 @@ activaTab('search');
     }
   });
 };
+
+
+
+
+
+
+
+/***********************************************************/
+/****************FOLLOW FUNCTION*******************/
+/***********************************************************/
+$scope.follow = function(myID, userID){
+  $scope.searchResults = [];  
+  $http.get('http://localhost:3000/addToFollow/' + myID + '/' + userID).success(function(data){ 
+  });
+};
+
+
 
 
 

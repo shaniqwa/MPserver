@@ -59,6 +59,8 @@ body {
 }
 hr{
     border-top: 1px solid rgba(255,255, 255,0.3);
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 h1,
 h2,
@@ -88,7 +90,8 @@ h4 {
   background: #222;
   border-top: 10px solid #222;
   border-right: 10px solid #222;
-  min-height: 820px;
+  /*min-height: 820px;*/
+  height: 100vh;
   margin-bottom: 0px;
   padding: 0px;
 }
@@ -96,7 +99,8 @@ h4 {
   border-top: 10px solid #222;
   border-left: 10px solid #222;
   background-color: rgba(255,255, 255,0.10);
-  min-height: 820px;
+  /*min-height: 820px;*/
+  height: 100vh;
   margin-bottom: 0px;
   padding: 10px;
 }
@@ -104,6 +108,8 @@ h4 {
 
 background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
+  /*min-height: 820px;*/
+  height: 100vh;
 }
 .nav-tabs li a {
   color: #ffffff;
@@ -156,6 +162,7 @@ select {
 }
 .simg{
   border-radius: 50%;
+  cursor: pointer;
 }
 /*FAVORITES TABLE*/
 .song {
@@ -279,8 +286,6 @@ select {
 /******************REGION: PLAYLIST STYLE*******************/
 /***********************************************************/
 .playlistItem {
-  /*padding-left: 24px;*/
-  /*padding-top: 8px;*/
   color: #cecece;
 }
 .first-item {
@@ -303,9 +308,7 @@ select {
 .bold {
   font-weight: 700;
 }
-.space{
-    height:200px;
-}
+
 /***********************************************************/
 /***************END REGION: PLAYLIST STYLE******************/
 /***********************************************************/
