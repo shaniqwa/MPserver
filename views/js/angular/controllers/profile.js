@@ -169,7 +169,21 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
        //onYouTubePlayerAPIReady();
   }; 
 
-
+$scope.changePie = function(mode){
+  $('.mode-btn').removeClass('active');
+  if(mode == "pleasure"){
+    drawPie($scope.pleasure, $scope.user.profileImage);
+     $('#pleasure').addClass('active');
+  }
+  if(mode == "business"){
+    drawPie($scope.business, $scope.user.profileImage);
+    $('#business').addClass('active');
+  }
+  if(mode == "artist"){
+    drawPie($scope.artist.genres, $scope.user.profileImage);
+    $('#artist').addClass('active');
+  }
+}
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/

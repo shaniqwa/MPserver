@@ -94,13 +94,11 @@
                       <!-- PROFILE TAB -->
                       <div id="profile" class="tab-pane fade in active">
                       <br>
-                      <select id="list" ng-model="data.select">
-                      
-                          <option value="P" selected="selected">Pleasure</option>
-                          <option value="B">Business</option>
-                          <option value="A" ng-show="isProducer">Artist</option>
-                        
-                      </select>
+                      <div class="mode-container">
+                          <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
+                          <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
+                          <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
+                      </div>
                           <!-- MP pie container -->
                         <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
 
