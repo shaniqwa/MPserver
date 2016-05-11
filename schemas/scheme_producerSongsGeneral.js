@@ -23,8 +23,8 @@ var producerSongsGeneralSchema = new Schema({
             songId: Number
         }
     ],
-    totalCounter: Number,  //
-    internalCounter: Number,
+    totalCounter: Number,  //   world + local
+    internalCounter: Number,    // wolrd counter
     ageGroup1Counter: Number,  //14 and less
     ageGroup2Counter: Number,  //15-24
     ageGroup3Counter: Number,  //25-34

@@ -109,7 +109,8 @@ h4 {
 background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
   /*min-height: 820px;*/
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
 }
 .nav-tabs li a {
   color: #ffffff;

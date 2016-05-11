@@ -7,6 +7,8 @@
      <%- include head %>
      
      <script src="js/pie.js"></script>
+     <!-- // <script src="js/ageGroup.js"></script> -->
+     <!-- // <script src="js/localVSworld.js"></script> -->
 
 </head>
 <body>
@@ -104,6 +106,8 @@
 
                         </div>
 
+                    
+
                    
 
                       </div>
@@ -167,17 +171,18 @@
                       <!-- STATISTICS -->
                      <div id="statistics" class="tab-pane fade">
                       <h3>statistics</h3>
-                     <select ng-model="selectedSong">
-                        <option ng-repeat="song in songs" value="{{song.songId}}">{{song.title}}</option>
+                     <select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
+                        <option ng-repeat="song in songs">{{song.title}}</option>
                      </select>
                       <div>name: {{songs[selectedSong].title}}</div>
-                      <div>songId: {{songs[selectedSong].songId}}</div>
-                      <div>counterAgeGroup1: {{songCounters[selectedSong].counterAgeGroup1}}</div>
-                      <div>counterAgeGroup2: {{songCounters[selectedSong].counterAgeGroup2}}</div>
-                      <div>counterAgeGroup3: {{songCounters[selectedSong].counterAgeGroup3}}</div>
-                      <div>counterAgeGroup4: {{songCounters[selectedSong].counterAgeGroup4}}</div>
-                      <div>counterAgeGroup5: {{songCounters[selectedSong].counterAgeGroup5}}</div>
-                      <div>counterAgeGroup6: {{songCounters[selectedSong].counterAgeGroup6}}</div>
+
+                        <!-- AGcontainer-->
+                        <div id="AGcontainer" style=" height: 300px; width:400px; margin: 0 auto">
+
+                        </div>
+                        <div id="pieContainer" style=" height: 300px; width:400px; margin: 0 auto">
+
+                        </div>
                     </div>
                     <!-- END STATISTICS -->
 

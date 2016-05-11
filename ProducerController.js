@@ -43,6 +43,7 @@ exports.getProducerStatistics = function(res,prodId){
 
 exports.updateCounters = function(res,prodId,songId){
 	//from general schema
+	//TODO pass to this func also the user id. check what it the user's age group and country, and increment only the relevent counters.
 	ProducerSongsGeneral.findOneAndUpdate({ userId: prodId, 'songs.songId':songId}, {$inc: { totalCounter:1, internalCounter:1, ageGroup1Counter:1 , ageGroup2Counter:1 , ageGroup3Counter:1 , ageGroup4Counter:1 , ageGroup5Counter:1 ,  ageGroup6Counter:1 ,counterLocal:1, 'songs.$.counterAgeGroup1':1, 'songs.$.counterAgeGroup2':1, 'songs.$.counterAgeGroup3':1, 'songs.$.counterAgeGroup4':1, 'songs.$.counterAgeGroup5':1, 'songs.$.counterAgeGroup6':1, 'songs.$.counterTotal':1, 'songs.$.counterInternal':1, 'songs.$.counterLocal':1 } } ,{new: true}, function (err, doc) {
 	  if (err){            
 	  	res.status(200).json("error updateCounters: " + err.message);
