@@ -142,6 +142,33 @@ select {
   border: 0px;
 
 }
+.mode-container{
+  margin: 0 auto;
+  width:300px;
+}
+.mode-btn{
+  color: #64d8ff;
+  border-radius: 2em;
+  border: 0px;
+  background-color: #00bfff;
+  font-size: 14px;
+  padding: 3px 16px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+.mode-btn.active{
+  background-color: #00bfff;
+  color: #fff;
+}
+
+.mode-btn.active:hover , .btn-default.active:focus{
+  background-color: #00bfff;
+  color: #fff;
+}
+.mode-btn:hover{
+  background-color: #00bfff;
+  color: #fff;
+}
 .search-wrapper{
   margin-top: 6px;
 }
