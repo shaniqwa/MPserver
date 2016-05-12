@@ -271,7 +271,6 @@ $scope.follow = function(myID, userID){
 /***********************************************************/
 $scope.drawDiagram = function(index){
   console.log($scope.songCounters[index]);
-  $scope.selectedSong = numberOfSong;
   drawAgeGroupDiagram($scope.songCounters[index]);
   activaTab('statistics');
 };
