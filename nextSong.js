@@ -31,7 +31,7 @@ function nextSong(currGenre, user, mode, userGraph, startGenre) {
     this.userGraph = userGraph;
     this.startGenre = startGenre;
     this.playlist = [];
-    this.flagFinish = 0;
+    //this.flagFinish = 0;
     ng = currGenre;
 }
 
@@ -206,12 +206,13 @@ function pickArtistOrSimiliar() {
 };
 
 
+
 function getRandArtist(type, userObject, currGenre) {
 
     for (obj in userObject) {
         if (userObject[obj][type].length == 0) {
-            return "shaniqwa11";
-        } // todo: will return from findMatch
+            return 411;
+        } // todo: will return from findMatch id
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
             console.log("####################### " + userObject[obj][type][distribution(engine)]);
@@ -323,16 +324,11 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         }
                                     } else { // producer
                                         var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        var collection = db.collection('Users');
-                                        collection.findOne({
-                                            username: randArtistProducer
-                                        }, function(err, document) {
-                                            if (err) { //user not found
-                                                throw err;
-                                            } else {
-                                                collection = db.collection('Producer_songs_list');
+
+                                        
+                                                var collection = db.collection('Producer_songs_list');
                                                 collection.findOne({
-                                                    prodId: document.userId
+                                                    prodId: randArtistProducer
                                                 }, function(err, document) {
                                                     if (err) { //user not found
                                                         throw err;
@@ -341,8 +337,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         callback();
                                                     }
                                                 });
-                                            }
-                                        });
+                                            
+                                        
                                     }
                                 } else {
                                     console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
@@ -405,16 +401,11 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 } else { // producer
 
                                                     var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                                    var collection = db.collection('Users');
-                                                    collection.findOne({
-                                                        username: randArtistProducer
-                                                    }, function(err, document) {
-                                                        if (err) { //user not found
-                                                            throw err;
-                                                        } else {
-                                                            collection = db.collection('Producer_songs_list');
+                                                    var collection = db.collection('Producer_songs_list');
+                                                    
+
                                                             collection.findOne({
-                                                                prodId: document.userId
+                                                                prodId: randArtistProducer
                                                             }, function(err, document) {
                                                                 if (err) { //user not found
                                                                     throw err;
@@ -423,9 +414,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                                     callback();
                                                                 }
                                                             });
-                                                        }
-                                                    });
-                                                }
+                                                        
+                                                    
+                                                } // ends producer
 
 
                                             }
@@ -475,16 +466,11 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         } else { // producer
 
                                             var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                            var collection = db.collection('Users');
-                                            collection.findOne({
-                                                username: randArtistProducer
-                                            }, function(err, document) {
-                                                if (err) { //user not found
-                                                    throw err;
-                                                } else {
-                                                    collection = db.collection('Producer_songs_list');
+                                            var collection = db.collection('Producer_songs_list');
+                                            
+                                                    
                                                     collection.findOne({
-                                                        prodId: document.userId //STAT : please debug this line is creating a bug : "cannot read propery userId of null"
+                                                        prodId: randArtistProducer //stas : was a conflict between user name which doesnt exists..
                                                     }, function(err, document) {
                                                         if (err) { //user not found
                                                             throw err;
@@ -493,9 +479,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                             callback();
                                                         }
                                                     });
-                                                }
-                                            });
-                                        }
+                                                
+                                         
+                                        } //end producer
 
 
 
@@ -557,16 +543,11 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         }
                                     } else { // producer
                                         var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                        var collection = db.collection('Users');
-                                        collection.findOne({
-                                            username: randArtistProducer
-                                        }, function(err, document) {
-                                            if (err) { //user not found
-                                                throw err;
-                                            } else {
-                                                collection = db.collection('Producer_songs_list');
+                                        var collection = db.collection('Producer_songs_list');
+                                        
+                                                
                                                 collection.findOne({
-                                                    prodId: document.userId
+                                                    prodId: randArtistProducer
                                                 }, function(err, document) {
                                                     if (err) { //user not found
                                                         throw err;
@@ -576,9 +557,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     }
                                                 });
 
-                                            }
-                                        });
-                                    }
+                                            
+                                        
+                                    } //ends producer
                                 } else {
                                     console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
                                     var pickedGenre = userGraph.nextGenre(user, startGenre, currGenre);
@@ -638,16 +619,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 } else { // producer
 
                                                     var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                                    var collection = db.collection('Users');
-                                                    collection.findOne({
-                                                        username: randArtistProducer
-                                                    }, function(err, document) {
-                                                        if (err) { //user not found
-                                                            throw err;
-                                                        } else {
-                                                            collection = db.collection('Producer_songs_list');
+                                                    var collection = db.collection('Producer_songs_list');
                                                             collection.findOne({
-                                                                prodId: document.userId
+                                                                prodId: randArtistProducer
                                                             }, function(err, document) {
                                                                 if (err) { //user not found
                                                                     throw err;
@@ -657,9 +631,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 
                                                                 }
                                                             });
-                                                        }
-                                                    });
-                                                }
+                                                        
+                                                    
+                                                } //ends producer
 
 
                                             }
@@ -708,17 +682,12 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             }
                                         } else { // producer
                                             var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
-                                            var collection = db.collection('Users');
-                                            collection.findOne({
-                                                username: randArtistProducer
-                                            }, function(err, document) {
-                                                if (err) { //user not found
-                                                    throw err;
-                                                } else {
+                                            var collection = db.collection('Producer_songs_list');
+                                            
                                                     // console.log(document.userId); 
-                                                    collection = db.collection('Producer_songs_list');
+                                                    
                                                     collection.findOne({
-                                                        prodId: document.userId
+                                                        prodId: randArtistProducer
                                                     }, function(err, document) {
                                                         if (err) { //user not found
                                                             throw err;
@@ -727,9 +696,9 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                             callback();
                                                         }
                                                     });
-                                                }
-                                            });
-                                        }
+                                                
+                                           
+                                        } //ends producer
 
 
 
