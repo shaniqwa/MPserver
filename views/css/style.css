@@ -183,9 +183,9 @@ background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
   transition: height 0.5s ease;
   height: 20px;
 }
- .nav-tabs>li.active, #profile-tab:hover, #favorites-tab:hover,#following-tab:hover, #followers-tab:hover,#statistics-tab:hover, #mySongs-tab:hover{
-  color: white;
-  height: 140px;
+ .nav-tabs li.active a, #profile-tab:hover, #favorites-tab:hover,#following-tab:hover, #followers-tab:hover,#statistics-tab:hover, #mySongs-tab:hover{
+  color: white !important;
+  height: 140px !important;
   border-bottom-left-radius: 5em;
   border-bottom-right-radius: 5em;
 }
