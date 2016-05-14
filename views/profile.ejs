@@ -7,8 +7,8 @@
      <%- include head %>
      
      <script src="js/pie.js"></script>
-     <!-- // <script src="js/ageGroup.js"></script> -->
-     <!-- // <script src="js/localVSworld.js"></script> -->
+     <script src="js/ageGroup.js"></script>
+     <script src="js/localVSworld.js"></script>
 
 </head>
 <body>
@@ -134,10 +134,8 @@
                       <h3>Following</h3>
                        <div class="following-container"> 
                             <div class="following searchresults" ng-repeat="x in user.following">
-                               <img ng-click="init(x.userId)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImg}}" /> 
-                               <p>{{x.first}}</p>
-                               <p>{{x.last}}</p>
-
+                               <img ng-click="init(x.userId)" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <p>{{x.first}} {{x.last}}</p>
                             </div>
                         </div>
                     </div>
@@ -150,9 +148,8 @@
                       <h3>Followers</h3>
                       <div class="followers-container"> 
                             <div class="followers searchresults" ng-repeat="x in user.followers">
-                               <img ng-click="init(x.userId)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImg}}" /> 
-                               <p>{{x.first}}</p>
-                               <p>{{x.last}}</p>
+                               <img ng-click="init(x.userId)" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <p>{{x.first}} {{x.last}}</p>
                             </div>
                         </div>
                     </div>
@@ -208,10 +205,9 @@
                           <h3>Search Results</h3>
                           <div class="search-results-container"> 
                             <div class="searchresults" ng-repeat="x in searchResults">
-                               <img ng-click="init(x.userID)" class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
-                               <p>{{x.firstName}}</p>
-                               <p>{{x.lastName}}</p>
-                               <p>{{x.type}}</p>
+                               <img ng-click="init(x.userID)" class="simg" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                               <p>{{x.firstName}} {{x.lastName}}</p>
+                               <!-- <p>{{x.type}}</p> -->
                             </div>
                           </div>
                     </div>
@@ -274,7 +270,7 @@
 
 
                    <!-- GOOGLE INFORMATION -->
-                 <div class="col-sm-6">
+                 <div  ng-if="myID == user.userId"  class="col-sm-6">
                     <div class="well">
                         <h5 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h5>
 
@@ -297,7 +293,7 @@
                  <!-- END GOOGLE INFORMATION -->
 
                  <!-- FACEBOOK INFORMATION -->
-                <div class="col-sm-6">
+                <div  ng-if="myID == user.userId" class="col-sm-6">
                     <div class="well">
                         <h5 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h5>
 

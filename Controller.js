@@ -98,6 +98,8 @@ exports.deleteUser = function(res, userID){
 	PleasureGraph.findOne({ pieId: userID }).remove().exec();
 	ProducerSongs.findOne({ prodId: userID }).remove().exec();
 	ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
+
+	//TODO: remove user from all following 
 	res.status(200).json("User has been deleted " + userID);
 }
 

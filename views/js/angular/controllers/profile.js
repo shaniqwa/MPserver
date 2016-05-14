@@ -137,8 +137,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                    for(i in data.songs){ 
                      $scope.songCounters.push({counterAgeGroup1: data.songs[i].counterAgeGroup1, counterAgeGroup2: data.songs[i].counterAgeGroup2, counterAgeGroup3: data.songs[i].counterAgeGroup3, counterAgeGroup4: data.songs[i].counterAgeGroup4, counterAgeGroup5: data.songs[i].counterAgeGroup5, counterAgeGroup6: data.songs[i].counterAgeGroup6, counterLocal: data.songs[i].counterLocal, counterTotal: data.songs[i].counterTotal, songId: data.songs[i].songId, counterInternal: data.songs[i].counterInternal}); 
                    }
-                   //drawAgeGroupDiagram($scope.songCounters[$scope.selectedSong]);
-                   //drawLocalVsWorldDiagram();
+                   drawAgeGroupDiagram($scope.songCounters[$scope.selectedSong]);
+                   drawLocalVsWorldDiagram();
                });
 
             }//end if producer
@@ -272,7 +272,7 @@ $scope.follow = function(myID, userID){
 $scope.drawDiagram = function(index){
   console.log($scope.songCounters[index]);
   //$scope.selectedSong = numberOfSong;
-  //drawAgeGroupDiagram($scope.songCounters[index]);
+  drawAgeGroupDiagram($scope.songCounters[index]);
   activaTab('statistics');
 };
 

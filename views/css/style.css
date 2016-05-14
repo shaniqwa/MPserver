@@ -185,8 +185,16 @@ select {
   outline: 0;
 }
 .searchresults{
+  width: 130px;
   float: left;
-  padding-left: 10px;
+  margin-right: 25px;
+}
+.searchresults p {
+  text-align: center;
+  margin-top: 5px;
+}
+.searchresults img{
+  width: 100%;
 }
 .simg{
   border-radius: 50%;
@@ -206,6 +214,10 @@ select {
 .table-hover tbody tr:hover td {
   background-color: #8900fe;
   border-color: #8900fe;
+}
+
+#recommended{
+  margin-top: 20px;
 }
 /*PIE*/
 .highcharts-container {

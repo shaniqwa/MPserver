@@ -382,6 +382,7 @@ io.on('connection', function(client) {
                 if (err){
                     return console.log(err);
                 }
+                // console.log("user "+ doc.userId+ " found");
                 user = doc;
                 callback();
             });
@@ -407,18 +408,19 @@ io.on('connection', function(client) {
             });
         },
         function(callback) {
+            // console.log(user);
             //if Producer - load also ProducerSongs and ArtistPie
             if(user.typeOfUser == "Producer"){
                 ProducerSongs.findOne({ 'prodId' :  req.params.userID }, function(err, doc) {
                     if (err){
                         return console.log(err);
                     }
-                    console.log("doc:");
-                    console.log(doc);
+                    // console.log("doc:");
+                    // console.log(doc);
                     
                     songs = doc.songs;
-                    console.log("songs:");
-                    console.log(songs);
+                    // console.log("songs:");
+                    // console.log(songs);
 
                     ArtistPie.findOne({ 'artistPieId' :  req.params.userID }, function(err, doc) {
                         // if there are any errors, return the error
