@@ -878,7 +878,13 @@ io.on('connection', function(client) {
             next();
      });
 
-     app.get('/updateCounters/:prodID/:songID', 
+     app.param('userID', function ( req, res, next, value){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+     });
+
+     app.get('/updateCounters/:prodID/:songID/:userID', 
         function (req, res, next){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -886,8 +892,8 @@ io.on('connection', function(client) {
         },
 
         function (req, res) {
-            console.log("request for updateCounters with user id " +req.params.prodID + " song id " + req.params.songID);
-            ProducerController.updateCounters(res,req.params.prodID, req.params.songID);
+            console.log("request for updateCounters with user id " +req.params.prodID + " song id " + req.params.songID + " user id " + req.params.userID);
+            ProducerController.updateCounters(res,req.params.prodID, req.params.songID, req.params.userID);
     });
 
 
