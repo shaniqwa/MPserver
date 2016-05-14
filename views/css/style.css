@@ -112,12 +112,87 @@ background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
   height: 100%;
   overflow: hidden;
 }
+
+/*TABS*/
+.nav-tabs, .nav-tabs>li>a{
+  border: 0px;
+}
 .nav-tabs li a {
   color: #ffffff;
+}
+.content .nav>li>a{
+  padding: 0 15px;
+}
+.content .nav-tabs>li>a{
+  border-radius: 0;
+  margin-right: 0;
+}
+.tab-content{
+  padding:15px;
 }
 .tab-content div {
   position: relative;
 }
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  border: 0px;
+}
+.nav-tabs>li{
+  cursor: pointer;
+  width: 9.7vw;
+  text-align: center;
+}
+
+#profile-tab{
+  background-color: #00bfff;
+  color: #00bfff;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+#profile-tab:hover:after {
+    content: url(../images/arrow.png); /* no need for qoutes */
+    margin-top: 70px;
+    display: block;
+}
+#favorites-tab{
+  background-color: #3772ff;
+  color: #3772ff;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+#following-tab{
+  background-color: #8a00ff;
+  color: #8a00ff;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+#followers-tab{
+  background-color: #d31fa4;
+  color: #d31fa4;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+#statistics-tab{
+  background-color: #ff1a7c;
+  color: #ff1a7c;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+#mySongs-tab{
+  background-color: #fc6b24;
+  color: #fc6b24;
+  transition: height 0.5s ease;
+  height: 20px;
+}
+ .nav-tabs>li.active, #profile-tab:hover, #favorites-tab:hover,#following-tab:hover, #followers-tab:hover,#statistics-tab:hover, #mySongs-tab:hover{
+  color: white;
+  height: 140px;
+  border-bottom-left-radius: 5em;
+  border-bottom-right-radius: 5em;
+}
+#search{
+  margin-bottom: 140px;
+}
+
 select {
   color: black;
 }

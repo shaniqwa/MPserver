@@ -65,7 +65,7 @@
 
         <!-- CONTENT -->
         <div class="col-sm-7">
-            <div class="well content">
+            <div class="content">
                 <% if (business) { 
                     business.genres.sort(function(a, b){
                         if(a.category < b.category) return -1;
@@ -77,15 +77,15 @@
                  
                  <!-- tabs -->
                   <ul class="nav nav-tabs">
-                    <li class="active"><a href="#profile">Profile</a></li>
-                    <li><a href="#favorites">Favorites</a></li>
-                    <li><a href="#following">Following</a></li>
-                    <li><a href="#followers">Followers</a></li>
+                    <li class="active"><a href="#profile" id="profile-tab">Profile</a></li>
+                    <li><a href="#favorites" id="favorites-tab">Favorites</a></li>
+                    <li><a href="#following" id="following-tab">Following</a></li>
+                    <li><a href="#followers" id="followers-tab">Followers</a></li>
                      <% if (user.typeOfUser == "Producer") {  %>
-                    <li><a href="#statistics">Statistics</a></li>
-                    <li><a href="#mySongs">My Songs</a></li>
+                    <li><a href="#statistics" id="statistics-tab">Statistics</a></li>
+                    <li><a href="#mySongs" id="mySongs-tab">My Songs</a></li>
                     <% } %>
-                    <li><a href="#search">Search</a></li>
+                    <li><a href="#search" id="search-tab">Search</a></li>
                   </ul>
 
                   <!-- BEGIN TEB CONTENT -->
@@ -200,7 +200,6 @@
                     <!-- END IF PRODUCER -->
 
                     <!-- SEARCH RESULTS -->
-                    
                     <div id="search" class="tab-pane fade">
                           <h3>Search Results</h3>
                           <div class="search-results-container"> 
