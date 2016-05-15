@@ -45,7 +45,7 @@
           </ul>
         </li>
       </ul>
-      <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link"> <%= user.firstName %> <%= user.lastName %></a></p>
+      <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link" ng-click="init('<%= JSON.stringify(user.userId) %>')"> <%= user.firstName %> <%= user.lastName %></a></p>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

@@ -99,18 +99,39 @@ h4 {
   border-top: 10px solid #222;
   border-left: 10px solid #222;
   background-color: rgba(255,255, 255,0.10);
-  /*min-height: 820px;*/
+  height: 100vh;
+  margin-bottom: 0px;
+  padding: 10px 10px 10px 25px;
+}
+.rightSidebarHome {
+  border-top: 10px solid #222;
+  border-left: 10px solid #222;
+  /*background-color: rgba(255,255, 255,0.10);*/
+  text-align: center;
   height: 100vh;
   margin-bottom: 0px;
   padding: 10px;
 }
+.details p {
+  margin-left: 23px;
+  color: #00cbff;
+}
 .content{
-
-background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
+  background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
   /*min-height: 820px;*/
   height: 100%;
   overflow: hidden;
+}
+.home{
+  background-image: url("../images/poly.jpg") !important;
+    background-repeat: no-repeat;
+  background-position: center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: 100vh;
 }
 
 /*TABS*/
@@ -293,6 +314,36 @@ select {
   padding: 4px 9px !important;
   line-height: 1 !important;
   font-size: 11px !important;
+}
+.btn-google{
+    color: #fff;
+    border-color: #ea4640;
+    padding: 6px 17px !important;
+    font-size: 14px !important;
+}
+.btn-google:hover{
+  color: #fff;
+  background-color: #ea4640;
+}
+.btn-facebook{
+    color: #fff;
+    border-color: #409ae7;
+    padding: 6px 17px !important;
+    font-size: 14px !important;
+}
+.btn-facebook:hover{
+  color: #fff;
+  background-color: #409ae7;
+}
+.btn-follow{
+    color: #fff;
+    border-color: #00cbff;
+    padding: 6px 17px !important;
+    font-size: 14px !important;
+}
+.btn-follow:hover{
+  color: #fff;
+  background-color: #00cbff;
 }
 .search-btn {
   height:20px;

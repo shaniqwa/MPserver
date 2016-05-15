@@ -93,14 +93,13 @@
 
                       <!-- PROFILE TAB -->
                       <div id="profile" class="tab-pane fade in active">
-                      <br>
                       <div class="mode-container">
                           <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
                           <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
                           <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
                       </div>
                           <!-- MP pie container -->
-                        <div id="MPcontainer" style=" height: 500px; margin: 0 auto">
+                        <div id="MPcontainer" style=" height: 450px; margin: 0 auto">
 
                         </div>
 
@@ -225,56 +224,60 @@
            <div class="col-sm-3">
                 <div class="well rightSidebar">
                     <!-- USER DETAILS -->
-                    <h3><span class="fa fa-user"></span> Local</h3>
-                        <p>
+                    <h4 style="display: inline-block;"><span class="fa fa-user"></span> {{user.firstName}} {{user.lastName}} </h4><p style="display: inline-block;">&nbsp({{user.typeOfUser}})</p>
+
+
                             <!--if local login -->
 <!--                             <% if (user.profileImage) { %>
                                 <img src=" <%= user.profileImage %> " width="60"><br><br>
                             <% } %> -->
-                            <strong>ID</strong>: {{user.userId}} <br>
-                            <strong>Activity Token</strong>: {{user.activityToken}}<br>
-                            <strong>User Type</strong>: {{user.typeOfUser}}<br>
-                            <strong>Fist Name</strong>: {{user.firstName}}<br>
-                            <strong>Last Name</strong>: {{user.lastName}}<br>
-                            <strong>email</strong>: {{user.email}}<br>
-                            <strong>Country</strong>: {{user.country}}<br>
-                            <strong>Age Group</strong>: 
-                            <p ng-if="user.ageGroup == 1">
-                                Under 14
-                            </p>
-                            <p ng-if="user.ageGroup == 2">
-                                15-25
-                            </p>
-                            <div ng-if="user.ageGroup == 3">
-                                24-35
-                            </div>
-                            <div ng-if="user.ageGroup == 4">
-                                35-44
-                            </div>
-                            <div ng-if="user.ageGroup == 5">
-                                44-55
-                            </div>
-                            <div ng-if="user.ageGroup == 6">
-                                55+
-                            </div>
-                        </p>
+                            <div class="details">
+                                
+                                <!-- <strong>Activity Token</strong>: {{user.activityToken}}<br> -->
+                                  <div ng-if="myID == user.userId">
+                                <strong><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp Email</strong>
+                                <p> {{user.email}}</p>
+                                </div>
+
+                                <strong><i class="fa fa-map-marker" aria-hidden="true"></i> &nbsp  Country</strong> 
+                                <p> {{user.country}}</p>
+
+                                <strong><i class="fa fa-users" aria-hidden="true"></i>&nbsp Age Group</strong>
+                                <p ng-if="user.ageGroup == 1">
+                                    Under 14
+                                </p>
+                                <p ng-if="user.ageGroup == 2">
+                                    15-25
+                                </p>
+                                <p ng-if="user.ageGroup == 3">
+                                    24-35
+                                </p>
+                                <p ng-if="user.ageGroup == 4">
+                                    35-44
+                                </p>
+                                <p ng-if="user.ageGroup == 5">
+                                    44-55
+                                </p>
+                                <p ng-if="user.ageGroup == 6">
+                                    55+
+                                </p>
+                            
                     <!-- END USER DETAILS -->
 
                   <!-- FOLLOW INFO -->
-                  <div ng-if="myID != user.userId" class="col-sm-12">
-                      <a ng-click="follow(myID,user.userId)" class="btn btn-primary">Follow</a>
+                  <div ng-if="myID != user.userId">
+                      <a ng-click="follow(myID,user.userId)" class="btn btn-follow">Follow</a>
                   </div>
                   
                   <!-- END FOLLOW INFO -->
 
 
                    <!-- GOOGLE INFORMATION -->
-                 <div  ng-if="myID == user.userId"  class="col-sm-6">
-                    <div class="well">
-                        <h5 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h5>
+                 <div  ng-if="myID == user.userId && (!user.YT_AT) ">
+                        <strong><span class="fa fa-google-plus"></span>&nbsp &nbsp Google+</strong>
 
                         <!-- check if the user has this token (is the user authenticated with this social account) -->
-                        <% if (user.YT_AT) { %>
+
                    <!--          <p>
                                 <strong>id</strong>: <%= user.YT_id %><br>
                                 <strong>token</strong>: <%= user.YT_AT %><br>
@@ -282,37 +285,34 @@
 
                             </p> -->
 
-                            <a href="/unlink/google" class="btn btn-danger">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/google" class="btn btn-danger">Connect Google</a>
-                        <% } %>
+                            <!-- <a href="/unlink/google" class="btn btn-google">Unlink</a> -->
 
-                    </div>
+                            <a href="/connect/google" class="btn btn-google">Connect Google</a>
+
                 </div>
                  <!-- END GOOGLE INFORMATION -->
 
                  <!-- FACEBOOK INFORMATION -->
-                <div  ng-if="myID == user.userId" class="col-sm-6">
-                    <div class="well">
-                        <h5 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h5>
+                <div  ng-if="myID == user.userId && (!user.FB_AT)">
+                        <strong><span class="fa fa-facebook"></span>&nbsp &nbsp Facebook</strong>
 
                         <!-- check if the user has this token (is the user authenticated with this social account) -->
-                        <% if (user.FB_AT) { %>
+
            <!--                  <p>
                                 <strong>id</strong>: <%= user.FB_id %><br>
                                 <strong>token</strong>: <%= user.FB_AT %><br>
                                 <strong>email</strong>: <%= user.FB_email %><br>
                             </p> -->
 
-                            <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
-                        <% } %>
+                            <!-- <a href="/unlink/facebook" class="btn btn-facebook">Unlink</a> -->
 
-                    </div>
+                            <p><a href="/connect/facebook" class="btn btn-facebook">Connect Facebook</a></p>
+
                 </div>
                 <!--END FACEBOOK INFORMATION -->
 
+              </div>
+              <!-- END DETAILS -->
 
                 <!-- RECOMMANDED --> 
                    <div id="recommended">
@@ -326,6 +326,9 @@
 
                       
                     </div>
+
+
+                    <strong>ID</strong>: {{user.userId}} <br>
                 <!-- END RECOMMANDED --> 
 
 

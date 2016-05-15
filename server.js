@@ -383,8 +383,14 @@ io.on('connection', function(client) {
                     return console.log(err);
                 }
                 // console.log("user "+ doc.userId+ " found");
-                user = doc;
-                callback();
+                if(doc){
+                    user = doc;    
+                    callback();
+                }else{
+                    console.log("getUser: cannot find user");
+                }
+                
+                
             });
         },
         function(callback) {
