@@ -138,7 +138,8 @@ background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
 }
 .nav-tabs>li{
   cursor: pointer;
-  width: 9.7vw;
+  /*width: 9vw;*/
+  width: 115px;
   text-align: center;
 }
 
@@ -186,6 +187,7 @@ background: linear-gradient(rgba(0, 0, 0,0.5) 100%, rgba(0, 0, 0,0));
  .nav-tabs li.active a, #profile-tab:hover, #favorites-tab:hover,#following-tab:hover, #followers-tab:hover,#statistics-tab:hover, #mySongs-tab:hover{
   color: white !important;
   height: 140px !important;
+  cursor: pointer;
   border-bottom-left-radius: 5em;
   border-bottom-right-radius: 5em;
 }
@@ -220,7 +222,7 @@ select {
 }
 .mode-container{
   margin: 0 auto;
-  width:300px;
+  text-align: center;
 }
 .mode-btn{
   color: #64d8ff;
