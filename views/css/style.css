@@ -144,7 +144,7 @@ h4 {
 }
 
 .nav-tabs, .nav-pills {
-    text-align:center;
+  text-align:center;
 }
 
 .nav-tabs, .nav-tabs>li>a{
@@ -171,9 +171,8 @@ h4 {
   border: 0px;
 }
 .nav-tabs>li{
-
   cursor: pointer;
-  width: 105px;
+  width: 100px;
   text-align: center;
 }
 
