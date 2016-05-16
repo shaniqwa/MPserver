@@ -478,7 +478,7 @@ function addCircle(chart){
 
             name: ' ',
             data: genres,
-            size: '70%',
+            size: '80%',
             innerSize: '95%',
             cursor: 'pointer',
             events: {
@@ -490,7 +490,8 @@ function addCircle(chart){
             dataLabels: {
                 formatter: function () {
                     // display only if larger than 1
-                    return this.y > 1 ?  this.point.name + '  ' + this.y + '%' : null;
+                     var name = toTitleCase(this.point.name);
+                    return this.y > 1 ?  name + '  ' + this.y + '%' : null;
                 },
                 color: '#d8d8d8',
                 style: {

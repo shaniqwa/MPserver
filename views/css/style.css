@@ -733,3 +733,17 @@ select::-ms-expand { /* for IE 11 */
 /***********************************************************/
 /***********END REGION: STYLED SELECT***********************/
 /***********************************************************/
+
+
+
+ .fancybox-skin {
+      /*background-image: #000; /* or whatever */
+        color: #e4e4e4 !important;
+  background-image: url("../images/background.jpg"); 
+  background-repeat: no-repeat;
+  background-position: center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    }
