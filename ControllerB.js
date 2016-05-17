@@ -42,7 +42,10 @@ exports.findMatch = function(userID,findMatchC){
 	console.log("insinde find findMatch");
 	var genres = [];
 	console.log(userID);
-	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
+
+	async.waterfall([
+    function(callback) {
+        	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
 	  if (err || pleasureUser === null){
 	  	// console.log(err);
 	  	return err;
@@ -54,10 +57,13 @@ exports.findMatch = function(userID,findMatchC){
 		  	}	
 		  }	
 		  console.log("done pleasure");
+		   callback();
 	});
-	  
 
-	BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
+    },
+    function(callback) {
+      // arg1 now equals 'one' and arg2 now equals 'two'
+      	BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
 		  if (err || buisnessUser === null){
 		  	return err;
 		  	// res.status(200).json("error finding buisness pie for user: " + err.message);
@@ -69,9 +75,13 @@ exports.findMatch = function(userID,findMatchC){
 			  	}
 			  }
 		console.log("done business");
-	});	  
-
-  	console.log("genres:");
+		callback();
+	});	
+        
+    }
+], function (err) {
+    // all dne
+    console.log("genres:");
   	console.log(genres);
 
 	ArtistPie.find({}, function (err, artists) {
@@ -95,10 +105,8 @@ exports.findMatch = function(userID,findMatchC){
 			  		}
 		      	}
 	      });
-	 });
 
-
-      	if(matchGeners.length >= 3){
+	      if(matchGeners.length >= 3){
       		for(var i=0; i< matchGeners.length; i++){
       			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 				  if (err){
@@ -122,6 +130,19 @@ exports.findMatch = function(userID,findMatchC){
       	}
       	//res.status(200).json("finished match");
       	findMatchC();
+      	
+	 });//close find all artist pies
+
+
+      	
+	});//end async
+
+
+	  
+
+  
+
+  	
 }
 
 //search
