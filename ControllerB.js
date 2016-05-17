@@ -104,33 +104,34 @@ exports.findMatch = function(userID,findMatchC){
 		      			matchGeners.push(artist.genres[i].genreName);
 			  		}
 		      	}
+
+			    if(matchGeners.length >= 3){
+		      		for(var i=0; i< matchGeners.length; i++){
+		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
+						  if (err){
+						  	// res.status(200).json("error adding producer to BusinessPie: " + err.message);
+						  	return err;
+						  } 
+						});
+						
+
+						PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
+							  if (err){
+							  	// res.status(200).json("error adding producer to PleasurePie: " + err.message);
+							  	return err;
+							  } 
+							   // res.status(200).json("New producer has been added to both pies successfully for user " + userID);
+							   return null;
+						});
+						
+		      		}
+      			}		
 	      });
 
-	      if(matchGeners.length >= 3){
-      		for(var i=0; i< matchGeners.length; i++){
-      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
-				  if (err){
-				  	// res.status(200).json("error adding producer to BusinessPie: " + err.message);
-				  	return err;
-				  } 
-				});
-				
 
-				PleasurePie.update({ pleasurePieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
-					  if (err){
-					  	// res.status(200).json("error adding producer to PleasurePie: " + err.message);
-					  	return err;
-					  } 
-					   // res.status(200).json("New producer has been added to both pies successfully for user " + userID);
-					   return null;
-				});
-				
-      		}
-			
-      	}
       	//res.status(200).json("finished match");
       	findMatchC();
-      	
+
 	 });//close find all artist pies
 
 
