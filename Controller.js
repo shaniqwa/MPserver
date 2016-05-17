@@ -347,16 +347,16 @@ exports.processWizardForm = function(req,res,data) {
                   }
                   callback();
                 });
-            }
+            },
+
+            // step 5 - findMatch
+    	function(callback){
+    		ControllerB.findMatch( data.userID , function(){
+    			callback();
+    		});
+    	}
 
         ],callback);
-    }
-
-    ,function(callback){
-    	ControllerB.findMatch( data.userID , function(){
-    		callback();
-    	});
-    	
     }
     ], function(err) {
         if (err) {
