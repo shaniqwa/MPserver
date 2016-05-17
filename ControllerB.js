@@ -88,7 +88,7 @@ exports.findMatch = function(userID,findMatchC){
 		      	for(var i=0; i<artist.genres.length; i++){
 		      		// console.log("categories[i] "+categories[i]);
 		      		if(genres.indexOf(artist.genres[i].genreName) > -1){
-		      			console.log("success ");
+		      			console.log("Found Match !");
 		      			console.log(artist.genres[i].genreName);
 		      			matchGeners.push(artist.genres[i].genreName);
 			  		}

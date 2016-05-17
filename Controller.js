@@ -325,7 +325,7 @@ exports.processWizardForm = function(req,res,data) {
     //step 4:  save new pies to db
    	function(callback) {
 
-        async.parallel([
+        async.waterfall([
             function(callback) {
                 var business_pie = new BusinessPie(MP.business);
                 //Save user's business pie
