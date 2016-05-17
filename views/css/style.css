@@ -747,3 +747,9 @@ select::-ms-expand { /* for IE 11 */
   -o-background-size: cover;
   background-size: cover;
     }
+
+
+    /*producer wizard*/
+    .ms-container{
+      width: 100%;
+    }
