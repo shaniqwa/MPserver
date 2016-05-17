@@ -72,7 +72,7 @@ exports.findMatch = function(userID,findMatchC){
 	});	  
 
   	console.log("genres:");
-  	// console.log(genres);
+  	console.log(genres);
 
 	ArtistPie.find({}, function (err, artists) {
 		console.log("find artist");
@@ -83,10 +83,11 @@ exports.findMatch = function(userID,findMatchC){
 	  
 	      artists.forEach(function(artist){
 	      	console.log("artist");
-	      	// console.log(artist);
+	      	console.log(artist);
 	      	matchGeners = [];
 		      	for(var i=0; i<artist.genres.length; i++){
 		      		// console.log("categories[i] "+categories[i]);
+		      		console.log("check if genre exsist in user generes:" + artist.genres[i].genreName + "for artist: "  + artist.artistPieId);
 		      		if(genres.indexOf(artist.genres[i].genreName) > -1){
 		      			console.log("success ");
 		      			console.log(artist.genres[i].genreName);
