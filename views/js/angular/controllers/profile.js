@@ -161,7 +161,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         
 
         // get recommendation
-        // call recommandtation func
+       $scope.recommendation($scope.userId);
        
        
        
