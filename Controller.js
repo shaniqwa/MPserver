@@ -352,9 +352,12 @@ exports.processWizardForm = function(req,res,data) {
         ],callback);
     }
 
-    // ,function(callback){
-    // 	ControllerB.findMatch( data.userID );
-    // }
+    ,function(callback){
+    	ControllerB.findMatch( data.userID , function(){
+    		callback();
+    	});
+    	
+    }
     ], function(err) {
         if (err) {
 			console.log(err);  
