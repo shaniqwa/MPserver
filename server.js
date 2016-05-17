@@ -521,22 +521,27 @@ io.on('connection', function(client) {
 
     //Producer Wizard - a step in Producer registration
     app.get('/ProducerWizard', function (req, res){
-        var list = [];
+        var uploadsList = [];
         var genres = [];
         async.parallel([
             function(callback){
-                request("https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token="+req.user.YT_AT, function(error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        var temp = JSON.parse(body);
-                        for(i=0; i<temp.items.length; i++){
-                            list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+                    request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + req.user.YT_AT, function(error, response, body) {
+                        if (!error && response.statusCode == 200) {
+                            var temp = JSON.parse(body);
+                            var uploadsPlaylistID =  temp.items[0].contentDetails.relatedPlaylists.uploads;
+
+                            Controller.getProducerPlaylistItems(uploadsPlaylistID, req.user.YT_AT, function(error, list){
+                                if(error){
+                                    console.log(error);
+                                }
+                                uploadsList = list;
+                                // console.log(list);
+                                callback();
+                            })
+                        }else{
+                            console.log(error.errors.message);
                         }
-                        callback(null, 'list is full'); 
-                        console.log("list of playlists is back from youtube");
-                    }else{
-                        console.log(response);
-                    }
-                });
+                    });
             }
             ,
             function(callback){
@@ -557,7 +562,7 @@ io.on('connection', function(client) {
             console.log("all done, render page");
              res.render('ProducerWizard.ejs', {
                 user : req.user,
-                list: list,
+                list: uploadsList,
                 genres: genres
             });
         });
@@ -693,23 +698,23 @@ io.on('connection', function(client) {
 
 
     //Find match
-    app.param('userIDM', function ( req, res, next, value){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        next();
-    });
+    // app.param('userIDM', function ( req, res, next, value){
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     next();
+    // });
 
-    //route that recives parameter using defined parameters
-    app.get('/findMatch/:userIDM', 
-        function (req, res, next){
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next(); 
-        },
+    // //route that recives parameter using defined parameters
+    // app.get('/findMatch/:userIDM', 
+    //     function (req, res, next){
+    //         res.header("Access-Control-Allow-Origin", "*");
+    //         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //         next(); 
+    //     },
 
-        function (req, res) {
-        ControllerB.findMatch(res,req.params.userIDM);
-    });
+    //     function (req, res) {
+    //     ControllerB.findMatch(req.params.userIDM);
+    // });
 
 
 

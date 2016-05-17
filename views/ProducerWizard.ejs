@@ -3,11 +3,12 @@
 <head>
     <title>Music Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+    <link href="css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
     <%- include head %>
 </head>
 <body>
 <%- include header %>
-<script>
+<!-- <script>
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -86,7 +87,7 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
-</script>
+</script> -->
 
 <!--
   Below we include the Login Button social plugin. This button uses
@@ -132,23 +133,26 @@
         <br><br>
 
 
-        <p>In order to get your music out there, you need to upload your songs to a youtube playlist. We will keep track of that playlist, so you will not have to update and upload your songs again. </p>
+        <p>In order to get your music out there, you need to upload your songs to youtube. This is a list of all your youtube channel uploads. Please choose the videos you would like to subscribe to the Music Profile system.  </p>
         
-        Choose Playlist : <br>
+        Choose Videos : <br>
+         <select multiple="multiple" id="my-select" name="list[]">
         <% for(var i=0; i < list.length; i++) { %>
-        <div class="checkbox">
-          <label><input type="radio" name="playlistID" value="<%= list[i].id %>" required>  <%= list[i].title %></label>
-        </div>
+<!--         <div class="checkbox">
+          <label><input type="checkbox" name="songs[]" value="<%= list[i].id %>"> <%= list[i].title %></label>
+        </div> -->
+        <option value="<%= list[i].videoId %>|<%= list[i].title %>" ><%= list[i].title %> </option>
         <% } %>
+        </select>
         <br>
 
 
         <!-- connect facebook page -->
-        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+<!--         <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
         </fb:login-button>
 
         <div id="status">
-        </div>
+        </div> -->
         <br>
 
         user id : <%= user.userId %><br>
@@ -177,6 +181,7 @@
         <script type="text/javascript">
         $(document).ready(function() {
           $(".js-example-basic-single").select2();
+          $('#my-select').multiSelect()
         });
         </script>
 
@@ -187,7 +192,7 @@
         <select id="genre1" name="genre1" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
-           <option value="<%= genres[i].name %>|<%= genres[i].category %>" value="{'genre':'<%= genres[i].name %>','category':'<%= genres[i].category %>'}"> <%= genres[i].name %></option>
+           <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
         <% } %>
         </select>
                   <input id="slider1" name="slider1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
@@ -240,5 +245,6 @@
 <%- include jsFiles %>
 <script src="js/producerWizard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+ <script src="js/jquery.multi-select.js" type="text/javascript"></script>
 </body>
 </html>

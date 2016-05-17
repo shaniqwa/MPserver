@@ -99,7 +99,8 @@ exports.deleteUser = function(res, userID){
 	ProducerSongs.findOne({ prodId: userID }).remove().exec();
 	ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
 
-	//TODO: remove user from all following 
+	//TODO: remove user from all following users, by cheking the deleted user followers 
+
 	res.status(200).json("User has been deleted " + userID);
 }
 
@@ -351,9 +352,12 @@ exports.processWizardForm = function(req,res,data) {
         ],callback);
     }
 
-    // ,function(callback){
-    // 	ControllerB.findMatch( data.userID );
-    // }
+    ,function(callback){
+    	ControllerB.findMatch( data.userID , function(){
+    		callback();
+    	});
+    	
+    }
     ], function(err) {
         if (err) {
 			console.log(err);  
@@ -366,21 +370,22 @@ exports.processWizardForm = function(req,res,data) {
 
 exports.getProducerPlaylists = function(YT_AT){
 	var list = [];
-	request("https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
+	request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var temp = JSON.parse(body);
-			for(i=0; i<temp.items.length; i++){
-				list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
-			}
+			// for(i=0; i<temp.items.length; i++){
+			// 	list.push({title: temp.items[i].snippet.title, id: temp.items[i].id});
+			// }
 			// console.log("the list:");
 			// console.log(list);
-			return list;	
+			// return list;	
+			return temp.contentDetails.relatedPlaylists.uploads;
 		}
 	});
 }
 
 //get all songs from a youtube playlist and insert to DB
-getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
+exports.getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
@@ -388,7 +393,7 @@ getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 			// console.log(temp);
 			for(i=0; i<temp.items.length; i++){
 				list.push({
-					songId: i,
+					// songId: i,
 					title: temp.items[i].snippet.title,
 					videoId: temp.items[i].snippet.resourceId.videoId
 				});
@@ -427,13 +432,28 @@ exports.processProducerWizardForm = function(req,res,data){
 	    function(callback){
 	    	// console.log("selected playlist id: ");
 	    	// console.log(data.playlistID);
-	    	var playlistID = data.playlistID;
-			getProducerPlaylistItems(playlistID, req.user.YT_AT,function(error, list){
-				if(error){
-					console.log(error);
-				}
+			console.log("songs from wizard:");
+			console.log(data.list);
+
+			// getProducerPlaylistItems(playlistID, req.user.YT_AT,function(error, list){
+				// if(error){
+				// 	console.log(error);
+				// }
 				var ProducerSongsDoc = {};
-				ProducerSongsDoc.songs = list;
+
+				ProducerSongsDoc.songs = [];
+				for(i=0; i<data.list.length; i++){
+					var values = data.list[i].split('|');
+		    		var videoId = values[0];
+		    		var songTitle = values[1];
+					ProducerSongsDoc.songs.push({
+						songId: i,
+						title: songTitle,
+						videoId: videoId
+					});
+				}
+
+
 				ProducerSongsDoc.prodId = req.user.userId;
 				//create new ProducerSongs document with the producer's id
 				var temp = new ProducerSongs(ProducerSongsDoc);
@@ -483,7 +503,7 @@ exports.processProducerWizardForm = function(req,res,data){
 	                  
                 });
 
-			});
+			// });
 	    },
 
 	    //calculate artist pie and save it
