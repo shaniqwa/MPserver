@@ -37,7 +37,7 @@ var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureG
 var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
 
 
-exports.findMatch = function(res,userID){
+exports.findMatch = function(userID,findMatchC){
 	var matchGeners = [];
 	console.log("insinde find findMatch");
 	var genres = [];
@@ -119,7 +119,8 @@ exports.findMatch = function(res,userID){
       		}
 			
       	}
-      	res.status(200).json("finished match");
+      	//res.status(200).json("finished match");
+      	findMatchC();
 }
 
 //search
