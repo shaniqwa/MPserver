@@ -163,7 +163,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
         // get recommendation
        // $scope.recommandation($scope.userId);
-         $http.get('http://localhost:3000/recommandation/' + userId).success(function(data){ 
+  $http.get('http://localhost:3000/recommandation/' + $scope.userId).success(function(data){ 
     console.log(data);
     for (i in data){
       $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
