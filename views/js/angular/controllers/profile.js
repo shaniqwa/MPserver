@@ -22,6 +22,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.favorits = [];
   $scope.BL = [];
   $scope.defaultGenre = [];
+   $scope.reco = [];  
   $scope.heart = "fa-heart-o";
   $scope.red = [];
   $scope.data = {
@@ -445,7 +446,7 @@ $scope.drawDiagram = function(index){
 
 $scope.recommandation = function(userId){
 console.log("inside recommandation");
- $scope.reco = [];  
+
   $http.get('http://localhost:3000/recommandation/' + userId).success(function(data){ 
     console.log(data);
     for (i in data){
