@@ -539,7 +539,7 @@ io.on('connection', function(client) {
                                 callback();
                             })
                         }else{
-                            console.log(error.errors.message);
+                            console.log("error with http request to google. check ip settings in google console");
                         }
                     });
             }
