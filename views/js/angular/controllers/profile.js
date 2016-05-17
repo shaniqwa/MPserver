@@ -448,9 +448,9 @@ console.log("inside recommandation");
  $scope.reco = [];  
   $http.get('http://localhost:3000/recommandation/' + userId).success(function(data){ 
     console.log(data);
-    // for (i in data){
-    //   // $scope.searchResults.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
-    // }
+    for (i in data){
+      $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+    }
   });
 
 

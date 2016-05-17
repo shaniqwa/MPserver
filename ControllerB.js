@@ -188,38 +188,97 @@ exports.removeFav = function(res, data){
 //recommandation
 exports.recommandation = function(res, userID){
 	var producers = [];
-	PleasurePie.findOne({ pleasurePieId: userID }, function (err, data) {
+	var result = [];
+	async.waterfall([
+    function(callback) {
+    PleasurePie.findOne({ pleasurePieId: userID }, function (err, data) {
 	  if (err || data === null){
 	  	res.status(200).json("error finding pleasur pie for user: " + err.message);
 	  } 
 	  //console.log(data);
-	  for(var i=0; i<data.genres.length; i++){
-	  	//console.log(data.genres[i].producers);
-	  	producers.push.apply(producers, data.genres[i].producers);
-	  	//console.log(producers);
-	  }	
+	  	for(var i=0; i<data.genres.length; i++){
+		  	for(var j=0; j<data.genres[i].producers.length; j++){
+		  		if(producers.indexOf(data.genres[i].producers[j]) == -1){
+		  			// producers.push(data.genres[i].producers);
+		  			 producers.push( data.genres[i].producers[j]);
+		  		}
+			}
+		}
 	  console.log("done pleasure");
- });
-	  BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
+	  callback();
+ 	});
+        
+    },
+    function(callback) {
+    BusinessPie.findOne({ businessPieId: userID }, function (err, data) {
 		  if (err || data === null){
 		  	res.status(200).json("error finding buisness pie for user: " + err.message);
 		  } 
-		  for(var i=0; i<data.genres.length; i++){
-		  	console.log(data.genres[i].producers);
-		  	producers.push.apply(producers, data.genres[i].producers);
-		  	//console.log(producers);
-		  }
-		 // console.log("done business");
+		 for(var i=0; i<data.genres.length; i++){
+		  	for(var j=0; j<data.genres[i].producers.length; j++){
+		  		console.log("check if exsist");
+		  		console.log(data.genres[i].producers[j]);
+		  		if(producers.indexOf(data.genres[i].producers[j]) == -1){
+		  		
+		  			 producers.push( data.genres[i].producers[j]);
+		  		}
+			}
+		}
+		 console.log("done business");
+		 callback();
+	});
+        
+    },
+    function(callback){
+    	
+    	var q = async.queue(function (task, taskCallback) {
+		    console.log('find ' + task.id);
+		    User.findOne({ userId: task.id }, function (err, user) {
+		      			console.log("find one");
+
+		      			if(err){
+		      				console.log(err);
+		      			}
+		      			if(user){
+		      				console.log(user);
+		      				result.push({usernsame: user.username, profileImage: user.profileImage, userID: user.userId,firstName : user.firstName , lastName: user.lastName, type: user.typeOfUser});		
+		      				taskCallback();
+		      			}else{
+		      				console.log("user " +producers[i] +" not found");
+		      			}
+			  			
+			  		});
+		    
+		}, 2);
+
+		// assign a callback
+		q.drain = function() {
+		    console.log('all items have been processed');
+		    callback();
+		}
+
+		if(producers.length == 0){
+			callback();
+		}
+    		
+			for(var i=0; i<producers.length; i++){
+		      		console.log("producers[i] "+producers[i]);
+		      		q.push({id: producers[i]}, function (err) {
+					    console.log('finished processing ');
+					});
+		      }
+
+    }
+], function (err) {
+
+
+		      	console.log("result:");
+		      	console.log(result);
+			  res.status(200).json(result);
 });
 // 		 // console.log("producers:");
 // 			console.log(producers);
-			var result = [];
-			for(var i=0; i<producers.length; i++){
-		      		console.log("producers[i] "+producers[i]);
-		      		User.findOne({ userID: producers[i] }, function (err, data) {
-			  			result.push({usernsame: user.username, profileImage: user.profileImage});
-			  		});
-		      	}
+			
 
 			// User.find({}, function (err, users) {
 				
@@ -241,9 +300,6 @@ exports.recommandation = function(res, userID){
 			//   			result.push({username: user.username, profileImage: user.profileImage});
 			//   		}
 		 //      	}
-		  
-			   console.log(result);
-			  res.status(200).json(result);
 }
 exports.getFollowing = function(res,userId) {
 	//addToSet make sure there are no duplicates is songs array.
