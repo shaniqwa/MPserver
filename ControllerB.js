@@ -164,7 +164,7 @@ exports.searchSpecificUser = function(res,data) {
 //search
 exports.searchuser = function(res,data) {
 
-	User.find({ username: {$regex: data} }, function (err, doc) {
+	User.find({ $or:[ {'username': {$regex: new RegExp(data, "i")} }, {'firstName': {$regex: new RegExp(data, "i")} },{'lastName': {$regex: new RegExp(data, "i")}}	  ]  }, function (err, doc) {
 	  if (err || doc === null){
 	  	res.status(200).json("error searching substring user: " + err.message);
 	  } 
