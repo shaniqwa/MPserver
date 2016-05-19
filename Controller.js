@@ -88,7 +88,22 @@ exports.addToBlackList = function(res,data) {
 
 //safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
-	User.findOne({ userId: userID }).remove().exec();
+
+	//remove user from all following users, by cheking the deleted user followers 
+	var q = async.queue(function (task, taskCallback) {
+    console.log('remove from followers ' + task.userId);
+
+	User.findOneAndUpdate({ userId: task.userId }, { $pull: { 'following':  task.user  } }, function(err){
+		if(!err){
+			taskCallback();
+		}
+	});
+}, 5);
+
+// assign a callback
+q.drain = function() {
+    console.log('all items have been processed');
+    User.findOne({ userId: userID }).remove().exec();
 	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
 	ArtistPie.findOne({ artistPieId: userID }).remove().exec();
@@ -99,9 +114,28 @@ exports.deleteUser = function(res, userID){
 	ProducerSongs.findOne({ prodId: userID }).remove().exec();
 	ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
 
-	//TODO: remove user from all following users, by cheking the deleted user followers 
-
 	res.status(200).json("User has been deleted " + userID);
+}
+
+	var me = {};
+    	User.findOne({ userId: userID }, function(err,doc){
+		if(doc){
+			me.userId = doc.userId;
+ 			me.username = doc.username;
+			me.profileImg = doc.profileImage;
+			me.first = doc.firstName;
+            me.last = doc.lastName;
+			for(i in doc.followers){
+				//push to queue
+				q.push({userId: i.userId, user: me}, function (err) {
+			    console.log('finished processing ');
+			});
+			}
+		}
+	});
+
+
+
 }
 
 exports.processWizardForm = function(req,res,data) {

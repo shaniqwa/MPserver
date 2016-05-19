@@ -76,7 +76,7 @@
                  <!-- <div class=""> -->
                  
                  <!-- tabs -->
-                  <ul class="nav nav-tabs">
+                  <ul id="myTab" class="nav nav-tabs">
                     <li class="active"><a href="#profile" id="profile-tab">Profile</a></li>
                     <li><a href="#favorites" id="favorites-tab">Favorites</a></li>
                     <li><a href="#following" id="following-tab">Following</a></li>
@@ -89,24 +89,19 @@
                   </ul>
 
                   <!-- BEGIN TEB CONTENT -->
-                  <div class="tab-content">
+                  <div id="myTabContent" class="tab-content">
 
                       <!-- PROFILE TAB -->
                       <div id="profile" class="tab-pane fade in active">
-                      <div class="mode-container">
-                          <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
-                          <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
-                          <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
-                      </div>
-                          <!-- MP pie container -->
-                        <div id="MPcontainer" style=" height: 450px; margin: 0 auto">
+                          <div class="mode-container">
+                              <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
+                              <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
+                              <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
+                          </div>
+                              <!-- MP pie container -->
+                            <div id="MPcontainer" style=" height: 450px; margin: 0 auto">
 
-                        </div>
-
-                    
-
-                   
-
+                            </div>
                       </div>
                   <!-- END PROFILE TAB -->
 
@@ -163,20 +158,20 @@
                             
 
                       <!-- STATISTICS -->
-                     <div id="statistics" class="tab-pane fade">
-                      <h3>statistics</h3>
-                     <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
-                        <option ng-repeat="song in songs">{{song.title}}</option>
-                     </select></div>
-                      <div>name: {{songs[selectedSong].title}}</div>
+                    <div id="statistics" class="tab-pane fade">
+                        <h3>statistics</h3>
+                       <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
+                          <option ng-repeat="song in songs">{{song.title}}</option>
+                       </select></div>
+                        <div>name: {{songs[selectedSong].title}}</div>
 
-                        <!-- AGcontainer-->
-                        <div id="AGcontainer" style=" height: 300px; width:400px; margin: 0 auto">
+                          <!-- AGcontainer-->
+                          <div id="AGcontainer" style=" height: 300px; width:400px; margin: 0 auto">
 
-                        </div>
-                        <div id="pieContainer" style=" height: 300px; width:400px; margin: 0 auto">
+                          </div>
+                          <div id="pieContainer" style=" height: 300px; width:400px; margin: 0 auto">
 
-                        </div>
+                          </div>
                     </div>
                     <!-- END STATISTICS -->
 
@@ -266,7 +261,7 @@
 
                   <!-- FOLLOW INFO -->
                   <div ng-if="myID != user.userId">
-                      <a ng-click="follow(myID,user.userId)" class="btn btn-follow">Follow</a>
+                      <a ng-click="follow(myID,user.userId)" class="btn btn-follow">{{isFollowing}}</a>
                   </div>
                   
                   <!-- END FOLLOW INFO -->
@@ -476,11 +471,18 @@
 
 <!-- END MUSIC PREFERENCES LIGHTBOX -->
  <%- include jsFiles %>
-
+<!-- Bootstrap TabCollapse-->
+<script type="text/javascript" src="js/bootstrap-tabcollapse.js"></script>
 </body>
+
+
+
 
 <script>
 $(document).ready(function(){
+  // $('#main-tabs').tabCollapse();
+  // $('#myTab').tabCollapse();
+
    $('.nav-tabs a[href="#search"]').hide();
     // $('.rightSidebar').css('height', $('.content').height()+'px');
     $(".nav-tabs a").click(function(){
@@ -490,53 +492,34 @@ $(document).ready(function(){
 </script>
 <% } %>
 <script> 
-setTimeout(function(){ 
-$(function () {
+// setTimeout(function(){ 
+// $(function () {
 
-    // var profileImg =  <%-JSON.stringify( user.profileImage )%>
-    // var businessData =<%-JSON.stringify( business.genres)%>
-    // var pleasureData =<%-JSON.stringify( pleasure.genres)%>
-    // <% if (user.typeOfUser == "Producer") {  %>
-    // var artistData =<%-JSON.stringify( artist.genres)%>
-    // drawPie(artistData,profileImg);
-    // <% } else { %>
-    // // console.log("call drawPie with img : " + profileImg);
-    // drawPie(pleasureData,profileImg);
-    // <% } %>
-    // $("#list").change(function() {
-    //     if ($("#list").val() == "P") {
-    //         drawPie(pleasureData,profileImg);
-    //         // $.get('/dough/includes/live-chart.php?mode=month'
-    //     } else if ($("#list").val() == "B"){
-    //         drawPie(businessData,profileImg);
-    //         // $.get('/dough/includes/live-chart.php?mode=newmode'
-    //     } else if ($("#list").val() == "artist"){
-    //     drawPie(artistData,profileImg);
-    //     }
-    // });
+// });
+// //on form submmition, input field is broadcasted to all users. on broadcast, insert data to div #future to display it. 
+//  var socket = io.connect('http://musicprofile.com');
+//  socket.on('connect', function(data) {
+//     socket.emit('join', 'Hello World from client');
+//  });
+//  socket.on('broad', function(data) {
+//          $('#future').html(data);
+//    });
 
-});
-//on form submmition, input field is broadcasted to all users. on broadcast, insert data to div #future to display it. 
- var socket = io.connect('http://localhost:3000');
- socket.on('connect', function(data) {
-    socket.emit('join', 'Hello World from client');
- });
- socket.on('broad', function(data) {
-         $('#future').html(data);
-   });
+//  $('form').submit(function(e){
+//     console.log("submit");
+//      e.preventDefault();
+//      var message = $('#chat_input').val();
+//      socket.emit('messages', message);
+//  });
 
- $('form').submit(function(e){
-    console.log("submit");
-     e.preventDefault();
-     var message = $('#chat_input').val();
-     socket.emit('messages', message);
- });
-
-}, 270); 
+// }, 270); 
 </script>
-<script type="text/javascript">
+
+
+
+<script>
+// set lightbox init
   $(document).ready(function() {
-    // $("#inline").fancybox();
     $("#inline").fancybox({
     helpers : {
         overlay : {
