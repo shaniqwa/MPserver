@@ -66,6 +66,26 @@ var ProducerSongs = mongoose.model('Producer_songs_list', producerSongsSchema, '
 		
 	app.use('/', express.static('./views'));
 
+    // Add headers
+    app.use(function (req, res, next) {
+
+        // Website you wish to allow to connect
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+        // Request methods you wish to allow
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+        // Request headers you wish to allow
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+        // Set to true if you need the website to include cookies in the requests sent
+        // to the API (e.g. in case you use sessions)
+        res.setHeader('Access-Control-Allow-Credentials', true);
+
+        // Pass to next layer of middleware
+        next();
+    });
+
 
     //===============SOCKET.IO EVENTS===============
 
@@ -673,7 +693,13 @@ io.on('connection', function(client) {
 		Controller.deleteUser(res,req.params.userID);
 	});
 
-    //following
+
+
+
+
+
+
+    //FOLLOW
     app.param('userF', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -695,6 +721,44 @@ io.on('connection', function(client) {
         function (req, res) {
         ControllerB.addToFollow(res,req.params.userF,req.params.Fuser);
     });
+
+
+
+
+
+
+
+
+    //UNFOLLOW
+    // app.param('userF', function ( req, res, next, value){
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     next();
+    // });
+    // app.param('Fuser', function ( req, res, next, value){
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     next();
+    // });
+    //route that recives parameter using defined parameters
+    app.get('/unfollow/:userF/:Fuser', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next(); 
+        },
+
+        function (req, res) {
+        ControllerB.unfollow(res,req.params.userF,req.params.Fuser);
+    });
+
+
+
+
+
+
+
+
 
 
     //Find match
