@@ -401,7 +401,7 @@ var follower = {};
 	    //step 2 : add me as a follower
 	    function(callback) {
 
-	    	User.findOneAndUpdate({ userId: userF }, { $pull: { 'followers': { follower } } }, function (err, doc) {
+	    	User.findOneAndUpdate({ userId: userF }, { $pull: { 'followers':  follower  } }, function (err, doc) {
 				if (err) {
 				  	callback(err);
 				  	return;
@@ -418,7 +418,7 @@ var follower = {};
 	    //step 3: add other user to my following
 	    function(callback){
 
-	    	User.findOneAndUpdate({ userId: Fuser }, { $pull: { 'following': { follower } } }, function (err, doc) {
+	    	User.findOneAndUpdate({ userId: Fuser }, { $pull: { 'following':  follower  } }, function (err, doc) {
 				if (err) {
 				  	callback(err);
 				  	return;
