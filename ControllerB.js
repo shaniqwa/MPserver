@@ -181,8 +181,9 @@ exports.searchuser = function(res,data) {
 
 //delete song from favorite
 exports.removeFav = function(res, data){
-	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } });
-	res.status(200).json("Songs has been deleted " + userID);
+	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } },function(err,doc){
+		res.status(200).json("Songs has been deleted " + userID);
+	});
 }
 
 //recommandation
@@ -249,7 +250,7 @@ exports.recommandation = function(res, userID){
 			  			
 			  		});
 		    
-		}, 2);
+		}, 5);
 
 		// assign a callback
 		q.drain = function() {
@@ -370,5 +371,68 @@ var follower = {};
 	    }
 	    console.log("added to following");
 	    res.status(200).json("added to following");
+	});
+}
+
+
+//unfollow
+exports.unfollow = function(res,Fuser,userF) {
+var follower = {};
+
+	async.waterfall([
+		// step 1: find me
+	    function(callback) {
+	    	User.findOne({ userId: Fuser }, function (err, doc) {
+				  if (err) {
+				  	callback(err);
+				  	return;
+				  }
+				  	
+					follower.userId = doc.userId;
+	  	 			follower.username = doc.username;
+	  				follower.profileImg = doc.profileImage;
+	  				follower.first = doc.firstName;
+	  	            follower.last = doc.lastName;
+	  	            console.log(follower);
+	                callback();
+			});
+
+	    },	
+	    //step 2 : add me as a follower
+	    function(callback) {
+
+	    	User.findOneAndUpdate({ userId: userF }, { $pull: { 'followers': { follower } } }, function (err, doc) {
+				if (err) {
+				  	callback(err);
+				  	return;
+				  }
+				  
+					follower.userId = doc.userId;
+	  	 			follower.username = doc.username;
+	  				follower.profileImg = doc.profileImage;
+	  				follower.first = doc.firstName;
+	  	            follower.last = doc.lastName;
+	                callback();
+			});
+	    },
+	    //step 3: add other user to my following
+	    function(callback){
+
+	    	User.findOneAndUpdate({ userId: Fuser }, { $pull: { 'following': { follower } } }, function (err, doc) {
+				if (err) {
+				  	callback(err);
+				  	return;
+				  }
+	                callback();
+			});
+	    		
+
+	    }
+	], function(err) {
+	    if (err) {
+	        throw err; //Or pass it on to an outer callback, log it or whatever suits your needs
+	    }
+	    console.log("unfollow");
+	    res.status(200).json("unfollow");
 	});
 }
