@@ -22,8 +22,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
   $scope.favorits = [];
   $scope.BL = [];
   $scope.defaultGenre = [];
-   $scope.reco = [];  
+  $scope.reco = [];  
   $scope.heart = "fa-heart-o";
+  $scope.isFollowing = "Follow";
   $scope.red = [];
   $scope.data = {
     select: 'P',
@@ -48,6 +49,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.artist;
    $scope.songs;
    $scope.selectedSong;
+   
    // create youtube player
     var player;
 
@@ -117,7 +119,43 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
          
             drawPie($scope.pleasure, $scope.user.profileImage);
             activaTab('profile');
-            
+
+            // get user's favorits
+            $http.get('http://themusicprofile.com/getFavorites/' + $scope.userId).success(function(data){
+                $scope.favorits = [];
+                for(i in data){
+                  $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
+               }
+            });
+
+                  
+
+            // get recommendation
+           // $scope.recommandation($scope.userId);
+            $http.get('http://themusicprofile.com/recommandation/' + $scope.userId).success(function(data){ 
+              // console.log(data);
+              for (i in data){
+                $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+              }
+            });
+
+
+            //follow
+            $scope.isFollowing = "Follow";
+            if($scope.myID != $scope.user.userId){
+                // console.log("you are on profile of user: " +  $scope.user.userId);
+                  // check if the logged in user is following the current user
+                  for(var i=0; i<$scope.user.followers.length; i++){
+                      // console.log($scope.user.followers[i].userId);
+                      // console.log("my id: " + $scope.myID);
+                      if($scope.user.followers[i].userId == $scope.myID){
+                        // console.log($scope.myID + " is following " + $scope.user.userId);
+                         $scope.isFollowing = "Following";
+                      } 
+                  } 
+              }
+
+
 
             if($scope.user.typeOfUser == "Producer"){
                 $scope.songs = data.songs;
@@ -144,37 +182,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
             }//end if producer
 
-                  // get user's favorits
-                  $http.get('http://themusicprofile.com/getFavorites/' + $scope.userId).success(function(data){
-                      $scope.favorits = [];
-                      for(i in data){
-                        $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration});
-                     }
-                  });
+        });//end getUser
 
-                  
-                  // if producer: get songs and statistics
-                  if($scope.user.typeOfUser == "Producer"){
-                         
-                  }//END  if producer: get songs and statistics
-        });
-
-        
-
-        // get recommendation
-       // $scope.recommandation($scope.userId);
-  $http.get('http://themusicprofile.com/recommandation/' + $scope.userId).success(function(data){ 
-    console.log(data);
-    for (i in data){
-      $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
-    }
-  });
-       
-       
-       
-        
        //onYouTubePlayerAPIReady();
-  }; 
+
+  };//end init
 
 $scope.changePie = function(mode){
   $('.mode-btn').removeClass('active');
@@ -264,9 +276,19 @@ activaTab('search');
 /****************FOLLOW FUNCTION*******************/
 /***********************************************************/
 $scope.follow = function(myID, userID){
-  $scope.searchResults = [];  
-  $http.get('http://themusicprofile.com/addToFollow/' + myID + '/' + userID).success(function(data){ 
-  });
+  if($scope.isFollowing == "Follow"){
+    // follow
+    $http.get('http://themusicprofile.com/addToFollow/' + myID + '/' + userID).success(function(data){ 
+      $scope.isFollowing = "Following";
+      console.log(data);
+    });  
+  }else if($scope.isFollowing == "Following"){
+    // unfollow
+    $http.get('http://localhost:3000/unfollow/' + myID + '/' + userID).success(function(data){ 
+      $scope.isFollowing = "Follow";
+      console.log(data);
+    });
+  }
 };
 
 
