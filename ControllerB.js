@@ -393,12 +393,12 @@ var follower = {};
 	  				follower.profileImg = doc.profileImage;
 	  				follower.first = doc.firstName;
 	  	            follower.last = doc.lastName;
-	  	            console.log(follower);
+	  	            // console.log(follower);
 	                callback();
 			});
 
 	    },	
-	    //step 2 : add me as a follower
+	    //step 2 : remove me from other user's followers
 	    function(callback) {
 
 	    	User.findOneAndUpdate({ userId: userF }, { $pull: { 'followers': { follower } } }, function (err, doc) {
