@@ -98,11 +98,11 @@ exports.deleteUser = function(res, userID){
 			taskCallback();
 		}
 	});
-}, 5);
+}, 3);
 
 // assign a callback
 q.drain = function() {
-    console.log('all items have been processed');
+    console.log('all users following have been updated');
     User.findOne({ userId: userID }).remove().exec();
 	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
@@ -120,17 +120,38 @@ q.drain = function() {
 	var me = {};
     	User.findOne({ userId: userID }, function(err,doc){
 		if(doc){
+			console.log("delete user " + userID);
 			me.userId = doc.userId;
  			me.username = doc.username;
 			me.profileImg = doc.profileImage;
 			me.first = doc.firstName;
             me.last = doc.lastName;
-			for(i in doc.followers){
+            if(doc.followers.length == 0){	
+            	console.log("followers is empty");
+            	User.findOne({ userId: userID }).remove().exec();
+				BusinessPie.findOne({ businessPieId: userID }).remove().exec();
+				PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
+				ArtistPie.findOne({ artistPieId: userID }).remove().exec();
+				Favorites.findOne({ userId: userID }).remove().exec();
+				BlackList.findOne({ userId: userID }).remove().exec();
+				BusinessGraph.findOne({ pieId: userID }).remove().exec();
+				PleasureGraph.findOne({ pieId: userID }).remove().exec();
+				ProducerSongs.findOne({ prodId: userID }).remove().exec();
+				ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
+
+            }
+			for(var i=0; i<doc.followers.length; i++){
+				console.log("remove deleted user from " +doc.followers[i].userId + "following");
 				//push to queue
-				q.push({userId: i.userId, user: me}, function (err) {
-			    console.log('finished processing ');
-			});
+				var task = {
+					userId: doc.followers[i].userId,
+					user: me
+				}
+					q.push(task, function (err) {
+				});
 			}
+		}else{
+			res.status(200).json("User " + userID + " does not exsist");
 		}
 	});
 
