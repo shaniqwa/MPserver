@@ -354,11 +354,16 @@ $scope.drawDiagram = function(index){
 /***********************************************************/
     $scope.nextSong = function(){
       //TODO: check it the comming song is already in favorits
-        
+        //console.log(model.myfavorites);
         if($scope.heart == "fa-heart"){
           $scope.heart = "fa-heart-o";
         }
             if ($scope.counter < $scope.track.length){
+              for(p in model.myfavorites){
+                if( model.myfavorites[p].url == $scope.track[$scope.counter].url){
+                    $scope.heart = "fa-heart";
+                }
+              }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
@@ -545,14 +550,8 @@ console.log("inside recommandation");
          angular.forEach($scope.firstTracks, function(item){
                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
          });
-         $scope.nextSong();
-            
-         
+         $scope.nextSong(); 
     };
-
-
-
-
 });
 
 
