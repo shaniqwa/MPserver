@@ -552,8 +552,63 @@ console.log("inside recommandation");
          });
          $scope.nextSong(); 
     };
-});
 
+
+
+
+/***********************************************************/
+/********************goToAboutPage FUNCTION*****************/
+/***********************************************************/
+    $scope.goToAboutPage = function(){
+       $('.tab-pane').removeClass('active');
+       $('#about').addClass('active');
+       $('#about').addClass('in');
+       $('#myTab li').removeClass('active');
+    };
+
+/***********************************************************/
+/********************goToHelpPage FUNCTION******************/
+/***********************************************************/
+    $scope.goToHelpPage = function(){
+       $('.tab-pane').removeClass('active');
+       $('#help').addClass('active');
+       $('#help').addClass('in');
+       $('#myTab li').removeClass('active');
+    };
+
+/***********************************************************/
+/********************goToDeveloperPage FUNCTION*************/
+/***********************************************************/
+    $scope.goToDeveloperPage = function(){
+       $('.tab-pane').removeClass('active');
+       $('#developer').addClass('active');
+       $('#developer').addClass('in');
+       $('#myTab li').removeClass('active');
+    };
+
+/***********************************************************/
+/********************goToMobilePage FUNCTION****************/
+/***********************************************************/
+    $scope.goToMobilePage = function(){
+       $('.tab-pane').removeClass('active');
+       $('#mobile').addClass('active');
+       $('#mobile').addClass('in');
+       $('#myTab li').removeClass('active');
+    };
+
+/***********************************************************/
+/********************goToActivityPage FUNCTION**************/
+/***********************************************************/
+    $scope.goToActivityPage = function(){
+       $('.tab-pane').removeClass('active');
+       $('#activity').addClass('active');
+       $('#activity').addClass('in');
+       $('#myTab li').removeClass('active');
+    };
+
+
+
+});
 
 
 // get song duration from youtube
