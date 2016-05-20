@@ -409,6 +409,8 @@ select {
   border-radius: 50%;
   cursor: pointer;
 }
+
+
 /*FAVORITES TABLE*/
 .song {
   font-weight: 600;
@@ -424,10 +426,13 @@ select {
   background-color: #8900fe;
   border-color: #8900fe;
 }
-
 #recommended{
   margin-top: 20px;
 }
+.songItem{
+  cursor:pointer;
+}
+
 /*PIE*/
 .highcharts-container {
   margin: 0 auto;

@@ -111,7 +111,7 @@
                       <h3>Favorites</h3>
                         <table class="table table-inverse table-hover">
                             <tbody>
-                                <tr ng-repeat="x in favorits">
+                                <tr class="songItem" ng-repeat="x in favorits track by $index" ng-click="playFavorites($index)">
                                     <td class="col-md-3"> {{x.artistName}}</td>
                                     <td class="col-md-6 song">{{x.songName}}</td>
                                     <td class="col-md-3 duration">{{x.duration}}</td>
