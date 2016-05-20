@@ -127,7 +127,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                 $scope.favorits = [];
                 for(i in data){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
-               } model.myfavorites = $scope.favorits; 
+                }
+                model.myfavorites = $scope.favorits; 
             });
 
               

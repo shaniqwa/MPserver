@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div ng-controller="profileCtrl">
+<div ng-controller="profileCtrl" ng-cloak>
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
 <div class="container">

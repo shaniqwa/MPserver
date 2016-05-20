@@ -57,6 +57,9 @@ body {
   background-color: #333335;
   word-wrap: break-word;
 }
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 hr{
     border-top: 1px solid rgba(255,255, 255,0.3);
     margin-top: 10px;
