@@ -311,6 +311,9 @@ h4 {
     opacity:1;
     display: block;
 }
+#mySongs tr{
+  cursor: pointer;
+}
 
 
  .nav-tabs li.active a, #profile-tab:hover, #favorites-tab:hover,#following-tab:hover, #followers-tab:hover,#statistics-tab:hover, #mySongs-tab:hover{

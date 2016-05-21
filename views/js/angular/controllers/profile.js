@@ -2,7 +2,7 @@
 var profile = angular.module('profile',[]);
 
 var model = {
-  
+   domain: "http://localhost:3000"
 }
 
 var business;
@@ -12,7 +12,7 @@ var artist;
 
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   // $scope.domain = "http://themusicprofile.com";
-  $scope.domain = "http://localhost:3000";
+  //$scope.domain = "http://localhost:3000";
   $scope.mod = model;
   $scope.songDetails = [];
   $scope.ageGroupCounters = [];
@@ -53,7 +53,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.songs;
    $scope.selectedSong;
    $scope.UserIsLoggedIn = false;
-   $scope.randomGenre;
+   $scope.iCameFromMyPlaylist = false;
    // create youtube player
     var player;
 
@@ -117,7 +117,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         }
          $scope.selectedSong = 0;
         // get user info
-        $http.get($scope.domain + '/getUser/' + $scope.userId).success(function(data){
+        $http.get(model.domain + '/getUser/' + $scope.userId).success(function(data){
             $scope.user = data.user;
             $scope.business = data.business.genres;
             $scope.pleasure = data.pleasure.genres;
@@ -129,17 +129,23 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                    //onYouTubePlayerAPIReady();
                    //$scope.firstTimePlaylist = true;
                     var allGenres = [];
-                     for(i in data.business.genres){
+                    if($scope.data.select == 'B'){
+                       for(i in data.business.genres){
                         allGenres.push(data.business.genres[i].genreName);
-                        for(j in data.pleasure.genres){
-                            allGenres.push(data.pleasure.genres[j].genreName);
-                        }
                      }
+                    }
+                    if($scope.data.select == 'P'){
+                      for(j in data.pleasure.genres){
+                            allGenres.push(data.pleasure.genres[j].genreName);
+                     }
+                    }
+                     
                      
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
-                     $scope.randomGenre = allGenres[getRandomNumber];
-                     $scope.bringMePlaylist($scope.randomGenre);
-                     console.log($scope.randomGenre);
+                     model.randomGenre = allGenres[getRandomNumber];
+                     
+                     $scope.updatePlaylist(model.randomGenre);
+                     console.log(model.randomGenre);
               }
             }
 
@@ -148,7 +154,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             activaTab('profile');
 
             // get user's favorits
-            $http.get($scope.domain + '/getFavorites/' + $scope.userId).success(function(data){
+            $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
                 $scope.favorits = [];
                 for(i in data){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
@@ -160,7 +166,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
             // get recommendation
            // $scope.recommandation($scope.userId);
-            $http.get($scope.domain + '/recommandation/' + $scope.userId).success(function(data){ 
+            $http.get(model.domain + '/recommandation/' + $scope.userId).success(function(data){ 
               // console.log(data);
               for (i in data){
                 $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
@@ -188,8 +194,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             if($scope.user.typeOfUser == "Producer"){
                 $scope.songs = data.songs;
                 $scope.artist = data.artist;
-
-               $http.get($scope.domain + '/getProducerStatistics/' + $scope.userId).success(function(data){
+                model.mySongs = $scope.songs; 
+               $http.get(model.domain + '/getProducerStatistics/' + $scope.userId).success(function(data){
                    // console.log(data);
                    $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
                    $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
@@ -248,11 +254,11 @@ $scope.bringMePlaylist = function($event){
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
     
     if(typeof $event === 'undefined'){
-        var genre =  $scope.defaultGenre;
+        var genre =  model.randomGenre;
     }
     else{
         if(typeof $event.currentTarget === 'undefined'){
-          var genre =  $scope.randomGenre;
+          var genre = model.randomGenre;
         }
         else{
           var genre = $event.currentTarget.innerHTML;
@@ -261,25 +267,29 @@ $scope.bringMePlaylist = function($event){
         
     }
          // console.log(genre);
-    var url = $scope.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-         // console.log(url);
-    $http.get($scope.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+    var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+         //console.log(url);
+    $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
-           $scope.videoFrame3 = true;
-           for(i in data){
-               if(typeof data[i].artistName === 'undefined'){
-                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
-               }
-               else{
-                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
-               }
-           }
-           if($scope.firstTimePlaylist == false){
-               onYouTubePlayerAPIReady();
-               $scope.firstTimePlaylist = true;
-           }
-          $scope.loaderStatus2 = "invisible-loader";
-          $scope.nextSong();
+       
+            $scope.videoFrame3 = true;
+            
+             for(i in data){
+                 if(typeof data[i].artistName === 'undefined'){
+                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+                 }
+                 else{
+                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+                 }
+             }
+             if($scope.firstTimePlaylist == false){
+                 onYouTubePlayerAPIReady();
+                 $scope.firstTimePlaylist = true;
+             }
+            $scope.loaderStatus2 = "invisible-loader";
+            $scope.nextSong();
+     
+           
       });
     };
 
@@ -293,7 +303,7 @@ $scope.search = function(text){
 
 activaTab('search');
   $scope.searchResults = [];  
-  $http.get($scope.domain + '/searchuser/' + text).success(function(data){ 
+  $http.get(model.domain + '/searchuser/' + text).success(function(data){ 
     for (i in data){
        $scope.searchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
@@ -312,13 +322,13 @@ activaTab('search');
 $scope.follow = function(myID, userID){
   if($scope.isFollowing == "Follow"){
     // follow
-    $http.get($scope.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
+    $http.get(model.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Following";
       console.log(data);
     });  
   }else if($scope.isFollowing == "Following"){
     // unfollow
-    $http.get($scope.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
+    $http.get(model.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Follow";
       console.log(data);
     });
@@ -351,17 +361,25 @@ $scope.drawDiagram = function(index){
      //$scope.counter = 0;
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
+
          if(typeof $event === 'undefined'){
-            var genre =  $scope.defaultGenre;
-         }
-         else{
-           var genre = $event.currentTarget.innerHTML;
-           $scope.defaultGenre = genre;
-         }
+            var genre =  model.randomGenre;
+          }
+          else{
+               if(typeof $event.currentTarget === 'undefined'){
+                  var genre = model.randomGenre;
+               }
+               else{
+                var genre = $event.currentTarget.innerHTML;
+                $scope.defaultGenre = genre;
+              }
+          }
+            
+           
          // console.log(genre);
-         var url = "http://themusicprofile.com/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-         // console.log(url);
-         $http.get('http://themusicprofile.com/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+         var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+          //console.log(url);
+         $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
@@ -394,7 +412,7 @@ $scope.drawDiagram = function(index){
                 if( model.myfavorites[p].url == $scope.track[$scope.counter].url){
                     $scope.heart = "fa-heart";
                 }
-              }
+              }//console.log($scope.track[$scope.counter].url);
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
@@ -425,12 +443,14 @@ $scope.drawDiagram = function(index){
                //$scope.updatePlaylist();
               
             }
+            console.log("track lenght: " + $scope.track.length);
             if($scope.track.length == 5){
                 $scope.updatePlaylist();
             }
             if($scope.track.length == 1){
                 $scope.videoFrame3 = true;
                 $scope.loaderStatus2 = "visible-loader";
+                $scope.updatePlaylist();
             }
             player.pauseVideo();
             player.playVideo();
@@ -468,7 +488,7 @@ $scope.drawDiagram = function(index){
                  });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
-      console.log($scope.domain);
+      console.log(model.domain);
       $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
            $scope.msg = "Added successfuly to your Favorites";
@@ -497,7 +517,7 @@ $scope.drawDiagram = function(index){
                  });
       console.log("black: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
-      $http.post($scope.domain + '/addToBlackList/',data).success(function(data,status){
+      $http.post(model.domain + '/addToBlackList/',data).success(function(data,status){
            console.log(data);
            $scope.msg = "Added successfuly to your Blacklist";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
@@ -519,7 +539,7 @@ $scope.drawDiagram = function(index){
 $scope.recommandation = function(userId){
 console.log("inside recommandation");
 
-  $http.get($scope.domain + '/recommandation/' + userId).success(function(data){ 
+  $http.get(model.domain + '/recommandation/' + userId).success(function(data){ 
     console.log(data);
     for (i in data){
       $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
@@ -563,6 +583,7 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playFavorites = function(index){
          //console.log(model.myfavorites);
+        $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
@@ -571,12 +592,44 @@ console.log("inside recommandation");
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
-             var flag = (i == index) ? 1:0;
+             var flag = (i == index) ? 1:0;console.log(item.url);
              if(i>=index){
                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              }
              else{
                 $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+             }
+             //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+             i++;
+         });
+         angular.forEach($scope.firstTracks, function(item){
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+         });
+         $scope.nextSong(); 
+    };
+
+
+/***********************************************************/
+/********************playMySongs FUNCTION**********************/
+/***********************************************************/
+    $scope.playMySongs = function(index){
+         //console.log(model.mySongs);
+         $scope.iCameFromMyPlaylist = true;
+         if($scope.firstTimePlaylist == false){
+               onYouTubePlayerAPIReady();
+               $scope.firstTimePlaylist = true;
+          }
+         $scope.track = [];
+         $scope.counter = 0;
+         var i = 0;
+         angular.forEach(model.mySongs, function(item){
+             var flag = (i == index) ? 1:0;
+             var url = "https://www.youtube.com/watch?v=" + item.videoId;
+             if(i>=index){
+               $scope.track.push({artistName: item.title, songName: item.title, url: url, active: flag});
+             }
+             else{
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: url, active: flag});
              }
              //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              i++;

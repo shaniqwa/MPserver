@@ -186,7 +186,7 @@
                           <h3>My Songs</h3>
                            <table class="table table-inverse table-hover">
                                 <tbody>
-                                       <tr ng-repeat="song in songs">
+                                       <tr ng-repeat="song in songs track by $index" ng-click="playMySongs($index)">
                                           <td class="col-md-12">{{song.title}}</td>
                                       </tr>
                                 </tbody>
