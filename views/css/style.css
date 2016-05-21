@@ -57,6 +57,9 @@ body {
   background-color: #333335;
   word-wrap: break-word;
 }
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 hr{
     border-top: 1px solid rgba(255,255, 255,0.3);
     margin-top: 10px;
@@ -410,6 +413,8 @@ select {
   border-radius: 50%;
   cursor: pointer;
 }
+
+
 /*FAVORITES TABLE*/
 .song {
   font-weight: 600;
@@ -425,10 +430,13 @@ select {
   background-color: #8900fe;
   border-color: #8900fe;
 }
-
 #recommended{
   margin-top: 20px;
 }
+.songItem{
+  cursor:pointer;
+}
+
 /*PIE*/
 .highcharts-container {
   margin: 0 auto;
@@ -754,3 +762,26 @@ select::-ms-expand { /* for IE 11 */
     .ms-container{
       width: 100%;
     }
+
+
+/***********************************************************/
+/***************REGION: ABOUT PAGE**************************/
+/***********************************************************/
+.about-container{
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color: black;
+}
+/***********************************************************/
+/***************END REGION: ABOUT PAGE**********************/
+/***********************************************************/
+
+/***********************************************************/
+/***************REGION: NANOBAR STYLE***********************/
+/***********************************************************/
+.bar{
+  background-color: #00bfff;
+}
