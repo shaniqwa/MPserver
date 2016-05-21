@@ -52,7 +52,8 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.artist;
    $scope.songs;
    $scope.selectedSong;
-   
+   $scope.UserIsLoggedIn = false;
+   $scope.randomGenre;
    // create youtube player
     var player;
 
@@ -120,7 +121,29 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             $scope.user = data.user;
             $scope.business = data.business.genres;
             $scope.pleasure = data.pleasure.genres;
-         
+            
+
+             if($scope.UserIsLoggedIn == false){
+              if($scope.firstTimePlaylist == false){
+                   $scope.UserIsLoggedIn = true;
+                   //onYouTubePlayerAPIReady();
+                   //$scope.firstTimePlaylist = true;
+                    var allGenres = [];
+                     for(i in data.business.genres){
+                        allGenres.push(data.business.genres[i].genreName);
+                        for(j in data.pleasure.genres){
+                            allGenres.push(data.pleasure.genres[j].genreName);
+                        }
+                     }
+                     
+                     var getRandomNumber = Math.floor((Math.random() * allGenres.length));
+                     $scope.randomGenre = allGenres[getRandomNumber];
+                     $scope.bringMePlaylist($scope.randomGenre);
+                     console.log($scope.randomGenre);
+              }
+            }
+
+
             drawPie($scope.pleasure, $scope.user.profileImage);
             activaTab('profile');
 
@@ -186,7 +209,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                });
 
             }//end if producer
-
+            
         });//end getUser
 
        //onYouTubePlayerAPIReady();
@@ -228,8 +251,14 @@ $scope.bringMePlaylist = function($event){
         var genre =  $scope.defaultGenre;
     }
     else{
-        var genre = $event.currentTarget.innerHTML;
-        $scope.defaultGenre = genre;
+        if(typeof $event.currentTarget === 'undefined'){
+          var genre =  $scope.randomGenre;
+        }
+        else{
+          var genre = $event.currentTarget.innerHTML;
+          $scope.defaultGenre = genre;
+        }
+        
     }
          // console.log(genre);
     var url = $scope.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
