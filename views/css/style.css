@@ -119,8 +119,8 @@ h4 {
 .content{
   background: linear-gradient(rgba(0, 0, 0,0.6) 100%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
-  /*min-height: 820px;*/
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 .home{
@@ -395,6 +395,7 @@ select {
 }
 .searchresults{
   width: 130px;
+  height: 200px;
   float: left;
   margin-right: 25px;
 }
