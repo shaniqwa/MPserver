@@ -13,6 +13,10 @@
 </head>
 <body>
 <div class="nanobar" style="background-color:#222"></div>
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status">&nbsp;</div>
+</div>
 <div ng-controller="profileCtrl" ng-cloak>
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>

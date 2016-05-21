@@ -56,9 +56,33 @@ body {
   font-weight: 300;
   background-color: #333335;
   word-wrap: break-word;
+  overflow: hidden;
 }
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
+}
+/* Preloader */
+
+#preloader {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#222; /* change if the mask should have another color then white */
+    z-index:1001; /* makes sure it stays on top */
+}
+
+#status {
+    width:200px;
+    height:200px;
+    position:absolute;
+    left:50%; /* centers the loading animation horizontally one the screen */
+    top:50%; /* centers the loading animation vertically one the screen */
+    //background-image:url("../images/status.gif"); /* path to your loading animation */
+    background-repeat:no-repeat;
+    background-position:center;
+    margin:-100px 0 0 -100px; /* is width and height divided by two */
 }
 hr{
     border-top: 1px solid rgba(255,255, 255,0.3);
@@ -785,4 +809,5 @@ select::-ms-expand { /* for IE 11 */
 /***********************************************************/
 .bar{
   background-color: #00bfff;
+  z-index: 1003;
 }
