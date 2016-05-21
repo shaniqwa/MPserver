@@ -488,7 +488,7 @@ $scope.drawDiagram = function(index){
                  });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
-      console.log(model.domain);
+      //console.log(model.domain);
       $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
            $scope.msg = "Added successfuly to your Favorites";
