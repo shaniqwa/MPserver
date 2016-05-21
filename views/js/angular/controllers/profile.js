@@ -11,6 +11,8 @@ var artist;
 
 
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
+  // $scope.domain = "http://themusicprofile.com";
+  $scope.domain = "http://localhost:3000";
   $scope.mod = model;
   $scope.songDetails = [];
   $scope.ageGroupCounters = [];
@@ -114,7 +116,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         }
          $scope.selectedSong = 0;
         // get user info
-        $http.get('http://themusicprofile.com/getUser/' + $scope.userId).success(function(data){
+        $http.get($scope.domain + '/getUser/' + $scope.userId).success(function(data){
             $scope.user = data.user;
             $scope.business = data.business.genres;
             $scope.pleasure = data.pleasure.genres;
@@ -123,7 +125,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             activaTab('profile');
 
             // get user's favorits
-            $http.get('http://themusicprofile.com/getFavorites/' + $scope.userId).success(function(data){
+            $http.get($scope.domain + '/getFavorites/' + $scope.userId).success(function(data){
                 $scope.favorits = [];
                 for(i in data){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
@@ -135,7 +137,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
             // get recommendation
            // $scope.recommandation($scope.userId);
-            $http.get('http://themusicprofile.com/recommandation/' + $scope.userId).success(function(data){ 
+            $http.get($scope.domain + '/recommandation/' + $scope.userId).success(function(data){ 
               // console.log(data);
               for (i in data){
                 $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
@@ -164,7 +166,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                 $scope.songs = data.songs;
                 $scope.artist = data.artist;
 
-               $http.get('http://themusicprofile.com/getProducerStatistics/' + $scope.userId).success(function(data){
+               $http.get($scope.domain + '/getProducerStatistics/' + $scope.userId).success(function(data){
                    // console.log(data);
                    $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
                    $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
@@ -230,9 +232,9 @@ $scope.bringMePlaylist = function($event){
         $scope.defaultGenre = genre;
     }
          // console.log(genre);
-    var url = "http://themusicprofile.com/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
+    var url = $scope.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          // console.log(url);
-    $http.get('http://themusicprofile.com/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+    $http.get($scope.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
            $scope.videoFrame3 = true;
            for(i in data){
@@ -262,7 +264,7 @@ $scope.search = function(text){
 
 activaTab('search');
   $scope.searchResults = [];  
-  $http.get('http://themusicprofile.com/searchuser/' + text).success(function(data){ 
+  $http.get($scope.domain + '/searchuser/' + text).success(function(data){ 
     for (i in data){
        $scope.searchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
@@ -281,13 +283,13 @@ activaTab('search');
 $scope.follow = function(myID, userID){
   if($scope.isFollowing == "Follow"){
     // follow
-    $http.get('http://themusicprofile.com/addToFollow/' + myID + '/' + userID).success(function(data){ 
+    $http.get($scope.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Following";
       console.log(data);
     });  
   }else if($scope.isFollowing == "Following"){
     // unfollow
-    $http.get('http://localhost:3000/unfollow/' + myID + '/' + userID).success(function(data){ 
+    $http.get($scope.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Follow";
       console.log(data);
     });
@@ -416,16 +418,18 @@ $scope.drawDiagram = function(index){
 /***********************************************************/
     $scope.addToFav = function(){
       $scope.elementToFadeInAndOut = '';
-      
-       $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
-        model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});; 
+      if($scope.userId == $scope.myID){
+        // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
+        model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});   
+      }
+       
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
       }else{
         $scope.heart == "fa-heart-o"
       }
       var data = JSON.stringify({
-                      userId : $scope.userId,
+                      userId : $scope.myID,
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
                          artist: $scope.track[$scope.counter - 1].artistName,
@@ -435,7 +439,8 @@ $scope.drawDiagram = function(index){
                  });
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
-      $http.post('http://themusicprofile.com/addToFavorites/',data).success(function(data,status){
+      console.log($scope.domain);
+      $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
            console.log(data);
            $scope.msg = "Added successfuly to your Favorites";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
@@ -463,7 +468,7 @@ $scope.drawDiagram = function(index){
                  });
       console.log("black: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
-      $http.post('http://themusicprofile.com/addToBlackList/',data).success(function(data,status){
+      $http.post($scope.domain + '/addToBlackList/',data).success(function(data,status){
            console.log(data);
            $scope.msg = "Added successfuly to your Blacklist";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
@@ -485,7 +490,7 @@ $scope.drawDiagram = function(index){
 $scope.recommandation = function(userId){
 console.log("inside recommandation");
 
-  $http.get('http://themusicprofile.com/recommandation/' + userId).success(function(data){ 
+  $http.get($scope.domain + '/recommandation/' + userId).success(function(data){ 
     console.log(data);
     for (i in data){
       $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
