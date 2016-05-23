@@ -2,7 +2,8 @@
 var profile = angular.module('profile',[]);
 
 var model = {
-   domain: "http://localhost:3000"
+   // domain: "http://localhost:3000"
+   domain: "http://themusicprofile.com"
 }
 
 var business;
