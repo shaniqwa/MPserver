@@ -609,12 +609,14 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playFavorites = function(index){
          //console.log(model.myfavorites);
+         
         $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
           }
          $scope.track = [];
+         $scope.firstTracks = [];
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
@@ -640,12 +642,14 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playMySongs = function(index){
          //console.log(model.mySongs);
+
          $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
           }
          $scope.track = [];
+          $scope.firstTracks = [];
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.mySongs, function(item){
