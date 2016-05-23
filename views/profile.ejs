@@ -13,6 +13,10 @@
 </head>
 <body>
 <div class="nanobar" style="background-color:#222"></div>
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status">&nbsp;</div>
+</div>
 <div ng-controller="profileCtrl" ng-cloak>
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
@@ -182,7 +186,7 @@
                           <h3>My Songs</h3>
                            <table class="table table-inverse table-hover">
                                 <tbody>
-                                       <tr ng-repeat="song in songs">
+                                       <tr ng-repeat="song in songs track by $index" ng-click="playMySongs($index)">
                                           <td class="col-md-12">{{song.title}}</td>
                                       </tr>
                                 </tbody>
