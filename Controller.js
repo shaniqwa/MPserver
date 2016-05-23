@@ -139,6 +139,8 @@ q.drain = function() {
 				ProducerSongs.findOne({ prodId: userID }).remove().exec();
 				ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
 
+				res.status(200).json("User has been deleted " + userID);
+
             }
 			for(var i=0; i<doc.followers.length; i++){
 				console.log("remove deleted user from " +doc.followers[i].userId + "following");
@@ -176,10 +178,14 @@ exports.processWizardForm = function(req,res,data) {
     //step1 : get user from db
     function(callback) {
     	var update = {is_New: 0};
-    	if (typeof data.ageGroup != 'undefined') {
-        	update.ageGroup = data.ageGroup;
-        	// console.log("updated user age group to : " + update.ageGroup);
-		}
+    	update.firstName = data.firstName;
+    	update.lastName = data.lastName
+    	//TODO: validate email - unique
+    	// update.email = data.email;
+    	update.country = data.country;
+        update.ageGroup = data.ageGroup;
+        update.profileImg = data.profileImg;
+
         User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
 		    if (err)
 		        console.log(err);
