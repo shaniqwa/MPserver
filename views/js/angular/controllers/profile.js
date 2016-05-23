@@ -48,10 +48,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.firstTimePlaylist = false;
    $scope.user;
    $scope.business = [];
+   $scope.businessPreferences = [];
    $scope.pleasure = [];
+   $scope.pleasurePreferences = [];
    $scope.artist;
    $scope.songs;
    $scope.selectedSong;
+
+
    
    // create youtube player
     var player;
@@ -118,9 +122,13 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         // get user info
         $http.get($scope.domain + '/getUser/' + $scope.userId).success(function(data){
             $scope.user = data.user;
+            
             $scope.business = data.business.genres;
+            $scope.businessPreferences = data.business.preferences;
+            console.log($scope.businessPreferences);
             $scope.pleasure = data.pleasure.genres;
-         
+            $scope.pleasurePreferences = data.pleasure.preferences;
+            console.log($scope.pleasurePreferences);
             drawPie($scope.pleasure, $scope.user.profileImage);
             activaTab('profile');
 

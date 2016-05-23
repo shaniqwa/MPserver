@@ -537,6 +537,20 @@ io.on('connection', function(client) {
 
 
 
+    //process update preferences Form
+    app.post('/updatePreferences', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.updatePreferences(req,res,data);
+    });
+
+
 
 
     //Producer Wizard - a step in Producer registration

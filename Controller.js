@@ -423,6 +423,267 @@ exports.processWizardForm = function(req,res,data) {
 }
 
 
+
+exports.updatePreferences = function(req,res,data) {
+	// console.log(data);
+
+	var MP = {};
+    MP.business = {};
+    MP.business.preferences = [];
+    MP.business.genres = [];
+    MP.pleasure = {};
+    MP.pleasure.preferences = [];
+    MP.pleasure.genres = [];
+
+    var url;
+
+	async.waterfall([
+    //step1 : get user from db
+    function(callback) {
+    	
+        User.findOne({ 'userId' : data.userID },function(err, user) {
+		    if (err)
+		        console.log(err);
+
+		    if (user) {
+		        req.user = user;
+		        if(req.user.FB_AT && req.user.YT_AT){
+					url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT +  "/" + req.user.YT_AT;
+		        }
+		        else if(req.user.FB_AT){
+		        	console.log("register with facebook, token: " + req.user.FB_AT);
+		        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
+		        }else if(req.user.YT_AT){
+		        	console.log("register with google, token: " + req.user.YT_AT);
+		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
+		        	console.log(url);
+		        }
+
+		        callback();
+		    } 
+		});
+    },
+    //step 2: creat initial MP
+    function(callback) {
+       request.get(url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log("success return from ws");
+            //fix result to match our pie schema
+            var obj = body.toString();
+                obj = JSON.parse(obj);
+            for(i in obj){
+                obj[i].genreName = obj[i].genre;
+                delete obj[i].genre;
+                delete obj[i].counter;
+                obj[i].producers = [];
+            }
+            // console.log(body); // Show the HTML for the Google homepage. 
+            body = JSON.stringify([obj]);
+            MP.business.businessPieId = data.userID;
+            MP.business.genres = obj;
+            MP.pleasure.pleasurePieId = data.userID;
+            MP.pleasure.genres = obj;
+            // console.log(MP);
+            callback();
+          }else if(error){
+            return console.error("ERROR with request to WS: " + error);
+          }
+        });
+    },
+    //step 3: save preferences recived in form and calculate new pies
+     function(callback) {
+     	// MP.business.preferences
+		if(data.b_rock){
+			MP.business.preferences.push(data.b_rock);
+		}
+		if(data.b_pop){
+			MP.business.preferences.push(data.b_pop);
+		}
+		if(data.b_rnb){
+			MP.business.preferences.push(data.b_rnb);
+		}
+		if(data.b_classical){
+			MP.business.preferences.push(data.b_classical);
+		}
+		if(data.b_country){
+			MP.business.preferences.push(data.b_country);
+		}
+		if(data.b_elctronic){
+			MP.business.preferences.push(data.b_elctronic);
+		}
+		if(data.b_latin){
+			MP.business.preferences.push(data.b_latin);
+		}
+		if(data.b_blues){
+			MP.business.preferences.push(data.b_blues);
+		}
+		if(data.b_world){
+			MP.business.preferences.push(data.b_world);
+		}
+		if(data.b_punk){
+			MP.business.preferences.push(data.b_punk);
+		}
+		if(data.b_metal){
+			MP.business.preferences.push(data.b_metal);
+		}
+		if(data.b_jazz){
+			MP.business.preferences.push(data.b_jazz);
+		}
+		if(data.b_folk){
+			MP.business.preferences.push(data.b_folk);
+		}
+		if(data.b_reggae){
+			MP.business.preferences.push(data.b_reggae);
+		}
+		if(data.b_hiphop){
+			MP.business.preferences.push(data.b_hiphop);
+		}
+
+		// MP.pleasure.preferences
+		if(data.p_rock){
+			MP.pleasure.preferences.push(data.p_rock);
+		}
+		if(data.p_pop){
+			MP.pleasure.preferences.push(data.p_pop);
+		}
+		if(data.p_rnb){
+			MP.pleasure.preferences.push(data.p_rnb);
+		}
+		if(data.p_classical){
+			MP.pleasure.preferences.push(data.p_classical);
+		}
+		if(data.p_country){
+			MP.pleasure.preferences.push(data.p_country);
+		}
+		if(data.p_elctronic){
+			MP.pleasure.preferences.push(data.p_elctronic);
+		}
+		if(data.p_latin){
+			MP.pleasure.preferences.push(data.p_latin);
+		}
+		if(data.p_blues){
+			MP.pleasure.preferences.push(data.p_blues);
+		}
+		if(data.p_world){
+			MP.pleasure.preferences.push(data.p_world);
+		}
+		if(data.p_punk){
+			MP.pleasure.preferences.push(data.p_punk);
+		}
+		if(data.p_metal){
+			MP.pleasure.preferences.push(data.p_metal);
+		}
+		if(data.p_jazz){
+			MP.pleasure.preferences.push(data.p_jazz);
+		}
+		if(data.p_folk){
+			MP.pleasure.preferences.push(data.p_folk);
+		}
+		if(data.p_reggae){
+			MP.pleasure.preferences.push(data.p_reggae);
+		}
+		if(data.p_hiphop){
+			MP.pleasure.preferences.push(data.p_hiphop);
+		}
+
+		
+		var arrB = [];
+		var arrP = [];
+
+		for(i in MP.business.genres){
+			arrB.push(MP.business.genres[i]);
+			arrP.push(MP.business.genres[i]);
+		}
+
+ 		for(var i = arrB.length - 1; i >= 0; i--){
+			//check if category is in prefs
+			if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
+			    //In the array! all good
+			} else {
+			    //Not in the array, take this genre out of pie
+			    arrB.splice(i, 1);	
+			}
+		}
+
+		for(var j = arrP.length - 1; j >= 0; j--){
+				//check jf category js jn prefs
+				if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
+				    //jn the array! all good
+				} else {
+				    //Not jn the array, take thjs genre out of pje
+				    arrP.splice(j, 1);	
+				}
+		}
+
+		//calc new percentages
+		var Btotal = 0, Ptotal = 0;
+		for(i in arrB){
+			Btotal+= arrB[i].artists.length;
+		}
+
+		for(i in arrP){
+			Ptotal+= arrP[i].artists.length;
+		}
+
+		var len = arrB.length;
+		for(var k = 0; k<len; k++){
+			arrB[k].percent = (arrB[k].artists.length / Btotal) * 100;
+			arrB[k].percent = math.round(arrB[k].percent, 2);
+		}
+		var len = arrP.length;
+		for(var k = 0; k<len; k++){
+			arrP[k].percent = (arrP[k].artists.length / Ptotal) * 100;
+			arrP[k].percent = math.round(arrP[k].percent, 2);
+		}
+
+		MP.business.genres = arrB;
+		MP.pleasure.genres = arrP;
+
+        callback();
+    },
+
+    //step 4:  save new pies to db
+   	function(callback) {
+
+        async.waterfall([
+            function(callback) {
+                // var business_pie = new BusinessPie(MP.business);
+                //Save user's business pie
+                BusinessPie.findOneAndUpdate({ 'businessPieId' : data.userID }, MP.business, function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving user business pie: " + err.message);
+                    return console.error(err);
+                  }
+                  console.log("business pie updated");
+                  callback();
+                });
+            },
+            function(callback) {
+                // var pleasure_pie = new PleasurePie(MP.pleasure);
+                //Save user's pleasure pie
+                PleasurePie.findOneAndUpdate({ 'pleasurePieId' : data.userID },MP.pleasure, function (err, doc) {
+                  if (err) {
+                    res.status(200).json("error saving user pleasure pie: " + err.message);
+                    return console.error(err);
+                  }
+                  console.log("pleasure pie updated");
+                  callback();
+                });
+            }
+
+        ],callback);
+    }
+    ], function(err) {
+        if (err) {
+			console.log(err);  
+        }
+        console.log('music preferences have been updated successfully');
+        res.status(200).json('music preferences have been updated successfully');
+		// res.redirect('/profile'); 
+    });
+}
+
+
 exports.getProducerPlaylists = function(YT_AT){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
