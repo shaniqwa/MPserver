@@ -227,14 +227,14 @@ function getRandTrack(artist) { // todo validations
         artist = artist.name;
     }
     console.log("getRandTrack: calling last fm...");
-    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=100&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
+    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
     return theSong;
 };
 
 function getSimilarArtist(artist) {
-    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=50&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
+    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
 
     var artists = JSON.parse(res.getBody('utf8')).similarartists.artist;
     var theArtist = Random.pick(engine, artists, 0, artists.length);
