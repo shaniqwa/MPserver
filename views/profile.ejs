@@ -132,7 +132,7 @@
                       <h3>Following</h3>
                        <div class="following-container"> 
                             <div class="following searchresults" ng-repeat="x in user.following">
-                               <img ng-click="init(x.userId)" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <img ng-click="init(x.userId)" width="130" height="130" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
                                <p>{{x.first}} {{x.last}}</p>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                       <h3>Followers</h3>
                       <div class="followers-container"> 
                             <div class="followers searchresults" ng-repeat="x in user.followers">
-                               <img ng-click="init(x.userId)" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
+                               <img ng-click="init(x.userId)" width="130" height="130" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
                                <p>{{x.first}} {{x.last}}</p>
                             </div>
                         </div>
@@ -202,7 +202,7 @@
                           <h3>Search Results</h3>
                           <div class="search-results-container"> 
                             <div class="searchresults" ng-repeat="x in searchResults">
-                               <img ng-click="init(x.userID)" class="simg" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                               <img ng-click="init(x.userID)" width="130" height="130" class="simg focus" border-radius: 100 ng-src="{{x.profileImage}}" /> 
                                <p>{{x.firstName}} {{x.lastName}}</p>
                                <!-- <p>{{x.type}}</p> -->
                             </div>
@@ -360,6 +360,7 @@
 
                 <!-- RECOMMANDED --> 
                    <div id="recommended">
+                   <hr>
                       <h3>Recommended</h3>
                       <p>Check out your recent matches with great Producers</p>
                       <div ng-repeat="x in reco">
