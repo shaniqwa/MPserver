@@ -211,7 +211,7 @@ function getRandArtist(type, userObject, currGenre) {
 
     for (obj in userObject) {
         if (userObject[obj][type].length == 0) {
-            return 411;
+            return 476;
         } // todo: will return from findMatch id
         if (userObject[obj].genreName == currGenre) { // our genre
             var distribution = Random.integer(0, userObject[obj][type].length - 1);
@@ -227,14 +227,14 @@ function getRandTrack(artist) { // todo validations
         artist = artist.name;
     }
     console.log("getRandTrack: calling last fm...");
-    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=100&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
+    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
     var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
     var theSong = Random.pick(engine, tracks, 0, tracks.length);
     return theSong;
 };
 
 function getSimilarArtist(artist) {
-    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=50&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
+    var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
 
     var artists = JSON.parse(res.getBody('utf8')).similarartists.artist;
     var theArtist = Random.pick(engine, artists, 0, artists.length);
@@ -333,8 +333,14 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     if (err) { //user not found
                                                         throw err;
                                                     } else {
+														if (document) { 
                                                         playlist.push(getRandTrackProducer(document.songs));
                                                         callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
                                                     }
                                                 });
                                             
@@ -407,12 +413,18 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                             collection.findOne({
                                                                 prodId: randArtistProducer
                                                             }, function(err, document) {
-                                                                if (err) { //user not found
-                                                                    throw err;
-                                                                } else {
-                                                                    playlist.push(getRandTrackProducer(document.songs));
-                                                                    callback();
-                                                                }
+                                                    if (err) { //user not found
+                                                        throw err;
+                                                    } else {
+														if (document) { 
+                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
+                                                    }
                                                             });
                                                         
                                                     
@@ -472,12 +484,18 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     collection.findOne({
                                                         prodId: randArtistProducer //stas : was a conflict between user name which doesnt exists..
                                                     }, function(err, document) {
-                                                        if (err) { //user not found
-                                                            throw err;
-                                                        } else {
-                                                            playlist.push(getRandTrackProducer(document.songs));
-                                                            callback();
-                                                        }
+                                                    if (err) { //user not found
+                                                        throw err;
+                                                    } else {
+														if (document) { 
+                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
+                                                    }
                                                     });
                                                 
                                          
@@ -552,8 +570,14 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     if (err) { //user not found
                                                         throw err;
                                                     } else {
+														if (document) { 
                                                         playlist.push(getRandTrackProducer(document.songs));
                                                         callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
                                                     }
                                                 });
 
@@ -623,13 +647,18 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                             collection.findOne({
                                                                 prodId: randArtistProducer
                                                             }, function(err, document) {
-                                                                if (err) { //user not found
-                                                                    throw err;
-                                                                } else {
-                                                                    playlist.push(getRandTrackProducer(document.songs));
-                                                                    callback();
-
-                                                                }
+                                                                                                                   if (err) { //user not found
+                                                        throw err;
+                                                    } else {
+														if (document) { 
+                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
+                                                    }
                                                             });
                                                         
                                                     
@@ -689,12 +718,18 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     collection.findOne({
                                                         prodId: randArtistProducer
                                                     }, function(err, document) {
-                                                        if (err) { //user not found
-                                                            throw err;
-                                                        } else {
-                                                            playlist.push(getRandTrackProducer(document.songs));
-                                                            callback();
-                                                        }
+                                                    if (err) { //user not found
+                                                        throw err;
+                                                    } else {
+														if (document) { 
+                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        callback();
+														} else {
+														var noProd = { producer : "no"};
+														playlist.push(noProd);
+														callback();
+														}
+                                                    }
                                                     });
                                                 
                                            

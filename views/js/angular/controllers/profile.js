@@ -113,7 +113,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
   $scope.init = function(userID){
-
+      if($scope.videoFrame == false){
+        $scope.videoFrame2 = false; 
+      }
         $scope.userId = JSON.parse(userID);
         if($scope.isLoggedIn == true){
           $scope.myID = $scope.userId;
@@ -371,6 +373,13 @@ $scope.drawDiagram = function(index){
     $scope.updatePlaylist = function($event){
      //$scope.track = [];
      //$scope.counter = 0;
+    //$scope.videoFrame3 = false;
+    if($scope.videoFrame == false){
+        $scope.videoFrame2 = false; 
+    }
+     
+    $scope.loaderStatus = "visible-loader";
+    //$scope.loaderStatus2 = "visible-loader";
     console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
 
@@ -403,6 +412,12 @@ $scope.drawDiagram = function(index){
            }
            $scope.videoFrame3 = false;
            $scope.loaderStatus2 = "invisible-loader";
+           if($scope.firstTimePlaylist == false){
+               onYouTubePlayerAPIReady();
+               $scope.firstTimePlaylist = true;
+               $scope.nextSong();
+          }
+           
       });
     };
 
@@ -595,12 +610,14 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playFavorites = function(index){
          //console.log(model.myfavorites);
+         
         $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
           }
          $scope.track = [];
+         $scope.firstTracks = [];
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
@@ -626,12 +643,14 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playMySongs = function(index){
          //console.log(model.mySongs);
+
          $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
                $scope.firstTimePlaylist = true;
           }
          $scope.track = [];
+          $scope.firstTracks = [];
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.mySongs, function(item){

@@ -1011,5 +1011,6 @@ io.on('connection', function(client) {
 
 //===============PORT=================
 	server.listen(process.env.PORT || 3000);
+	server.timeout = 240000; // for testings..
 	console.log("The magic happens on port 3000");
 
