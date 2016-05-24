@@ -2,8 +2,8 @@
 var profile = angular.module('profile',[]);
 
 var model = {
-   // domain: "http://localhost:3000"
-   domain: "http://themusicprofile.com"
+   domain: "http://localhost:3000"
+   // domain: "http://themusicprofile.com"
 }
 
 var business;
@@ -128,11 +128,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             
             $scope.business = data.business.genres;
             $scope.businessPreferences = data.business.preferences;
-            console.log($scope.businessPreferences);
+
             $scope.pleasure = data.pleasure.genres;
 
             $scope.pleasurePreferences = data.pleasure.preferences;
-            console.log($scope.pleasurePreferences);
+
 
             
 
@@ -181,9 +181,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             // get recommendation
            // $scope.recommandation($scope.userId);
             $http.get(model.domain + '/recommandation/' + $scope.userId).success(function(data){ 
-              // console.log(data);
+               $scope.reco = []; 
               for (i in data){
-                $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+                $scope.reco.push({userId: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
               }
             });
 

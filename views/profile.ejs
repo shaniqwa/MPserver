@@ -361,16 +361,22 @@
                 <!-- RECOMMANDED --> 
                    <div id="recommended">
                       <h3>Recommended</h3>
-                      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                      <p>Check out your recent matches with great Producers</p>
                       <div ng-repeat="x in reco">
-                             <img  class="simg" width="100" height="100" border-radius: 100 ng-src="{{x.profileImage}}" /> 
-                             <p>{{x.username}}</p>
+                          <div style="width:100%; height: 80px">
+                             <img  ng-click="init(x.userId)" class="simg recommand-result" width="50" height="50" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                             <div class="recommand-text">
+                                <p style="color: rgba(255,255, 255,0.5)">{{x.firstName}}  {{x.lastName}}</p>
+                                <p ng-click="init(x.userId)" style="color: white; cursor:pointer;">Check my pie &nbsp<i class="fa fa-angle-right" aria-hidden="true"></i> </p>
+
+                             </div>
+                          </div>
                       </div>
 
                       
                     </div>
 
-
+                    <div style="clear:both"></div>
                     <strong>ID</strong>: {{user.userId}} <br>
                 <!-- END RECOMMANDED --> 
 

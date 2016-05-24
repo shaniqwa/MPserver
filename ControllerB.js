@@ -242,7 +242,7 @@ exports.recommandation = function(res, userID){
 		      			}
 		      			if(user){
 		      				console.log(user);
-		      				result.push({usernsame: user.username, profileImage: user.profileImage, userID: user.userId,firstName : user.firstName , lastName: user.lastName, type: user.typeOfUser});		
+		      				result.push({username: user.username, profileImage: user.profileImage, userID: user.userId,firstName : user.firstName , lastName: user.lastName, type: user.typeOfUser});		
 		      				taskCallback();
 		      			}else{
 		      				console.log("user " +producers[i] +" not found");
