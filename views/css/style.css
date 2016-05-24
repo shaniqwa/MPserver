@@ -332,6 +332,11 @@ h4 {
 select {
   color: black;
 }
+
+textarea, input , .btn{
+  outline: none !important; 
+}
+
 .cursor:hover {
   cursor: pointer;
 }
@@ -345,6 +350,10 @@ select {
   padding: 4px 9px !important;
   line-height: 1 !important;
   font-size: 11px !important;
+}
+
+.btn.focus, .btn:focus, .btn:hover{
+  color: #fff !important;
 }
 .btn-google{
     color: #fff;
@@ -699,11 +708,29 @@ select {
   width: 200px;
   height: 30px;
   padding: 10px;
-  color: #00cbff;
+  color: #00cbff !important;
   border-radius: 3em;
   border: 0;
   background-color: rgba(255,255, 255,0.20);
 }
+
+.ms-container .ms-list{
+  background-color: #222;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
+    border-bottom: 1px #555 solid !important;
+    padding: 7px 11px 8px 14px !important;
+    color: #eee !important;
+    font-size: 14px !important;
+}
+
+.ms-container .ms-selectable li.ms-elem-selectable:hover, .ms-container .ms-selection li.ms-elem-selection:hover {
+    background-color: #06befe !important; 
+    color: #222 !important;
+}
+
 .msgBlock {
   background-color: #E0E0E3;
   color: #333335;

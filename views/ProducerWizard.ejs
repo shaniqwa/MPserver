@@ -104,14 +104,14 @@
 
 <div class="container">
 
-    <div class="col-sm-12 text-center">
+ <!--    <div class="col-sm-12 text-center">
         <div class="well">
             <h1>Producer Wizard</h1>
         </div>
-    </div>
+    </div> -->
 
     <!-- BEGIN FORM -->
-    <form action="/processProducerWizardForm" method="post" id="wizard">
+    <form action="/processProducerWizardForm" method="post" id="ProducerWizardForm">
     
     <!-- pass hidden values : id and type of user -->
     <input type="hidden" name="userID" value="<%= user.userId %>">
@@ -127,7 +127,7 @@
 <!-- ADDITIONAL MISSING INFORMATION -->
 <div class="col-sm-6">
         <div class="well">
-        <h3>Additional Information</h3>
+        <h3>Your Songs</h3>
          Band/Artist Name:<br>
         <input type="text" class="producerForm" name="artistName">
         <br><br>
@@ -153,41 +153,15 @@
 
         <div id="status">
         </div> -->
-        <br>
-
-        user id : <%= user.userId %><br>
-        google token: <%= user.YT_AT%><br>
-
-
-        <% if (user.ageGroup == null) { %>
-        <strong>Age Group: </strong>
-        <select name="ageGroup">
-            <option value="1" selected="selected">Under 14</option>
-            <option value="2">15-24</option>
-            <option value="3">25-34</option>
-            <option value="4">35-44</option>
-            <option value="5">45-54</option>
-            <option value="6">55+</option>
-        </select>
-    <% } %>
+      
     </div>
 </div>
 
 <!-- ARTIST PIE -->
 <div class="col-sm-6">
         <div class="well">
-           <h3>Your Music</h3>
-          <!-- dropdown with autocomplete init -->
-        <script type="text/javascript">
-        $(document).ready(function() {
-          $(".js-example-basic-single").select2();
-          $('#my-select').multiSelect()
-        });
-        </script>
-
-
-        
-
+           <h3>Your Style</h3>
+           <p>Please choose 5 genre tags that most describe your music. Rate each genre influence between 1-5 and we will calculate your unique Artist Pie</p>
          <label for="genre1">Genre 1</label><br>
         <select id="genre1" name="genre1" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
@@ -196,7 +170,7 @@
         <% } %>
         </select>
                   <input id="slider1" name="slider1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
-        <br>
+        <br><br>
         <label for="genre2">Genre 2</label><br>
         <select id="genre2" name="genre2" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
@@ -205,7 +179,7 @@
         <% } %>
         </select>
                   <input id="slider2" name="slider2" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
-          <br>
+          <br><br>
          <label for="genre3">Genre 3</label><br>
         <select id="genre3" name="genre3" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
@@ -214,7 +188,7 @@
         <% } %>
         </select>
                   <input id="slider3" name="slider3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
-          <br>
+          <br><br>
          <label for="genre4">Genre 4</label><br>
         <select id="genre4" name="genre4" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
@@ -223,7 +197,7 @@
         <% } %>
         </select>
                   <input id="slider4" name="slider4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
-          <br>
+          <br><br>
          <label for="genre5">Genre 5</label><br>
         <select id="genre5" name="genre5" class="js-example-basic-single">
         <option value="null"> Select Genre...</option>
@@ -239,12 +213,21 @@
 </div>
     
     </form>
-    <button type="submit" form="wizard" class="btn btn-submit" value="Submit">Submit</button>
+    <button type="submit" form="ProducerWizardForm" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
     <!-- END FORM -->
 </div>
 <%- include jsFiles %>
-<script src="js/producerWizard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
  <script src="js/jquery.multi-select.js" type="text/javascript"></script>
+
+
+<script src="js/producerWizard.js"></script>
+          <!-- dropdown with autocomplete init -->
+        <script type="text/javascript">
+        $(document).ready(function() {
+          $(".js-example-basic-single").select2();
+          $('#my-select').multiSelect()
+        });
+        </script>
 </body>
 </html>
