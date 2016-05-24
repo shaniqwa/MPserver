@@ -81,15 +81,15 @@
                  
                  <!-- tabs -->
                   <ul id="myTab" class="nav nav-tabs">
-                    <li class="active"><a href="#profile" id="profile-tab">Profile</a></li>
-                    <li><a href="#favorites" id="favorites-tab">Favorites</a></li>
-                    <li><a href="#following" id="following-tab">Following</a></li>
-                    <li><a href="#followers" id="followers-tab">Followers</a></li>
+                    <li class="active"><a data-toggle="tab" href="#profile" id="profile-tab">Profile</a></li>
+                    <li><a data-toggle="tab" href="#favorites" id="favorites-tab">Favorites</a></li>
+                    <li><a data-toggle="tab" href="#following" id="following-tab">Following</a></li>
+                    <li><a data-toggle="tab" href="#followers" id="followers-tab">Followers</a></li>
                      <% if (user.typeOfUser == "Producer") {  %>
-                    <li><a href="#statistics" id="statistics-tab">Statistics</a></li>
-                    <li><a href="#mySongs" id="mySongs-tab">My Songs</a></li>
+                    <li><a data-toggle="tab" href="#statistics" id="statistics-tab">Statistics</a></li>
+                    <li><a data-toggle="tab" href="#mySongs" id="mySongs-tab">My Songs</a></li>
                     <% } %>
-                    <li><a href="#search" id="search-tab">Search</a></li>
+                    <li><a data-toggle="tab" href="#search" id="search-tab">Search</a></li>
                   </ul>
 
                   <!-- BEGIN TEB CONTENT -->
@@ -534,6 +534,21 @@
 <script>
 $(document).ready(function(){
 
+
+    //set sidebars height dynemicly
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var right   = $('.rightSidebar').height(),
+            left    = $('.leftSidebar').height(),
+            content = $('.content').height();
+
+            $('.leftSidebar').css({"height":content + "px"} );
+            $('.rightSidebar').css({"height":content + "px"} );
+    });
+
+
+
+
+  //post music preferences form
   $("#updatePreferencesForm").submit(function(e){
     var postData = $(this).serializeArray();
     var formURL = $(this).attr("action");
@@ -568,8 +583,10 @@ $(document).ready(function(){
         }
     }
   });
-  // $('#main-tabs').tabCollapse();
-  // $('#myTab').tabCollapse();
+
+
+  //tab collapse plugin
+  $('#myTab').tabCollapse();
 
    $('.nav-tabs a[href="#search"]').hide();
     // $('.rightSidebar').css('height', $('.content').height()+'px');
