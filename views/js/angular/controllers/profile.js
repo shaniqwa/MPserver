@@ -510,7 +510,8 @@ $scope.drawDiagram = function(index){
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
       }else{
-        $scope.heart == "fa-heart-o"
+        $scope.heart == "fa-heart-o";
+        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
       }
       var data = JSON.stringify({
                       userId : $scope.myID,
