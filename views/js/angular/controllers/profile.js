@@ -103,9 +103,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
     // when video ends
      function onPlayerStateChange(event) {        
-        if(event.data === 0) {            
+        if(event.data === 0) {   
+                 
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
+
         }
     }
 
@@ -210,7 +212,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                 $scope.artist = data.artist;
                 model.mySongs = $scope.songs; 
                $http.get(model.domain + '/getProducerStatistics/' + $scope.userId).success(function(data){
-                   // console.log(data);
+                   //console.log(data);
                    $scope.ageGroupCounters.push({ageGroup1Counter: data.ageGroup1Counter});
                    $scope.ageGroupCounters.push({ageGroup2Counter: data.ageGroup2Counter});
                    $scope.ageGroupCounters.push({ageGroup3Counter: data.ageGroup3Counter});
@@ -225,7 +227,12 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                      $scope.songCounters.push({counterAgeGroup1: data.songs[i].counterAgeGroup1, counterAgeGroup2: data.songs[i].counterAgeGroup2, counterAgeGroup3: data.songs[i].counterAgeGroup3, counterAgeGroup4: data.songs[i].counterAgeGroup4, counterAgeGroup5: data.songs[i].counterAgeGroup5, counterAgeGroup6: data.songs[i].counterAgeGroup6, counterLocal: data.songs[i].counterLocal, counterTotal: data.songs[i].counterTotal, songId: data.songs[i].songId, counterInternal: data.songs[i].counterInternal}); 
                    }
                    drawAgeGroupDiagram($scope.songCounters[$scope.selectedSong]);
-                   drawLocalVsWorldDiagram();
+                   drawLocalVsWorldDiagram($scope.ageGroupCounters);
+                   
+               });
+               $http.get(model.domain + '/getFacebookYoutubeStatistics/' + $scope.userId).success(function(data){
+                    //console.log(data); 
+                   //drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
                });
 
             }//end if producer
@@ -284,7 +291,7 @@ $scope.bringMePlaylist = function($event){
     var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          //console.log(url);
     $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           // console.log(data);
+            console.log(data);
        
             $scope.videoFrame3 = true;
             
@@ -440,6 +447,7 @@ $scope.drawDiagram = function(index){
                     $scope.heart = "fa-heart";
                 }
               }//console.log($scope.track[$scope.counter].url);
+              //console.log($scope.track[$scope.counter]);
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
@@ -669,6 +677,15 @@ console.log("inside recommandation");
                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
          });
          $scope.nextSong(); 
+    };
+
+
+
+/***********************************************************/
+/********************updateCounters FUNCTION**********************/
+/***********************************************************/
+    $scope.updateCounters = function(){
+         //TODO SEND REQUEST TO THIS LINK /updateCounters/:prodID/:songID/:userID
     };
 
 

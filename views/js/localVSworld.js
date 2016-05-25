@@ -1,5 +1,18 @@
 var drawLocalVsWorldDiagram = function (diagramData) {
-
+    console.log(diagramData); 
+    var local, global;
+    if (diagramData[8].totalCounter == 0){
+       local = 0;
+       global = 0;
+    }
+    else{
+        local = Math.floor( diagramData[6].counterLocal / diagramData[8].totalCounter ); 
+        global = Math.floor( diagramData[7].internalCounter / diagramData[8].totalCounter );
+    }
+    
+    
+    
+    console.log(local + " " + global);
     // Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
@@ -44,8 +57,8 @@ var drawLocalVsWorldDiagram = function (diagramData) {
         series: [{
             name: 'Brands',
             data: [
-                { name: 'Local', y: 56.33 },
-                { name: 'World', y: 24.03 }
+                { name: 'Local', y: local },
+                { name: 'World', y: global }
             ]
         }]
     });
