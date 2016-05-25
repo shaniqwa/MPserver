@@ -242,8 +242,9 @@ function getSimilarArtist(artist) {
 };
 
 function getRandTrackProducer(arrSongs) {
-    var theSong = Random.pick(engine, arrSongs, 0, arrSongs.length);
+    var theSong = Random.pick(engine, arrSongs.songs, 0, arrSongs.songs.length);
 	theSong['type'] =  'producer';
+	theSong['prodId'] = arrSongs.prodId;
     return theSong;
 };
 
@@ -334,7 +335,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -417,7 +418,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -488,7 +489,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -571,7 +572,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -651,7 +652,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -722,7 +723,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
