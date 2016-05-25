@@ -654,21 +654,25 @@ io.on('connection', function(client) {
 
 
 
- app.param('url', function ( req, res, next, value){
+ app.param('song', function ( req, res, next, value){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
     });
-
+app.param('artist', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
         //Remove Song from favorites
-    app.get('/removeFav/:songId', function (req, res, next){
+    app.get('/removeFav/:song/:artist', function (req, res, next){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next(); 
         },
 
         function (req, res) {
-        Controller.removeFav(res,req.params.url);
+        Controller.removeFav(res,req.params.song,req.params.artist);
     });
 
 

@@ -74,13 +74,16 @@ exports.getFavorites = function(res,userId) {
 	  res.status(200).json(doc.songs);
 	});
 }
-exports.removeFav = function(res,url) {
-	Favorites.findOneAndRemove({'url': url}, function (err, doc) {
-    if (err) {
-        throw err;
-    }
-     res.status(200).json("New song has been removed from favorites successfully, songId: " + url);
-});
+exports.removeFav = function(res,song,artist) {
+	Favorites.findOne({song: song,artist: artist}, function (err, doc) {
+	    if (err) {
+	        throw err;
+	    }
+	    doc.remove(function(err){
+	    	 res.status(200).json("New song has been removed from favorites successfully, songId: " + song + " " + artist);
+	    });
+    
+    });
 }
 exports.addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.

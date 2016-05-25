@@ -408,7 +408,7 @@ $scope.drawDiagram = function(index){
          var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
           //console.log(url);
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           // console.log(data);
+            console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
                  $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
