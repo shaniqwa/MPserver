@@ -329,6 +329,13 @@ h4 {
   margin-bottom: 140px;
 }
 
+
+/*MOBILE TABS*/
+.panel{
+  background-color: transparent !important;
+}
+
+
 select {
   color: black;
 }
