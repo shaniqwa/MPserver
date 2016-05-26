@@ -408,7 +408,7 @@ $scope.drawDiagram = function(index){
          var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
           //console.log(url);
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           // console.log(data);
+            console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
                  $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
@@ -510,7 +510,8 @@ $scope.drawDiagram = function(index){
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
       }else{
-        $scope.heart == "fa-heart-o"
+        $scope.heart == "fa-heart-o";
+        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
       }
       var data = JSON.stringify({
                       userId : $scope.myID,

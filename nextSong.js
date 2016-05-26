@@ -191,8 +191,8 @@ var pushSong = function(song, typeAP, artistOrg, callback) {
 
 function pickProducerConsumer() { 
     var relations = [
-        [0, "producers"],
-        [100, "artists"]
+        [20, "producers"],
+        [80, "artists"]
     ];
     return pickChoice(relations);
 };
@@ -242,8 +242,9 @@ function getSimilarArtist(artist) {
 };
 
 function getRandTrackProducer(arrSongs) {
-    var theSong = Random.pick(engine, arrSongs, 0, arrSongs.length);
+    var theSong = Random.pick(engine, arrSongs.songs, 0, arrSongs.songs.length);
 	theSong['type'] =  'producer';
+	theSong['prodId'] = arrSongs.prodId;
     return theSong;
 };
 
@@ -276,18 +277,21 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                         collection.findOne({
                             pleasurePieId: document.userId
                         }, function(err, document) {
-                            if (err) { // didn't found pie datadddd
+                            if (err) { // didn't found pie data
                                 throw err;
                             } else { //found pie data
                                 var count = document.genres.length;
                                 var results = [];
+								var idCurrGenreArr = 0;
                                 for (var i = 0; i < count; i++) {
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+									if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
                                 }
                                 var newGenre = pickChoice(results);
                                 if ((currGenre == newGenre) || (runs == 1) ) { // if same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
-                                    if (prodOrConsumer == "artists") { // known artist
+                                    if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+										prodOrConsumer = "artists";
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
                                         var artistOrSimiliar = pickArtistOrSimiliar();
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
@@ -334,7 +338,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -361,14 +365,17 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             } else { //found pie data
                                                 var count = document.genres.length;
                                                 var results = [];
+												var idCurrGenreArr = 0;
                                                 for (var i = 0; i < count; i++) {
                                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+													if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
                                                 }
                                                 var newGenre = pickChoice(results);
                                                 ng = newGenre;
                                                 //choose producer or known artist
                                                 var prodOrConsumer = pickProducerConsumer();
-                                                if (prodOrConsumer == "artists") { // known artist
+                                                if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+													prodOrConsumer = "artists";
                                                     //choose random artist
                                                     var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
@@ -417,7 +424,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -488,7 +495,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -520,14 +527,17 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                 console.log("extracting pie data :");
                                 var count = document.genres.length;
                                 var results = [];
+								var idCurrGenreArr = 0;
                                 for (var i = 0; i < count; i++) {
                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+									if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
                                 if ((currGenre == newGenre) || (runs == 1)) { //stay in same genre or first run
                                     var prodOrConsumer = pickProducerConsumer();
-                                    if (prodOrConsumer == "artists") { // known artist
+                                    if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+										prodOrConsumer = "artists";
                                         var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
                                         var artistOrSimiliar = pickArtistOrSimiliar(); // choose song of this one or similiar
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
@@ -571,7 +581,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -598,14 +608,17 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             } else { //found pie data
                                                 var count = document.genres.length;
                                                 var results = [];
+												var idCurrGenreArr = 0;
                                                 for (var i = 0; i < count; i++) {
                                                     results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+													if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
                                                 }
                                                 var newGenre = pickChoice(results);
                                                 ng = newGenre;
                                                 //choose producer or known artist
                                                 var prodOrConsumer = pickProducerConsumer();
-                                                if (prodOrConsumer == "artists") { // known artist
+                                                if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+													prodOrConsumer = "artists";
                                                     //choose random artist
                                                     var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre); // choose song of this one or similiar
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
@@ -651,7 +664,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -722,7 +735,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document.songs));
+                                                        playlist.push(getRandTrackProducer(document));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
