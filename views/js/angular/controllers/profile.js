@@ -103,8 +103,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
     // when video ends
      function onPlayerStateChange(event) {        
-        if(event.data === 0) {   
-                 
+        if(event.data === 0) {  
+
+            if($scope.user.typeOfUser == "Producer")
+            $scope.updateCounters();
+
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
 
@@ -297,7 +300,7 @@ $scope.bringMePlaylist = function($event){
             
              for(i in data){
                  if(typeof data[i].artistName === 'undefined'){
-                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                  }
                  else{
                    $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -411,7 +414,7 @@ $scope.drawDiagram = function(index){
             console.log(data);
            for(i in data){
                if(typeof data[i].artistName === 'undefined'){
-                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                }
                else{
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -531,9 +534,6 @@ $scope.drawDiagram = function(index){
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
-
-
-
 
 
 
@@ -686,7 +686,11 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
+        console.log("updateCounters function");
          //TODO SEND REQUEST TO THIS LINK /updateCounters/:prodID/:songID/:userID
+         $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
+              console.log("updateCounters successfuly");
+         });
     };
 
 
