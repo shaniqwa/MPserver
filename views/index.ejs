@@ -3,10 +3,11 @@
 <head>
     <title>The Music Profile</title>
    <%- include head %> 
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.0/jquery.fullPage.css">
 </head>
-<body>
+<body class="home-body">
 <!-- header -->
-<nav class="navbar navbar-inverse navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top navbar-fixed-top nav-home">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -16,32 +17,22 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Music Profile</a>
+      <a class="navbar-brand" href="#">The Music Profile</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-music">  <span class=" fa-angle-down"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Activity Switch</a></li>
-            <li><a href="#">Mobile App</a></li>
-            <li><a href="#">About</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Developers API</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-        </li>
-      </ul>
-      <!-- SEARCH -->
-<!--       <form id="search-form" ng-submit="search(searchText)" class="navbar-form navbar-left" role="search">
-        <div class="form-group search-wrapper">
-          <input type="text" ng-model="searchText" class="form-control search-form search-custom" placeholder="Search">
-          <button type="submit" class="btn btn-default search-btn"><span class="fa fa-search"></button>
-        </div>
-      </form> -->
+      
+      <a href="/auth/google?type=Consumer" class="btn btn-google header-login"><span class="fa fa-google-plus"></span> Google</a>
+      <a href="/auth/facebook?type=Consumer" class="btn btn-facebook header-login"><span class="fa fa-facebook"></span> Facebook</a>
+      
+      <p class="navbar-text navbar-right nav-text">Consumer</p>
+      <img src="images/consumer-white.png" width="20" class="navbar-right nav-icon">
+      <p class="navbar-text navbar-right nav-text" style="font-size:23px;line-height:0.6;">&nbsp&nbsp|</p>
+      <a href="/auth/google?type=Producer" class="btn btn-google header-login"><span class="fa fa-google-plus"></span> Google</a>
+
+      <p class="navbar-text navbar-right nav-text">Producer</p>
+      <img src="images/producer-white.png" width="20" class="navbar-right nav-icon">
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -58,33 +49,193 @@
     </div>   -->
 
 
-     <div class="col-sm-9 home">
-            <div class="content" style="background: linear-gradient(rgba(0, 0, 0,0) 100%, rgba(0, 0, 0,0));">
+
+<div id="fullpage">
+
+    <!-- HOME SLIDE -->
+     <div class="section home-slide1 home-slide">
+            <div class="center holder" style="margin-top:60px">
+                <h1><span style="font-size:5vw">The Music Profile</span></h1>
+                <h2><span style="font-size:3vw; margin-top:-24px;">Explore music</span></h2>
             </div>
+     </div>
+
+     <!-- PRODUCER CONSUMER SLIDE -->
+     <div class="section home-slide2 home-slide">
+          <div class="center holder split-slide">
+              <img src="images/producer-white.png" class="res-img">
+              <h1>Producer</h1>
+              <h4>Get your music out there. </h4>
+              <ul class="well">
+              <span style="font-size: 16px;">
+                <li><i class="fa fa-check" aria-hidden="true"></i> Define your artist music profile</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Spread your music to high match Consumers</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Get to know your listeners</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Track your popularity by viewing statistics</li>
+                </span>
+              </ul>
+          </div>
+
+
+            <div class="center holder split-slide">
+                <img src="images/consumer-white.png" class="res-img">
+                <h2>Consumer</h2>
+                <h4>Simply consum music you love. </h4>
+                <ul class="well">
+                <span style="font-size: 16px;">
+                <li><i class="fa fa-check" aria-hidden="true"></i> Listen to playlits customized for you</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Enjoy our auto DJ and jump between different genres</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Explore new artist that match your Music Profile</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Follow artists and frinds and listen to their Music Profiles</li>
+                </span>
+              </ul>
+            </div>
+     </div>
+
+
+     <!-- BUSINESS PLEASURE SLIDE -->
+     <div class="section home-slide3 home-slide">
+            <div class="center holder-2">
+            <h2>Business Pleasure</h2>
+            <span style="font-size: 16px;"><p>Define your music preferences for busy and playfull modes in your day. Check out our Activity Switch to set your preferences automatically</p></span>
+            </div>
+             <!--  <div class="col-sm-6 home-slide3-business home-slide"></div>
+              <div class="col-sm-6 home-slide3-pleasure home-slide"></div> -->
+
+     </div>
+     <div class="section home-slide parallax-window" data-parallax="scroll" data-image-src="/images/slide-share.jpg">
+
+              <div class="holder" style="width:40%">
+                <h2>Spread the word</h2>     
+                <span style="font-size: 16px;">
+                <p>We would really appreciate if you can help us spread the word and share The Music Profile for eveyone to enjoy!</p></span>
+
+                <!-- SHARE ON FACEBOOK -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u=themusicprofile.com" class="share share-fb" target="_blank">
+                <i class="fa fa-facebook" aria-hidden="true"></i>&nbsp Share</a>
+
+                <!-- SHARE ON TWEETER -->
+                <a href="https://twitter.com/share" class="share share-tweet" data-url="http://themusicprofile.com" data-hashtags="theMusicProfile" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>&nbsp Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+                <!-- SHARE ON GOOGLE + -->
+              <!-- <div class="g-plus" data-action="share" data-height="24" data-href="http://themusicprofile.com"></div> -->
+              
+
+              <a href="https://plus.google.com/share?url=http://themusicprofile.com" class="share share-gp" target="_blank">
+                   <i class="fa fa-google-plus" aria-hidden="true"></i>&nbsp Share</a>
+              </a>
+              </div>
     </div>
 
 
-      <div class="col-sm-3">
-                <div class="well rightSidebarHome">
 
-                <h4>Consumer</h4>
-                <p>Login or Register with</p>
-                <a href="/auth/google?type=Consumer" class="btn btn-google"><span class="fa fa-google-plus"></span> Google</a>
-                <a href="/auth/facebook?type=Consumer" class="btn btn-facebook"><span class="fa fa-facebook"></span> Facebook</a>
-                <br>
-                <hr>
-                
-                <h4>Producer</h4>
-                <p>Login or Register with</p>
-                <a href="/auth/google?type=Producer" class="btn btn-google"><span class="fa fa-google-plus"></span> Google</a>
-                <!-- <a href="/auth/facebook?type=Producer" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a> -->
 
-                </div>
-    </div> 
-        
+</div>
+<!-- END FULL PAGE -->
+<!-- <div class="parallax-window" data-parallax="scroll" data-image-src="/images/slide-share.jpg"></div>
+<div class="parallax-window" data-parallax="scroll" data-image-src="/images/poly.jpg"></div>
+<div class="parallax-window" data-parallax="scroll" data-image-src="/images/slide-share.jpg"></div> -->
+
     
 
 </div>
 <%- include jsFiles %>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.0/jquery.fullPage.js"></script>
+<script src="js/parallax.min.js"></script>
+<script src="js/attrchange.js"></script>
+<script>
+$(document).ready(function() {
+
+    $('#fullpage').fullpage({
+        //Navigation
+        menu: '#menu',
+        lockAnchors: false,
+        anchors:['Home', 'Producer | Consumer', 'Business | Pleasure', 'Spread the Word'],
+        navigation: true,
+        navigationPosition: 'right',
+        navigationTooltips: ['Home', 'Producer | Consumer', 'Business | Pleasure', 'Spread the Word'],
+        showActiveTooltip: false,
+        slidesNavigation: true,
+        slidesNavPosition: 'bottom',
+
+        //Scrolling
+        css3: true,
+        scrollingSpeed: 700,
+        autoScrolling: true,
+        fitToSection: false,
+        fitToSectionDelay: 1000,
+        scrollBar: true,
+        easing: 'easeInOutCubic',
+        easingcss3: 'ease',
+        loopBottom: false,
+        loopTop: false,
+        loopHorizontal: true,
+        continuousVertical: false,
+        normalScrollElements: '#element1, .element2',
+        scrollOverflow: true,
+        scrollOverflowOptions: null,
+        touchSensitivity: 15,
+        normalScrollElementTouchThreshold: 5,
+
+        //Accessibility
+        keyboardScrolling: true,
+        animateAnchor: true,
+        recordHistory: true,
+
+        //Design
+        controlArrows: true,
+        verticalCentered: true,
+        sectionsColor : ['#ccc', '#fff'],
+        // paddingTop: '3em',
+        // paddingBottom: '10px',
+        // fixedElements: '#header, .footer',
+        responsiveWidth: 0,
+        responsiveHeight: 0,
+
+        //Custom selectors
+        sectionSelector: '.section',
+        slideSelector: '.slide',
+
+        //events
+        onLeave: function(index, nextIndex, direction){},
+        afterLoad: function(anchorLink, index){
+          $(".section").eq(0).animate({"opacity":"1"},500);  //fade the first div.section in on page load
+        },
+        afterRender: function(){},
+        afterResize: function(){},
+        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){
+
+        },
+        onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex){}
+    });
+
+
+});
+
+
+</script>
+
+<script>
+$(document).ready(function(){
+
+
+
+$(".section").attrchange({
+    trackValues: true, // set to true so that the event object is updated with old & new values
+    callback: function(evnt) {
+        if(evnt.attributeName == "class") { // which attribute you want to watch for changes
+            if(evnt.newValue.search(/active/i) == -1) { // "active" is the class name you search for inside "class" attribute
+                $(".section.active").animate({"opacity":"1"},1000); //fade in the section with class active
+            }
+        }
+    }
+});
+
+}); //end of document ready
+</script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 </body>
 </html>
