@@ -17,8 +17,9 @@
 
 /*theme colors*/
 
-/*gray      #222*/
-/*white     #e4e4e4*/
+/*gray          #222*/
+/*white         #e4e4e4*/
+/*light blue    #00bfff*/
 /* colors : #06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f"*/
 
 
@@ -62,6 +63,13 @@ body {
 .home-body{
   background-color: #222 !important;
   background-image: none;
+}
+
+.logo{
+  background-image: url("../images/logo-s-2.png"); 
+  width:114px;
+  height: 41px;
+  margin:3px 10px 0 10px !important;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -153,7 +161,7 @@ ul{
 }
 .holder-4 {
     position: relative;
-    top: 35%;
+    top: 30%;
     padding: 30px;
      background-color: transparent;
     width: 100%;
@@ -164,7 +172,7 @@ ul{
   margin: 0 auto;
   background-color: rgba(0, 0, 0,0.4);
   position: relative;
-  top:60px;
+  top:20%;
   padding: 20px;
 }
 .mobile-holder ul{
@@ -173,6 +181,17 @@ ul{
 .mobile-holder h2{
   margin: 0;
 }
+
+
+/*NAVBAR*/
+
+/*.navbar-brand,
+.navbar-nav li a {
+    line-height: 150px;
+    height: 60px;
+    padding-top: 0;
+}*/
+
 .navbar{
   margin-bottom: 0px !important;
 }
@@ -288,13 +307,13 @@ ul{
   opacity: 0;
 }
 .home-slide{
-      background-repeat: no-repeat;
+      /*background-repeat: no-repeat;*/
   background-position: center center; 
-  -webkit-background-size: cover;
+  /*-webkit-background-size: cover;*/
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
 }
 .home-slide1{
   background-image: url("../images/poly.jpg") !important;
@@ -1185,7 +1204,7 @@ select::-ms-expand { /* for IE 11 */
  
 .bounce {
  position: absolute;
- bottom: 30px;
+ bottom: 15%;
  left: 50% ;
  width: 60px;
  height: 60px ;
