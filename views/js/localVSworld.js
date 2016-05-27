@@ -1,5 +1,5 @@
 var drawLocalVsWorldDiagram = function (diagramData) {
-    console.log(diagramData); 
+    //console.log(diagramData); 
     var local, global;
     if (diagramData[8].totalCounter == 0){
        local = 0;
@@ -12,7 +12,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
     
     
     
-    console.log(local + " " + global);
+    //console.log(local + " " + global);
     // Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
