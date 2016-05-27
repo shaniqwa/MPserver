@@ -10,7 +10,6 @@ var business;
 var songs;
 var artist;
 
-
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";
@@ -103,8 +102,11 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
 
     // when video ends
      function onPlayerStateChange(event) {        
-        if(event.data === 0) {   
-                 
+        if(event.data === 0) {  
+
+            if($scope.user.typeOfUser == "Producer")
+            $scope.updateCounters();
+
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
 
@@ -160,7 +162,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                      model.randomGenre = allGenres[getRandomNumber];
                      
                      $scope.updatePlaylist(model.randomGenre);
-                     console.log(model.randomGenre);
+                     // console.log(model.randomGenre);
               }
             }
 
@@ -294,10 +296,13 @@ $scope.bringMePlaylist = function($event){
             console.log(data);
        
             $scope.videoFrame3 = true;
-            
+
              for(i in data){
-                 if(typeof data[i].artistName === 'undefined'){
-                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+                 if(data[i].type == 'producer'){
+                  var startUrl = "https://www.youtube.com/watch?v=";
+                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                 
+                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                  }
                  else{
                    $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -387,7 +392,7 @@ $scope.drawDiagram = function(index){
      
     $scope.loaderStatus = "visible-loader";
     //$scope.loaderStatus2 = "visible-loader";
-    console.log("my select is: " + $scope.data.select);
+    // console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
 
          if(typeof $event === 'undefined'){
@@ -410,8 +415,10 @@ $scope.drawDiagram = function(index){
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
             console.log(data);
            for(i in data){
-               if(typeof data[i].artistName === 'undefined'){
-                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, active: 0});
+               if(data[i].type == 'producer'){
+                 var startUrl = "https://www.youtube.com/watch?v=";
+                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                }
                else{
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -447,7 +454,8 @@ $scope.drawDiagram = function(index){
                     $scope.heart = "fa-heart";
                 }
               }//console.log($scope.track[$scope.counter].url);
-              //console.log($scope.track[$scope.counter]);
+              
+             
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
@@ -525,15 +533,12 @@ $scope.drawDiagram = function(index){
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
       //console.log(model.domain);
-      $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
+      $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
            console.log(data);
-           $scope.msg = "Added successfuly to your Favorites";
+           $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };
-
-
-
 
 
 
@@ -686,7 +691,11 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
+        console.log("updateCounters function");
          //TODO SEND REQUEST TO THIS LINK /updateCounters/:prodID/:songID/:userID
+         $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
+              console.log("updateCounters successfuly");
+         });
     };
 
 
