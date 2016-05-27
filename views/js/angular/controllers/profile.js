@@ -10,7 +10,6 @@ var business;
 var songs;
 var artist;
 
-
 profile.controller('profileCtrl', function ($scope, $http, $sce) {
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";
@@ -297,10 +296,13 @@ $scope.bringMePlaylist = function($event){
             console.log(data);
        
             $scope.videoFrame3 = true;
-            
+
              for(i in data){
-                 if(typeof data[i].artistName === 'undefined'){
-                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
+                 if(data[i].type == 'producer'){
+                  var startUrl = "https://www.youtube.com/watch?v=";
+                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                 
+                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                  }
                  else{
                    $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -413,8 +415,10 @@ $scope.drawDiagram = function(index){
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
             console.log(data);
            for(i in data){
-               if(typeof data[i].artistName === 'undefined'){
-                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
+               if(data[i].type == 'producer'){
+                 var startUrl = "https://www.youtube.com/watch?v=";
+                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                }
                else{
                  $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
@@ -450,7 +454,8 @@ $scope.drawDiagram = function(index){
                     $scope.heart = "fa-heart";
                 }
               }//console.log($scope.track[$scope.counter].url);
-              //console.log($scope.track[$scope.counter]);
+              
+             
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
