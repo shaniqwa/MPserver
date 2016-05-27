@@ -161,7 +161,7 @@
                       <!-- STATISTICS -->
                     <div id="statistics" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
                         <h3>statistics</h3>
-                       <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
+                       <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs track by songs" ng-change="drawDiagram(selectedSong.songId)">
                           <option ng-repeat="song in songs">{{song.title}}</option>
                        </select></div>
                         <div>name: {{songs[selectedSong].title}}</div>
