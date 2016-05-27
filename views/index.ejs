@@ -193,6 +193,25 @@
                    <i class="fa fa-google-plus" aria-hidden="true"></i>&nbsp Share</a>
               </a>
               </div>
+
+              <div class="footer">
+                  <!-- about -->
+                  <a id="inline" href="#about"><div class="footer-icons"><i class="fa fa-info" aria-hidden="true"></i></div></a>
+
+                  <!-- contact us -->
+                  <a id="inline" href="#contact"><div class="footer-icons"><i class="fa fa-envelope" aria-hidden="true"></i></div></a>
+
+                  <!-- facebook -->
+                  <a href="https://www.facebook.com/theMusicProfile/" target="_blank"><div class="footer-icons"><i class="fa fa-facebook" aria-hidden="true"></i></div></a>
+
+
+                   <!--  <p><a href="#">About</a> | </p>
+                    <p><a href="#">Contact us</a> | </p>
+                    <p><a href="https://www.facebook.com/theMusicProfile/" target="_blank">Facebook</a></p> -->
+
+                    <!-- android app -->
+                    <img src="images/app-on-Google-play.png" width="200" style="float:right">
+              </div>
     </div>
 
 
@@ -287,6 +306,18 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function(){
+    // init fancybox
+    $("#inline").fancybox({
+    helpers : {
+        overlay : {
+            css : {
+                'background' : 'rgba(0, 0, 0, 0.7)'
+            }
+        }
+    }
+  });
+
+    //arrow down
     $(".bounce").on("click", function(){
       $.fn.fullpage.moveSectionDown();
     });
@@ -371,5 +402,54 @@ $(".section").attrchange({
     });
   });
 </script>
+
+
+<!-- FANCYBOX -->
+
+
+    <!-- ABOUT -->
+    <div style="display:none">
+        <div id="about">
+        <h2>About</h2>
+        <p>This project was founded at 2016 as part of our software engineering studies at Shenkat College for Engineering and Design. </p>
+        <p>Shani Almog</p>
+        <p>Rafael Bar</p>
+        <p>Stas Volfus</p>
+        <p>Viktoria Yakovashvili</p>
+        </div>
+    </div>
+
+
+    <!-- CONTACT -->
+    <div style="display:none">
+        <div id="contact">
+        <h2>Contact Us</h2>
+        <p>We would love to get some feedbacks or answer any questions. </p>
+         <form action="/processWizardForm" method="post" id="wizard">
+      
+        <div class="form-group col-md-6">
+          <label for="firstName" class="control-label">Name</label>
+          <input type="text" class="producerForm form-control" id="firstName" name="firstName">
+        </div>
+        
+        <div class="form-group col-md-6">
+          <label  for="email" class="control-label">Email </label>
+          <input type="email" class="producerForm form-control" id="email" name="email">
+        </div>
+
+          <div class="form-group col-md-11">
+          <label  for="msg" class="control-label">Message</label>
+          <textarea rows="4" cols="30" class="producerForm form-control"  id="msg" name="msg"  style="width:100%;"></textarea>
+        </div>
+
+
+        </form>
+
+         <button type="submit" form="wizard" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
+        </div>
+    </div>
+
+<!-- END FANCYBOX -->
+
 </body>
 </html>
