@@ -181,6 +181,59 @@ ul{
   height: auto;
   padding: 0px !important;
 }
+.footer{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding: 0 20px 10px 20px;
+}
+.footer img, .footer p, .footer div{
+  display: inline-block;
+  font-size: 16px;
+}
+.footer p{
+  margin-top: 50px;
+}
+.footer a{
+  color: rgba(255,255, 255,0.3);
+}
+.footer-icons{
+  margin-left: 10px;
+  border: 2px solid rgba(255,255, 255,0.5);
+  width: 60px;
+ height: 60px ;
+ border-radius: 50%;
+ background-color: transparent;
+   -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+
+.footer-icons:hover{
+  /*background-color: #00bfff;*/
+  border: 2px solid #00bfff;
+}
+.footer .fa {
+     width: 58px;
+    display: block;
+    text-align: center;
+    color: rgba(255,255, 255,0.5);
+    font: normal 34px 'FontAwesome';
+    line-height: 60px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+       -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+.footer .fa:hover{
+  color: #00bfff;
+}
+
+
+
 .well {
   background-color: rgba(0, 0, 0,0.3);
   border: 0px;
