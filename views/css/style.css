@@ -129,6 +129,7 @@ ul{
 }
 .holder{
   margin: 0 40px 0 40px;
+  position: relative;
 }
 .holder ul{
   width:70%;
@@ -261,6 +262,70 @@ ul{
   background-image: url("../images/slide-pleasure.jpg") !important;
 }
 
+@-moz-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -moz-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+@-webkit-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-30px);
+    -ms-transform: translateY(-30px);
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -moz-transform: translateY(-15px);
+    -ms-transform: translateY(-15px);
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+.arrow-down {
+    background-image: url("../images/scroll-icon.png");
+    width: 33px;
+    height: 45px;
+    display: block;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    padding-bottom: 10px;
+    margin-top: -65px;
+    -moz-animation: bounce 2s infinite;
+  -webkit-animation: bounce 2s infinite;
+  animation: bounce 2s infinite;
+}
+#fp-nav ul li a span, .fp-slidesNav ul li a span{
+  background-color: white !important;
+}
 /*.home-slide4{
   background-image: url("../images/slide-share.jpg") !important;
 }*/
@@ -476,7 +541,7 @@ textarea, input , .btn{
 .share{
   padding:18px 30px 18px 30px;
   margin: 10px;
-  border: 2px dotted white;
+  border: 2px solid white;
   display: inline-block;
   text-decoration: none;
   color:#fff;

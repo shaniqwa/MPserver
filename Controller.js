@@ -75,6 +75,7 @@ exports.getFavorites = function(res,userId) {
 	});
 }
 exports.removeFav = function(res,song,artist) {
+	
 	Favorites.findOne({song: song,artist: artist}, function (err, doc) {
 	    if (err) {
 	        throw err;
