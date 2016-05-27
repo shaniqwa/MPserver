@@ -137,11 +137,37 @@ ul{
   margin: 0 auto;
 }
 .holder-2{
+  position: relative;
+  top:200px;
   padding: 30px;
   background-color: rgba(0, 0, 0,0.5);
   width:65%;
   max-width: 960px;
   margin: 0 auto;
+}
+.holder-3{
+  position: relative;
+  margin: 0 40px 0 40px;
+  top:100px;
+}
+.holder-4 {
+    position: relative;
+    top: 35%;
+    padding: 30px;
+     background-color: transparent;
+    width: 100%;
+    margin: 0 auto;
+  }
+.mobile-holder{
+  width:350px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0,0.4);
+  position: relative;
+  top:60px;
+  padding: 20px 10px 20px 10px;
+}
+.mobile-holder ul{
+  text-align: left;
 }
 .navbar{
   margin-bottom: 0px !important;
@@ -220,11 +246,11 @@ ul{
   background-image: url("../images/slide-bp.jpg") !important;
 }
 .home-slide2-producer{
-  background-image: url("../images/slide-producer.jpg") !important;
+  background-image: url("../images/slide-producer-full.jpg") !important;
 }
 
 .home-slide2-consumer{
-  background-image: url("../images/slide-consumer.jpg") !important;
+  background-image: url("../images/slide-consumer-full.jpg") !important;
 }
 .home-slide3-business{
   background-image: url("../images/slide-business.jpg") !important;
@@ -433,8 +459,10 @@ textarea, input , .btn{
   outline: none !important; 
 }
 
-.cursor:hover {
-  cursor: pointer;
+
+
+.cursor:hover, .btn:hover {
+  cursor: pointer !important;
 }
 /*SEARCH FORM*/
 .search-form {
