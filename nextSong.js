@@ -106,7 +106,7 @@ function pickChoice(choice) {
 
 };
 
-var pushSong = function(song, typeAP, artistOrg, callback) {
+var pushSong = function(song, typeAP, artistOrg,genre, callback) {
 
     var songFull = song.artist.name + " - " + song.name + " | " + song.artist.name + " | " + song.name;
     console.log("full song " + songFull);
@@ -148,6 +148,7 @@ var pushSong = function(song, typeAP, artistOrg, callback) {
                                 playlist.push({
                                     artistName: chsnSongNew.artist.name,
                                     songName: chsnSongNew.name,
+									currGenre: genre,
                                     url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
                                     type: typeAP
                                 });
@@ -166,17 +167,12 @@ var pushSong = function(song, typeAP, artistOrg, callback) {
 
 
 
-                //  playlist.push({
-                //      artistName: song.artist.name,
-                //      songName: song.name,
-                //      url: "no_url" // todo something more intelligent
-                //  });
-                //callback("no_url");
             } else { // there are results from youtube
                 console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
                 playlist.push({
                     artistName: song.artist.name,
                     songName: song.name,
+					currGenre: genre,
                     url: "https://www.youtube.com/watch?v=" + result.items[0].id.videoId,
                     type: typeAP
                 });
@@ -241,10 +237,11 @@ function getSimilarArtist(artist) {
     return theArtist;
 };
 
-function getRandTrackProducer(arrSongs) {
+function getRandTrackProducer(arrSongs,genre) {
     var theSong = Random.pick(engine, arrSongs.songs, 0, arrSongs.songs.length);
 	theSong['type'] =  'producer';
 	theSong['prodId'] = arrSongs.prodId;
+	theSong['currGenre'] = genre;
     return theSong;
 };
 
@@ -298,7 +295,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var chsnSongArtist = getRandTrack(randArtist);
 										
                                             console.log("the artist:: " + chsnSongArtist);
-                                            pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+                                            pushSong(chsnSongArtist,"artist",randArtist,currGenre, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
 											
@@ -314,7 +311,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 											var chsnSongSimilar = getRandTrack(artistSimiliar);
 
 											console.log("the artist:: " + chsnSongSimilar);
-                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+                                            pushSong(chsnSongSimilar,"artist",artistSimiliar,currGenre, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
 											
@@ -338,7 +335,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,currGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -377,12 +374,12 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
 													prodOrConsumer = "artists";
                                                     //choose random artist
-                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, newGenre);
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist = getRandTrack(randArtist);
 														console.log("the artist:: " + chsnSongArtist);
-														pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+														pushSong(chsnSongArtist,"artist",randArtist,newGenre, function(stat) {
 														if (stat == "no_url") {
 														console.log("no url!!!!!");
 									
@@ -398,7 +395,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar);
 													
 															console.log("the artist:: " + chsnSongSimilar);
-															 pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+															 pushSong(chsnSongSimilar,"artist",artistSimiliar,newGenre, function(stat) {
 															if (stat == "no_url") {
 															console.log("no url!!!!!");
 										
@@ -413,7 +410,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 															}
                                                 } else { // producer
 
-                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, newGenre);
                                                     var collection = db.collection('Producer_songs_list');
                                                     
 
@@ -424,7 +421,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,newGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -449,13 +446,13 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         var prodOrConsumer = pickProducerConsumer();
                                         if (prodOrConsumer == "artists") { // known artist
                                             //choose random artist
-                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, pickedGenre);
                                             // choose song of this one or similiar
                                             var artistOrSimiliar = pickArtistOrSimiliar();
                                             if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                 var chsnSongArtist = getRandTrack(randArtist);
 
-												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist,pickedGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 					
@@ -470,7 +467,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 var artistSimiliar = getSimilarArtist(randArtist);
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar);
 											
-												pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+												pushSong(chsnSongSimilar,"artist",artistSimiliar,pickedGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 								
@@ -484,7 +481,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             }
                                         } else { // producer
 
-                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, pickedGenre);
                                             var collection = db.collection('Producer_songs_list');
                                             
                                                     
@@ -495,7 +492,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,pickedGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -543,7 +540,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                             var chsnSongArtist = getRandTrack(randArtist);
 
-												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist,currGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 									
@@ -558,7 +555,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistSimiliar = getSimilarArtist(randArtist);
                                             var chsnSongSimilar = getRandTrack(artistSimiliar);
 				
-                                            pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+                                            pushSong(chsnSongSimilar,"artist",artistSimiliar,currGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 									
@@ -581,7 +578,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,currGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -620,12 +617,12 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                 if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
 													prodOrConsumer = "artists";
                                                     //choose random artist
-                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre); // choose song of this one or similiar
+                                                    var randArtist = getRandArtist(prodOrConsumer, document.genres, newGenre); // choose song of this one or similiar
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist  = getRandTrack(randArtist);
 								
-														pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+														pushSong(chsnSongArtist,"artist",randArtist,newGenre, function(stat) {
                                                         if (stat == "no_url") {
 														console.log("no url!!!!!");
 												
@@ -641,7 +638,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 														artistSimiliar = artistSimiliar.name;
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar);
 
-														pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+														pushSong(chsnSongSimilar,"artist",artistSimiliar,newGenre, function(stat) {
 														if (stat == "no_url") {
 														console.log("no url!!!!!");
 												
@@ -655,7 +652,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     }
                                                 } else { // producer
 
-                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                                    var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, newGenre);
                                                     var collection = db.collection('Producer_songs_list');
                                                             collection.findOne({
                                                                 prodId: randArtistProducer
@@ -664,7 +661,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,newGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
@@ -689,13 +686,13 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         var prodOrConsumer = pickProducerConsumer();
                                         if (prodOrConsumer == "artists") { // known artist
                                             //choose random artist
-                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, currGenre); // choose song of this one or similiar
+                                            var randArtist = getRandArtist(prodOrConsumer, document.genres, pickedGenre); // choose song of this one or similiar
                                             var artistOrSimiliar = pickArtistOrSimiliar();
                                             if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                 var chsnSongArtist = getRandTrack(randArtist);
 											
 
-												pushSong(chsnSongArtist,"artist",randArtist, function(stat) {
+												pushSong(chsnSongArtist,"artist",randArtist,pickedGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 										
@@ -711,7 +708,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 												artistSimiliar = artistSimiliar.name;
                                                 var chsnSongSimilar = getRandTrack(artistSimiliar);
 
-												pushSong(chsnSongSimilar,"artist",artistSimiliar, function(stat) {
+												pushSong(chsnSongSimilar,"artist",artistSimiliar,pickedGenre, function(stat) {
                                                 if (stat == "no_url") {
 												console.log("no url!!!!!");
 
@@ -723,7 +720,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 												
                                             }
                                         } else { // producer
-                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, currGenre);
+                                            var randArtistProducer = getRandArtist(prodOrConsumer, document.genres, pickedGenre);
                                             var collection = db.collection('Producer_songs_list');
                                             
                                                     // console.log(document.userId); 
@@ -735,7 +732,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         throw err;
                                                     } else {
 														if (document) { 
-                                                        playlist.push(getRandTrackProducer(document));
+                                                        playlist.push(getRandTrackProducer(document,pickedGenre));
                                                         callback();
 														} else {
 														var noProd = { producer : "no"};
