@@ -160,15 +160,18 @@ ul{
     margin: 0 auto;
   }
 .mobile-holder{
-  width:350px;
+  width:420px;
   margin: 0 auto;
   background-color: rgba(0, 0, 0,0.4);
   position: relative;
   top:60px;
-  padding: 20px 10px 20px 10px;
+  padding: 20px;
 }
 .mobile-holder ul{
   text-align: left;
+}
+.mobile-holder h2{
+  margin: 0;
 }
 .navbar{
   margin-bottom: 0px !important;
@@ -209,6 +212,9 @@ ul{
   height: 100vh;
   margin-bottom: 0px;
   padding: 30px;
+}
+.side-icon{
+  margin-bottom: 6px;
 }
 .details p {
   margin-left: 23px;
@@ -541,7 +547,7 @@ textarea, input , .btn{
 .share{
   padding:18px 30px 18px 30px;
   margin: 10px;
-  border: 2px solid white;
+  border: 2px dotted white;
   display: inline-block;
   text-decoration: none;
   color:#fff;
@@ -681,6 +687,7 @@ textarea, input , .btn{
   width: 100%;
 }
 .simg{
+  float:left;
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid rgba(255,255, 255,0.4);
@@ -697,8 +704,12 @@ textarea, input , .btn{
   border: 20px solid #222;
 }
 .recommand-result{
-  float: left;
+  width:100%; 
+  height: 80px;
+  /*visibility: hidden;*/
 }
+
+
 .recommand-text{
   float: left;
   margin-top: 4px;
@@ -977,17 +988,17 @@ textarea, input , .btn{
 }
 
 .msgBlock {
-  background-color: #E0E0E3;
-  color: #333335;
+  background-color: #222;
+  color: #64d8ff;
   padding: 15px;
   position: fixed;
   bottom: 10px;
   left: 10px;
   z-index: 9999;
-  font-size: 25px;
-  font-weight: bold;
-  border-radius: 20px;
-  border: 2px solid #333335;
+  font-size: 16px;
+  /*font-weight: bold;*/
+  border-radius: 0.5em;
+  border: 1px solid #64d8ff;
   opacity: 0;
 }
 .elementToFadeInAndOut {
@@ -1104,7 +1115,86 @@ select::-ms-expand { /* for IE 11 */
 }
 
 
+/*ARROW*/
+@import url(http://weloveiconfonts.com/api/?family=fontawesome);
+ 
+.bounce .fa {
+ width: 60px;
+ display: block;
+ text-align: center;
+ color:#00bfff;
+ font:normal 45px 'FontAwesome';
+ line-height:60px;
+ text-rendering: auto;
+ -webkit-font-smoothing: antialiased;
+}
+.fa-angle-double-down:before {content: "\f103";}
+ 
+.bounce {
+ position: absolute;
+ bottom: 30px;
+ left: 50% ;
+ width: 60px;
+ height: 60px ;
+ margin-left:-30px;
+ border: 2px solid #00bfff;
+ -webkit-border-radius:50%;
+ -moz-border-radius:50%;
+ -ms-border-radius:50%;
+ border-radius:50%;
+ animation: bounce 2s infinite;
+ -webkit-animation: bounce 2s infinite;
+ -moz-animation: bounce 2s infinite;
+ -o-animation: bounce 2s infinite;
+}
+.bounce:hover{
+  cursor: pointer;
+}
+ 
+@-webkit-keyframes bounce {
+ 0%, 20%, 50%, 80%, 100% {-webkit-transform: translateY(0);} 
+ 40% {-webkit-transform: translateY(-30px);}
+ 60% {-webkit-transform: translateY(-15px);}
+}
+ 
+@-moz-keyframes bounce {
+ 0%, 20%, 50%, 80%, 100% {-moz-transform: translateY(0);}
+ 40% {-moz-transform: translateY(-30px);}
+ 60% {-moz-transform: translateY(-15px);}
+}
+ 
+@-o-keyframes bounce {
+ 0%, 20%, 50%, 80%, 100% {-o-transform: translateY(0);}
+ 40% {-o-transform: translateY(-30px);}
+ 60% {-o-transform: translateY(-15px);}
+}
+@keyframes bounce {
+ 0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+ 40% {transform: translateY(-30px);}
+ 60% {transform: translateY(-15px);}
+}
 
 
+/*SLIDE IN CONTENT*/
+@import "compass/css3";
 
+* {
+  @include box-sizing(border-box); 
+}
 
+ 
+.come-in {
+  transform: translateY(150px);
+  animation: come-in 0.8s ease forwards;
+}
+.come-in:nth-child(odd) {
+  animation-duration: 2s;
+}
+.already-visible {
+  transform: translateY(0);
+  animation: none;
+}
+
+@keyframes come-in {
+  to { transform: translateY(0); }
+}

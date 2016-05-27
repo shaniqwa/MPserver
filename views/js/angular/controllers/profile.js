@@ -163,7 +163,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
                      model.randomGenre = allGenres[getRandomNumber];
                      
                      $scope.updatePlaylist(model.randomGenre);
-                     console.log(model.randomGenre);
+                     // console.log(model.randomGenre);
               }
             }
 
@@ -390,7 +390,7 @@ $scope.drawDiagram = function(index){
      
     $scope.loaderStatus = "visible-loader";
     //$scope.loaderStatus2 = "visible-loader";
-    console.log("my select is: " + $scope.data.select);
+    // console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
 
          if(typeof $event === 'undefined'){
@@ -528,9 +528,9 @@ $scope.drawDiagram = function(index){
       console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
       //console.log(model.domain);
-      $http.post('http://localhost:3000/addToFavorites/',data).success(function(data,status){
+      $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
            console.log(data);
-           $scope.msg = "Added successfuly to your Favorites";
+           $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
     };

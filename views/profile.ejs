@@ -85,10 +85,8 @@
                     <li><a data-toggle="tab" href="#favorites" id="favorites-tab">Favorites</a></li>
                     <li><a data-toggle="tab" href="#following" id="following-tab">Following</a></li>
                     <li><a data-toggle="tab" href="#followers" id="followers-tab">Followers</a></li>
-                     <% if (user.typeOfUser == "Producer") {  %>
-                    <li><a data-toggle="tab" href="#statistics" id="statistics-tab">Statistics</a></li>
-                    <li><a data-toggle="tab" href="#mySongs" id="mySongs-tab">My Songs</a></li>
-                    <% } %>
+                    <li ng-if="user.typeOfUser == 'Producer'" ><a data-toggle="tab" href="#statistics" id="statistics-tab">Statistics</a></li>
+                    <li ng-if="user.typeOfUser == 'Producer'" ><a data-toggle="tab" href="#mySongs" id="mySongs-tab">My Songs</a></li>
                     <li><a data-toggle="tab" href="#search" id="search-tab">Search</a></li>
                   </ul>
 
@@ -158,11 +156,10 @@
 
 
                       <!-- IF PRODUCER : -->
-                      <% if (user.typeOfUser == "Producer") {  %>
                             
 
                       <!-- STATISTICS -->
-                    <div id="statistics" class="tab-pane fade">
+                    <div id="statistics" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
                         <h3>statistics</h3>
                        <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
                           <option ng-repeat="song in songs">{{song.title}}</option>
@@ -186,7 +183,7 @@
 
 
                       <!-- MY SONGS -->
-                     <div id="mySongs" class="tab-pane fade">
+                     <div id="mySongs" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
                           <h3>My Songs</h3>
                            <table class="table table-inverse table-hover">
                                 <tbody>
@@ -198,8 +195,10 @@
                     </div>
                     <!-- END MY SONGS -->
 
-                    <% } %>
                     <!-- END IF PRODUCER -->
+
+
+
 
                     <!-- SEARCH RESULTS -->
                     <div id="search" class="tab-pane fade">
@@ -216,7 +215,7 @@
 
                      <!-- STATIC PAGE -->
                     <div id="about" class="tab-pane fade">
-                          <h3>ABOUT PAGE</h3>
+                          <h3>About</h3>
                           <div class="about-container"> 
                              
                           </div>
@@ -272,7 +271,12 @@
            <div class="col-sm-3">
                 <div class="well rightSidebar">
                     <!-- USER DETAILS -->
-                    <h4 style="display: inline-block;"><span class="fa fa-user"></span> {{user.firstName}} {{user.lastName}} </h4><p style="display: inline-block;">&nbsp({{user.typeOfUser}})</p>
+                    <h4 style="display: inline-block;">
+                    <img ng-if="user.typeOfUser == 'Producer'" src="images/producer-white.png" width="20" class="side-icon">
+                    <img ng-if="user.typeOfUser == 'Consumer'" src="images/consumer-white.png" width="20" class="side-icon">
+
+
+                    {{user.firstName}} {{user.lastName}} </h4><p style="display: inline-block;">&nbsp({{user.typeOfUser}})</p>
 
 
                             <!--if local login -->
@@ -312,12 +316,12 @@
                             
                     <!-- END USER DETAILS -->
 
-                  <!-- FOLLOW INFO -->
+                  <!-- FOLLOW  -->
                   <div ng-if="myID != user.userId">
                       <a ng-click="follow(myID,user.userId)" class="btn btn-follow">{{isFollowing}}</a>
                   </div>
                   
-                  <!-- END FOLLOW INFO -->
+                  <!-- END FOLLOW  -->
 
 
                    <!-- GOOGLE INFORMATION -->
@@ -361,15 +365,25 @@
 
               </div>
               <!-- END DETAILS -->
-
+              <hr>
                 <!-- RECOMMANDED --> 
+                   
                    <div id="recommended">
-                   <hr>
-                      <h3>Recommended</h3>
+                   
+                      <h4>Recommended</h4>
                       <p>Check out your recent matches with great Producers</p>
+                       <div class="recommand-result">
+                             <img   class="simg" width="50" height="50" border-radius: 100 ng-src="{{user.profileImage}}" /> 
+                             <div class="recommand-text">
+                                <p style="color: rgba(255,255, 255,0.5)">Example Result</p>
+                                <p ng-click="init(x.userId)" style="color: white; cursor:pointer;">Check my pie &nbsp<i class="fa fa-angle-right" aria-hidden="true"></i> </p>
+
+                             </div>
+                          </div>
+
                       <div ng-repeat="x in reco">
-                          <div style="width:100%; height: 80px">
-                             <img  ng-click="init(x.userId)" class="simg recommand-result" width="50" height="50" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                          <div class="recommand-result slideUp">
+                             <img  ng-click="init(x.userId)" class="simg" width="50" height="50" border-radius: 100 ng-src="{{x.profileImage}}" /> 
                              <div class="recommand-text">
                                 <p style="color: rgba(255,255, 255,0.5)">{{x.firstName}}  {{x.lastName}}</p>
                                 <p ng-click="init(x.userId)" style="color: white; cursor:pointer;">Check my pie &nbsp<i class="fa fa-angle-right" aria-hidden="true"></i> </p>
@@ -530,6 +544,8 @@
 
 </div>
 <!-- END ng-controller -->
+
+
 </body>
 
 

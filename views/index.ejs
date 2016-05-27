@@ -57,8 +57,9 @@
      <div class="section home-slide1 home-slide">
             <div class="center holder-4">
                 <h1>The Music Profile</h1>
-                <h2>Explore music</h2>
+                <h3>Content matched personally to your taste</h3>
             </div>
+            <div class="bounce"><i class="fa fa-angle-double-down"></i></div>
      </div>
 
      <!-- PRODUCER CONSUMER SLIDE -->
@@ -110,17 +111,18 @@
 
      <!-- ONLY CONSUMER -->
     <div class="section home-slide2-consumer home-slide">
-         <div class="center mobile-holder ">
+         <div class="center mobile-holder slideUp">
                 <img src="images/consumer-white.png" class="res-img">
                 <h2>Consumer</h2>
-                <h4>Simply consum music you love. </h4>
+                <span style="color:#00bfff;">
+                <h4>Simply consum music you love. </h4></span>
                 <ul>
                 <span style="font-size: 16px;">
                 <li><i class="fa fa-check" aria-hidden="true"></i> Create your own Music Profile in seconds</li>
                 <li><i class="fa fa-check" aria-hidden="true"></i> Listen to playlits customized for you</li>
                 <li><i class="fa fa-check" aria-hidden="true"></i> Enjoy our auto DJ and jump between different genres</li>
                 <li><i class="fa fa-check" aria-hidden="true"></i> Explore new artist that match your Music Profile</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i> Follow artists and frinds and listen to their Music Profiles</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i> Follow artists and friends and listen to their profiles</li>
                 </span>
               </ul>
               <div class="center">
@@ -135,10 +137,11 @@
 
      <!-- ONLY PRODUCER -->
       <div class="section home-slide2-producer home-slide">
-          <div class="center mobile-holder">
+          <div class="center mobile-holder slideUp">
               <img src="images/producer-white.png" class="res-img">
               <h1>Producer</h1>
-              <h4>Get your music out there. </h4>
+              <span style="color:#00bfff;">
+              <h4>Get your music out there. </h4></span>
               <ul>
               <span style="font-size: 16px;">
                 <li><i class="fa fa-check" aria-hidden="true"></i> Define your artist music profile</li>
@@ -158,7 +161,7 @@
 
 
      <!-- BUSINESS PLEASURE SLIDE -->
-     <div class="section home-slide3 home-slide">
+     <div class="section home-slide parallax-window" data-parallax="scroll" data-image-src="/images/slide-bp.jpg">
             <div class="center holder-2">
             <h2>Business Pleasure</h2>
             <span style="font-size: 16px;"><p>Define your music preferences for busy and playfull modes in your day. Check out our Activity Switch to set your preferences automatically</p></span>
@@ -215,7 +218,8 @@ $(document).ready(function() {
         //Navigation
         menu: '#menu',
         lockAnchors: false,
-        anchors:['Home', 'Producer | Consumer', 'Business | Pleasure', 'Spread the Word'],
+        // anchors:['Home', 'Producer | Consumer', 'Business | Pleasure', 'Spread the Word'],
+        anchors: ['Home', 'Consumer' ,'Producer' , 'Business | Pleasure', 'Spread the Word'],
         navigation: true,
         navigationPosition: 'right',
         // navigationTooltips: ['Home', 'Producer | Consumer', 'Business | Pleasure', 'Spread the Word'],
@@ -283,7 +287,61 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function(){
+    $(".bounce").on("click", function(){
+      $.fn.fullpage.moveSectionDown();
+    });
 
+(function($) {
+
+  /**
+   * Copyright 2012, Digital Fusion
+   * Licensed under the MIT license.
+   * http://teamdf.com/jquery-plugins/license/
+   *
+   * @author Sam Sehnert
+   * @desc A small plugin that checks whether elements are within
+   *     the user visible viewport of a web browser.
+   *     only accounts for vertical position, not horizontal.
+   */
+
+  $.fn.visible = function(partial) {
+    
+      var $t            = $(this),
+          $w            = $(window),
+          viewTop       = $w.scrollTop(),
+          viewBottom    = viewTop + $w.height(),
+          _top          = $t.offset().top,
+          _bottom       = _top + $t.height(),
+          compareTop    = partial === true ? _bottom : _top,
+          compareBottom = partial === true ? _top : _bottom;
+    
+    return ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+
+  };
+    
+})(jQuery);
+
+var win = $(window);
+
+var allMods = $(".slideUp");
+
+allMods.each(function(i, el) {
+  var el = $(el);
+  if (el.visible(true)) {
+    el.addClass("already-visible"); 
+  } 
+});
+
+win.scroll(function(event) {
+  
+  allMods.each(function(i, el) {
+    var el = $(el);
+    if (el.visible(true)) {
+      el.addClass("come-in"); 
+    } 
+  });
+  
+});
 
 
 $(".section").attrchange({
@@ -301,6 +359,17 @@ $(".section").attrchange({
 </script>
 <!-- Place this tag in your head or just before your close body tag. -->
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+  $(window).scroll(function() {
+    $('.holder-2').each(function(){
+    var imagePos = $(this).offset().top;
 
+    var topOfWindow = $(window).scrollTop();
+      if (imagePos < topOfWindow+400) {
+        $(this).addClass("hatch");
+      }
+    });
+  });
+</script>
 </body>
 </html>
