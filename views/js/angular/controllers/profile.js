@@ -531,18 +531,15 @@ $scope.drawDiagram = function(index){
 /***********************************************************/
     $scope.addToFav = function(){
       $scope.elementToFadeInAndOut = '';
-      if($scope.userId == $scope.myID){
-        // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
-        model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});   
-      }
+     
        
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
-      }else{
-        $scope.heart == "fa-heart-o";
-        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
-      }
-      var data = JSON.stringify({
+         if($scope.userId == $scope.myID){
+          // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
+          model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});   
+         }
+          var data = JSON.stringify({
                       userId : $scope.myID,
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
@@ -551,14 +548,39 @@ $scope.drawDiagram = function(index){
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });
-      console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
-      $http.defaults.headers.post["Content-Type"] = "application/json";
-      //console.log(model.domain);
-      $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
-           console.log(data);
-           $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
-           $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
-      });
+            console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+            $http.defaults.headers.post["Content-Type"] = "application/json";
+            //console.log(model.domain);
+            $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
+                 //console.log(data);
+                 $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
+                 $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+            });
+      }
+      else{
+        $scope.heart = "fa-heart-o";
+        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
+        $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + $scope.track[$scope.counter - 1].songName + '/' + $scope.track[$scope.counter - 1].artistName).success(function(data){
+              for(i in model.myfavorites){
+                
+                  if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
+                    delete model.myfavorites[i]; 
+                    delete $scope.track[$scope.counter - 1];
+                    $(".songItem" + i).empty();
+                  }
+                    
+              
+              }
+               
+
+              
+
+              $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
+              $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+        });
+  
+      }
+     
     };
 
 
