@@ -106,9 +106,6 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
      function onPlayerStateChange(event) {  
 
         if(event.data === 0) {    //video ended
-
-            if($scope.user.typeOfUser == "Producer")
-            $scope.updateCounters();
             
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
@@ -117,6 +114,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         if(event.data === 1){   //video playing
           $scope.$apply(function() {
             $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
+            $scope.updateCounters();
           });  
         }
          if(event.data === -1){  //video unstarted
@@ -323,10 +321,10 @@ $scope.bringMePlaylist = function($event){
                   var startUrl = "https://www.youtube.com/watch?v=";
                   //startUrl = startUrl.replace("watch?v=", "embed/"); 
                  
-                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
+                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p"});
                  }
                  else{
-                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c"});
                  }
              }
              if($scope.firstTimePlaylist == false){
@@ -439,10 +437,10 @@ $scope.drawDiagram = function(index){
                if(data[i].type == 'producer'){
                  var startUrl = "https://www.youtube.com/watch?v=";
                   //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0});
+                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p"});
                }
                else{
-                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
+                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c"});
                }
            }
            $scope.videoFrame3 = false;
@@ -464,7 +462,7 @@ $scope.drawDiagram = function(index){
 /********************nextSong FUNCTION**********************/
 /***********************************************************/
     $scope.nextSong = function(){
-      //TODO: check it the comming song is already in favorits
+         
         //console.log(model.myfavorites);
         if($scope.heart == "fa-heart"){
           $scope.heart = "fa-heart-o";
@@ -715,11 +713,13 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-        console.log("updateCounters function");
-         //TODO SEND REQUEST TO THIS LINK /updateCounters/:prodID/:songID/:userID
-         $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
-              console.log("updateCounters successfuly");
-         });
+        console.log("updateCounters function" );
+         if($scope.track[0].type == "p"){
+            $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
+                console.log("updateCounters successfuly");
+            });
+         }
+         
     };
 
 
