@@ -36,6 +36,7 @@
                     <p class="songName"> {{nowPlaying.songName}}</p>
                     <p class="artistName">{{nowPlaying.artistName}} </p>
                     <!-- player controllers -->
+                    <div style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
                     <div class="playerControllers">
                         <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
                         <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;

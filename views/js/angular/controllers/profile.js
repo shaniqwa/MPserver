@@ -56,7 +56,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.selectedSong;
    $scope.UserIsLoggedIn = false;
    $scope.iCameFromMyPlaylist = false;
-
+   $scope.videoDuration;
    // create youtube player
     var player;
 
@@ -80,8 +80,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
             'showinfo': 0
           }
         });
-
-        
+         
     }
     
 
@@ -91,7 +90,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
-        // console.log("end of ready");
+        
         $scope.$apply(function() {
           $scope.videoFrame = true;
           $scope.videoFrame2 = true;
@@ -100,17 +99,39 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         });
     }
 
+
+ 
+
     // when video ends
-     function onPlayerStateChange(event) {        
-        if(event.data === 0) {  
+     function onPlayerStateChange(event) {  
+
+        if(event.data === 0) {    //video ended
 
             if($scope.user.typeOfUser == "Producer")
             $scope.updateCounters();
-
+            
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
 
         }
+        if(event.data === 1){   //video playing
+          $scope.$apply(function() {
+            $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
+          });  
+        }
+         if(event.data === -1){  //video unstarted
+              
+        }
+         if(event.data === 2){  //video paused
+          
+        }
+         if(event.data === 3){  //video buffering
+          
+        }
+         if(event.data === 5){  //video cued
+          
+        }
+       
     }
 
 /***********************************************************/
@@ -293,7 +314,7 @@ $scope.bringMePlaylist = function($event){
     var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          //console.log(url);
     $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-            console.log(data);
+           // console.log(data);
        
             $scope.videoFrame3 = true;
 
@@ -461,6 +482,8 @@ $scope.drawDiagram = function(index){
               // console.log(url);
               $scope.myVideo = $sce.trustAsResourceUrl(url);
               player.cueVideoByUrl(url);
+              var date = new Date(null);
+
               $scope.track[$scope.counter].active = 1;
               // console.log($scope.counter);
               $scope.nowPlaying = $scope.track[$scope.counter];
@@ -635,7 +658,8 @@ console.log("inside recommandation");
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
-             var flag = (i == index) ? 1:0;console.log(item.url);
+             var flag = (i == index) ? 1:0;
+             //console.log(item.url);
              if(i>=index){
                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              }
