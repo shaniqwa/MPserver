@@ -68,7 +68,7 @@ module.exports = function(passport) {
 
     },
     function(req, token, refreshToken, profile, done) {
-        console.log("state: " + req.query.state);
+        // console.log("state: " + req.query.state);
         profile.type = req.query.state;
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
