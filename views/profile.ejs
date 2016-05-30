@@ -36,7 +36,7 @@
                     <p class="songName"> {{nowPlaying.songName}}</p>
                     <p class="artistName">{{nowPlaying.artistName}} </p>
                     <!-- player controllers -->
-                    <div style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
+                   
                     <div class="playerControllers">
                         <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
                         <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
@@ -44,6 +44,12 @@
                         <span class="cursor fa {{heart}} red font-size" ng-click="addToFav()"></span>&nbsp;&nbsp;
                         <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
                         <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div>
+                    </div>
+
+                     <div class="timeContainer">
+                       <div class="videoCurrentTime" style="text-align: center;" ng-show="videoFrame">{{timer}}</div>
+                       <div class="videoDuration" style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
+                       <div class="navTimer" ng-style="{'width': timeWidth + '%'}"></div>
                     </div>
                 </div>
 
@@ -565,7 +571,7 @@ $(document).ready(function(){
             left    = $('.leftSidebar').height(),
             content = $('.content').height();
 
-            $('.leftSidebar').css({"height":content + "px"} );
+            //$('.leftSidebar').css({"height":content + "px"} );
             $('.rightSidebar').css({"height":content + "px"} );
     });
 

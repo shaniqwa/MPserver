@@ -10,7 +10,7 @@ var business;
 var songs;
 var artist;
 
-profile.controller('profileCtrl', function ($scope, $http, $sce) {
+profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";
   $scope.mod = model;
@@ -57,6 +57,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
    $scope.UserIsLoggedIn = false;
    $scope.iCameFromMyPlaylist = false;
    $scope.videoDuration;
+   $scope.timer;
+   $scope.tickInterval = 1000 //ms
+   $scope.timeWidth;
    // create youtube player
     var player;
 
@@ -113,7 +116,9 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         }
         if(event.data === 1){   //video playing
           $scope.$apply(function() {
+            $interval(tick, $scope.tickInterval);
             $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
+            
             $scope.updateCounters();
           });  
         }
@@ -132,6 +137,14 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
        
     }
 
+       
+      var tick = function(){
+       $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
+       var tempTimer = player.getCurrentTime() / player.getDuration();
+       $scope.timeWidth = tempTimer * 100;
+       console.log($scope.timeWidth);
+      }
+      
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/

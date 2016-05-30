@@ -1099,6 +1099,36 @@ textarea, input , .btn{
     opacity: 0;
   }
 }
+.timeContainer{
+  overflow: hidden;
+  position: relative;
+}
+.timeContainer .videoDuration{
+   display:inline-block;
+   color:#5e5e5e;
+   font-size:12px;
+   float: right;
+   width:50%;
+   margin-bottom: 9px;
+}
+.timeContainer .videoCurrentTime{
+   display:inline-block;
+   color:#5e5e5e;
+   font-size:12px;
+   width:50%;
+   margin-bottom: 9px;
+   float: left;
+}
+.timeContainer .navTimer{
+   display: block;
+   
+   height:4px;
+   background-color: #3875ff;
+   position: absolute;
+   bottom: 0;
+}
+
+
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
 /***********************************************************/
