@@ -1103,19 +1103,18 @@ textarea, input , .btn{
 .timeContainer{
   overflow: hidden;
   position: relative;
+  font-weight:bold;
+  color:#5e5e5e;
+   font-size:12px;
 }
 .timeContainer .videoDuration{
    display:inline-block;
-   color:#5e5e5e;
-   font-size:12px;
    float: right;
    width:50%;
    margin-bottom: 9px;
 }
 .timeContainer .videoCurrentTime{
    display:inline-block;
-   color:#5e5e5e;
-   font-size:12px;
    width:50%;
    margin-bottom: 9px;
    float: left;
@@ -1127,8 +1126,8 @@ textarea, input , .btn{
    background-color: #3875ff;
    position: absolute;
    bottom: 0;
-   -webkit-transition: width 2s; /* Safari */
-    transition: width 2s;
+   -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
 }
 
 
