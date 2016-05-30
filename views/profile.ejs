@@ -36,6 +36,7 @@
                     <p class="songName"> {{nowPlaying.songName}}</p>
                     <p class="artistName">{{nowPlaying.artistName}} </p>
                     <!-- player controllers -->
+                    <div style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
                     <div class="playerControllers">
                         <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
                         <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
@@ -113,7 +114,7 @@
                       <h3>Favorites</h3>
                         <table class="table table-inverse table-hover">
                             <tbody>
-                                <tr class="songItem" ng-repeat="x in favorits track by $index" ng-click="playFavorites($index)">
+                                <tr class="songItem songItem{{$index}}" ng-repeat="x in favorits track by $index" ng-click="playFavorites($index)">
                                     <td class="col-md-3"> {{x.artistName}}</td>
                                     <td class="col-md-6 song">{{x.songName}}</td>
                                     <td class="col-md-3 duration">{{x.duration}}</td>
