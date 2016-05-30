@@ -142,7 +142,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
        $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;
-       console.log($scope.timeWidth);
+       //console.log($scope.timeWidth);
       }
       
 /***********************************************************/
