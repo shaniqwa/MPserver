@@ -1121,11 +1121,13 @@ textarea, input , .btn{
 }
 .timeContainer .navTimer{
    display: block;
-   
    height:4px;
+   width:0%;
    background-color: #3875ff;
    position: absolute;
    bottom: 0;
+   -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
 }
 
 
