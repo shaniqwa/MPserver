@@ -67,6 +67,7 @@ body {
 
 .logo{
   background-image: url("../images/logo-s-2.png"); 
+  background-repeat: no-repeat;
   width:114px;
   height: 41px;
   margin:3px 10px 0 10px !important;
@@ -1269,4 +1270,27 @@ select::-ms-expand { /* for IE 11 */
 
 @keyframes come-in {
   to { transform: translateY(0); }
+}
+
+
+/*privacy policy*/
+/*#ppBody
+{
+    font-size:11pt;
+    width:100%;
+    margin:0 auto;
+    text-align:justify;
+}
+
+#ppHeader
+{
+    font-family:verdana;
+    font-size:21pt;
+    width:100%;
+    margin:0 auto;
+}*/
+
+.ppConsistencies
+{
+    display:none;
 }

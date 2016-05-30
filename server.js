@@ -492,7 +492,10 @@ io.on('connection', function(client) {
 
 
 
-
+    // PRIVACY POLICY
+        app.get('/privacyPolicy', function(req, res) {
+           res.render('privacyPolicy.ejs');
+    });
 
 
 

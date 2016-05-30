@@ -99,37 +99,17 @@ profile.controller('profileCtrl', function ($scope, $http, $sce) {
         });
     }
 
-
- 
-
     // when video ends
-     function onPlayerStateChange(event) {  
+     function onPlayerStateChange(event) {        
+        if(event.data === 0) {  
 
-        if(event.data === 0) {    //video ended
-            
+            if($scope.user.typeOfUser == "Producer")
+            $scope.updateCounters();
+
             var next = angular.element( document.querySelector(".fa-fast-forward") );
             next.triggerHandler('click');
 
         }
-        if(event.data === 1){   //video playing
-          $scope.$apply(function() {
-            $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
-            $scope.updateCounters();
-          });  
-        }
-         if(event.data === -1){  //video unstarted
-              
-        }
-         if(event.data === 2){  //video paused
-          
-        }
-         if(event.data === 3){  //video buffering
-          
-        }
-         if(event.data === 5){  //video cued
-          
-        }
-       
     }
 
 /***********************************************************/
@@ -312,19 +292,16 @@ $scope.bringMePlaylist = function($event){
     var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
          //console.log(url);
     $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           // console.log(data);
+            console.log(data);
        
             $scope.videoFrame3 = true;
-
+            
              for(i in data){
-                 if(data[i].type == 'producer'){
-                  var startUrl = "https://www.youtube.com/watch?v=";
-                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 
-                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p"});
+                 if(typeof data[i].artistName === 'undefined'){
+                   $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                  }
                  else{
-                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c"});
+                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                  }
              }
              if($scope.firstTimePlaylist == false){
@@ -434,13 +411,11 @@ $scope.drawDiagram = function(index){
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
             console.log(data);
            for(i in data){
-               if(data[i].type == 'producer'){
-                 var startUrl = "https://www.youtube.com/watch?v=";
-                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p"});
+               if(typeof data[i].artistName === 'undefined'){
+                 $scope.track.push({artistName: data[i].name, songName: data[i].albumName, url: data[i].artwork, songId:data[i].songId, prodId:data[i].prodId, active: 0});
                }
                else{
-                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c"});
+                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0});
                }
            }
            $scope.videoFrame3 = false;
@@ -462,7 +437,7 @@ $scope.drawDiagram = function(index){
 /********************nextSong FUNCTION**********************/
 /***********************************************************/
     $scope.nextSong = function(){
-         
+      //TODO: check it the comming song is already in favorits
         //console.log(model.myfavorites);
         if($scope.heart == "fa-heart"){
           $scope.heart = "fa-heart-o";
@@ -473,15 +448,12 @@ $scope.drawDiagram = function(index){
                     $scope.heart = "fa-heart";
                 }
               }//console.log($scope.track[$scope.counter].url);
-              
-             
+              //console.log($scope.track[$scope.counter]);
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
               $scope.myVideo = $sce.trustAsResourceUrl(url);
               player.cueVideoByUrl(url);
-              var date = new Date(null);
-
               $scope.track[$scope.counter].active = 1;
               // console.log($scope.counter);
               $scope.nowPlaying = $scope.track[$scope.counter];
@@ -531,15 +503,18 @@ $scope.drawDiagram = function(index){
 /***********************************************************/
     $scope.addToFav = function(){
       $scope.elementToFadeInAndOut = '';
-     
+      if($scope.userId == $scope.myID){
+        // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
+        model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});   
+      }
        
       if($scope.heart == "fa-heart-o"){
         $scope.heart = "fa-heart";
-         if($scope.userId == $scope.myID){
-          // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
-          model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});   
-         }
-          var data = JSON.stringify({
+      }else{
+        $scope.heart == "fa-heart-o";
+        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
+      }
+      var data = JSON.stringify({
                       userId : $scope.myID,
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
@@ -548,39 +523,14 @@ $scope.drawDiagram = function(index){
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });
-            console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
-            $http.defaults.headers.post["Content-Type"] = "application/json";
-            //console.log(model.domain);
-            $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
-                 //console.log(data);
-                 $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
-                 $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
-            });
-      }
-      else{
-        $scope.heart = "fa-heart-o";
-        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
-        $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + $scope.track[$scope.counter - 1].songName + '/' + $scope.track[$scope.counter - 1].artistName).success(function(data){
-              for(i in model.myfavorites){
-                
-                  if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
-                    delete model.myfavorites[i]; 
-                    delete $scope.track[$scope.counter - 1];
-                    $(".songItem" + i).empty();
-                  }
-                    
-              
-              }
-               
-
-              
-
-              $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
-              $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
-        });
-  
-      }
-     
+      console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      $http.defaults.headers.post["Content-Type"] = "application/json";
+      //console.log(model.domain);
+      $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
+           console.log(data);
+           $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
+           $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+      });
     };
 
 
@@ -678,8 +628,7 @@ console.log("inside recommandation");
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
-             var flag = (i == index) ? 1:0;
-             //console.log(item.url);
+             var flag = (i == index) ? 1:0;console.log(item.url);
              if(i>=index){
                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              }
@@ -735,13 +684,11 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-        console.log("updateCounters function" );
-         if($scope.track[0].type == "p"){
-            $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
-                console.log("updateCounters successfuly");
-            });
-         }
-         
+        console.log("updateCounters function");
+         //TODO SEND REQUEST TO THIS LINK /updateCounters/:prodID/:songID/:userID
+         $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
+              console.log("updateCounters successfuly");
+         });
     };
 
 
