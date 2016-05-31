@@ -1,0 +1,120 @@
+ <div class="col-sm-12 text-center">
+        <!-- <div class="well"> -->
+            <h2>Music Preferences</h2>
+            <p>Change your business and pleasure pies by choosing categories</p>
+        <!-- </div> -->
+    </div>
+
+    <!-- BEGIN FORM -->
+    <form action="/updatePreferences" method="post" id="updatePreferencesForm">
+    <div class="col-sm-6">
+        <div class="well">
+            <h4>Business</h4>
+            <hr />
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_rock" value="Rock" ng-checked="businessPreferences.indexOf('Rock') != -1">Rock</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_pop"  value="Pop" ng-checked="businessPreferences.indexOf('Pop') != -1">Pop</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_rnb"  value="R&amp;B" ng-checked="businessPreferences.indexOf('R&B') != -1">R&amp;B</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_classical"  value="Classical" ng-checked="businessPreferences.indexOf('Classical') != -1">Classical</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_country"  value="Country" ng-checked="businessPreferences.indexOf('Country') != -1">Country</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_elctronic"  value="Electronic" ng-checked="businessPreferences.indexOf('Electronic') != -1">Electronic</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_latin"  value="Latin" ng-checked="businessPreferences.indexOf('Latin') != -1">Latin</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_blues" value="Blues" ng-checked="businessPreferences.indexOf('Blues') != -1">Blues</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_world"  value="World" ng-checked="businessPreferences.indexOf('World') != -1">World</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_punk"  value="Punk" ng-checked="businessPreferences.indexOf('Punk') != -1">Punk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_metal"  value="Metal" ng-checked="businessPreferences.indexOf('Metal') != -1">Metal</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_jazz"  value="Jazz" ng-checked="businessPreferences.indexOf('Jazz') != -1">Jazz</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_folk"  value="Folk" ng-checked="businessPreferences.indexOf('Folk') != -1">Folk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_reggae"  value="Reggae" ng-checked="businessPreferences.indexOf('Reggae') != -1">Reggae</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="b_hiphop"  value="Hip Hop" ng-checked="businessPreferences.indexOf('Hip Hop') != -1">Hip Hop</label>
+                </div>
+        </div>
+    </div>
+
+        <div class="col-sm-6">
+        <div class="well">
+            <h4>Pleasure</h4>
+            <hr />
+            <!-- begin form -->
+            
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_rock" value="Rock" ng-checked="pleasurePreferences.indexOf('Rock') != -1">Rock</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_pop"  value="Pop" ng-checked="pleasurePreferences.indexOf('Pop') != -1">Pop</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_rnb"  value="R&amp;B" ng-checked="pleasurePreferences.indexOf('R&B') != -1">R&amp;B</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_classical"  value="Classical" ng-checked="pleasurePreferences.indexOf('Classical') != -1">Classical</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_country"  value="Country" ng-checked="pleasurePreferences.indexOf('Country') != -1">Country</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_elctronic"  value="Electronic" ng-checked="pleasurePreferences.indexOf('Electronic') != -1">Electronic</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_latin"  value="Latin" ng-checked="pleasurePreferences.indexOf('Latin') != -1">Latin</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_blues" value="Blues" ng-checked="pleasurePreferences.indexOf('Blues') != -1">Blues</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_world"  value="World" ng-checked="pleasurePreferences.indexOf('World') != -1">World</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_punk"  value="Punk" ng-checked="pleasurePreferences.indexOf('Punk') != -1">Punk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_metal"  value="Metal" ng-checked="pleasurePreferences.indexOf('Metal') != -1">Metal</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_jazz"  value="Jazz" ng-checked="pleasurePreferences.indexOf('Jazz') != -1">Jazz</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_folk"  value="Folk" ng-checked="pleasurePreferences.indexOf('Folk') != -1">Folk</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_reggae"  value="Reggae" ng-checked="pleasurePreferences.indexOf('Reggae') != -1">Reggae</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" name="p_hiphop"  value="Hip Hop" ng-checked="pleasurePreferences.indexOf('Hip Hop') != -1">Hip Hop</label>
+                </div>
+        </div>
+    </div>
+    
+    <input type="hidden" name="userID" value="{{myID}}">
+    
+    </form>
+    <button type="submit" form="updatePreferencesForm" value="Submit" class="btn btn-submit">Submit</button>
+    <!-- END FORM -->

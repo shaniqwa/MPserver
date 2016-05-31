@@ -1,24 +1,14 @@
-<!doctype html>
-<html>
-<head>
-    <title>Music Profile</title>
-    <%- include head %>
-</head>
-<body>
-<%- include header %>
-<div class="container">
-
-
-
-    <!-- BEGIN FORM -->
-    <form action="/processWizardForm" method="post" id="wizard">
+ <div class="col-sm-12 text-center">
+        <h2>Settings</h2>
+        <p>Edit your personal information</p>
+    </div>
+ <!-- BEGIN FORM -->
+    <form action="/editProfileForm" method="post" id="settingsForm">
 
 
     <!-- ADDITIONAL MISSING INFORMATION -->
-<div class="col-sm-5">
+<div class="col-sm-12">
         <div class="well" style="overflow: hidden;">
-        <h2>Confirm Information</h2>
-        <p>Please confirm or change some basic information about you</p>
         <div class="form-group col-md-6">
           <label for="firstName" class="control-label">First Name</label>
           <input type="text" class="producerForm form-control" id="firstName" name="firstName" value="<%= user.firstName %>">
@@ -337,122 +327,7 @@
     </div>
 </div>
 
-<div class="well" style="overflow:hidden">
-    <div class="col-sm-12">
-        
-            <h2>Your Music Preferences</h2>
-            <p>Choose your favorite music categories for different modes: Business and Pleasure.</p>
-        
-    </div>
-    <div class="col-sm-6">
-
-            <h3>Business</h3>
-            <hr />
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_rock" value="Rock" checked>Rock</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_pop"  value="Pop" checked>Pop</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_rnb"  value="R&amp;B" checked>R&amp;B</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_classical"  value="Classical" checked>Classical</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_country"  value="Country" checked>Country</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_elctronic"  value="Electronic" checked>Electronic</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_latin"  value="Latin" checked>Latin</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_blues" value="Blues" checked>Blues</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_world"  value="World" checked>World</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_punk"  value="Punk" checked>Punk</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_metal"  value="Metal" checked>Metal</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_jazz"  value="Jazz" checked>Jazz</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_folk"  value="Folk" checked>Folk</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_reggae"  value="Reggae" checked>Reggae</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_hiphop"  value="Hip Hop" checked>Hip Hop</label>
-                </div>
-
-    </div>
-
-        <div class="col-sm-6">
-
-            <h3>Pleasure</h3>
-            <hr />
-            <!-- begin form -->
-            
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_rock" value="Rock" checked>Rock</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_pop"  value="Pop" checked>Pop</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_rnb"  value="R&amp;B" checked>R&amp;B</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_classical"  value="Classical" checked>Classical</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_country"  value="Country" checked>Country</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_elctronic"  value="Electronic" checked>Electronic</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_latin"  value="Latin" checked>Latin</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_blues" value="Blues" checked>Blues</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_world"  value="World" checked>World</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_punk"  value="Punk" checked>Punk</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_metal"  value="Metal" checked>Metal</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_jazz"  value="Jazz" checked>Jazz</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_folk"  value="Folk" checked>Folk</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_reggae"  value="Reggae" checked>Reggae</label>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_hiphop"  value="Hip Hop" checked>Hip Hop</label>
-                </div>
-
-    </div>
-
-    </div>
-    
-    <input type="hidden" name="userID" value="<%= user.userId %>">
+   <input type="hidden" name="userID" value="<%= user.userId %>">
     <% if (user.typeOfUser == "Consumer") { %>
        <input type="hidden" name="UserType" value="Consumer">
     <% } %>
@@ -465,18 +340,7 @@
     
     </form>
     <div class="text-center">
-        <button type="submit" form="wizard" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
+        <button type="submit" form="settingsForm" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
     </div>
     
     <!-- END FORM -->
-</div>
-<%- include jsFiles %>
-
-<script>
-$(document).ready(function(){
-  $("#img").imagepicker();
-
-});
-</script>
-</body>
-</html>
