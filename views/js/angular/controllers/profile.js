@@ -193,7 +193,7 @@ profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
                      model.randomGenre = allGenres[getRandomNumber];
                      
-                     $scope.updatePlaylist(model.randomGenre);
+                     // $scope.updatePlaylist(model.randomGenre);
                      // console.log(model.randomGenre);
               }
             }
