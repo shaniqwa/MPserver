@@ -669,7 +669,7 @@ io.on('connection', function(client) {
 
         var data = {};
         data = req.body;
-        Controller.editProfileform(req,res,data);
+        Controller.editProfileForm(req,res,data);
     });
 
 
