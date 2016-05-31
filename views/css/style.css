@@ -318,7 +318,8 @@ ul{
   /*min-height: 100vh;*/
 }
 .home-slide1{
-  background-image: url("../images/poly.jpg") !important;
+  /*background-image: url("../images/poly.jpg") !important;*/
+  background-color: #000 !important;
 }
 .home-slide2{
   background-image: url("../images/slide-pc.jpg") !important;
