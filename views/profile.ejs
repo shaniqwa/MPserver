@@ -24,7 +24,7 @@
     <!-- LEFT SIDE BAR -->
     <!-- <div class="row"> -->
          <div class="col-sm-2">
-            <div class="well leftSidebar">
+            <div class="leftSidebar">
                 <div class="player-container">
                     <!-- the video -->
                     <div ng-hide="videoFrame2" class="loader {{loaderStatus}}"></div>
@@ -167,21 +167,27 @@
 
                       <!-- STATISTICS -->
                     <div id="statistics" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
-                        <h3>statistics</h3>
-                       <div class="styled-select"><select ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs track by songs" ng-change="drawDiagram(selectedSong.songId)">
+                        <h3>Popularity Rate</h3>
+                        <div class="col-sm-12">
+                          <div id="YTContainer" style=" height: 300px; width:400px; margin: 0 auto"></div>
+                        </div>
+
+
+
+                        <h3>Song Statistics</h3>
+                        <p>Choose a songs from the menu to view its data</p>
+
+                       <div class="styled-select"><select name="name" id="select-song" ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
                           <option ng-repeat="song in songs">{{song.title}}</option>
                        </select></div>
-                        <div>name: {{songs[selectedSong].title}}</div>
+                        <!-- <div>name: {{songs[selectedSong].title}}</div> -->
 
                           <!-- AGcontainer-->
-                          <div id="AGcontainer" style=" height: 300px; width:400px; margin: 0 auto">
-
+                          <div class="col-md-6">
+                            <div id="AGcontainer" style="width:300px; margin: 0 auto"></div>
                           </div>
-                          <div id="YTContainer" style=" height: 300px; width:400px; margin: 0 auto">
-
-                          </div>
-                          <div id="pieContainer" style=" height: 300px; width:400px; margin: 0 auto">
-
+                          <div class="col-md-6">
+                          <div id="pieContainer" style="  width:300px; margin: 0 auto"></div>
                           </div>
                           
                     </div>
@@ -496,7 +502,7 @@ $(document).ready(function(){
         }
     });
     e.preventDefault(); //STOP default action
-    e.unbind(); //unbind. to stop multiple form submit.
+    // e.unbind(); //unbind. to stop multiple form submit.
 });
 
 
@@ -526,7 +532,7 @@ $(document).ready(function(){
         }
     });
     e.preventDefault(); //STOP default action
-    e.unbind(); //unbind. to stop multiple form submit.
+    // e.unbind(); //unbind. to stop multiple form submit.
 });
 
 
@@ -549,6 +555,11 @@ $(document).ready(function(){
     $(".nav-tabs a").click(function(){
         $(this).tab('show');
     });
+
+
+
+
+
 
     var options = {
       classname: 'nanobar',
