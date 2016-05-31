@@ -240,7 +240,26 @@ io.on('connection', function(client) {
     // 'https://www.googleapis.com/auth/youtube'
     app.get('/auth/google', function(req, res){
         console.log("auth with google, user type: " + req.query.type);
-        passport.authenticate(
+        //different permissions for Producer and Consumer
+        if(req.query.type == "Producer"){
+           passport.authenticate(
+                'google', 
+                { 
+                    scope : [
+                                'profile', 
+                                'email' , 
+                                'https://www.googleapis.com/auth/youtube.readonly', 
+                                'https://www.googleapis.com/auth/youtubepartner',
+                                'https://www.googleapis.com/auth/youtube.force-ssl',
+                                'https://www.googleapis.com/auth/youtube.upload',
+                                'https://www.googleapis.com/auth/youtubepartner',
+                                'https://www.googleapis.com/auth/youtubepartner-channel-audit'
+                            ],
+                    state: req.query.type
+                    })(req,res);
+
+        }else if(req.query.type == "Consumer"){
+       passport.authenticate(
             'google', 
             { 
                 scope : [
@@ -251,6 +270,8 @@ io.on('connection', function(client) {
                         ],
                 state: req.query.type
                 })(req,res);
+            }
+ 
         });
 
 
@@ -314,7 +335,8 @@ io.on('connection', function(client) {
                             'user_actions.music', 
                             'user_likes',
                             'user_birthday',
-                            'user_location'
+                            'user_location',
+                            'user_friends'
                         ],
               state: req.query.type
             })(req,res);
@@ -340,7 +362,7 @@ io.on('connection', function(client) {
 
     // connect facebook -------------------------------
     // send to facebook to do the authentication
-    app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location'] }));
+    app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location','user_friends'] }));
 
     // handle the callback after facebook has authorized the user
     app.get('/connect/facebook/callback',
