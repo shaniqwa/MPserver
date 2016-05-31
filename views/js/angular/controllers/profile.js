@@ -9,7 +9,9 @@ var model = {
 var business;
 var songs;
 var artist;
-
+var hours;
+var seconds;
+var minutes;
 profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";
@@ -117,7 +119,26 @@ profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
         if(event.data === 1){   //video playing
           $scope.$apply(function() {
             $interval(tick, $scope.tickInterval);
-            $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
+            
+            hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
+            seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
+            minutes = new Date(player.getDuration() * 1000).toISOString().substr(17, 2);
+            if(parseInt(hours) == 0){
+               if(parseInt(seconds) == 0){
+                  
+               }
+               else{
+                   $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(14, 5);
+                  if(parseInt(seconds) < 10){
+                    $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(15, 4);
+                  } 
+               }
+            }
+            else{
+              $scope.videoDuration = new Date(player.getDuration() * 1000).toISOString().substr(11, 8);
+            }
+            
+           
             
             $scope.updateCounters();
           });  
@@ -139,7 +160,27 @@ profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
 
        
       var tick = function(){
-       $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
+       //$scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
+
+            hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
+            seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
+            minutes = new Date(player.getDuration() * 1000).toISOString().substr(17, 2);
+            if(parseInt(hours) == 0){
+               if(parseInt(seconds) == 0){
+                  
+               }
+               else{
+                   $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(14, 5);
+                  if(parseInt(seconds) < 10){
+                    $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(15, 4);
+                  } 
+               }
+            }
+            else{
+              $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
+            }
+
+
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;
        //console.log($scope.timeWidth);
