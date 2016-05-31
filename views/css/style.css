@@ -1201,7 +1201,10 @@ select::-ms-expand { /* for IE 11 */
   bottom:0;
   left:0;
   right:0;
-  border-bottom: 10px;
+  /*border-bottom: 1px solid #64d8ff;*/
+}
+.about-developer{
+ 
 }
 /***********************************************************/
 /***************END REGION: ABOUT PAGE**********************/
