@@ -1200,7 +1200,7 @@ select::-ms-expand { /* for IE 11 */
   bottom:0;
   left:0;
   right:0;
-  background-color: black;
+  border-bottom: 10px;
 }
 /***********************************************************/
 /***************END REGION: ABOUT PAGE**********************/
