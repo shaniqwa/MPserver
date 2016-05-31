@@ -659,6 +659,18 @@ io.on('connection', function(client) {
         Controller.getFavorites(res,req.params.userID);
     });
 
+     //edit profile form
+    app.post('/editProfileForm', isLoggedIn, function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        Controller.editProfileform(req,res,data);
+    });
 
 
 
