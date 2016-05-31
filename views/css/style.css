@@ -261,17 +261,16 @@ ul{
 }
 .leftSidebar {
   /*background: #222;*/
-  border-top: 10px solid #222;
-  border-right: 10px solid #222;
+  /*border-top: 10px solid #222;*/
+  /*border-right: 10px solid #222;*/
+  background:  linear-gradient(rgba(0,0, 0,0.3) 50%, rgba(0, 0, 0,0));
   min-height: 100vh;
   height: 100%;
   margin-bottom: 0px;
   padding: 0px;
 }
 .rightSidebar {
-  border-top: 10px solid #222;
-  border-left: 10px solid #222;
-  background-color: rgba(255,255, 255,0.10);
+  background:  linear-gradient(rgba(255,255, 255,0.10) 70%, rgba(255, 255, 255,0));
   min-height: 100vh;
   height: 100%;
   margin-bottom: 0px;
@@ -294,6 +293,8 @@ ul{
   color: #00cbff;
 }
 .content{
+  border-right: 10px solid #222;
+  border-left: 10px solid #222;
   background: linear-gradient(rgba(0, 0, 0,0.6) 100%, rgba(0, 0, 0,0));
   margin-bottom: 0px;
   min-height: 100vh;
@@ -1140,7 +1141,7 @@ textarea, input , .btn{
 /***********************************************************/
 .styled-select {
     height:35px;
-    width: 325px;
+    width: 100%;
     box-shadow: inset 1px 1px 2px #ddd8dc;
     background: #fff; 
     border-radius: 0px;
@@ -1324,4 +1325,10 @@ select::-ms-expand { /* for IE 11 */
 .ppConsistencies
 {
     display:none;
+}
+
+
+#select-song{
+  background-color: #222;
+    color: white;
 }

@@ -1,29 +1,23 @@
 var drawLocalVsWorldDiagram = function (diagramData) {
-    //console.log(diagramData); 
-    var local, global;
-    if (diagramData[8].totalCounter == 0){
+    // console.log(diagramData); 
+    var local, world;
+    if (diagramData.counterTotal == 0){
        local = 0;
-       global = 0;
+       world = 0;
+       console.log("ZERO");
     }
     else{
-        local = Math.floor( diagramData[6].counterLocal / diagramData[8].totalCounter ); 
-        global = Math.floor( diagramData[7].internalCounter / diagramData[8].totalCounter );
+        local =  diagramData.counterLocal; 
+        world = diagramData.counterTotal -  diagramData.counterLocal;
     }
+
     
     
-    
-    //console.log(local + " " + global);
+    // console.log(local + " " + world);
     // Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
-        var colors = [],
-            base = Highcharts.getOptions().colors[0],
-            i;
-
-        for (i = 0; i < 10; i += 1) {
-            // Start out with a darkened base color (negative brighten), and end
-            // up with a much brighter color
-            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
-        }
+        var colors = ["#8900fe","#00aae3"];
+   
         return colors;
     }());
 
@@ -36,10 +30,14 @@ var drawLocalVsWorldDiagram = function (diagramData) {
             type: 'pie'
         },
         title: {
+            fontFamily: 'Glegoo, serif',
             text: 'Local VS World',
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        credits: {
+            enabled: false
         },
         plotOptions: {
             pie: {
@@ -49,7 +47,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
                     enabled: true,
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        color: ('#00aae3' && Highcharts.theme.contrastTextColor) || 'black'
                     }
                 }
             }
@@ -58,7 +56,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
             name: 'Brands',
             data: [
                 { name: 'Local', y: local },
-                { name: 'World', y: global }
+                { name: 'World', y: world }
             ]
         }]
     });
