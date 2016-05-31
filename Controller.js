@@ -166,57 +166,58 @@ q.drain = function() {
 
 
 }
+var emailValidation = function (email, id,callback){
+	console.log("validate user:" + email + id);
+	var emailValid = false;
+     User.findOne({ email: email }, function (err, doc) {
+     	if (err){
+	  	console.log("error at email validation: " + err.message);
+	  	callback(emailValid,err);
+	  	}else{
+	  		if(doc){
+	 			console.log("doc:"+doc.userId);
+	     	 	if(id == doc.userId){
+			  		console.log("id:"+ id + "doc userid:"+ doc.userId);
+			  		emailValid = true;
+			  	}
+	 	 	}else{
+	 	 		emailValid = true;
+	 	 	}
+		}
+	  	callback(emailValid,null);
+     });	
+}
 
 exports.editProfileForm = function(req,res,data){
 	var update = {};
     	update.firstName = data.firstName;
     	update.lastName = data.lastName
-    	//TODO: validate email - unique
-    	// update.email = data.email;
     	update.country = data.country;
         update.ageGroup = data.ageGroup;
-        update.profileImg = data.profileImg;
+        update.profileImage = data.profileImg;
 
+		emailValidation(data.email,data.userID,function(status,err){
+			if(err){
+				console.log(err);
+			}
+			console.log("status:"+status);
+			if(!status){
+				return res.status(200).json({error: "Email is taken, please try again"});
+			}else{
+		     	update.email = data.email;
 
-     if (!emailValidation(data.email)){
-     	//return the error  - email is taken
-     	return res.status(200).json({error: "Email is taken, please try again"});
-     }else{
-     	update.email = data.email;
+        		User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
+		    		if (err){
+		    			console.log(err);
+		    		}
+		        	return res.status(200).json({state:"success"});
+				});
+     		}
 
-        User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
-		    if (err)
-		        console.log(err);
-		        res.status(200).json("success");
 		});
-     }
-
-
-
 }
 
-function emailValidation (email, id)
-{
-	var emailValid = false;
-     User.find({ email: email }, function (err, doc) {
-	  if (err){
-	  //	res.status(200).json("error getting following: " + err.message);
-	  	return err;
-	  }
-	  if(!doc){
-	  	// valid
-	  	emailValid = true;
-	  }else{
-	  	if(id == doc.id){
-	  		emailValid = true;
-	  	}
-	  } 
 
-	
-	console.log("doc id:" + doc.id);	
-     return emailValid;
-     });
-}
 exports.processWizardForm = function(req,res,data) {
 	// console.log(data);
 
