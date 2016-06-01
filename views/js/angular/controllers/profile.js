@@ -1,6 +1,3 @@
-
-var profile = angular.module('profile',[]);
-
 var model = {
    domain: "http://localhost:3000"
    // domain: "http://themusicprofile.com"
@@ -12,7 +9,15 @@ var artist;
 var hours;
 var seconds;
 var minutes;
-profile.controller('profileCtrl', function ($scope, $http, $sce, $interval) {
+
+
+angular.module('profile',['datatables'])
+.controller('profileCtrl', function ($scope, $http, $sce, $interval, DTOptionsBuilder) {
+
+   $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDisplayLength(10)
+        .withOption('bLengthChange', false);
+
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";
   $scope.mod = model;
