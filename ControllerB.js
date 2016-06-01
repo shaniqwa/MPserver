@@ -39,65 +39,57 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 
 exports.findMatch = function(userID,findMatchC){
 	var matchGeners = [];
-	console.log("insinde find findMatch");
+	console.log("FindMatch start");
 	var genres = [];
 	console.log(userID);
 
 	async.waterfall([
     function(callback) {
-        	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
-	  if (err || pleasureUser === null){
-	  	// console.log(err);
-	  	return err;
-	  } 
-	  console.log("find PleasurePie");
-		  for(var i=0; i<pleasureUser.genres.length; i++){
-		  	if(genres.indexOf(pleasureUser.genres[i].genreName) === -1){
-		  		genres.push(pleasureUser.genres[i].genreName);
-		  	}	
-		  }	
-		  console.log("done pleasure");
-		   callback();
-	});
+    	PleasurePie.findOne({ pleasurePieId: userID }, function (err, pleasureUser) {
+			  if (err || pleasureUser === null){
+			  	// console.log(err);
+			  	return err;
+			  } 
+			  for(var i=0; i<pleasureUser.genres.length; i++){
+			  	if(genres.indexOf(pleasureUser.genres[i].genreName) === -1){
+			  		genres.push(pleasureUser.genres[i].genreName);
+			  	}	
+			  }	
+			   callback();
+		});
 
     },
     function(callback) {
       // arg1 now equals 'one' and arg2 now equals 'two'
       	BusinessPie.findOne({ businessPieId: userID }, function (err, buisnessUser) {
-		  if (err || buisnessUser === null){
-		  	return err;
-		  	// res.status(200).json("error finding buisness pie for user: " + err.message);
-		  } 
-		  console.log("find BusinessPie");
+			  if (err || buisnessUser === null){
+			  	return err;
+			  	// res.status(200).json("error finding buisness pie for user: " + err.message);
+			  } 
+
 			  for(var i=0; i<buisnessUser.genres.length; i++){
 			  	if(genres.indexOf(buisnessUser.genres[i].genreName) === -1){
 			  		genres.push(buisnessUser.genres[i].genreName);
 			  	}
 			  }
-		console.log("done business");
-		callback();
+
+			callback();
 	});	
         
     }
 ], function (err) {
-    // all dne
-    console.log("genres:");
-  	console.log(genres);
-
+    // all done
 	ArtistPie.find({}, function (err, artists) {
-		console.log("find artist");
 	  if (err || artists === null){
 	  	return err;
 	  	// res.status(200).json("error finding artists: " + err.message);
 	  } 
 	  
 	      artists.forEach(function(artist){
-	      	console.log("artist");
-	      	console.log(artist);
 	      	matchGeners = [];
 		      	for(var i=0; i<artist.genres.length; i++){
 		      		// console.log("categories[i] "+categories[i]);
-		      		console.log("check if genre exsist in user generes:" + artist.genres[i].genreName + "for artist: "  + artist.artistPieId);
+		      		// console.log("check if genre exsist in user generes:" + artist.genres[i].genreName + "for artist: "  + artist.artistPieId);
 		      		if(genres.indexOf(artist.genres[i].genreName) > -1){
 		      			console.log("Found Match !");
 		      			console.log(artist.genres[i].genreName);
@@ -127,26 +119,12 @@ exports.findMatch = function(userID,findMatchC){
 		      		}
       			}		
 	      });
-
-
-      	//res.status(200).json("finished match");
-      	findMatchC();
-
+      	findMatchC(); //callback
 	 });//close find all artist pies
-
-
-      	
 	});//end async
-
-
-	  
-
-  
-
-  	
 }
 
-//search
+//search Specific User
 exports.searchSpecificUser = function(res,data) {
 
 	User.findOne({ username: data }, function (err, doc) {
@@ -161,7 +139,7 @@ exports.searchSpecificUser = function(res,data) {
 	});
 }
 
-//search
+//Srach User
 exports.searchuser = function(res,data) {
 
 	User.find({ $or:[ {'username': {$regex: new RegExp(data, "i")} }, {'firstName': {$regex: new RegExp(data, "i")} },{'lastName': {$regex: new RegExp(data, "i")}}	  ]  }, function (err, doc) {
@@ -186,6 +164,8 @@ exports.removeFav = function(res, data){
 	});
 }
 
+
+
 //recommandation
 exports.recommandation = function(res, userID){
 	var producers = [];
@@ -205,7 +185,7 @@ exports.recommandation = function(res, userID){
 		  		}
 			}
 		}
-	  console.log("done pleasure");
+	  // console.log("done pleasure"); 
 	  callback();
  	});
         
@@ -225,7 +205,7 @@ exports.recommandation = function(res, userID){
 		  		}
 			}
 		}
-		 console.log("done business");
+		 // console.log("done business");
 		 callback();
 	});
         
@@ -235,8 +215,6 @@ exports.recommandation = function(res, userID){
     	var q = async.queue(function (task, taskCallback) {
 		    console.log('find ' + task.id);
 		    User.findOne({ userId: task.id }, function (err, user) {
-		      			console.log("find one");
-
 		      			if(err){
 		      				console.log(err);
 		      			}
@@ -245,7 +223,7 @@ exports.recommandation = function(res, userID){
 		      				result.push({username: user.username, profileImage: user.profileImage, userID: user.userId,firstName : user.firstName , lastName: user.lastName, type: user.typeOfUser});		
 		      				taskCallback();
 		      			}else{
-		      				console.log("user " +producers[i] +" not found");
+		      				// console.log("user " +producers[i] +" not found");
 		      			}
 			  			
 			  		});
@@ -254,7 +232,7 @@ exports.recommandation = function(res, userID){
 
 		// assign a callback
 		q.drain = function() {
-		    console.log('all items have been processed');
+		    // console.log('all items have been processed');
 		    callback();
 		}
 
@@ -265,18 +243,16 @@ exports.recommandation = function(res, userID){
 			for(var i=0; i<producers.length; i++){
 		      		console.log("producers[i] "+producers[i]);
 		      		q.push({id: producers[i]}, function (err) {
-					    console.log('finished processing ');
+					    // console.log('finished processing ');
 					});
 		      }
 
-    }
-], function (err) {
-
-
-		      	console.log("result:");
-		      	console.log(result);
-			  res.status(200).json(result);
-});
+	    }
+	], function (err) {
+	  	// console.log("result:");
+	  	// console.log(result);
+	  res.status(200).json(result);
+	});
 // 		 // console.log("producers:");
 // 			console.log(producers);
 			
@@ -302,6 +278,11 @@ exports.recommandation = function(res, userID){
 			//   		}
 		 //      	}
 }
+
+
+
+
+
 exports.getFollowing = function(res,userId) {
 	//addToSet make sure there are no duplicates is songs array.
 	User.findOne({ userId: userId }, function (err, doc) {
@@ -313,6 +294,10 @@ exports.getFollowing = function(res,userId) {
 	  res.status(200).json(doc.following);
 	});
 }
+
+
+
+
 
 //add to followers
 exports.addToFollow = function(res,Fuser,userF) {

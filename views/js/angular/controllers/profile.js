@@ -16,7 +16,7 @@ angular.module('profile',['datatables'])
 
    $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDisplayLength(10)
-        .withOption('bLengthChange', false);
+        .withOption('bLengthChange', true);
 
   // $scope.domain = "http://themusicprofile.com";
   //$scope.domain = "http://localhost:3000";

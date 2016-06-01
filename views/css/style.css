@@ -813,7 +813,7 @@ table.dataTable tbody tr {
     height: 30px;
     padding: 10px;
     color: #00cbff !important;
-    border-radius: 3em;
+    border-radius: 0.5em;
     border: 0;
     background-color: rgba(255,255, 255,0.20);
 }
@@ -837,6 +837,9 @@ table.dataTable tbody tr {
     color: #337ab7 !important;
     border: 1px solid transparent;
 }
+table.dataTable.no-footer {
+    border-bottom: 0px solid #111 !important;
+}
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
     color: white !important;
@@ -851,6 +854,22 @@ table.dataTable tbody tr {
 }
 .dataTables_wrapper .dataTables_info{
   color:#00bfff !important;
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
+  color: white;
+}
+.dataTables_wrapper .dataTables_length select{
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 30px;
+    padding: 10px;
+    color: #00cbff !important;
+    border-radius: 3em;
+    border: 0;
+    background-color: rgba(255,255, 255,0.20);
+
 }
 .song {
   font-weight: 600;
@@ -1094,9 +1113,9 @@ table.dataTable tbody tr {
 .producerForm{
   width: 200px;
   height: 30px;
-  padding: 10px;
+  padding: 5px 5px 5px 10px;
   color: #00cbff !important;
-  border-radius: 3em;
+  border-radius: 0.5em;
   border: 0;
   background-color: rgba(255,255, 255,0.20);
 }
