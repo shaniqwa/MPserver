@@ -8,7 +8,11 @@ dataSum = parseInt(diagramData.counterAgeGroup1) + parseInt(diagramData.counterA
             type: 'column'
         },
         title: {
-            text: 'Age Group'
+            text: 'Age Group',
+            style: {
+                textTransform: "camelcase",
+                fontFamily: 'Glegoo, serif'
+            }
         },
         subtitle: {
             text: ''

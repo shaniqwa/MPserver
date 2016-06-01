@@ -1100,6 +1100,8 @@ table.dataTable.no-footer {
 }
 .playlist-container{
   padding: 10px;
+  height: 300px;
+  overflow-y: scroll;
 }
 .songName {
   text-align: center;

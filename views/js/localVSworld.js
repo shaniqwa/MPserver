@@ -29,9 +29,12 @@ var drawLocalVsWorldDiagram = function (diagramData) {
             plotShadow: false,
             type: 'pie'
         },
-        title: {
-            fontFamily: 'Glegoo, serif',
+        title: {            
             text: 'Local VS World',
+            style: {
+                textTransform: "camelcase",
+                fontFamily: 'Glegoo, serif'
+            }
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
