@@ -94,21 +94,29 @@ exports.addToBlackList = function(res,data) {
 
 //safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
-
+	
 	//remove user from all following users, by cheking the deleted user followers 
 	var q = async.queue(function (task, taskCallback) {
-    console.log('remove from followers ' + task.userId);
-
-	User.findOneAndUpdate({ userId: task.userId }, { $pull: { 'following':  task.user  } }, function(err){
-		if(!err){
-			taskCallback();
-		}
-	});
+    console.log('remove ' + task.user.userId + ' from ' + task.userId + ' ' + task.array);
+    var arrayToPull = task.array;
+	if(task.array == 'followers'){
+		User.findOneAndUpdate({ userId: task.userId }, { $pull: { 'followers' :  task.user  } }, function(err){
+			if(!err){
+				taskCallback();
+			}
+		});
+	}else if(task.array == 'following'){
+		User.findOneAndUpdate({ userId: task.userId }, { $pull: { 'following' :  task.user  } }, function(err){
+			if(!err){
+				taskCallback();
+			}
+		});
+	}
 }, 3);
 
 // assign a callback
 q.drain = function() {
-    console.log('all users following have been updated');
+    console.log('all relavent users following/followers have been updated');
     User.findOne({ userId: userID }).remove().exec();
 	BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 	PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
@@ -132,8 +140,8 @@ q.drain = function() {
 			me.profileImg = doc.profileImage;
 			me.first = doc.firstName;
             me.last = doc.lastName;
-            if(doc.followers.length == 0){	
-            	console.log("followers is empty");
+            if((doc.followers.length == 0) && (doc.following.length == 0)){	
+            	console.log("this user has no following or followers. Simply delete");
             	User.findOne({ userId: userID }).remove().exec();
 				BusinessPie.findOne({ businessPieId: userID }).remove().exec();
 				PleasurePie.findOne({ pleasurePieId: userID }).remove().exec();
@@ -149,11 +157,24 @@ q.drain = function() {
 
             }
 			for(var i=0; i<doc.followers.length; i++){
-				console.log("remove deleted user from " +doc.followers[i].userId + "following");
+				console.log("first for");
 				//push to queue
 				var task = {
 					userId: doc.followers[i].userId,
-					user: me
+					user: me,
+					array: 'following'
+				}
+					q.push(task, function (err) {
+				});
+			}
+
+			for(var i=0; i<doc.following.length; i++){
+				console.log("second for");
+				//push to queue
+				var task = {
+					userId: doc.following[i].userId,
+					user: me,
+					array: 'followers'
 				}
 					q.push(task, function (err) {
 				});

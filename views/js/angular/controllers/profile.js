@@ -594,6 +594,7 @@ $scope.drawDiagram = function(index){
      
        
       if($scope.heart == "fa-heart-o"){
+        //add to fav
         $scope.heart = "fa-heart";
          if($scope.userId == $scope.myID){
           // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
@@ -608,7 +609,7 @@ $scope.drawDiagram = function(index){
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });
-            console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+            // console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
             $http.defaults.headers.post["Content-Type"] = "application/json";
             //console.log(model.domain);
             $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
@@ -616,8 +617,8 @@ $scope.drawDiagram = function(index){
                  $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
                  $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
             });
-      }
-      else{
+      }else{
+        //remove from fav
         $scope.heart = "fa-heart-o";
         //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
         $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + $scope.track[$scope.counter - 1].songName + '/' + $scope.track[$scope.counter - 1].artistName).success(function(data){
@@ -628,13 +629,7 @@ $scope.drawDiagram = function(index){
                     delete $scope.track[$scope.counter - 1];
                     $(".songItem" + i).empty();
                   }
-                    
-              
               }
-               
-
-              
-
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
               $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
         });
