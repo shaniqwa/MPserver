@@ -248,15 +248,16 @@
                                 Rishon Lezion, Israel 7569137<br>
                                 Israel<br>
                                 s.almog88@gmail.com</p>
-                             <p>Visit our <a href="#">help page</a> for support and answers to questions.</p>
-
+                             <p>Visit our <a ng-click="goToHelpPage()" href="#">help page</a> for support and FAQs.</p>
+                            <br>
                              <hr>
                           </div>
                           <div class="about-developer">
-                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Shani</div>
-                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Viki</div>
-                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Stas</div>
-                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Rafi</div>
+                                <h5>Developers</h5>
+                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Shani Almog <br> s.almog88@gmail.com</div>
+                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Viktoria Yakobashvili <br> viktoria5660@gmail.com</div>
+                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Stas Volfus <br> stasvolfus@gmail.com </div>
+                                <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Rafel Bar <br> rafaelbar37@gmail.com </div>
                           </div>
                     </div>
                     <!--END STATIC PAGE -->
@@ -290,12 +291,24 @@
 
                     <!-- STATIC PAGE -->
                     <div id="mobile" class="tab-pane fade">
+                          
+                           <div class = "col-md-12">
                           <h3>The Music Profile App</h3>
-                          <div class="mobile-container"> 
-                             <p>
-                                <img width="400" src="images/mobile_tablet.png">
-                             </p>
-                          </div>
+                          <h4>Listening to your music anywhere has never been easier</h4>
+                             <img width="600" src="images/mobile_tablet.png">
+
+                             <div class="phone-holder col-md-6">
+                    <ul class="rslides">
+                    <li><img src="images/background.jpg" alt=""></li>
+                    <li><img src="images/poly.jpg" alt=""></li>
+              </ul>
+          </div>
+                           <p>The Music Profiles Android App is free, personalized service made for you to listen to the music you love anywhere you go.</p>
+                           <p>The app is simple to use.</p>
+                           <p>Just click play to turn on our  auto Dj and explore more of your favorite songs.</p>
+                           <br><br><br><br>   
+                           </div>
+                          
                     </div>
                     <!--END STATIC PAGE -->
 
@@ -486,10 +499,32 @@
   var name = "<%- user.firstName %>";
   // the string to insert in name field:  Shani"; alert("mmohahahah"); window.open("http://www.ihud.org.il/college/"); var close = "
 </script>
+<script src="js/responsiveslides.min.js"></script>
 
 
 <script>
 $(document).ready(function(){
+//mobile slider init
+ $(".rslides").responsiveSlides({
+      auto: true,             // Boolean: Animate automatically, true or false
+      speed: 500,            // Integer: Speed of the transition, in milliseconds
+      timeout: 4000,          // Integer: Time between slide transitions, in milliseconds
+      pager: false,           // Boolean: Show pager, true or false
+      nav: false,             // Boolean: Show navigation, true or false
+      random: false,          // Boolean: Randomize the order of the slides, true or false
+      pause: false,           // Boolean: Pause on hover, true or false
+      pauseControls: true,    // Boolean: Pause when hovering controls, true or false
+      prevText: "Previous",   // String: Text for the "previous" button
+      nextText: "Next",       // String: Text for the "next" button
+      maxwidth: "",           // Integer: Max-width of the slideshow, in pixels
+      navContainer: "",       // Selector: Where controls should be appended to, default is after the 'ul'
+      manualControls: "",     // Selector: Declare custom pager navigation
+      namespace: "rslides",   // String: Change the default namespace used
+      before: function(){},   // Function: Before callback
+      after: function(){}     // Function: After callback
+    });
+
+
     //init imagepicker
     $("#img").imagepicker();
 
