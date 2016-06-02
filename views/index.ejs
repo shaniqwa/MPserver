@@ -213,7 +213,7 @@ $(document).ready(function() {
         loopHorizontal: true,
         continuousVertical: false,
         normalScrollElements: '#element1, .element2',
-        scrollOverflow: true,
+        scrollOverflow: false,
         scrollOverflowOptions: null,
         touchSensitivity: 15,
         normalScrollElementTouchThreshold: 5,
@@ -377,7 +377,7 @@ $(".section").attrchange({
         <div id="contact">
         <h2>Contact Us</h2>
         <p>We would love to get some feedbacks or answer any questions. </p>
-         <form action="/processWizardForm" method="post" id="wizard">
+         <form action="/handleContactUsForm" method="post" id="contactUs">
       
         <div class="form-group col-md-6">
           <label for="firstName" class="control-label">Name</label>
@@ -397,11 +397,47 @@ $(".section").attrchange({
 
         </form>
 
-         <button type="submit" form="wizard" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
+         <button type="submit" form="contactUs" id="contactUsSubmit" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
         </div>
     </div>
 
 <!-- END FANCYBOX -->
 
 </body>
+
+<script>
+$(document).ready(function(){
+ //post music preferences form
+  $("#contactUs").submit(function(e){
+    $("#contactUsSubmit").html("Loading...");
+    var postData = $(this).serializeArray();
+    var formURL = $(this).attr("action");
+    $.ajax(
+    {
+        url : formURL,
+        type: "POST",
+        data : postData,
+        success:function(data, textStatus, jqXHR) 
+        {
+            //data: return data from server
+            if(data.yo != "error"){
+                parent.$.fancybox.close();
+                $("#contactUsSubmit").html("Submit");
+            }else if(data.yo == "error"){
+              alert("Sorry, something went wrong.. :/ ");
+            }
+            
+        },
+        error: function(jqXHR, textStatus, errorThrown) 
+        {
+            //if fails      
+        }
+    });
+    e.preventDefault(); //STOP default action
+    // e.unbind(); //unbind. to stop multiple form submit.
+});
+});
+   
+</script>
+
 </html>
