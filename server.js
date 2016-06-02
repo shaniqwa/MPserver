@@ -8,6 +8,8 @@ var express = require('express'),
 var request = require('request');
 var server = require('http').createServer(app);  
 var io = require('socket.io')(server);
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport('smtps://s.almog88%40gmail.com:shani101288@smtp.gmail.com');
 
 var mongoose = require('mongoose');
 
@@ -1055,6 +1057,40 @@ app.param('artist', function ( req, res, next, value){
                 console.log("getFacebookYoutubeStatistics with id: " + req.params.prodID);
                 ProducerController.getFacebookYoutubeStatistics(res,req.params.prodID);
        });
+
+
+
+
+       //handle Contact Us Form
+    app.post('/handleContactUsForm', function (req, res){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var text = 'Message from ' + req.body.firstName + ": " + req.body.msg;
+            var mailOptions = {
+                from: req.body.email, // sender address
+                to: 's.almog88@gmail.com, viktoria5660@gmail.com', // list of receivers
+                subject: 'The Music Profile : new message via Contact Us form', // Subject line
+                text: text //, // plaintext body
+                // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    console.log(error);
+                    res.json({yo: 'error'});
+                }else{
+                    console.log('Message sent: ' + info.response);
+                    res.json({yo: info.response});
+                };
+            });
+    });
+
+
+     
 
 
 

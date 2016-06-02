@@ -374,7 +374,7 @@
 
                   <!-- FOLLOW  -->
                   <div ng-if="myID != user.userId">
-                      <a ng-click="follow(myID,user.userId)" class="btn btn-follow">{{isFollowing}}</a>
+                      <a ng-click="follow(myID,user.userId)" class="btn btn-follow"><i class="fa {{fafollow}}" aria-hidden="true"></i> {{isFollowing}}</a>
                   </div>
                   
                   <!-- END FOLLOW  -->
@@ -546,6 +546,7 @@ $(document).ready(function(){
 
   //post music preferences form
   $("#updatePreferencesForm").submit(function(e){
+    $("#updatePreferencesFormSubmit").html("Loading...");
     var postData = $(this).serializeArray();
     var formURL = $(this).attr("action");
     $.ajax(
@@ -556,8 +557,9 @@ $(document).ready(function(){
         success:function(data, textStatus, jqXHR) 
         {
             //data: return data from server
-            console.log(data);
+            // console.log(data);
             parent.$.fancybox.close();
+            $("#updatePreferencesFormSubmit").html("Submit");
         },
         error: function(jqXHR, textStatus, errorThrown) 
         {
@@ -571,6 +573,7 @@ $(document).ready(function(){
 
   //post settings form
   $("#settingsForm").submit(function(e){
+    $("#settingsFormSubmit").html("Loading...");
     var postData = $(this).serializeArray();
     var formURL = $(this).attr("action");
     $.ajax(
@@ -580,12 +583,15 @@ $(document).ready(function(){
         data : postData,
         success:function(data, textStatus, jqXHR) 
         {
+          $("#settingsFormSubmit").html("Submit");
             //data: return data from server
-            console.log(data);
+            // console.log(data);
             if(data.state == "success"){
-              parent.$.fancybox.close();  
+              parent.$.fancybox.close();
+              $(".my-alert").remove(); 
             }else if(data.error){
-              console.log(data.error);
+              $("#email").focus();
+              $("#email").before("<p class='my-alert' style='color: red'>Sorry, This Email is Taken.</p>");
             }
             
         },

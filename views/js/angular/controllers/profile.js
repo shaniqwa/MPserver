@@ -33,6 +33,7 @@ angular.module('profile',['datatables'])
   $scope.defaultGenre = [];
   $scope.reco = [];  
   $scope.heart = "fa-heart-o";
+  $scope.fafollow = "fa-plus";
   $scope.isFollowing = "Follow";
   $scope.red = [];
   $scope.data = {
@@ -273,6 +274,7 @@ angular.module('profile',['datatables'])
 
             //follow
             $scope.isFollowing = "Follow";
+            $scope.fafollow = "fa-plus";
             if($scope.myID != $scope.user.userId){
                 // console.log("you are on profile of user: " +  $scope.user.userId);
                   // check if the logged in user is following the current user
@@ -281,8 +283,9 @@ angular.module('profile',['datatables'])
                       // console.log("my id: " + $scope.myID);
                       if($scope.user.followers[i].userId == $scope.myID){
                         // console.log($scope.myID + " is following " + $scope.user.userId);
+                        $scope.fafollow = "fa-check";
                          $scope.isFollowing = "Following";
-                      } 
+                      }
                   } 
               }
 
@@ -429,12 +432,14 @@ $scope.follow = function(myID, userID){
     // follow
     $http.get(model.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Following";
+      $scope.fafollow = "fa-check";
       console.log(data);
     });  
   }else if($scope.isFollowing == "Following"){
     // unfollow
     $http.get(model.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Follow";
+      $scope.fafollow = "fa-plus";
       console.log(data);
     });
   }
