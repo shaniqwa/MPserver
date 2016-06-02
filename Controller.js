@@ -10,6 +10,7 @@ autoIncrement.initialize(db);
 var math = require('mathjs');
 var ControllerB = require('./ControllerB');
 
+
 //===============MODELS===============
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
 var User = mongoose.model('User', usersSchema, 'Users');
@@ -258,29 +259,42 @@ exports.processWizardForm = function(req,res,data) {
     	var update = {is_New: 0};
     	update.firstName = data.firstName;
     	update.lastName = data.lastName
-    	//TODO: validate email - unique
-    	// update.email = data.email;
     	update.country = data.country;
         update.ageGroup = data.ageGroup;
-        update.profileImg = data.profileImg;
+        update.profileImage = data.profileImg;
 
-        User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
-		    if (err)
-		        console.log(err);
 
-		    if (user) {
-		        req.user = user;
-		        if(req.user.FB_AT){
-		        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
-		        }else if(req.user.YT_AT){
-		        	console.log("register with google, token: " + req.user.YT_AT);
-		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
-		        	console.log(url);
-		        }
+        emailValidation(data.email,data.userID,function(status,err){
+			if(err){
+				console.log(err);
+			}
+			if(!status){
+				return res.status(200).json({error: "Email is taken, please try again"});
+			}else{
+		     	update.email = data.email;
 
-		        callback();
-		    } 
+        		User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
+				    if (err)
+				        console.log(err);
+
+				    if (user) {
+				        req.user = user;
+				        if(req.user.FB_AT){
+				        	console.log("register with facebook, token: " + req.user.FB_AT);
+				        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
+				        }else if(req.user.YT_AT){
+				        	console.log("register with google, token: " + req.user.YT_AT);
+				        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
+				        }
+
+				        callback();
+				    } 
+				});
+     		}
+
 		});
+
+        
     },
     //step 2: creat initial MP
     function(callback) {
