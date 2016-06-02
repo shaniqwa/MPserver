@@ -54,7 +54,8 @@
                 </div>
 
               <!-- the playlist -->
-               <div class="playlist-container">
+               <div class="playlist-container mCustomScrollbar" data-mcs-theme="dark">
+               
                     <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
 
                     <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> <div class="abs loader {{loaderStatus2}}"></div>
@@ -66,7 +67,8 @@
                             <hr>
                         </div>
                     </div>   
-                </div>  
+                
+              </div>  
                 <!-- end playlist -->
 
           </div>
@@ -504,6 +506,7 @@
 
 <script>
 $(document).ready(function(){
+  $(".content").mCustomScrollbar();
 //mobile slider init
  $(".rslides").responsiveSlides({
       auto: true,             // Boolean: Animate automatically, true or false

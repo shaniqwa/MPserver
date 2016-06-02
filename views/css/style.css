@@ -1141,7 +1141,17 @@ table.dataTable.no-footer {
 .playlist-container{
   padding: 10px;
   height: 300px;
-  overflow-y: scroll;
+  padding-right: 3px;
+}
+ .playlist-container::-webkit-scrollbar { 
+    display: none; 
+}
+ .playlist-container { overflow: -moz-scrollbars-none; }
+#mCSB_2_container{
+  margin-right: 20px !important;
+}
+#mCSB_2_dragger_vertical .mCSB_dragger_bar{
+  background-color: #e4e4e4;
 }
 .songName {
   text-align: center;
