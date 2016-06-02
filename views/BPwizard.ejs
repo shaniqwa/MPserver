@@ -21,22 +21,22 @@
         <p>Please confirm or change some basic information about you</p>
         <div class="form-group col-md-6">
           <label for="firstName" class="control-label">First Name</label>
-          <input type="text" class="producerForm form-control" id="firstName" name="firstName" value="<%= user.firstName %>">
+          <input type="text" class="producerForm form-control" id="firstName" name="firstName" value="<%= user.firstName %>" required>
         </div>
 
          <div class="form-group col-md-6">
           <label  for="lastName" class="control-label">Last Name</label>
-          <input type="text" class="producerForm form-control"  id="lastName" name="lastName" value="<%= user.lastName %>">
+          <input type="text" class="producerForm form-control"  id="lastName" name="lastName" value="<%= user.lastName %>" required>
         </div>
         
         <div class="form-group col-md-6">
           <label  for="email" class="control-label">Email </label>
-          <input type="email" class="producerForm form-control" id="email" name="email" value="<%= user.email %>">
+          <input type="email" class="producerForm form-control" id="email" name="email" value="<%= user.email %>" required>
         </div>
 
         <div class="form-group col-md-6">
           <label  for="country" class="control-label">Country </label>
-          <select class="producerForm form-control" id="country" name="country">
+          <select class="producerForm form-control" id="country" name="country" required>
 <option value="<%= user.country %>"><%= user.country %></option>
 <option value="Afghanistan">Afghanistan</option>
 <option value="Åland Islands">Åland Islands</option>
@@ -348,50 +348,79 @@
 
             <h3>Business</h3>
             <hr />
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_rock" value="Rock" checked>Rock</label>
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_rock" name="b_rock" value="Rock" checked>
+                  <label for="b_rock">Rock</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_pop"  value="Pop" checked>Pop</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_pop" name="b_pop"  value="Pop" checked>
+                  <label for="b_pop">Pop</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_rnb"  value="R&amp;B" checked>R&amp;B</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_rnb" name="b_rnb"  value="R&amp;B" checked>
+                  <label for="b_rnb">R&amp;B</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_classical"  value="Classical" checked>Classical</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_classical" name="b_classical"  value="Classical" checked>
+                  <label for="b_classical">Classical</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_country"  value="Country" checked>Country</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_country" name="b_country"  value="Country" checked>
+                  <label for="b_country">Country</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_elctronic"  value="Electronic" checked>Electronic</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_elctronic" name="b_elctronic"  value="Electronic" checked>
+                  <label for="b_elctronic">Electronic</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_latin"  value="Latin" checked>Latin</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" name="b_latin"  value="Latin" checked>
+                  <label>Latin</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_blues" value="Blues" checked>Blues</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_blues" name="b_blues" value="Blues" checked>
+                  <label for="b_blues">Blues</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_world"  value="World" checked>World</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_world" name="b_world"  value="World" checked>
+                  <label for="b_world">World</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_punk"  value="Punk" checked>Punk</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_punk" name="b_punk"  value="Punk" checked>
+                  <label for="b_punk">Punk</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_metal"  value="Metal" checked>Metal</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_metal" name="b_metal"  value="Metal" checked>
+                  <label for="b_metal">Metal</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_jazz"  value="Jazz" checked>Jazz</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_jazz" name="b_jazz"  value="Jazz" checked>
+                  <label for="b_jazz">Jazz</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_folk"  value="Folk" checked>Folk</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_folk" name="b_folk"  value="Folk" checked>
+                  <label for="b_folk">Folk</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_reggae"  value="Reggae" checked>Reggae</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_reggae" name="b_reggae"  value="Reggae" checked>
+                  <label for="b_reggae">Reggae</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="b_hiphop"  value="Hip Hop" checked>Hip Hop</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="b_hiphop" name="b_hiphop"  value="Hip Hop" checked>
+                  <label for="b_hiphop">Hip Hop</label>
                 </div>
 
     </div>
@@ -402,50 +431,79 @@
             <hr />
             <!-- begin form -->
             
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_rock" value="Rock" checked>Rock</label>
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_rock" name="p_rock" value="Rock" checked>
+                  <label for="p_rock">Rock</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_pop"  value="Pop" checked>Pop</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_pop" name="p_pop"  value="Pop" checked>
+                  <label for="p_pop">Pop</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_rnb"  value="R&amp;B" checked>R&amp;B</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_rnb" name="p_rnb"  value="R&amp;B" checked>
+                  <label for="p_rnb">R&amp;B</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_classical"  value="Classical" checked>Classical</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_classical" name="p_classical"  value="Classical" checked>
+                  <label for="p_classical">Classical</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_country"  value="Country" checked>Country</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_country" name="p_country"  value="Country" checked>
+                  <label for="p_country">Country</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_elctronic"  value="Electronic" checked>Electronic</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_elctronic" name="p_elctronic"  value="Electronic" checked>
+                  <label for="p_elctronic">Electronic</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_latin"  value="Latin" checked>Latin</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_latin" name="p_latin"  value="Latin" checked>
+                  <label for="p_latin">Latin</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_blues" value="Blues" checked>Blues</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_blues" name="p_blues" value="Blues" checked>
+                  <label for="p_blues">Blues</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_world"  value="World" checked>World</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_world" name="p_world"  value="World" checked>
+                  <label for="p_world">World</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_punk"  value="Punk" checked>Punk</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_punk" name="p_punk"  value="Punk" checked>
+                  <label for="p_punk">Punk</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_metal"  value="Metal" checked>Metal</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_metal" name="p_metal"  value="Metal" checked>
+                  <label for="p_metal">Metal</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_jazz"  value="Jazz" checked>Jazz</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_jazz" name="p_jazz"  value="Jazz" checked>
+                  <label for="p_jazz">Jazz</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_folk"  value="Folk" checked>Folk</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_folk" name="p_folk"  value="Folk" checked>
+                  <label for="p_folk">Folk</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_reggae"  value="Reggae" checked>Reggae</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_reggae" name="p_reggae"  value="Reggae" checked>
+                  <label for="p_reggae">Reggae</label>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" name="p_hiphop"  value="Hip Hop" checked>Hip Hop</label>
+
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" id="p_hiphop" name="p_hiphop"  value="Hip Hop"  checked>
+                  <label for="p_hiphop">Hip Hop</label>
                 </div>
 
     </div>
@@ -475,6 +533,36 @@
 <script>
 $(document).ready(function(){
   $("#img").imagepicker();
+
+
+    //post form
+  $("#wizard").submit(function(e){
+    var postData = $(this).serializeArray();
+    var formURL = $(this).attr("action");
+    $.ajax(
+    {
+        url : formURL,
+        type: "POST",
+        data : postData,
+        success:function(data, textStatus, jqXHR) 
+        {
+            //data: return data from server
+            console.log(data);
+            if(data.error){
+              alert("email is taken");
+              $("#email").focus();
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) 
+        {
+            //if fails      
+        }
+    });
+    e.preventDefault(); //STOP default action
+    // e.unbind(); //unbind. to stop multiple form submit.
+});
+
+
 
 });
 </script>
