@@ -68,6 +68,7 @@ angular.module('profile',['datatables'])
    $scope.timer;
    $scope.tickInterval = 1000 //ms
    $scope.timeWidth;
+   $scope.timeHeight = 4;
    $scope.removedSongsIndexes = [];
    $scope.elementIsEmpty;
    $scope.tickColor = 1;
@@ -196,6 +197,7 @@ angular.module('profile',['datatables'])
         if($scope.tickColor == 1){
           $scope.color = "00bfff";
           $scope.tickColor = $scope.tickColor + 1;
+          //$scope.timeHeight = 4;
         }
         else if($scope.tickColor == 2){
           $scope.color = "3772ff";
@@ -216,6 +218,7 @@ angular.module('profile',['datatables'])
         else if($scope.tickColor == 6){
           $scope.color = "fc6b24";
          $scope.tickColor = 1;
+         //$scope.timeHeight = 5;
         }
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;

@@ -21,6 +21,7 @@
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
 <div class="container">
+  <div class="navTimer2" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div>
     <!-- LEFT SIDE BAR -->
     <!-- <div class="row"> -->
          <div class="col-sm-2">
@@ -51,7 +52,7 @@
                      <div class="timeContainer">
                        <div class="videoCurrentTime" style="text-align: center;" ng-show="videoFrame">{{timer}}</div>
                        <div class="videoDuration" style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
-                       <div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color}"></div>
+                       <div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div>
                     </div>
                 </div>
 

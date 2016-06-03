@@ -1273,15 +1273,27 @@ table.dataTable.no-footer {
    background-color: #3875ff;
    position: absolute;
    bottom: 0;
-   -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
-     -webkit-transition: background-color 1000ms linear;
-    -moz-transition: background-color 1000ms linear;
-    -o-transition: background-color 1000ms linear;
-    -ms-transition: background-color 1000ms linear;
-    transition: background-color 1000ms linear;
+     -webkit-transition: background-color 1000ms linear, width 1s;
+    -moz-transition: background-color 1000ms linear, width 1s;
+    -o-transition: background-color 1000ms linear, width 1s;
+    -ms-transition: background-color 1000ms linear, width 1s;
+    transition: background-color 1000ms linear, width 1s;
 }
+.navTimer2{
+  display: block;
+  z-index: 9999;
+   height:7px;
+   width:0%;
+   background-color: #3875ff;
+   position: fixed;
+   top: 0;
 
+     -webkit-transition: background-color 1000ms linear, width 1s;
+    -moz-transition: background-color 1000ms linear, width 1s;
+    -o-transition: background-color 1000ms linear, width 1s;
+    -ms-transition: background-color 1000ms linear, width 1s;
+    transition: background-color 1000ms linear, width 1s;
+}
 
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
