@@ -133,11 +133,12 @@
                             </tr>
                         </thead>
                             <tbody>
-                                <tr class="songItem songItem{{$index}}" ng-repeat="x in favorits track by $index" ng-click="playFavorites($index)">
-                                    <td class="col-md-3"> {{x.artistName}}</td>
-                                    <td class="col-md-6 song">{{x.songName}}</td>
-                                    <td class="col-md-2 duration">{{x.duration}}</td>
-                                    <td class="col-md-1"><img src="images/icon-trash.png" width="20" style="float:right"></td>
+                                <tr class="songItem songItem{{$index}}" ng-repeat="x in favorits track by $index">
+                                    <td class="col-md-3" ng-click="playFavorites(x.url)"> {{x.artistName}}</td>
+                                    <td class="col-md-6 song" ng-click="playFavorites(x.url)">{{x.songName}}</td>
+                                    <td class="col-md-2 duration" ng-click="playFavorites(x.url)">{{x.duration}}</td>
+                                    <td class="col-md-1"><img src="images/icon-trash.png" width="20" style="float:right" ng-click="removeItem(x.url)"></td>
+                                    
                                 </tr>
                             </tbody>
                         </table>

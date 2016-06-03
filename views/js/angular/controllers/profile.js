@@ -69,6 +69,9 @@ angular.module('profile',['datatables'])
    $scope.tickInterval = 1000 //ms
    $scope.timeWidth;
    $scope.removedSongsIndexes = [];
+   $scope.elementIsEmpty;
+  
+
    // create youtube player
     var player;
 
@@ -153,8 +156,11 @@ angular.module('profile',['datatables'])
          if(event.data === -1){  //video unstarted
               
         }
+         if(event.data === 1){  //video playing
+               $scope.toggle = true;
+        }
          if(event.data === 2){  //video paused
-          
+          $scope.toggle = false;
         }
          if(event.data === 3){  //video buffering
           
@@ -453,7 +459,7 @@ $scope.follow = function(myID, userID){
 /****************DRAW DIAGRAM*******************************/
 /***********************************************************/
 $scope.drawDiagram = function(index){
-  console.log($scope.songCounters[index]);
+  //console.log($scope.songCounters[index]);
   //$scope.selectedSong = numberOfSong;
   drawAgeGroupDiagram($scope.songCounters[index]);
   drawLocalVsWorldDiagram($scope.songCounters[index]);
@@ -498,7 +504,7 @@ $scope.drawDiagram = function(index){
          var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
           //console.log(url);
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-            console.log(data);
+           // console.log(data);
            for(i in data){
                if(data[i].type == 'producer'){
                  var startUrl = "https://www.youtube.com/watch?v=";
@@ -634,8 +640,6 @@ $scope.drawDiagram = function(index){
 
                     $scope.removedSongsIndexes.push(i);
                     delete model.myfavorites[i]; 
-                    //delete $scope.track[$scope.counter - 1];
-                    $(".songItem" + i).empty();
                   }
               }
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
@@ -728,7 +732,7 @@ console.log("inside recommandation");
 /***********************************************************/
 /********************playFavorites FUNCTION**********************/
 /***********************************************************/
-    $scope.playFavorites = function(index){
+    $scope.playFavorites = function(url){
          //console.log(model.myfavorites);
         
         $scope.iCameFromMyPlaylist = true;
@@ -741,19 +745,13 @@ console.log("inside recommandation");
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
-             var flag = (i == index) ? 1:0;
-            
-             
-                if(i>=index){
-                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-                 }
-                 else{
-                    $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-                 }
-            
-             //console.log(item.url);
-             
-             //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            var flag = (item.url == url) ? 1:0;
+            if(item.url == url){
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+            else{
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
              i++;
          });
         
@@ -805,7 +803,7 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-        console.log("updateCounters function" );
+        //console.log("updateCounters function" );
          if($scope.track[0].type == "p"){
             $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
                 console.log("updateCounters successfuly");
@@ -869,9 +867,27 @@ console.log("inside recommandation");
 
 
 
+/***********************************************************/
+/*************removeItem from playlist FUNCTION*************/
+/***********************************************************/
+   $scope.removeItem = function(url){
+              for(i in model.myfavorites){
+                  if(model.myfavorites[i].url == url){
+                    $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + model.myfavorites[i].songName + '/' + model.myfavorites[i].artistName).success(function(data){
+                        delete model.myfavorites[i]; 
+                    });
+                   
+                  }
+              }
+              if($scope.track[$scope.counter - 1].url == url){
+                 $scope.heart = "fa-heart-o";
+              }
+              $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
+              $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+   }
+
+
 });
 
-
-// get song duration from youtube
 // https://www.googleapis.com/youtube/v3/videos?id=9bZkp7q19f0&part=contentDetails&key=AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk
 

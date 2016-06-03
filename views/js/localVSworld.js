@@ -4,7 +4,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
     if (diagramData.counterTotal == 0){
        local = 0;
        world = 0;
-       console.log("ZERO");
+       //console.log("ZERO");
     }
     else{
         local =  diagramData.counterLocal; 
