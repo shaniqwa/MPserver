@@ -155,7 +155,7 @@ Highcharts.theme = {
       borderWidth: 0,
       style: {
          color: '#F0F0F0',
-         fontSize: '16px'
+         fontSize: '18px'
       },
       shape: 'circle',
       style: {
@@ -495,7 +495,11 @@ function addCircle(chart){
                 },
                 color: '#d8d8d8',
                 style: {
-                        fontWeight: '400'
+                        fontWeight: '400',
+                        fontColor: '#e4e4e4',
+                        fontSize: '12px',
+                        letterSpacing: 0.5,
+                        textShadow : false
                 }
             }
         }]

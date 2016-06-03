@@ -164,11 +164,20 @@ ul{
 }
 .holder-4 {
     position: relative;
-    top: 30%;
+    top: 40%;
     padding: 30px;
      background-color: transparent;
     width: 100%;
     margin: 0 auto;
+  }
+  .holder-4 img{
+    position: absolute;
+    margin: 0;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+
   }
 .mobile-holder{
   width:420px;
@@ -361,7 +370,7 @@ ul{
 }
 .home-slide1{
   /*background-image: url("../images/poly.jpg") !important;*/
-  background-color: #000 !important;
+  background-color: #222 !important;
 }
 .home-slide2{
   background-image: url("../images/slide-pc.jpg") !important;
@@ -536,7 +545,7 @@ orites tab*/
   height: 20px;
 }
 #favorites-tab:after{
-  content: url(../images/profile.png);
+  content: url(../images/favorites.png);
   opacity:0;
     transition: opacity 0.5s ease;
     -webkit-transition: opacity 0.7s ease;
@@ -554,7 +563,7 @@ orites tab*/
   height: 20px;
 }
 #following-tab:after{
-  content: url(../images/profile.png);
+  content: url(../images/following.png);
   opacity:0;
     transition: opacity 0.5s ease;
     -webkit-transition: opacity 0.7s ease;
@@ -572,7 +581,7 @@ orites tab*/
   height: 20px;
 }
 #followers-tab:after{
-  content: url(../images/profile.png);
+  content: url(../images/followers.png);
   opacity:0;
     transition: opacity 0.5s ease;
     -webkit-transition: opacity 0.7s ease;
@@ -590,7 +599,7 @@ orites tab*/
   height: 20px;
 }
 #statistics-tab:after{
-  content: url(../images/profile.png);
+  content: url(../images/statistics.png);
   opacity:0;
     transition: opacity 0.5s ease;
     -webkit-transition: opacity 0.7s ease;
@@ -608,7 +617,7 @@ orites tab*/
   height: 20px;
 }
 #mySongs-tab:after{
-  content: url(../images/profile.png);
+  content: url(../images/my_songs.png);
   opacity:0;
     transition: opacity 0.5s ease;
     -webkit-transition: opacity 0.7s ease;
@@ -1112,14 +1121,21 @@ table.dataTable.no-footer {
   font-size: 20px;
 }
 .loader {
-  background-image: url("../images/loader.gif");
+  position: relative;
+  background-color: black;
   height: 200px;
   width: 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
   min-height: 200px;
   display: block;
   visibility: hidden;
+}
+.loader img{
+  position: absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
 }
 .abs{
   position: absolute;

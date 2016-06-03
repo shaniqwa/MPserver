@@ -474,8 +474,10 @@ io.on('connection', function(client) {
                     }
                     // console.log("doc:");
                     // console.log(doc);
+                    if(doc){
+                        songs = doc.songs;    
+                    }
                     
-                    songs = doc.songs;
                     // console.log("songs:");
                     // console.log(songs);
 
