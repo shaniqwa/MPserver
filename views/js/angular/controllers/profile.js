@@ -87,7 +87,8 @@ angular.module('profile',['datatables'])
           videoId: '',
           events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
           },
           playerVars: { 
             'autoplay': 0,
@@ -119,8 +120,6 @@ angular.module('profile',['datatables'])
 
 
  
-
-    // when video ends
      function onPlayerStateChange(event) {  
 
         if(event.data === 0) {    //video ended
@@ -225,7 +224,33 @@ angular.module('profile',['datatables'])
        
        //$scope.color = hours.toString() + seconds.toString() + minutes.toString();
        
-       console.log( $scope.tickColor);
+       //console.log( $scope.tickColor);
+      }
+
+      
+
+
+      // 2 – The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.
+      // 5 – The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.
+      // 100 – The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.
+      // 101 – The owner of the requested video does not allow it to be played in embedded players.
+      // 150 – This error is the same as 101. It's just a 101 error in disguise!
+      function onPlayerError(event){
+         if(event.data == 2){
+
+         }
+         if(event.data == 5){
+          
+         }
+         if(event.data == 100){
+            //TODO CATCH ERROR AND CHANGE SONG
+         }
+         if(event.data == 101){
+            
+         }
+         if(event.data == 150){
+          
+         }
       }
       
 /***********************************************************/
