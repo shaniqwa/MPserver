@@ -68,7 +68,7 @@ angular.module('profile',['datatables'])
    $scope.timer;
    $scope.tickInterval = 1000 //ms
    $scope.timeWidth;
-   $scope.timeHeight = 4;
+   $scope.timeHeight;
    $scope.removedSongsIndexes = [];
    $scope.elementIsEmpty;
    $scope.tickColor = 1;
@@ -102,12 +102,14 @@ angular.module('profile',['datatables'])
 
      // autoplay video
      function onPlayerReady(event) {
+
         // console.log("player ready");
         //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
         
         $scope.$apply(function() {
+          $interval(tick, $scope.tickInterval);
           $scope.videoFrame = true;
           $scope.videoFrame2 = true;
           $scope.videoFrame3 = true;
@@ -129,7 +131,7 @@ angular.module('profile',['datatables'])
         }
         if(event.data === 1){   //video playing
           $scope.$apply(function() {
-            $interval(tick, $scope.tickInterval);
+            $scope.toggle = true;
             
             hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
             seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
@@ -156,9 +158,6 @@ angular.module('profile',['datatables'])
         }
          if(event.data === -1){  //video unstarted
               
-        }
-         if(event.data === 1){  //video playing
-               $scope.toggle = true;
         }
          if(event.data === 2){  //video paused
           $scope.toggle = false;

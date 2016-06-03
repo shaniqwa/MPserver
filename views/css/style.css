@@ -1282,7 +1282,7 @@ table.dataTable.no-footer {
 .navTimer2{
   display: block;
   z-index: 9999;
-   height:7px;
+   height:4px;
    width:0%;
    background-color: #3875ff;
    position: fixed;
