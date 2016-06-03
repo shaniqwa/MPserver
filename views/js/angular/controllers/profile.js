@@ -72,7 +72,7 @@ angular.module('profile',['datatables'])
    $scope.removedSongsIndexes = [];
    $scope.elementIsEmpty;
    $scope.tickColor = 1;
-
+   $scope.generalLoader;
    // create youtube player
     var player;
 
@@ -260,6 +260,7 @@ angular.module('profile',['datatables'])
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
   $scope.init = function(userID){
+     $scope.thereAreSongsInPlaylist = true;
       if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
       }
@@ -439,7 +440,7 @@ $scope.bringMePlaylist = function($event){
          //console.log(url);
     $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
-       
+            $scope.thereAreSongsInPlaylist = true;
             $scope.videoFrame3 = true;
 
              for(i in data){
@@ -562,6 +563,7 @@ $scope.drawDiagram = function(index){
           //console.log(url);
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
+           $scope.thereAreSongsInPlaylist = true;
            for(i in data){
                if(data[i].type == 'producer'){
                  var startUrl = "https://www.youtube.com/watch?v=";
@@ -605,6 +607,11 @@ $scope.drawDiagram = function(index){
               
               if(typeof $scope.track[$scope.counter].url === 'undefined'){
                 $scope.counter++;
+                $scope.track[$scope.counter - 1].active = 0;
+                $scope.track.splice([$scope.counter - 1],1);
+                $scope.counter--;
+                var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
+                myEl.remove();
                 console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
               }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
@@ -628,6 +635,7 @@ $scope.drawDiagram = function(index){
                 //var myPlay = angular.element( document.querySelector(".fa-play") );
                 //myPlay.triggerHandler('click');
                  //$scope.$apply();
+
                  player.pauseVideo();
                  player.playVideo();
               }
@@ -645,8 +653,12 @@ $scope.drawDiagram = function(index){
             }
             if($scope.track.length == 1){
                 $scope.videoFrame3 = true;
+                $scope.thereAreSongsInPlaylist = false;
                 $scope.loaderStatus2 = "visible-loader";
                 $scope.updatePlaylist();
+            }
+            else{
+              $scope.thereAreSongsInPlaylist = true;
             }
             player.pauseVideo();
             player.playVideo();
@@ -944,6 +956,15 @@ console.log("inside recommandation");
               }
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
               $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+   }
+
+
+
+/***********************************************************/
+/*************genealLoader FUNCTION*************/
+/***********************************************************/
+   $scope.generalLoader = function(whereICameFrom){
+        $scope.generalLoader = whereICameFrom;
    }
 
 

@@ -1189,6 +1189,7 @@ table.dataTable.no-footer {
  .playlist-container { overflow: -moz-scrollbars-none; }
 #mCSB_2_container{
   margin-right: 20px !important;
+  overflow: visible;
 }
 #mCSB_2_dragger_vertical .mCSB_dragger_bar{
   background-color: #e4e4e4;
@@ -1316,7 +1317,9 @@ table.dataTable.no-footer {
     -ms-transition: background-color 1000ms linear, width 1s;
     transition: background-color 1000ms linear, width 1s;
 }
-
+#currGenre{
+  visibility: hidden;
+}
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
 /***********************************************************/
@@ -1509,14 +1512,25 @@ select::-ms-expand { /* for IE 11 */
     width:100%;
     margin:0 auto;
 }*/
-
 .ppConsistencies
 {
     display:none;
 }
-
-
 #select-song{
   background-color: #222;
     color: white;
+}
+#generalLoaderId{
+  height:20px;
+  width:20px;
+  position: absolute;
+  background-image: url("../images/loader.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 9999;
+  left:0;
+  bottom:0;
+  right:0;
+  top:0;
+  margin: 0 auto;
 }
