@@ -603,7 +603,10 @@ $scope.drawDiagram = function(index){
                 }
               }//console.log($scope.track[$scope.counter].url);
               
-             
+              if(typeof $scope.track[$scope.counter].url === 'undefined'){
+                $scope.counter++;
+                console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
+              }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
