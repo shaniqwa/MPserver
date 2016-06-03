@@ -1076,8 +1076,7 @@ table.dataTable.no-footer {
   cursor: pointer;
 }
 .playlistItem:hover {
-  color: #bababa;
-  
+  color:#03BBFF;
 }
 .first-item {
   display: none;
