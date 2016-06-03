@@ -416,6 +416,15 @@ $scope.bringMePlaylist = function($event){
     if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
     }
+    if($scope.track.length == 1){
+        $scope.thereAreSongsInPlaylist = false;
+    }
+    else{
+         $scope.thereAreSongsInPlaylist = true;
+    }
+    if($scope.firstTimePlaylist == false){
+       $scope.thereAreSongsInPlaylist = true;
+    }
      
     $scope.loaderStatus = "visible-loader";
     $scope.loaderStatus2 = "visible-loader";
@@ -535,8 +544,17 @@ $scope.drawDiagram = function(index){
      //$scope.track = [];
      //$scope.counter = 0;
     //$scope.videoFrame3 = false;
-    if($scope.videoFrame == false){
-        $scope.videoFrame2 = false; 
+    if($scope.track.length == 1){
+        $scope.thereAreSongsInPlaylist = false;
+    }
+    else{
+         $scope.thereAreSongsInPlaylist = true;
+    }
+    if($scope.firstTimePlaylist == false){
+       $scope.thereAreSongsInPlaylist = true;
+        if($scope.videoFrame == false){
+           $scope.videoFrame2 = false; 
+        }
     }
      
     $scope.loaderStatus = "visible-loader";
@@ -689,7 +707,7 @@ $scope.drawDiagram = function(index){
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
                          artist: $scope.track[$scope.counter - 1].artistName,
-                         duration: "3:43",
+                         duration: $scope.videoDuration,
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });

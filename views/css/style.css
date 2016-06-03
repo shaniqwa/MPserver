@@ -1073,6 +1073,11 @@ table.dataTable.no-footer {
 /***********************************************************/
 .playlistItem {
   color: #cecece;
+  cursor: pointer;
+}
+.playlistItem:hover {
+  color: #bababa;
+  
 }
 .first-item {
   display: none;
