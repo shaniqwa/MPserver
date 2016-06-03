@@ -1275,6 +1275,11 @@ table.dataTable.no-footer {
    bottom: 0;
    -webkit-transition: width 1s; /* Safari */
     transition: width 1s;
+     -webkit-transition: background-color 1000ms linear;
+    -moz-transition: background-color 1000ms linear;
+    -o-transition: background-color 1000ms linear;
+    -ms-transition: background-color 1000ms linear;
+    transition: background-color 1000ms linear;
 }
 
 

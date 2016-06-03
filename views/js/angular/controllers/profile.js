@@ -70,7 +70,7 @@ angular.module('profile',['datatables'])
    $scope.timeWidth;
    $scope.removedSongsIndexes = [];
    $scope.elementIsEmpty;
-  
+   $scope.tickColor = 1;
 
    // create youtube player
     var player;
@@ -192,11 +192,38 @@ angular.module('profile',['datatables'])
             else{
               $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
             }
-
-
+         
+        if($scope.tickColor == 1){
+          $scope.color = "00bfff";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 2){
+          $scope.color = "3772ff";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 3){
+          $scope.color = "8a00ff";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 4){
+          $scope.color = "d31fa4";
+         $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 5){
+          $scope.color = "ff1a7c";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 6){
+          $scope.color = "fc6b24";
+         $scope.tickColor = 1;
+        }
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;
-       //console.log($scope.timeWidth);
+      
+       
+       //$scope.color = hours.toString() + seconds.toString() + minutes.toString();
+       
+       console.log( $scope.tickColor);
       }
       
 /***********************************************************/
