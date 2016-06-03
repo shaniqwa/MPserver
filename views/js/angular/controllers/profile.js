@@ -236,20 +236,22 @@ angular.module('profile',['datatables'])
       // 101 – The owner of the requested video does not allow it to be played in embedded players.
       // 150 – This error is the same as 101. It's just a 101 error in disguise!
       function onPlayerError(event){
+         $scope.nextSong();
          if(event.data == 2){
-
+            $scope.nextSong();
          }
          if(event.data == 5){
-          
+            $scope.nextSong();
          }
          if(event.data == 100){
             //TODO CATCH ERROR AND CHANGE SONG
+            $scope.nextSong();
          }
          if(event.data == 101){
-            
+            $scope.nextSong();
          }
          if(event.data == 150){
-          
+            $scope.nextSong();
          }
       }
       
