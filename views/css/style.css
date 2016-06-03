@@ -197,10 +197,10 @@ ul{
   position: relative;
   list-style: none;
   overflow: hidden;
-  width: 246px;
+  width: 256px;
   padding: 0;
-  margin-top: 90px;
-  margin-left:115px;
+  margin-top: 71px;
+  margin-left:40px;
   }
 
 .rslides li {
@@ -229,12 +229,34 @@ ul{
   }
 .phone-holder{
     position: absolute;
-    background: url("../images/phone-holder.png") no-repeat;
+    background: url("../images/phone.png") no-repeat;
     height: 600px;
-    width: 409px;
+    width: 300px;
   }
 
+  /*help page*/
+   .FAQ {
+  cursor: hand;
+  cursor: pointer;
+  border: 1px solid #CCC;
+  width: 731px;
+  margin-top: 10px;
+  padding: 10px;
+  color:#00bfff;
+}
+ .ANS { 
+  display:none;
+  margin-top:7px;
+  color:#dee3e3;
+}
 
+/*activity switch page*/
+.download{
+float: right;
+position: relative;
+margin-right: 286px;
+margin-top: -42px;
+}
 /*NAVBAR*/
 
 /*.navbar-brand,
