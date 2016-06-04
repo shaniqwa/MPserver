@@ -9,6 +9,7 @@
      <script src="js/pie.js"></script>
      <script src="js/ageGroup.js"></script>
      <script src="js/localVSworld.js"></script>
+     <script src="js/YTlisteners.js"></script>
 
 </head>
 <body>
@@ -65,7 +66,7 @@
                     <div id="generalLoaderId" class="{{generalLoader}}" ng-hide="thereAreSongsInPlaylist"></div>
                     <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> 
                     <!-- <div class="abs loader {{loaderStatus2}}"></div> -->
-                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-click="playFavorites(x.url)">                        
+                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-click="playThisSong(x.url)">                        
                         <div class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>
                             <div class="name">{{x.artistName}}</div>

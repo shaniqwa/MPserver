@@ -43,6 +43,7 @@ angular.module('profile',['datatables'])
     option3: 'A'
    };
    $scope.track = [];
+   $scope.tempTrack = [];
    $scope.firstTracks = [];
    $scope.toggle = true;
    $scope.videoFrame = false;
@@ -376,7 +377,7 @@ angular.module('profile',['datatables'])
                    }
                    drawAgeGroupDiagram($scope.songCounters[$scope.selectedSong]);
                    drawLocalVsWorldDiagram($scope.songCounters[$scope.selectedSong]);
-                   
+                   //drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
                });
                $http.get(model.domain + '/getFacebookYoutubeStatistics/' + $scope.userId).success(function(data){
                     console.log(data); 
@@ -852,6 +853,43 @@ console.log("inside recommandation");
          
          $scope.nextSong(); 
     };
+
+
+/***********************************************************/
+/********************playThisSong FUNCTION**********************/
+/***********************************************************/
+    $scope.playThisSong = function(url){
+         //console.log(model.myfavorites);
+        
+        $scope.iCameFromMyPlaylist = true;
+         if($scope.firstTimePlaylist == false){
+               onYouTubePlayerAPIReady();
+               $scope.firstTimePlaylist = true;
+          }
+         $scope.tempTrack = $scope.track;
+         $scope.track = [];
+         $scope.firstTracks = [];
+         $scope.counter = 0;
+         var i = 0;
+         angular.forEach($scope.tempTrack, function(item){
+            var flag = (item.url == url) ? 1:0;
+            if(item.url == url){
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+            else{
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+             i++;
+         });
+        
+            angular.forEach($scope.firstTracks, function(item){
+                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+            });
+         
+         
+         $scope.nextSong(); 
+    };
+
 
 
 /***********************************************************/
