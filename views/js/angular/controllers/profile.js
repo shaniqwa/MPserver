@@ -1003,7 +1003,9 @@ console.log("inside recommandation");
      for(i in model.myfavorites){
        if(model.myfavorites[i].url == url){
           $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + model.myfavorites[i].songName + '/' + model.myfavorites[i].artistName).success(function(data){
-                $scope.heart = "fa-heart-o";
+                 if(url ==  $scope.track[$scope.counter - 1].url){
+                     $scope.heart = "fa-heart-o";
+                 }
                 delete model.myfavorites; 
 
                $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
