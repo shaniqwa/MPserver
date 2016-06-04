@@ -730,6 +730,7 @@ $scope.drawDiagram = function(index){
                   if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
 
                     $scope.removedSongsIndexes.push(i);
+                    $(".songItem" + i).css({'display':'none'});
                     delete model.myfavorites[i]; 
                   }
               }
@@ -999,19 +1000,25 @@ console.log("inside recommandation");
 /*************removeItem from playlist FUNCTION*************/
 /***********************************************************/
    $scope.removeItem = function(url){
-              for(i in model.myfavorites){
-                  if(model.myfavorites[i].url == url){
-                    $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + model.myfavorites[i].songName + '/' + model.myfavorites[i].artistName).success(function(data){
-                        delete model.myfavorites[i]; 
-                    });
-                   
-                  }
-              }
-              if($scope.track[$scope.counter - 1].url == url){
-                 $scope.heart = "fa-heart-o";
-              }
-              $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
-              $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+     for(i in model.myfavorites){
+       if(model.myfavorites[i].url == url){
+          $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + model.myfavorites[i].songName + '/' + model.myfavorites[i].artistName).success(function(data){
+                $scope.heart = "fa-heart-o";
+                delete model.myfavorites; 
+
+               $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
+                    $scope.favorits = [];
+                    for(j in data){
+                      $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
+                    }
+                    model.myfavorites = $scope.favorits; 
+               });
+          });
+           
+       }
+      
+     }
+           
    }
 
 
