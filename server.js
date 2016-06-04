@@ -1059,6 +1059,12 @@ app.param('artist', function ( req, res, next, value){
                 console.log("getFacebookYoutubeStatistics with id: " + req.params.prodID);
                 ProducerController.getFacebookYoutubeStatistics(res,req.params.prodID);
        });
+	   
+	   //download AS
+	   app.get('/downloadAS', function(req, res){
+  var file = __dirname + '/uploads/AS.zip';
+  res.download(file); // Set disposition and send it.
+});
 
 
 
