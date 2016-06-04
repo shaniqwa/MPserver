@@ -54,7 +54,7 @@
                      <div class="timeContainer">
                        <div class="videoCurrentTime" style="text-align: center;" ng-show="videoFrame">{{timer}}</div>
                        <div class="videoDuration" style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
-                       <div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div>
+                       <div class="navTimerContainer" ng-click="moveToThisPoint($event)"><div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div></div>
                     </div>
                 </div>
 
@@ -368,7 +368,7 @@
                     <img ng-if="user.typeOfUser == 'Consumer'" src="images/consumer-white.png" width="20" class="side-icon">
 
 
-                    {{user.firstName}} {{user.lastName}} </h4>
+                    {{user.firstName | uppercase}} {{user.lastName | uppercase}} </h4>
 
 
                             <!--if local login -->

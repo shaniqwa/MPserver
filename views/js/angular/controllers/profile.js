@@ -986,6 +986,19 @@ console.log("inside recommandation");
    }
 
 
+/***********************************************************/
+/*************moveToThisPoint FUNCTION*************/
+/***********************************************************/
+   $scope.moveToThisPoint = function($event){
+        var totalWidth = $(".navTimerContainer").css('width');
+        totalWidth = totalWidth.replace("px",'');
+        var youtubeTime = ($event.offsetX / totalWidth).toFixed(2);
+        var result = youtubeTime * player.getDuration();
+        player.seekTo(result);
+   }
+
+
+
 });
 
 // https://www.googleapis.com/youtube/v3/videos?id=9bZkp7q19f0&part=contentDetails&key=AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk
