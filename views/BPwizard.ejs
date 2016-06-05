@@ -367,7 +367,7 @@
                 </div>
 
                 <div class="checkbox checkbox-info">
-                  <input type="checkbox" id="b_rnb" name="b_rnb"  value="R&amp;B" checked>
+                  <input type="checkbox" id="b_rnb" name="b_rnb"  value="rNb" checked>
                   <label for="b_rnb">R&amp;B</label>
                 </div>
 
@@ -450,7 +450,7 @@
                 </div>
 
                 <div class="checkbox checkbox-info">
-                  <input type="checkbox" id="p_rnb" name="p_rnb"  value="R&amp;B" checked>
+                  <input type="checkbox" id="p_rnb" name="p_rnb"  value="rNb" checked>
                   <label for="p_rnb">R&amp;B</label>
                 </div>
 
@@ -544,31 +544,31 @@ $(document).ready(function(){
 
 
     //post form
-  $("#wizard").submit(function(e){
-    var postData = $(this).serializeArray();
-    var formURL = $(this).attr("action");
-    $.ajax(
-    {
-        url : formURL,
-        type: "POST",
-        data : postData,
-        success:function(data, textStatus, jqXHR) 
-        {
-            //data: return data from server
-            console.log(data);
-            if(data.error){
-              alert("email is taken");
-              $("#email").focus();
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) 
-        {
-            //if fails      
-        }
-    });
-    e.preventDefault(); //STOP default action
-    // e.unbind(); //unbind. to stop multiple form submit.
-});
+//   $("#wizard").submit(function(e){
+//     var postData = $(this).serializeArray();
+//     var formURL = $(this).attr("action");
+//     $.ajax(
+//     {
+//         url : formURL,
+//         type: "POST",
+//         data : postData,
+//         success:function(data, textStatus, jqXHR) 
+//         {
+//             //data: return data from server
+//             // console.log(data);
+//             if(data.error){
+//               alert("email is taken");
+//               $("#email").focus();
+//             }
+//         },
+//         error: function(jqXHR, textStatus, errorThrown) 
+//         {
+//             //if fails      
+//         }
+//     });
+//     e.preventDefault(); //STOP default action
+//     // e.unbind(); //unbind. to stop multiple form submit.
+// });
 
 
 
