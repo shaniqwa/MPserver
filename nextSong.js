@@ -190,15 +190,19 @@ function pickProducerConsumer() {
         [20, "producers"],
         [80, "artists"]
     ];
-    return pickChoice(relations);
+    var result = pickChoice(relations);
+    console.log("Producer or Artist: " + result);
+    return result;
 };
 
 function pickArtistOrSimiliar() {
     var relations = [
-        [20, "thisArtist"],
-        [80, "similiar"]
+        [10, "thisArtist"],
+        [90, "similiar"]
     ];
-    return pickChoice(relations);
+    var result = pickChoice(relations);
+    console.log("Artist or Similar: " + result);
+    return result;
 };
 
 
@@ -234,6 +238,7 @@ function getSimilarArtist(artist) {
 
     var artists = JSON.parse(res.getBody('utf8')).similarartists.artist;
     var theArtist = Random.pick(engine, artists, 0, artists.length);
+    console.log("similar artist to " + artist + " is : " + theArtist.name);
     return theArtist;
 };
 
@@ -255,7 +260,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
     }
 	
     runs = parseInt(runs) + 1;
-    console.log("************************** currGenre is: " + currGenre + " prevNG is: " +prevNG + "ng is" + ng);
+    console.log("************************** currGenre is: " + currGenre + "  prevNG is: " +prevNG + "  ng is " + ng);
     MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function(err, db) {
         if (err) {
             throw err;
@@ -294,7 +299,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                         if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                             var chsnSongArtist = getRandTrack(randArtist);
 										
-                                            console.log("the artist:: " + chsnSongArtist);
+                                            console.log("the track:: " + chsnSongArtist);
                                             pushSong(chsnSongArtist,"artist",randArtist,currGenre, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
@@ -310,7 +315,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                             var artistSimiliar = getSimilarArtist(randArtist);
 											var chsnSongSimilar = getRandTrack(artistSimiliar);
 
-											console.log("the artist:: " + chsnSongSimilar);
+											console.log("line 318 the track:: ");
+                                            console.log(chsnSongSimilar);
                                             pushSong(chsnSongSimilar,"artist",artistSimiliar,currGenre, function(stat) {
 												if (stat == "no_url") {
 												console.log("no url!!!!!");
@@ -378,7 +384,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                     var artistOrSimiliar = pickArtistOrSimiliar();
                                                     if (artistOrSimiliar == "thisArtist") { // find song of this artist 
                                                         var chsnSongArtist = getRandTrack(randArtist);
-														console.log("the artist:: " + chsnSongArtist);
+														console.log("line 387 the artist:: ");
+                                                        console.log(chsnSongArtist);
 														pushSong(chsnSongArtist,"artist",randArtist,newGenre, function(stat) {
 														if (stat == "no_url") {
 														console.log("no url!!!!!");
@@ -394,7 +401,8 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                                         var artistSimiliar = getSimilarArtist(randArtist);
                                                         var chsnSongSimilar = getRandTrack(artistSimiliar);
 													
-															console.log("the artist:: " + chsnSongSimilar);
+															console.log("line 404 the artist:: ");
+                                                            console.log(chsnSongSimilar);
 															 pushSong(chsnSongSimilar,"artist",artistSimiliar,newGenre, function(stat) {
 															if (stat == "no_url") {
 															console.log("no url!!!!!");

@@ -53,7 +53,7 @@ function callNextSong(times,ns, callNextSongCallback) {
 		
 		while(ns.getPlaylistLength()  != i) 
 		{ //while prev not finished
-		console.log("waiting prev iter to finish");
+		// console.log("waiting prev iter to finish");
 		require('deasync').sleep(100);
 }
 	    ns.getNextSong(function(err) {
