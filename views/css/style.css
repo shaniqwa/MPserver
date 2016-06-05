@@ -1326,7 +1326,7 @@ table.dataTable.no-footer {
    width:0%;
    background-color: #3875ff;
    position: fixed;
-   top: 0;
+   bottom: 0;
 
      -webkit-transition: background-color 1000ms linear, width 1s;
     -moz-transition: background-color 1000ms linear, width 1s;
@@ -1337,7 +1337,7 @@ table.dataTable.no-footer {
 .navTimer2 .timeRunning{
   position:absolute;
   right:-9px;
-  top:5px;
+  top:-14px;
   opacity: 0.5;
   font-size: 9px;
   color:white;
