@@ -252,10 +252,10 @@ ul{
 
 /*activity switch page*/
 .download{
-float: right;
-position: relative;
-margin-right: 286px;
-margin-top: -42px;
+
+position: absolute;
+margin-top: -10px;
+margin-left: 10px;
 }
 /*NAVBAR*/
 

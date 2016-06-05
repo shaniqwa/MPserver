@@ -275,7 +275,7 @@ angular.module('profile',['datatables'])
         // get user info
         $http.get(model.domain + '/getUser/' + $scope.userId).success(function(data){
             $scope.user = data.user;
-            $scope.token = data.user.YT_AT;
+            $scope.token = data.user.activityToken;
             $scope.business = data.business.genres;
             $scope.businessPreferences = data.business.preferences;
 
