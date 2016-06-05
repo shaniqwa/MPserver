@@ -1,9 +1,10 @@
 var drawYTlistenersDiagram = function (diagramData) {
     // Create the chart
+    console.log("hello");
 var dataSum = 0;
 dataSum = parseInt(diagramData.counterAgeGroup1) + parseInt(diagramData.counterAgeGroup2) + parseInt(diagramData.counterAgeGroup3) + parseInt(diagramData.counterAgeGroup4) + parseInt(diagramData.counterAgeGroup5) + parseInt(diagramData.counterAgeGroup6);
 
-    $('#YTcontainer').highcharts({
+    $('#YTContainer').highcharts({
         chart: {
             type: 'column'
         },

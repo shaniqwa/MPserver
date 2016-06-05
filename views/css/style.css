@@ -197,10 +197,10 @@ ul{
   position: relative;
   list-style: none;
   overflow: hidden;
-  width: 246px;
+  width: 256px;
   padding: 0;
-  margin-top: 90px;
-  margin-left:115px;
+  margin-top: 71px;
+  margin-left:40px;
   }
 
 .rslides li {
@@ -229,12 +229,34 @@ ul{
   }
 .phone-holder{
     position: absolute;
-    background: url("../images/phone-holder.png") no-repeat;
+    background: url("../images/phone.png") no-repeat;
     height: 600px;
-    width: 409px;
+    width: 300px;
   }
 
+  /*help page*/
+   .FAQ {
+  cursor: hand;
+  cursor: pointer;
+  border: 1px solid #CCC;
+  width: 731px;
+  margin-top: 10px;
+  padding: 10px;
+  color:#00bfff;
+}
+ .ANS { 
+  display:none;
+  margin-top:7px;
+  color:#dee3e3;
+}
 
+/*activity switch page*/
+.download{
+float: right;
+position: relative;
+margin-right: 286px;
+margin-top: -42px;
+}
 /*NAVBAR*/
 
 /*.navbar-brand,
@@ -1051,6 +1073,10 @@ table.dataTable.no-footer {
 /***********************************************************/
 .playlistItem {
   color: #cecece;
+  cursor: pointer;
+}
+.playlistItem:hover {
+  color:#03BBFF;
 }
 .first-item {
   display: none;
@@ -1171,6 +1197,7 @@ table.dataTable.no-footer {
  .playlist-container { overflow: -moz-scrollbars-none; }
 #mCSB_2_container{
   margin-right: 20px !important;
+  
 }
 #mCSB_2_dragger_vertical .mCSB_dragger_bar{
   background-color: rgba(255,255, 255,0.3);
@@ -1262,12 +1289,12 @@ table.dataTable.no-footer {
    display:inline-block;
    float: right;
    width:50%;
-   margin-bottom: 9px;
+   margin-bottom: 5px;
 }
 .timeContainer .videoCurrentTime{
    display:inline-block;
    width:50%;
-   margin-bottom: 9px;
+   margin-bottom: 5px;
    float: left;
 }
 .timeContainer .navTimer{
@@ -1277,11 +1304,48 @@ table.dataTable.no-footer {
    background-color: #3875ff;
    position: absolute;
    bottom: 0;
-   -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+   cursor: pointer;
+     -webkit-transition: background-color 1000ms linear, width 1s;
+    -moz-transition: background-color 1000ms linear, width 1s;
+    -o-transition: background-color 1000ms linear, width 1s;
+    -ms-transition: background-color 1000ms linear, width 1s;
+    transition: background-color 1000ms linear, width 1s;
 }
+.navTimerContainer{
+  width:100%;
+  height:4px;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+  display: table;
+}
+.navTimer2{
+  display: block;
+  z-index: 9999;
+   height:4px;
+   width:0%;
+   background-color: #3875ff;
+   position: fixed;
+   top: 0;
 
+     -webkit-transition: background-color 1000ms linear, width 1s;
+    -moz-transition: background-color 1000ms linear, width 1s;
+    -o-transition: background-color 1000ms linear, width 1s;
+    -ms-transition: background-color 1000ms linear, width 1s;
+    transition: background-color 1000ms linear, width 1s;
+}
+.navTimer2 .timeRunning{
+  position:absolute;
+  right:-9px;
+  top:5px;
+  opacity: 0.5;
+  font-size: 9px;
+  color:white;
 
+}
+#currGenre{
+  visibility: hidden;
+}
 /***********************************************************/
 /***********END REGION: PLAYER CONTROLS STYLE***************/
 /***********************************************************/
@@ -1474,14 +1538,25 @@ select::-ms-expand { /* for IE 11 */
     width:100%;
     margin:0 auto;
 }*/
-
 .ppConsistencies
 {
     display:none;
 }
-
-
 #select-song{
   background-color: #222;
     color: white;
+}
+#generalLoaderId{
+  height:20px;
+  width:20px;
+  position: absolute;
+  background-image: url("../images/loader.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 9999;
+  left:0;
+  bottom:0;
+  right:0;
+  top:0;
+  margin: 0 auto;
 }

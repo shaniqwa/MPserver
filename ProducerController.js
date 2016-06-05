@@ -220,7 +220,7 @@ exports.getFacebookYoutubeStatistics = function(res,prodId){
 		// }, function(err, results) {
 		//     res.status(200).json(docprod.YT_AT);
 		// });
-               var url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&key=" + docprod.YT_AT;
+               var url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
 				request.get(url, function (error, response, body) {
 					if (!error && response.statusCode == 200) {
 					    var obj = body.toString();

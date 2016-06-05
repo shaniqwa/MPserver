@@ -9,6 +9,7 @@
      <script src="js/pie.js"></script>
      <script src="js/ageGroup.js"></script>
      <script src="js/localVSworld.js"></script>
+     <script src="js/YTlisteners.js"></script>
 
 </head>
 <body>
@@ -18,9 +19,12 @@
     <div id="status">&nbsp;</div>
 </div>
 <div ng-controller="profileCtrl" ng-cloak>
+  <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div>
+
 <div ng-init="init('<%= JSON.stringify(user.userId) %>')"></div>
 <%- include header %>
 <div class="container">
+  <div class="navTimer2" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"><div class="timeRunning">{{timer}}</div></div>
     <!-- LEFT SIDE BAR -->
     <!-- <div class="row"> -->
          <div class="col-sm-2">
@@ -51,7 +55,7 @@
                      <div class="timeContainer">
                        <div class="videoCurrentTime" style="text-align: center;" ng-show="videoFrame">{{timer}}</div>
                        <div class="videoDuration" style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
-                       <div class="navTimer" ng-style="{'width': timeWidth + '%'}"></div>
+                       <div class="navTimerContainer" ng-click="moveToThisPoint($event)"><div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div></div>
                     </div>
                 </div>
 
@@ -59,10 +63,10 @@
                <div class="playlist-container mCustomScrollbar" data-mcs-theme="dark">
                
                     <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
-
+                    <div id="generalLoaderId" class="{{generalLoader}}" ng-hide="thereAreSongsInPlaylist"></div>
                     <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> 
                     <!-- <div class="abs loader {{loaderStatus2}}"></div> -->
-                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-if="$index < 6">                        
+                    <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-click="playThisSong(x.url)" ng-show="item + $index">                        
                         <div class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>
                             <div class="name">{{x.artistName}}</div>
@@ -133,11 +137,12 @@
                             </tr>
                         </thead>
                             <tbody>
-                                <tr class="songItem songItem{{$index}}" ng-repeat="x in favorits track by $index" ng-click="playFavorites($index)">
-                                    <td class="col-md-3"> {{x.artistName}}</td>
-                                    <td class="col-md-6 song">{{x.songName}}</td>
-                                    <td class="col-md-2 duration">{{x.duration}}</td>
-                                    <td class="col-md-1"><img src="images/icon-trash.png" width="20" style="float:right"></td>
+                                <tr class="songItem songItem{{$index}}" ng-repeat="x in favorits track by $index">
+                                    <td class="col-md-3" ng-click="playFavorites(x.url)"> {{x.artistName}}</td>
+                                    <td class="col-md-6 song" ng-click="playFavorites(x.url)">{{x.songName}}</td>
+                                    <td class="col-md-2 duration" ng-click="playFavorites(x.url)">{{x.duration}}</td>
+                                    <td class="col-md-1"><img src="images/icon-trash.png" width="20" style="float:right" ng-click="removeItem(x.url)"></td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -271,16 +276,42 @@
                     <div id="activity" class="tab-pane fade">
                           <h3>Activity Switch</h3>
                           <div class="activity-container"> 
-                             
+                             <p>The Activity Switch will automatically determine in which mode you are, Business or Pleasure. </p>
+                             <br>
+                             <p>Download Activity Switch plugin and start working on your computer.</p> <a href="/downloadAS"><img class="download" width="35" src="images/download.png"></a>
+
                           </div>
                     </div>
                     <!--END STATIC PAGE -->
 
                     <!-- STATIC PAGE -->
                     <div id="help" class="tab-pane fade">
-                          <h3>Help</h3>
+                          <h3>FAQ</h3>
                           <div class="help-container"> 
-                             
+                          <div class="FAQ" onclick="toggle('faq1')">
+                            <font size="3"> <i> 1. How to contact us?  </i></font>
+                            <div id="faq1" class="ANS"> <font size = "3">Go to our About page, drop down menu ---> About</font></div>
+                          </div>
+                          <div class="FAQ" onclick="toggle('faq2')">
+                            <font size="3"> <i> 2.Quetion</i></font>
+                            <div id="faq2" class="ANS"> <font size = "3">Answer</font></div>
+                          </div>
+                          <div class="FAQ" onclick="toggle('faq3')">
+                            <font size="3"> <i> 3. Quetion</i></font>
+                            <div id="faq3" class="ANS"> <font size = "3">Answer</font></div>
+                          </div>
+                          <div class="FAQ" onclick="toggle('faq4')">
+                            <font size="3"> <i> 4.Quetion</i></font>
+                            <div id="faq4" class="ANS"> <font size = "3">Answer</font></div>
+                          </div>
+                          <div class="FAQ" onclick="toggle('faq5')">
+                            <font size="3"> <i> 5.Quetion</i></font>
+                            <div id="faq5" class="ANS"> <font size = "3">Answer</font></div>
+                          </div>
+                          <div class="FAQ" onclick="toggle('faq6')">
+                            <font size="3"> <i> 6.Quetion</i></font>
+                            <div id="faq6" class="ANS"> <font size = "3">Answer</font></div>
+                          </div>
                           </div>
                     </div>
                     <!--END STATIC PAGE -->
@@ -301,17 +332,20 @@
                           <h3>The Music Profile App</h3>
                           <h4>Listening to your music anywhere has never been easier</h4>
                              <img width="600" src="images/mobile_tablet.png">
-
-                             <div class="phone-holder col-md-6">
-                    <ul class="rslides">
-                    <li><img src="images/background.jpg" alt=""></li>
-                    <li><img src="images/poly.jpg" alt=""></li>
-              </ul>
-          </div>
+                              <br><br>
+                            <div class="phone-holder col-md-6">
+                                <ul class="rslides">
+                                  <!-- <li><img src="images/slide-business.jpg" alt=""></li> -->
+                                  <!-- <li><img src="images/slide-consumer.jpg" alt=""></li> -->
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
                            <p>The Music Profiles Android App is free, personalized service made for you to listen to the music you love anywhere you go.</p>
                            <p>The app is simple to use.</p>
                            <p>Just click play to turn on our  auto Dj and explore more of your favorite songs.</p>
                            <br><br><br><br>   
+                           </div>
+                             
                            </div>
                           
                     </div>
@@ -335,7 +369,7 @@
                     <img ng-if="user.typeOfUser == 'Consumer'" src="images/consumer-white.png" width="20" class="side-icon">
 
 
-                    {{user.firstName}} {{user.lastName}} </h4>
+                    {{user.firstName | uppercase}} {{user.lastName | uppercase}} </h4>
 
 
                             <!--if local login -->
@@ -680,6 +714,14 @@ $(document).ready(function(){
 
 // }, 270); 
 </script>
+<script type="text/javascript">
+function toggle(Info) {
+  var CState = document.getElementById(Info);
+  CState.style.display = (CState.style.display != 'block')
+                       ? 'block' : 'none';
+}
+</script>
+
 
 
 

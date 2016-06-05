@@ -43,6 +43,7 @@ angular.module('profile',['datatables'])
     option3: 'A'
    };
    $scope.track = [];
+   $scope.tempTrack = [];
    $scope.firstTracks = [];
    $scope.toggle = true;
    $scope.videoFrame = false;
@@ -68,7 +69,11 @@ angular.module('profile',['datatables'])
    $scope.timer;
    $scope.tickInterval = 1000 //ms
    $scope.timeWidth;
+   $scope.timeHeight;
    $scope.removedSongsIndexes = [];
+   $scope.elementIsEmpty;
+   $scope.tickColor = 1;
+   $scope.generalLoader;
    // create youtube player
     var player;
 
@@ -83,7 +88,8 @@ angular.module('profile',['datatables'])
           videoId: '',
           events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
           },
           playerVars: { 
             'autoplay': 0,
@@ -98,12 +104,14 @@ angular.module('profile',['datatables'])
 
      // autoplay video
      function onPlayerReady(event) {
+
         // console.log("player ready");
         //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
         
         $scope.$apply(function() {
+          $interval(tick, $scope.tickInterval);
           $scope.videoFrame = true;
           $scope.videoFrame2 = true;
           $scope.videoFrame3 = true;
@@ -113,8 +121,6 @@ angular.module('profile',['datatables'])
 
 
  
-
-    // when video ends
      function onPlayerStateChange(event) {  
 
         if(event.data === 0) {    //video ended
@@ -125,7 +131,7 @@ angular.module('profile',['datatables'])
         }
         if(event.data === 1){   //video playing
           $scope.$apply(function() {
-            $interval(tick, $scope.tickInterval);
+            $scope.toggle = true;
             
             hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
             seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
@@ -154,7 +160,7 @@ angular.module('profile',['datatables'])
               
         }
          if(event.data === 2){  //video paused
-          
+          $scope.toggle = false;
         }
          if(event.data === 3){  //video buffering
           
@@ -186,17 +192,76 @@ angular.module('profile',['datatables'])
             else{
               $scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
             }
-
-
+         
+        if($scope.tickColor == 1){
+          $scope.color = "00bfff";
+          $scope.tickColor = $scope.tickColor + 1;
+          //$scope.timeHeight = 4;
+        }
+        else if($scope.tickColor == 2){
+          $scope.color = "3772ff";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 3){
+          $scope.color = "8a00ff";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 4){
+          $scope.color = "d31fa4";
+         $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 5){
+          $scope.color = "ff1a7c";
+          $scope.tickColor = $scope.tickColor + 1;
+        }
+        else if($scope.tickColor == 6){
+          $scope.color = "fc6b24";
+         $scope.tickColor = 1;
+         //$scope.timeHeight = 5;
+        }
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;
-       //console.log($scope.timeWidth);
+      
+       
+       //$scope.color = hours.toString() + seconds.toString() + minutes.toString();
+       
+       //console.log( $scope.tickColor);
+      }
+
+      
+
+
+      // 2 – The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.
+      // 5 – The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.
+      // 100 – The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.
+      // 101 – The owner of the requested video does not allow it to be played in embedded players.
+      // 150 – This error is the same as 101. It's just a 101 error in disguise!
+      function onPlayerError(event){
+        console.log("error accured - onPlayerError function");
+         $scope.nextSong();
+         if(event.data == 2){
+            $scope.nextSong();
+         }
+         if(event.data == 5){
+            $scope.nextSong();
+         }
+         if(event.data == 100){
+            //TODO CATCH ERROR AND CHANGE SONG
+            $scope.nextSong();
+         }
+         if(event.data == 101){
+            $scope.nextSong();
+         }
+         if(event.data == 150){
+            $scope.nextSong();
+         }
       }
       
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
   $scope.init = function(userID){
+     $scope.thereAreSongsInPlaylist = true;
       if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
       }
@@ -312,7 +377,7 @@ angular.module('profile',['datatables'])
                    }
                    drawAgeGroupDiagram($scope.songCounters[$scope.selectedSong]);
                    drawLocalVsWorldDiagram($scope.songCounters[$scope.selectedSong]);
-                   
+                   //drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
                });
                $http.get(model.domain + '/getFacebookYoutubeStatistics/' + $scope.userId).success(function(data){
                     console.log(data); 
@@ -352,6 +417,15 @@ $scope.bringMePlaylist = function($event){
     if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
     }
+    if($scope.track.length == 1){
+        $scope.thereAreSongsInPlaylist = false;
+    }
+    else{
+         $scope.thereAreSongsInPlaylist = true;
+    }
+    if($scope.firstTimePlaylist == false){
+       $scope.thereAreSongsInPlaylist = true;
+    }
      
     $scope.loaderStatus = "visible-loader";
     $scope.loaderStatus2 = "visible-loader";
@@ -376,7 +450,7 @@ $scope.bringMePlaylist = function($event){
          //console.log(url);
     $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
            // console.log(data);
-       
+            $scope.thereAreSongsInPlaylist = true;
             $scope.videoFrame3 = true;
 
              for(i in data){
@@ -453,7 +527,7 @@ $scope.follow = function(myID, userID){
 /****************DRAW DIAGRAM*******************************/
 /***********************************************************/
 $scope.drawDiagram = function(index){
-  console.log($scope.songCounters[index]);
+  //console.log($scope.songCounters[index]);
   //$scope.selectedSong = numberOfSong;
   drawAgeGroupDiagram($scope.songCounters[index]);
   drawLocalVsWorldDiagram($scope.songCounters[index]);
@@ -471,8 +545,17 @@ $scope.drawDiagram = function(index){
      //$scope.track = [];
      //$scope.counter = 0;
     //$scope.videoFrame3 = false;
-    if($scope.videoFrame == false){
-        $scope.videoFrame2 = false; 
+    if($scope.track.length == 1){
+        $scope.thereAreSongsInPlaylist = false;
+    }
+    else{
+         $scope.thereAreSongsInPlaylist = true;
+    }
+    if($scope.firstTimePlaylist == false){
+       $scope.thereAreSongsInPlaylist = true;
+        if($scope.videoFrame == false){
+           $scope.videoFrame2 = false; 
+        }
     }
      
     $scope.loaderStatus = "visible-loader";
@@ -498,7 +581,8 @@ $scope.drawDiagram = function(index){
          var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
           //console.log(url);
          $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-            console.log(data);
+           // console.log(data);
+           $scope.thereAreSongsInPlaylist = true;
            for(i in data){
                if(data[i].type == 'producer'){
                  var startUrl = "https://www.youtube.com/watch?v=";
@@ -540,7 +624,15 @@ $scope.drawDiagram = function(index){
                 }
               }//console.log($scope.track[$scope.counter].url);
               
-             
+              if(typeof $scope.track[$scope.counter].url === 'undefined'){
+                $scope.counter++;
+                $scope.track[$scope.counter - 1].active = 0;
+                $scope.track.splice([$scope.counter - 1],1);
+                $scope.counter--;
+                var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
+                myEl.remove();
+                console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
+              }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               // console.log(url);
@@ -562,6 +654,7 @@ $scope.drawDiagram = function(index){
                 //var myPlay = angular.element( document.querySelector(".fa-play") );
                 //myPlay.triggerHandler('click');
                  //$scope.$apply();
+
                  player.pauseVideo();
                  player.playVideo();
               }
@@ -579,8 +672,12 @@ $scope.drawDiagram = function(index){
             }
             if($scope.track.length == 1){
                 $scope.videoFrame3 = true;
+                $scope.thereAreSongsInPlaylist = false;
                 $scope.loaderStatus2 = "visible-loader";
                 $scope.updatePlaylist();
+            }
+            else{
+              $scope.thereAreSongsInPlaylist = true;
             }
             player.pauseVideo();
             player.playVideo();
@@ -611,7 +708,7 @@ $scope.drawDiagram = function(index){
                       songData : {
                          song: $scope.track[$scope.counter - 1].songName,
                          artist: $scope.track[$scope.counter - 1].artistName,
-                         duration: "3:43",
+                         duration: $scope.videoDuration,
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });
@@ -633,9 +730,8 @@ $scope.drawDiagram = function(index){
                   if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
 
                     $scope.removedSongsIndexes.push(i);
+                    $(".songItem" + i).css({'display':'none'});
                     delete model.myfavorites[i]; 
-                    //delete $scope.track[$scope.counter - 1];
-                    $(".songItem" + i).empty();
                   }
               }
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
@@ -728,7 +824,7 @@ console.log("inside recommandation");
 /***********************************************************/
 /********************playFavorites FUNCTION**********************/
 /***********************************************************/
-    $scope.playFavorites = function(index){
+    $scope.playFavorites = function(url){
          //console.log(model.myfavorites);
         
         $scope.iCameFromMyPlaylist = true;
@@ -741,19 +837,13 @@ console.log("inside recommandation");
          $scope.counter = 0;
          var i = 0;
          angular.forEach(model.myfavorites, function(item){
-             var flag = (i == index) ? 1:0;
-            
-             
-                if(i>=index){
-                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-                 }
-                 else{
-                    $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-                 }
-            
-             //console.log(item.url);
-             
-             //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            var flag = (item.url == url) ? 1:0;
+            if(item.url == url){
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+            else{
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
              i++;
          });
         
@@ -764,6 +854,43 @@ console.log("inside recommandation");
          
          $scope.nextSong(); 
     };
+
+
+/***********************************************************/
+/********************playThisSong FUNCTION**********************/
+/***********************************************************/
+    $scope.playThisSong = function(url){
+         //console.log(model.myfavorites);
+        
+        $scope.iCameFromMyPlaylist = true;
+         if($scope.firstTimePlaylist == false){
+               onYouTubePlayerAPIReady();
+               $scope.firstTimePlaylist = true;
+          }
+         $scope.tempTrack = $scope.track;
+         $scope.track = [];
+         $scope.firstTracks = [];
+         $scope.counter = 0;
+         var i = 0;
+         angular.forEach($scope.tempTrack, function(item){
+            var flag = (item.url == url) ? 1:0;
+            if(item.url == url){
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+            else{
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+            }
+             i++;
+         });
+        
+            angular.forEach($scope.firstTracks, function(item){
+                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+            });
+         
+         
+         $scope.nextSong(); 
+    };
+
 
 
 /***********************************************************/
@@ -805,7 +932,7 @@ console.log("inside recommandation");
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-        console.log("updateCounters function" );
+        //console.log("updateCounters function" );
          if($scope.track[0].type == "p"){
             $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
                 console.log("updateCounters successfuly");
@@ -869,9 +996,57 @@ console.log("inside recommandation");
 
 
 
+/***********************************************************/
+/*************removeItem from playlist FUNCTION*************/
+/***********************************************************/
+   $scope.removeItem = function(url){
+     for(i in model.myfavorites){
+       if(model.myfavorites[i].url == url){
+          $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + model.myfavorites[i].songName + '/' + model.myfavorites[i].artistName).success(function(data){
+                 if(url ==  $scope.track[$scope.counter - 1].url){
+                     $scope.heart = "fa-heart-o";
+                 }
+                delete model.myfavorites; 
+
+               $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
+                    $scope.favorits = [];
+                    for(j in data){
+                      $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
+                    }
+                    model.myfavorites = $scope.favorits; 
+               });
+          });
+           
+       }
+      
+     }
+           
+   }
+
+
+
+/***********************************************************/
+/*************genealLoader FUNCTION*************/
+/***********************************************************/
+   $scope.generalLoader = function(whereICameFrom){
+        $scope.generalLoader = whereICameFrom;
+   }
+
+
+/***********************************************************/
+/*************moveToThisPoint FUNCTION*************/
+/***********************************************************/
+   $scope.moveToThisPoint = function($event){
+        var totalWidth = $(".navTimerContainer").css('width');
+        totalWidth = totalWidth.replace("px",'');
+        var youtubeTime = ($event.offsetX / totalWidth).toFixed(2);
+        var result = youtubeTime * player.getDuration();
+        player.seekTo(result);
+   }
+
+
+
 });
 
-
-// get song duration from youtube
 // https://www.googleapis.com/youtube/v3/videos?id=9bZkp7q19f0&part=contentDetails&key=AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk
 
