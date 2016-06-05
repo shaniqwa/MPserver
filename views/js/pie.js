@@ -450,7 +450,7 @@ function addCircle(chart){
         formatter: function () {
           var color = this.color;
           color = color.replace("rgb", "rgba");
-          color = color.replace(")", ",0.6)");
+          color = color.replace(")", ",0.7)");
 
           var name = toTitleCase(this.point.name);
 
@@ -466,7 +466,8 @@ function addCircle(chart){
             innerSize: '70%',
             dataLabels: {
                 formatter: function () {
-                    return this.y > 5 ? this.point.name : null;
+                    // return this.y > 5 ? this.point.name : null;
+                    return null;
                 },
                 color: '#ffffff',
                 style: {

@@ -1150,7 +1150,7 @@ table.dataTable.no-footer {
   background-color: #222;
 }
 #player{
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .playerControllers{
   padding: 5px 0 10px 0;
@@ -1161,15 +1161,19 @@ table.dataTable.no-footer {
   height: 300px;
   padding-right: 3px;
 }
+.player-container p {
+  margin-bottom: 3px;
+}
  .playlist-container::-webkit-scrollbar { 
     display: none; 
+}
 }
  .playlist-container { overflow: -moz-scrollbars-none; }
 #mCSB_2_container{
   margin-right: 20px !important;
 }
 #mCSB_2_dragger_vertical .mCSB_dragger_bar{
-  background-color: #e4e4e4;
+  background-color: rgba(255,255, 255,0.3);
 }
 .songName {
   text-align: center;
