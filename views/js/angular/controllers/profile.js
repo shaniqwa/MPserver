@@ -79,6 +79,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
    $scope.elementIsEmpty;
    $scope.tickColor = 1;
    $scope.generalLoader;
+   $scope.token;
    // create youtube player
     var player;
 
@@ -279,7 +280,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         // get user info
         $http.get(model.domain + '/getUser/' + $scope.userId).success(function(data){
             $scope.user = data.user;
-            
+            $scope.token = data.user.activityToken;
             $scope.business = data.business.genres;
             $scope.businessPreferences = data.business.preferences;
 
