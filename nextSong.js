@@ -451,8 +451,16 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 
                                     } else { // get song of returned genre
                                         //choose producer or known artist
+										var count = document.genres.length;
+                                                var results = [];
+												var idCurrGenreArr = 0;
+                                                for (var i = 0; i < count; i++) {
+                                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+													if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
+                                                }
                                         var prodOrConsumer = pickProducerConsumer();
-                                        if (prodOrConsumer == "artists") { // known artist
+                                        if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+										prodOrConsumer = "artists";
                                             //choose random artist
                                             var randArtist = getRandArtist(prodOrConsumer, document.genres, pickedGenre);
                                             // choose song of this one or similiar
@@ -691,8 +699,16 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 
                                     } else { // get song of returned genre
                                         //choose producer or known artist
+										var count = document.genres.length;
+                                                var results = [];
+												var idCurrGenreArr = 0;
+                                                for (var i = 0; i < count; i++) {
+                                                    results.push([Math.floor(document.genres[i].percent), document.genres[i].genreName]);
+													if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
+                                                }
                                         var prodOrConsumer = pickProducerConsumer();
-                                        if (prodOrConsumer == "artists") { // known artist
+                                        if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
+										prodOrConsumer = "artists";
                                             //choose random artist
                                             var randArtist = getRandArtist(prodOrConsumer, document.genres, pickedGenre); // choose song of this one or similiar
                                             var artistOrSimiliar = pickArtistOrSimiliar();
