@@ -228,13 +228,15 @@ ul{
 .rslides img {
   display: block;
   float: left;
-  width: 100%;
-  height: 434px;
+  /*width: 100%;*/
+  /*height: 434px;*/
   border: 0;
 
   }
 
-
+.rslides li:first-child{
+  left:0px !important;
+}
 
 
 
