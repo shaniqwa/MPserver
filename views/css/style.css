@@ -272,13 +272,22 @@ ul{
 
   /*help page*/
    .FAQ {
-  cursor: hand;
-  cursor: pointer;
-  border: 1px solid #CCC;
-  width: 731px;
-  margin-top: 10px;
-  padding: 10px;
-  color:#00bfff;
+    position: relative;
+cursor: pointer;
+border: 0px solid #CCC;
+width: 731px;
+margin-top: 10px;
+padding: 10px;
+color: #1DF0F2;
+background-color: rgba(255,255,255,0.4);
+border-radius: 0.5em;
+}
+.FAQ .fa-plus-circle{
+  position: absolute;
+  right:5px;
+  top:5px;
+
+  font-size: 24px;
 }
  .ANS { 
   display:none;
