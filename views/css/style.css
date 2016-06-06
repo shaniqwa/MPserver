@@ -277,17 +277,16 @@ ul{
     position: relative;
 cursor: pointer;
 border: 0px solid #CCC;
-width: 731px;
 margin-top: 10px;
 padding: 10px;
 color: #1DF0F2;
 background-color: rgba(255,255,255,0.4);
-border-radius: 0.5em;
+border-radius: 0.5em !important;
 }
 .FAQ .fa-plus-circle{
   position: absolute;
-  right:5px;
-  top:5px;
+  right:8px;
+  top:9px;
 
   font-size: 24px;
 }
