@@ -44,18 +44,19 @@
                     <!-- player controllers -->
                    
                     <div class="playerControllers">
-                        <span class="cursor fa fa-fast-forward font-size" ng-click="nextSong()"></span>&nbsp;&nbsp;
-                        <span class="cursor fa fa-pause font-size" ng-show="toggle" ng-click="pauseSong()"></span>&nbsp;&nbsp;
-                        <span class="cursor fa fa-play font-size" ng-hide="toggle" ng-click="playSong()"></span>&nbsp;&nbsp;
-                        <span class="cursor fa {{heart}} red font-size" ng-click="addToFav()"></span>&nbsp;&nbsp;
-                        <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
-                        <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div>
+                        <span class="player fa fa-expand" ng-click="fullScreen()"></span>
+                        <span class="player fa fa-pause" ng-show="toggle" ng-click="pauseSong()"></span>
+                        <span class="player fa fa-play" ng-hide="toggle" ng-click="playSong()"></span>
+                        <span class="player fa fa-fast-forward player-big" ng-click="nextSong()"></span>
+                        <span class="player fa {{heart}} red" ng-click="addToFav()"></span>
+                        <!-- <span class="cursor fa fa-frown-o yellow font-size" ng-click="addToBlacklist()"></span>
+                        <div class="msgBlock {{elementToFadeInAndOut}}">{{msg}}</div> -->
                     </div>
 
                      <div class="timeContainer">
                        <div class="videoCurrentTime" style="text-align: center;" ng-show="videoFrame">{{timer}}</div>
                        <div class="videoDuration" style="text-align: center;" ng-show="videoFrame">{{videoDuration}}</div>
-                       <div class="navTimerContainer" ng-click="moveToThisPoint($event)"><div class="navTimer" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"></div></div>
+                       <div class="navTimerContainer" ng-click="moveToThisPoint($event)"><div class="navTimer" ng-style="{'width': timeWidth + '%', 'height': timeHeight}"></div></div>
                     </div>
                 </div>
 
@@ -118,7 +119,7 @@
                           </div>
                               <!-- MP pie container -->
                             <div id="MPcontainer" style=" height: 450px; margin: 0 auto">
-
+                                  <div id="playDJ"></div>
                             </div>
                       </div>
                   <!-- END PROFILE TAB -->
@@ -369,7 +370,7 @@
                     <img ng-if="user.typeOfUser == 'Consumer'" src="images/consumer-white.png" width="20" class="side-icon">
 
 
-                    {{user.firstName | uppercase}} {{user.lastName | uppercase}} </h4>
+                    {{user.firstName | titleCase}} {{user.lastName | titleCase}} </h4>
 
 
                             <!--if local login -->
@@ -543,6 +544,12 @@
 
 <script>
 $(document).ready(function(){
+  var playlist_height = $(".playlist-container").height() - $(".player-container").height() - 70;
+  console.log(playlist_height);
+   $('.playlist-container').css({"height":playlist_height + "px"} );
+
+
+
   $(".content").mCustomScrollbar();
 //mobile slider init
  $(".rslides").responsiveSlides({

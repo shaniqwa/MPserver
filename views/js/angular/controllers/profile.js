@@ -11,7 +11,12 @@ var seconds;
 var minutes;
 var songWasDeleted = false;
 
-angular.module('profile',['datatables'])
+angular.module('profile',['datatables']).filter('titleCase', function() {
+    return function(input) {
+      input = input || '';
+      return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
+  })
 .controller('profileCtrl', function ($scope, $http, $sce, $interval, DTOptionsBuilder) {
 
    $scope.dtOptions = DTOptionsBuilder.newOptions()
