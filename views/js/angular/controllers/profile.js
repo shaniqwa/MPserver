@@ -10,7 +10,7 @@ var hours;
 var seconds;
 var minutes;
 var songWasDeleted = false;
-
+var iframe = $('#player');
 angular.module('profile',['datatables']).filter('titleCase', function() {
     return function(input) {
       input = input || '';
@@ -1048,6 +1048,24 @@ console.log("inside recommandation");
         var youtubeTime = ($event.offsetX / totalWidth).toFixed(2);
         var result = youtubeTime * player.getDuration();
         player.seekTo(result);
+   }
+
+
+/***********************************************************/
+/*************fullScreen FUNCTION*************/
+/***********************************************************/
+   $scope.fullScreen = function(){
+          var elem = document.documentElement;
+          if (elem.requestFullscreen) {
+              elem.requestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+              elem.msRequestFullscreen();
+          } else if (elem.mozRequestFullScreen) {
+              elem.mozRequestFullScreen();
+          } else if (elem.webkitRequestFullscreen) {
+              elem.webkitRequestFullscreen();
+          }
+          $("iframe").css({'width':'100%'});
    }
 
 
