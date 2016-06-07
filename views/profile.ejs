@@ -27,6 +27,8 @@
   <div class="navTimer2" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"><div class="timeRunning">{{timer}}</div></div>
     <!-- LEFT SIDE BAR -->
     <!-- <div class="row"> -->
+    
+
     <a title="Close" class="fancybox-item fancybox-close video-close-hide" href="javascript:;" ng-click="closeFullScreen()"></a>
          <div class="col-sm-2">
             <div class="leftSidebar">
@@ -79,7 +81,10 @@
                 
               </div>  
                 <!-- end playlist -->
-
+               <div class="mobile-buttons">
+                <div class="left-mobile-button" ng-click="playFavorites()">Play Favorites</div>
+                <div class="right-mobile-button" ng-click="bringMePlaylist()">Play My Pie</div>
+              </div>
           </div>
       </div>
       <!-- END LEFT SIDE BAR -->

@@ -835,33 +835,46 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playFavorites = function(url){
          //console.log(model.myfavorites);
+        if ( typeof url === 'undefined') {
+              if($scope.firstTimePlaylist == false){
+                   onYouTubePlayerAPIReady();
+                   $scope.firstTimePlaylist = true;
+              }
+              $scope.track = [];
+              angular.forEach(model.myfavorites, function(item){
+                  $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: 0});
+              });
+              $scope.nextSong();
+        }
+        else{
+              $scope.iCameFromMyPlaylist = true;
+             if($scope.firstTimePlaylist == false){
+                   onYouTubePlayerAPIReady();
+                   $scope.firstTimePlaylist = true;
+              }
+             
+             $scope.firstTracks = [];
+             $scope.counter = 0;
+             var i = 0;
+             angular.forEach(model.myfavorites, function(item){
+                var flag = (item.url == url) ? 1:0;
+                if(item.url == url){
+                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                }
+                else{
+                   $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                }
+                 i++;
+             });
+            
+                angular.forEach($scope.firstTracks, function(item){
+                    $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+                });
+             
+             
+             $scope.nextSong(); 
+        }
         
-        $scope.iCameFromMyPlaylist = true;
-         if($scope.firstTimePlaylist == false){
-               onYouTubePlayerAPIReady();
-               $scope.firstTimePlaylist = true;
-          }
-         $scope.track = [];
-         $scope.firstTracks = [];
-         $scope.counter = 0;
-         var i = 0;
-         angular.forEach(model.myfavorites, function(item){
-            var flag = (item.url == url) ? 1:0;
-            if(item.url == url){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-            }
-            else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-            }
-             i++;
-         });
-        
-            angular.forEach($scope.firstTracks, function(item){
-                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
-            });
-         
-         
-         $scope.nextSong(); 
     };
 
 

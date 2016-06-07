@@ -1,7 +1,80 @@
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px){
+    .navbar-static-top{
+    	position: relative;
+    	width:100%;
+    	z-index: 9999;
+    	height: 10vh;
+    	top:0;    }
+    .player-container{
+    	position: relative;
+    	width:100%;
+    	z-index: 9998;
+    	//top:10vh;
+    	height: 45vh;
+    }
+	.playlist-container{
+		position: relative;
+		width:100%;
+		bottom: 0;
+		z-index: 9998;
+		background-color: #222;
+		height: 38vh !important;
+	}
+    .col-sm-3 .rightSidebar, .col-sm-7 .content{
+    	display: none;
+    }
+    #player {
+  	  margin-bottom: 0;
+  	  height: 25vh;
+    }
+    .player-container p {
+	    margin-bottom: 0;
+	}
+    .playerControllers{
+    	padding: 0;
+    	margin-top: 10px;
+    }
+    .timeContainer{
+    	position: absolute;
+    	left:0;
+    	right:0;
+    	bottom: 0;
+    }
+    .leftSidebar{
+    	height: 100%;
+    	min-height: unset;
+    }
+    .nanobar{
+    	display: none;
+    }
+    body::-webkit-scrollbar{
+	    display: none; 
+	}
+ body { overflow: -moz-scrollbars-none; overflow: hidden !important;}
+  .mobile-buttons{
+  	padding-bottom: 10px;
+    padding-top: 4px;
+    z-index: 9999;
+    position: relative;
+    bottom: 0;
+    width: 100vw;
+    font-size: 20px;
+    border-top: 2px solid white;
+    display: block;
+    background-color: #222;
+    height: 7vh;
+  }
+  .left-mobile-button{
+  	display: inline-block;
+    width: 48%;
+    text-align: center;
 
-	
-
+  }
+  .right-mobile-button{
+  	display: inline-block;
+    width: 48%;
+    text-align: center;
+  }
 }
  
 	

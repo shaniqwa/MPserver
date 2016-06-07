@@ -1200,6 +1200,9 @@ table.dataTable.no-footer {
 }
  .BodyFullScreenStyle { overflow: -moz-scrollbars-none; }
 }
+.mobile-buttons{
+  display: none;
+}
 /*.player-big{
   font-size: 28px;
   margin: 5px 5px 5px 5px;
