@@ -595,6 +595,7 @@ io.on('connection', function(client) {
         var genres = [];
         async.parallel([
             function(callback){
+                if(typeof req.user !== 'undefined' && req.user){
                     request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + req.user.YT_AT, function(error, response, body) {
                         if (!error && response.statusCode == 200) {
                             var temp = JSON.parse(body);
@@ -612,6 +613,9 @@ io.on('connection', function(client) {
                             console.log("error with http request to google. check ip settings in google console");
                         }
                     });
+                }else{
+                    res.redirect('/');
+                }                    
             }
             ,
             function(callback){
@@ -620,7 +624,11 @@ io.on('connection', function(client) {
                         callback(err);
                         return;
                       }
+
                       genres = docs;
+                      for(var i=0; i<genres.length; i++){
+                        genres[i].name =  capitalizeEachWord(genres[i].name);
+                      }
                       console.log("got all genres from DB");
                       callback();
                 });
@@ -1098,7 +1106,11 @@ app.param('artist', function ( req, res, next, value){
     });
 
 
-     
+     function capitalizeEachWord(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
 
 
 

@@ -451,39 +451,18 @@
 
                    <!-- GOOGLE INFORMATION -->
                  <div  ng-if="myID == user.userId && (!user.YT_AT) ">
-                        <strong><span class="fa fa-google-plus"></span>&nbsp &nbsp Google+</strong>
-
-                        <!-- check if the user has this token (is the user authenticated with this social account) -->
-
-                   <!--          <p>
-                                <strong>id</strong>: <%= user.YT_id %><br>
-                                <strong>token</strong>: <%= user.YT_AT %><br>
-                                <strong>email</strong>: <%= user.YT_email %><br>
-
-                            </p> -->
-
-                            <!-- <a href="/unlink/google" class="btn btn-google">Unlink</a> -->
-
+                        <strong><span class="fa fa-google-plus"></span>&nbsp &nbsp Improve your profile</strong>
+                            <p  style="margin-top:5px">
                             <a href="/connect/google" class="btn btn-google">Connect Google</a>
+                            </p>
 
                 </div>
                  <!-- END GOOGLE INFORMATION -->
 
                  <!-- FACEBOOK INFORMATION -->
                 <div  ng-if="myID == user.userId && (!user.FB_AT)">
-                        <strong><span class="fa fa-facebook"></span>&nbsp &nbsp Facebook</strong>
-
-                        <!-- check if the user has this token (is the user authenticated with this social account) -->
-
-           <!--                  <p>
-                                <strong>id</strong>: <%= user.FB_id %><br>
-                                <strong>token</strong>: <%= user.FB_AT %><br>
-                                <strong>email</strong>: <%= user.FB_email %><br>
-                            </p> -->
-
-                            <!-- <a href="/unlink/facebook" class="btn btn-facebook">Unlink</a> -->
-
-                            <p><a href="/connect/facebook" class="btn btn-facebook">Connect Facebook</a></p>
+                        <strong><span class="fa fa-facebook"></span>&nbsp &nbsp Improve your profile</strong>
+                            <p style="margin-top:5px"><a href="/connect/facebook" class="btn btn-facebook">Connect Facebook</a></p>
 
                 </div>
                 <!--END FACEBOOK INFORMATION -->

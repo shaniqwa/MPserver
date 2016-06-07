@@ -12,11 +12,11 @@
 
     <!-- BEGIN FORM -->
     <form action="/processWizardForm" method="post" id="wizard">
-
+    <div class="well">
 
     <!-- ADDITIONAL MISSING INFORMATION -->
 <div class="col-sm-5">
-        <div class="well" style="overflow: hidden;">
+        <div style="overflow: hidden;">
         <h2>Confirm Information</h2>
         <p>Please confirm or change some basic information about you</p>
         <div class="form-group col-md-6">
@@ -326,8 +326,8 @@
             <option data-img-src="images/profile_images/profile4.jpg" value="images/profile_images/profile4.jpg">Avatar 4</option>
             <option data-img-src="images/profile_images/profile5.jpg" value="images/profile_images/profile5.jpg">Avatar 5</option>
             <option data-img-src="images/profile_images/profile6.jpg" value="images/profile_images/profile6.jpg">Avatar 6</option>
-            <option data-img-src="images/profile_images/profile7.jpg" value="images/profile_images/profile7.jpg">Avatar 7</option>
-            <option data-img-src="images/profile_images/profile8.jpg" value="images/profile_images/profile8.jpg">Avatar 8</option>
+           <!--  <option data-img-src="images/profile_images/profile7.jpg" value="images/profile_images/profile7.jpg">Avatar 7</option>
+            <option data-img-src="images/profile_images/profile8.jpg" value="images/profile_images/profile8.jpg">Avatar 8</option> -->
            
          
 
@@ -345,7 +345,7 @@
     </div>
 </div>
 
-<div class="well" style="overflow:hidden">
+<div style="overflow:hidden">
     <div class="col-sm-12">
         
             <h2>Your Music Preferences</h2>
@@ -526,13 +526,13 @@
        <input type="hidden" name="UserType" value="Producer">
     <% } %>
 
-
-
-    
-    </form>
-    <div class="text-center">
-        <button type="submit" form="wizard" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
+ <div class="text-center">
+        <button type="submit" form="wizard" class="btn btn-submit btn-submit-big" value="Submit">Submit</button>
     </div>
+
+    </div>
+    </form>
+   
     
     <!-- END FORM -->
 </div>
