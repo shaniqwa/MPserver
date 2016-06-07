@@ -8,107 +8,11 @@
 </head>
 <body>
 <%- include header %>
-<!-- <script>
-  // This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
-
-  // This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '1188683537828357',
-    cookie     : true,  // enable cookies to allow the server to access 
-                        // the session
-    xfbml      : true,  // parse social plugins on this page
-    version    : 'v2.5' // use graph api version 2.5
-  });
-
-  // Now that we've initialized the JavaScript SDK, we call 
-  // FB.getLoginStatus().  This function gets the state of the
-  // person visiting this page and can return one of three states to
-  // the callback you provide.  They can be:
-  //
-  // 1. Logged into your app ('connected')
-  // 2. Logged into Facebook, but not your app ('not_authorized')
-  // 3. Not logged into Facebook and can't tell if they are logged into
-  //    your app or not.
-  //
-  // These three cases are handled in the callback function.
-
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-
-  };
-
-  // Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
-</script> -->
-
-<!--
-  Below we include the Login Button social plugin. This button uses
-  the JavaScript SDK to present a graphical Login button that triggers
-  the FB.login() function when clicked.
--->
-
-
-
-
-
-
-
-
 <div class="container">
 
- <!--    <div class="col-sm-12 text-center">
+    <div class="col-sm-12">
         <div class="well">
-            <h1>Producer Wizard</h1>
-        </div>
-    </div> -->
+
 
     <!-- BEGIN FORM -->
     <form action="/processProducerWizardForm" method="post" id="ProducerWizardForm">
@@ -125,45 +29,30 @@
 
 
 <!-- ADDITIONAL MISSING INFORMATION -->
-<div class="col-sm-6">
-        <div class="well">
+<div class="col-sm-6"  style="padding: 10px;">
         <h3>Your Songs</h3>
          Band/Artist Name:<br>
-        <input type="text" class="producerForm" name="artistName">
+        <input type="text" class="producerForm" name="artistName" required>
         <br><br>
 
 
         <p>In order to get your music out there, you need to upload your songs to youtube. This is a list of all your youtube channel uploads. Please choose the videos you would like to subscribe to the Music Profile system.  </p>
         
         Choose Videos : <br>
-         <select multiple="multiple" id="my-select" name="list[]">
+         <select multiple="multiple" id="my-select" name="list[]" required>
         <% for(var i=0; i < list.length; i++) { %>
-<!--         <div class="checkbox">
-          <label><input type="checkbox" name="songs[]" value="<%= list[i].id %>"> <%= list[i].title %></label>
-        </div> -->
         <option value="<%= list[i].videoId %>|<%= list[i].title %>" ><%= list[i].title %> </option>
         <% } %>
         </select>
         <br>
-
-
-        <!-- connect facebook page -->
-<!--         <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-        </fb:login-button>
-
-        <div id="status">
-        </div> -->
-      
-    </div>
 </div>
 
 <!-- ARTIST PIE -->
-<div class="col-sm-6">
-        <div class="well">
+<div class="col-sm-6" style="padding: 10px;">
            <h3>Your Style</h3>
            <p>Please choose 5 genre tags that most describe your music. Rate each genre influence between 1-5 and we will calculate your unique Artist Pie</p>
          <label for="genre1">Genre 1</label><br>
-        <select id="genre1" name="genre1" class="js-example-basic-single">
+        <select id="genre1" name="genre1" class="js-example-basic-single" required>
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
@@ -172,7 +61,7 @@
                   <input id="slider1" name="slider1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
         <br><br>
         <label for="genre2">Genre 2</label><br>
-        <select id="genre2" name="genre2" class="js-example-basic-single">
+        <select id="genre2" name="genre2" class="js-example-basic-single" required>
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
@@ -181,7 +70,7 @@
                   <input id="slider2" name="slider2" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br><br>
          <label for="genre3">Genre 3</label><br>
-        <select id="genre3" name="genre3" class="js-example-basic-single">
+        <select id="genre3" name="genre3" class="js-example-basic-single" required>
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
@@ -190,7 +79,7 @@
                   <input id="slider3" name="slider3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br><br>
          <label for="genre4">Genre 4</label><br>
-        <select id="genre4" name="genre4" class="js-example-basic-single">
+        <select id="genre4" name="genre4" class="js-example-basic-single" required>
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
@@ -199,7 +88,7 @@
                   <input id="slider4" name="slider4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
           <br><br>
          <label for="genre5">Genre 5</label><br>
-        <select id="genre5" name="genre5" class="js-example-basic-single">
+        <select id="genre5" name="genre5" class="js-example-basic-single" required>
         <option value="null"> Select Genre...</option>
         <% for(var i=0; i < genres.length; i++) { %>
            <option value="<%= genres[i].name %>|<%= genres[i].category %>"> <%= genres[i].name %></option>
@@ -209,11 +98,15 @@
 
         
 
-        </div>
+
 </div>
     
     </form>
-    <button type="submit" form="ProducerWizardForm" class="btn btn-submit" value="Submit" style="width:97%; margin-bottom:20px; padding: 10px 17px !important;">Submit</button>
+    <button type="submit" form="ProducerWizardForm" class="btn btn-submit btn-submit-big" value="Submit";">Submit</button>
+
+
+        </div>
+    </div>
     <!-- END FORM -->
 </div>
 <%- include jsFiles %>

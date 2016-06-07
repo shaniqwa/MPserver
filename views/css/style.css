@@ -228,13 +228,15 @@ ul{
 .rslides img {
   display: block;
   float: left;
-  width: 100%;
-  height: 434px;
+  /*width: 100%;*/
+  /*height: 434px;*/
   border: 0;
 
   }
 
-
+.rslides li:first-child{
+  left:0px !important;
+}
 
 
 
@@ -275,17 +277,16 @@ ul{
     position: relative;
 cursor: pointer;
 border: 0px solid #CCC;
-width: 731px;
 margin-top: 10px;
 padding: 10px;
 color: #1DF0F2;
 background-color: rgba(255,255,255,0.4);
-border-radius: 0.5em;
+border-radius: 0.5em !important;
 }
 .FAQ .fa-plus-circle{
   position: absolute;
-  right:5px;
-  top:5px;
+  right:8px;
+  top:9px;
 
   font-size: 24px;
 }
@@ -815,6 +816,11 @@ textarea, input , .btn{
     padding: 6px 17px !important;
     font-size: 14px !important;
 }
+.btn-submit-big{
+  width:100%; 
+  margin-top:20px; 
+  padding: 10px 17px !important;
+}
 .btn-submit:hover{
   color: #fff;
   background-color: #00cbff;
@@ -1291,6 +1297,31 @@ table.dataTable.no-footer {
   text-align: center;
   font-size: 14px;
 }
+
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+  color: white !important;
+}
+.select2-container--default .select2-selection--single {
+    background-color: transparent;
+    border: 1px solid white;
+}
+.select2-dropdown {
+    background-color: #222;
+    border: 1px solid white;
+    border-radius: 4px;
+}
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #00cbff;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #00cbff;
+    color: white;
+}
+.ms-container .ms-selectable, .ms-container .ms-selection {
+  border-radius: 0.5em;
+  border: 0px solid white !important;
+}
+
 .producerForm{
   width: 200px;
   height: 30px;
@@ -1301,10 +1332,84 @@ table.dataTable.no-footer {
   background-color: rgba(255,255, 255,0.20);
 }
 
+.slider-track-low, .slider-track-high {
+    background: #222;
+}
+
+.slider.slider-horizontal .slider-track {
+    height: 8px;
+    width: 100%;
+    margin-top: -5px;
+    top: 50%;
+    left: 0;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field{
+  color:#222;
+}
+.slider-selection {
+  background-color: #fff !important;
+    background-image: -webkit-linear-gradient(left,black 0,black 100%);
+    background-image: -o-linear-gradient(top,#fff 0,#fff 100%);
+     background-image: linear-gradient(to bottom,#fff 0,#fff 100%); 
+    /* background-repeat: repeat-x; */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff9f9f9',endColorstr='#fff5f5f5',GradientType=0);
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+    border-radius: 4px;
+     -webkit-animation: neon4 1.5s ease-in-out infinite alternate;
+  -moz-animation: neon4 1.5s ease-in-out infinite alternate;
+  animation: neon4 1.5s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes neon1 {
+  from {
+    box-shadow: 0 0 10px #000, 0 0 20px #000, 0 0 30px #000, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+  }
+  to {
+    box-shadow: 0 0 5px #000, 0 0 10px #000, 0 0 15px #000, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+  }
+}
+
+
+
+@-webkit-keyframes neon4 {
+  from {
+     box-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #09fb3c, 0 0 10px #09fb3c, 0 0 10px #09fb3c, 0 0 15px #09fb3c, 0 0 15px #09fb3c;
+  }
+  to {
+     box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 8px #fff, 0 0 10px #09fb3c, 0 0 15px #09fb3c, 0 0 16px #09fb3c, 0 0 20px #09fb3c, 0 0 20px #09fb3c;
+  }
+}
+
+
+.slider-handle.round {
+    border-radius: 0;
+}
+
+.slider-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: gray;
+    background-image: -webkit-linear-gradient(top,#222 0,gray 100%);
+    background-image: -o-linear-gradient(top,#222 0,gray 100%);
+    background-image: linear-gradient(to bottom,#222 0,gray 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff149bdf',endColorstr='#ff0480be',GradientType=0);
+    filter: none;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
+    border: 0 solid transparent;
+}
+
+.slider.slider-horizontal {
+    margin-left: 25px;
+}
 .ms-container .ms-list{
   background-color: #222;
-  border: 0 !important;
-  border-radius: 0 !important;
+  border: 1px solid white !important;
+  border-radius: 0.5em;
 }
 .ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
     border-bottom: 1px #555 solid !important;
@@ -1315,7 +1420,7 @@ table.dataTable.no-footer {
 
 .ms-container .ms-selectable li.ms-elem-selectable:hover, .ms-container .ms-selection li.ms-elem-selection:hover {
     background-color: #06befe !important; 
-    color: #222 !important;
+    color: white !important;
 }
 
 .msgBlock {

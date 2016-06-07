@@ -319,7 +319,8 @@ exports.processWizardForm = function(req,res,data) {
             // console.log(MP);
             callback();
           }else if(error){
-            return console.error("ERROR with request to WS: " + error);
+            console.error("ERROR with request to WS: " + error);
+            res.status(200).json("Sorry, something went wrong... Please try again later.");
           }
         });
     },

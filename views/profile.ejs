@@ -248,18 +248,22 @@
 
                      <!-- STATIC PAGE -->
                     <div id="about" class="tab-pane fade">
-                          <h3>About Music Profile</h3>
+                          <h3>About The Music Profile</h3>
                           <div class="about-container"> 
-                             <p>The Music Profile is a context-based platform whith music as its content</p>
-                             <p>As producer The Music Profile provides you tools to monitor your music rate among The Music Profile user all around the world</p>
-                             <p>The Music Profile can be also accessed using Android apps</p>
+                             <p>The Music Profile is a context-based platform whith music as its content. Users can register as Producers or Consumers. </p>
+                             <p>As a<strong> Consumer</strong>, a Music Profile pie will be generated for you according to your activity in Facebook and Youtube. You can influence your pie, for example by adding Facebook Likes to artist you love. When you play your pie, a unique playlist is generated from the pie, considering each genre precentage and related genres to create a smooth traverse between songs. </p>
+                             <p>As a <strong>Producer</strong>, you can link videos from the YouTube Channel you registered with to your Music Profile account, so there is no need to upload your tracks to our system as well. The Music Profile provides you with tools to monitor your popularity rate and getting to know your listeners by displaying statistics from Youtube and internal data collected in our system from users all around the world</p>
+
                              <p>This project was founded at 2016 as part of our software engineering studies at Shenkat College for Engineering and Design.</p>
+                             <div class="well">
                              <p style="font-weight:bold">Contact Us</p>
+                             <p>Please don't hesitate to contact us if you have any questions or feedbacks.
                              <p>Katzerin st.<br>
                                 Rishon Lezion, Israel 7569137<br>
                                 Israel<br>
                                 s.almog88@gmail.com</p>
                              <p>Visit our <a ng-click="goToHelpPage()" href="#">help page</a> for support and FAQs.</p>
+                             </div>
                             <br>
                              <hr>
                           </div>
@@ -269,6 +273,8 @@
                                 <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Viktoria Yakobashvili <br> viktoria5660@gmail.com</div>
                                 <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Stas Volfus <br> stasvolfus@gmail.com </div>
                                 <div class="col-sm-3" style="hight:20px, width:20px background-color=black">Rafael Bar <br> rafaelbar37@gmail.com </div>
+
+                                <br><br><br><br>
                           </div>
                     </div>
                     <!--END STATIC PAGE -->
@@ -276,14 +282,19 @@
                      <!-- STATIC PAGE -->
                     <div id="activity" class="tab-pane fade">
                           <h3>Activity Switch</h3>
+                          <span style="font-size: 20px"><p><strong>The Easiest & Fastest Way To Set Your Playing Mode!</p></strong></span>
                           <div class="activity-container"> 
-                             <p>The Activity Switch will automatically determine in which mode you are, Business or Pleasure. </p>
-                             <br>
-                             <p>Download Activity Switch plugin and start working on your computer.</p> 
-                             <div class="instructions">
-                                  <div>1. Download the plugin <a href="/downloadAS"><img class="download" width="35" src="images/download.png"></a></div>
-                                  <div>2. Install the plugin.</div>
-                                  <div>3. Put your unique token: <span style="color:#00bfff">{{ token }}</span></div>
+                             <p>The Activity Switch is a plugin that automatically changes your Business or Pleasure playing mode according to your activity on the computer. This plugin is recommanded especially if you work/study on your computer and love listening to music while you work.</p>
+                             <div class="instructions well">
+                             <p><strong>How do I get my switch?</strong></p>
+                                <ul>
+                                  <li>1. Notic that The Activity Switch requiers Windows operating system</li>
+                                  <li>2. Download the plugin by clicking the Download button</li>
+                                  <li>3. Unzip and run the .exe file to install it</li>
+                                  <li>4. Insert your unique token when asked during installation: <span style="color:#00bfff">{{ token }}</span></li>
+                                  <li>5. Let it run in the background and enjoy :)</li>
+                                </ul>
+                                   <a class="btn btn-follow" href="/downloadAS"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
                              </div>
                           </div>
                     </div>
@@ -293,32 +304,43 @@
                     <div id="help" class="tab-pane fade">
                           <h3>FAQ</h3>
                           <div class="help-container"> 
-                          <div class="FAQ" onclick="toggle('faq1')">
-                            <font size="3"> <i>How to contact us?  </i></font>
-                            <div id="faq1" class="ANS"> <font size = "3">Go to our About page, drop down menu ---> About</font></div>
+                          <div class="FAQ well" onclick="toggle('faq1')">
+                            <font size="3"><i>Am I a Consumer or Producer?</i></font>
+                            <div id="faq1" class="ANS"> <font size = "3">Consumer is the basic listener user, Consumer can create his own Music Profile, switch modes, follow others or be followed by other users. Producer an extended Consumer, Producer has channel on YouTube with uploaded songs, Producer can get song statistics, popularity rate and follow his fans.</font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                          </div>  
+                          <div class="FAQ well" onclick="toggle('faq2')">
+                            <font size="3"><i>How can I create an account in The Music Profile?</i></font>
+                            <div id="faq2" class="ANS"> <font size = "3">Creating an account is easy. if you are a Consumer you can use your Google+ or Facebook to connect, if a Producer you can use your Google+. Signing up is free.</font></div>
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          <div class="FAQ" onclick="toggle('faq2')">
-                            <font size="3"> <i>Quetion</i></font>
-                            <div id="faq2" class="ANS"> <font size = "3">Answer</font></div>
+                           <div class="FAQ well" onclick="toggle('faq3')">
+                            <font size="3"><i>How can I change playlist mode?</i></font>
+                            <div id="faq3" class="ANS"> <font size = "3">On profile page you can toggle between Bussiness/Plesure buttons, also you can download our Activity Switch for autometicly switch modes. read more in <a ng-click="" href="#">Activity Switch page</a></font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          <div class="FAQ" onclick="toggle('faq3')">
-                            <font size="3"> <i>Quetion</i></font>
-                            <div id="faq3" class="ANS"> <font size = "3">Answer</font></div>
+                          <div class="FAQ well" onclick="toggle('faq4')">
+                            <font size="3"><i>How can I change my Bussiness/Plesure preferences?</i></font>
+                            <div id="faq4" class="ANS"> <font size = "3">Go to Music Preferences in the menu next to your profile icon and fill the checkboxes.</font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          <div class="FAQ" onclick="toggle('faq4')">
-                            <font size="3"> <i>Quetion</i></font>
-                            <div id="faq4" class="ANS"> <font size = "3">Answer</font></div>
+                            <div class="FAQ well" onclick="toggle('faq5')">
+                            <font size="3"><i>How does The Music Profile knows what kind of music I like?</i></font>
+                            <div id="faq5" class="ANS"> <font size = "3">The Music Profile collects from Facebook your music likes and from your YouTube Deshboard songs you have listen to, taking playing/hearing frequency into consideration.</font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          <div class="FAQ" onclick="toggle('faq5')">
-                            <font size="3"> <i>Quetion</i></font>
-                            <div id="faq5" class="ANS"> <font size = "3">Answer</font></div>
+                            <div class="FAQ well" onclick="toggle('faq6')">
+                            <font size="3"><i>How can I delete my account in The Music Profile?</i></font>
+                            <div id="faq6" class="ANS"> <font size = "3">Please contact us by mail to s.almog88@gmail.com with an explanation, within 7 work days we will respond to your request.</font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          <div class="FAQ" onclick="toggle('faq6')">
-                            <font size="3"> <i>Quetion</i></font>
-                            <div id="faq6" class="ANS"> <font size = "3">Answer</font></div>
+                          <div class="FAQ well" onclick="toggle('faq7')">
+                            <font size="3"><i>How can I contact The Music Profile's support?</i></font>
+                            <div id="faq7" class="ANS"> <font size = "3">Please contact us by mail to s.almog88@gmail.com and will respond to your request, or visit our <a ng-click="goToHelpPage()" href="#">help page</a></font></div>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
-                          </div>
+                            
+                          </div><!-- end help container -->
                     </div>
                     <!--END STATIC PAGE -->
 
@@ -336,23 +358,27 @@
                           
                            <div class = "col-md-12">
                           <h3>The Music Profile App</h3>
-                          <h4>Listening to your music anywhere has never been easier</h4>
-                             <img width="600" src="images/mobile_tablet.png">
-                              <br><br>
-                            <div class="phone-holder col-md-6">
-                                <ul class="rslides">
-                                  <!-- <li><img src="images/slide-business.jpg" alt=""></li> -->
-                                  <!-- <li><img src="images/slide-consumer.jpg" alt=""></li> -->
-                                </ul>
+                           <span style="font-size: 20px"><p><strong>Listening To Your Music Anywhere Has Never Been Easier.</strong></p></span>
+                             <!-- <img width="600" src="images/mobile_tablet.png"> -->
                             </div>
-                            <div class="col-md-6">
-                           <p>The Music Profiles Android App is free, personalized service made for you to listen to the music you love anywhere you go.</p>
-                           <p>The app is simple to use.</p>
-                           <p>Just click play to turn on our  auto Dj and explore more of your favorite songs.</p>
-                           <br><br><br><br>   
-                           </div>
+                            
+                             <div class="col-md-12" style="margin-top:30px ">
+                                  <div class="phone-holder col-md-6">
+                                      <ul class="rslides">
+                                        <li><img src="images/phone_1.png" alt=""></li>
+                                        <li><img src="images/phone_2.png" alt=""></li>
+                                        <li><img src="images/phone_3.png" alt=""></li>
+                                      </ul>
+                                  </div>
+                                  <div class="col-md-6">
+                                 <p>The Music Profiles Android App is free, personalized service made for you to listen to the music you love anywhere you go.</p>
+                                 <p>The app is simple to use.</p>
+                                 <p>Just click play to turn on our  auto Dj and explore more of your favorite songs.</p> 
+                                 <a href="#"><img width="180" src="images/app-on-Google-play.png"></a>
+                                 </div>
+                            </div>
                              
-                           </div>
+                          
                           
                     </div>
                     <!--END STATIC PAGE -->
@@ -425,39 +451,18 @@
 
                    <!-- GOOGLE INFORMATION -->
                  <div  ng-if="myID == user.userId && (!user.YT_AT) ">
-                        <strong><span class="fa fa-google-plus"></span>&nbsp &nbsp Google+</strong>
-
-                        <!-- check if the user has this token (is the user authenticated with this social account) -->
-
-                   <!--          <p>
-                                <strong>id</strong>: <%= user.YT_id %><br>
-                                <strong>token</strong>: <%= user.YT_AT %><br>
-                                <strong>email</strong>: <%= user.YT_email %><br>
-
-                            </p> -->
-
-                            <!-- <a href="/unlink/google" class="btn btn-google">Unlink</a> -->
-
+                        <strong><span class="fa fa-google-plus"></span>&nbsp &nbsp Improve your profile</strong>
+                            <p  style="margin-top:5px">
                             <a href="/connect/google" class="btn btn-google">Connect Google</a>
+                            </p>
 
                 </div>
                  <!-- END GOOGLE INFORMATION -->
 
                  <!-- FACEBOOK INFORMATION -->
                 <div  ng-if="myID == user.userId && (!user.FB_AT)">
-                        <strong><span class="fa fa-facebook"></span>&nbsp &nbsp Facebook</strong>
-
-                        <!-- check if the user has this token (is the user authenticated with this social account) -->
-
-           <!--                  <p>
-                                <strong>id</strong>: <%= user.FB_id %><br>
-                                <strong>token</strong>: <%= user.FB_AT %><br>
-                                <strong>email</strong>: <%= user.FB_email %><br>
-                            </p> -->
-
-                            <!-- <a href="/unlink/facebook" class="btn btn-facebook">Unlink</a> -->
-
-                            <p><a href="/connect/facebook" class="btn btn-facebook">Connect Facebook</a></p>
+                        <strong><span class="fa fa-facebook"></span>&nbsp &nbsp Improve your profile</strong>
+                            <p style="margin-top:5px"><a href="/connect/facebook" class="btn btn-facebook">Connect Facebook</a></p>
 
                 </div>
                 <!--END FACEBOOK INFORMATION -->
