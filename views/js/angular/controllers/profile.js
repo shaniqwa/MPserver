@@ -1058,17 +1058,23 @@ console.log("inside recommandation");
 /*************fullScreen FUNCTION*************/
 /***********************************************************/
    $scope.fullScreen = function(){
-          var elem = document.documentElement;
-          if (elem.requestFullscreen) {
-              elem.requestFullscreen();
-          } else if (elem.msRequestFullscreen) {
-              elem.msRequestFullscreen();
-          } else if (elem.mozRequestFullScreen) {
-              elem.mozRequestFullScreen();
-          } else if (elem.webkitRequestFullscreen) {
-              elem.webkitRequestFullscreen();
-          }
-          $("iframe").css({'width':'100%'});
+          $("iframe").addClass("fullScreenVideoStyle");
+          $("body").addClass("BodyFullScreenStyle");
+          $(".video-close-hide").addClass("video-close");
+          $(".navbar-static-top").addClass("video-close-hide");
+          
+   }
+
+
+
+/***********************************************************/
+/*************closeFullScreen FUNCTION*************/
+/***********************************************************/
+   $scope.closeFullScreen = function(){
+          $("iframe").removeClass("fullScreenVideoStyle");
+          $("body").removeClass("BodyFullScreenStyle");
+          $(".video-close-hide").removeClass("video-close");
+          $(".navbar-static-top").removeClass("video-close-hide");
    }
 
 

@@ -27,6 +27,7 @@
   <div class="navTimer2" ng-style="{'width': timeWidth + '%', backgroundColor: '#' + color, 'height': timeHeight}"><div class="timeRunning">{{timer}}</div></div>
     <!-- LEFT SIDE BAR -->
     <!-- <div class="row"> -->
+    <a title="Close" class="fancybox-item fancybox-close video-close-hide" href="javascript:;" ng-click="closeFullScreen()"></a>
          <div class="col-sm-2">
             <div class="leftSidebar">
                 <div class="player-container">
@@ -34,10 +35,10 @@
                     <div ng-hide="videoFrame2" class="loader {{loaderStatus}}">
                       <img src="images/loading.gif" width="110">
                     </div>
-                    <iframe ng-show="videoFrame" id="player" type="text/html" width="100%" height="200" 
+                    <iframe class="" ng-show="videoFrame" id="player" type="text/html" width="100%" height="200" 
                     src="http://www.youtube.com/embed/S1o41_oHSAg?enablejsapi=1&showinfo=0&controls=0"
                     frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-
+                   
                     <!-- current song  -->
                     <p class="songName"> {{nowPlaying.songName}}</p>
                     <p class="artistName">{{nowPlaying.artistName}} </p>
