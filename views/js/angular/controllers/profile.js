@@ -734,10 +734,13 @@ $scope.drawDiagram = function(index){
               for(i in model.myfavorites){
                 
                   if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
-
-                    $scope.removedSongsIndexes.push(i);
-                    $(".songItem" + i).css({'display':'none'});
-                    delete model.myfavorites[i]; 
+                       $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
+                            $scope.favorits = [];
+                            for(j in data){
+                              $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
+                            }
+                            model.myfavorites = $scope.favorits; 
+                       });
                   }
               }
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
