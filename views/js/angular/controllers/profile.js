@@ -10,7 +10,7 @@ var hours;
 var seconds;
 var minutes;
 var songWasDeleted = false;
-
+var iframe = $('#player');
 angular.module('profile',['datatables']).filter('titleCase', function() {
     return function(input) {
       input = input || '';
@@ -734,10 +734,13 @@ $scope.drawDiagram = function(index){
               for(i in model.myfavorites){
                 
                   if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
-
-                    $scope.removedSongsIndexes.push(i);
-                    $(".songItem" + i).css({'display':'none'});
-                    delete model.myfavorites[i]; 
+                       $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
+                            $scope.favorits = [];
+                            for(j in data){
+                              $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
+                            }
+                            model.myfavorites = $scope.favorits; 
+                       });
                   }
               }
               $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
@@ -832,33 +835,46 @@ console.log("inside recommandation");
 /***********************************************************/
     $scope.playFavorites = function(url){
          //console.log(model.myfavorites);
+        if ( typeof url === 'undefined') {
+              if($scope.firstTimePlaylist == false){
+                   onYouTubePlayerAPIReady();
+                   $scope.firstTimePlaylist = true;
+              }
+              $scope.track = [];
+              angular.forEach(model.myfavorites, function(item){
+                  $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: 0});
+              });
+              $scope.nextSong();
+        }
+        else{
+              $scope.iCameFromMyPlaylist = true;
+             if($scope.firstTimePlaylist == false){
+                   onYouTubePlayerAPIReady();
+                   $scope.firstTimePlaylist = true;
+              }
+             
+             $scope.firstTracks = [];
+             $scope.counter = 0;
+             var i = 0;
+             angular.forEach(model.myfavorites, function(item){
+                var flag = (item.url == url) ? 1:0;
+                if(item.url == url){
+                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                }
+                else{
+                   $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                }
+                 i++;
+             });
+            
+                angular.forEach($scope.firstTracks, function(item){
+                    $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+                });
+             
+             
+             $scope.nextSong(); 
+        }
         
-        $scope.iCameFromMyPlaylist = true;
-         if($scope.firstTimePlaylist == false){
-               onYouTubePlayerAPIReady();
-               $scope.firstTimePlaylist = true;
-          }
-         $scope.track = [];
-         $scope.firstTracks = [];
-         $scope.counter = 0;
-         var i = 0;
-         angular.forEach(model.myfavorites, function(item){
-            var flag = (item.url == url) ? 1:0;
-            if(item.url == url){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-            }
-            else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
-            }
-             i++;
-         });
-        
-            angular.forEach($scope.firstTracks, function(item){
-                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
-            });
-         
-         
-         $scope.nextSong(); 
     };
 
 
@@ -1048,6 +1064,30 @@ console.log("inside recommandation");
         var youtubeTime = ($event.offsetX / totalWidth).toFixed(2);
         var result = youtubeTime * player.getDuration();
         player.seekTo(result);
+   }
+
+
+/***********************************************************/
+/*************fullScreen FUNCTION*************/
+/***********************************************************/
+   $scope.fullScreen = function(){
+          $("iframe").addClass("fullScreenVideoStyle");
+          $("body").addClass("BodyFullScreenStyle");
+          $(".video-close-hide").addClass("video-close");
+          $(".navbar-static-top").addClass("video-close-hide");
+          
+   }
+
+
+
+/***********************************************************/
+/*************closeFullScreen FUNCTION*************/
+/***********************************************************/
+   $scope.closeFullScreen = function(){
+          $("iframe").removeClass("fullScreenVideoStyle");
+          $("body").removeClass("BodyFullScreenStyle");
+          $(".video-close-hide").removeClass("video-close");
+          $(".navbar-static-top").removeClass("video-close-hide");
    }
 
 
