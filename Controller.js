@@ -1014,7 +1014,33 @@ exports.processProducerWizardForm = function(req,res,data){
 
 
 
-
+exports.getUsers = function(res){
+	User.find({}).sort({registered: 'desc'}).exec(function(err, docs) { 
+		var results = {};
+		if(docs){
+			results.total = docs.length;
+			results.total_consumers = 0;
+			results.total_producers = 0;
+			results.consumers = [];
+			results.producers = [];
+			for(i in docs){
+				if(docs[i].typeOfUser == "Consumer"){
+					results.consumers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered});	
+					results.total_consumers++;
+				}
+				else if(docs[i].typeOfUser == "Producer"){
+					results.producers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered});	
+					results.total_producers++;
+				}
+				
+			}
+			res.status(200).json(results);	
+		}else{
+			res.status(200).json("Something went wrong... :/");	
+		}
+		
+	});
+}
 
 
 
