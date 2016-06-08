@@ -1199,10 +1199,11 @@ table.dataTable.no-footer {
     display: none; 
 }
  .BodyFullScreenStyle { overflow: -moz-scrollbars-none; }
-}
+
 .mobile-buttons{
-  display: none;
+  display: none !important;
 }
+
 /*.player-big{
   font-size: 28px;
   margin: 5px 5px 5px 5px;

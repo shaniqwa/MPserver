@@ -60,7 +60,7 @@
     width: 100vw;
     font-size: 20px;
     border-top: 2px solid white;
-    display: block;
+    display: block !important;
     background-color: #222;
     height: 7vh;
   }
