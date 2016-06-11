@@ -52,28 +52,35 @@
 	}
  body { overflow: -moz-scrollbars-none; overflow: hidden !important;}
   .mobile-buttons{
-  	padding-bottom: 10px;
+  	padding-bottom: 0px;
     padding-top: 4px;
     z-index: 9999;
     position: relative;
     bottom: 0;
     width: 100vw;
     font-size: 20px;
-    border-top: 2px solid white;
-    display: block;
+    //border-top: 2px solid white;
+    display: block !important;
     background-color: #222;
     height: 7vh;
+    color: #03BBFF;
+    line-height: 1.9;
+    font-weight: bold;
   }
   .left-mobile-button{
-  	display: inline-block;
-    width: 48%;
+  	display: table-cell;
+    width: 50vw;
     text-align: center;
-
+    height: 7vh;
+    border-top: 2px solid #03BBFF;
+    border-right: 2px solid #03BBFF;
   }
   .right-mobile-button{
-  	display: inline-block;
-    width: 48%;
+  	display: table-cell;
+    width: 50vw;
     text-align: center;
+    height: 7vh;
+    border-top: 2px solid #03BBFF;
   }
 }
  

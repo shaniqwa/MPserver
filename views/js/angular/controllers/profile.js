@@ -834,7 +834,7 @@ console.log("inside recommandation");
 /********************playFavorites FUNCTION**********************/
 /***********************************************************/
     $scope.playFavorites = function(url){
-         //console.log(model.myfavorites);
+        //console.log(url);
         if ( typeof url === 'undefined') {
               if($scope.firstTimePlaylist == false){
                    onYouTubePlayerAPIReady();
@@ -852,7 +852,7 @@ console.log("inside recommandation");
                    onYouTubePlayerAPIReady();
                    $scope.firstTimePlaylist = true;
               }
-             
+             $scope.track = [];
              $scope.firstTracks = [];
              $scope.counter = 0;
              var i = 0;
