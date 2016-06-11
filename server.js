@@ -586,6 +586,22 @@ io.on('connection', function(client) {
         Controller.updatePreferences(req,res,data);
     });
 
+    //mobile connection
+    app.post('/enterfromMobile', function (req, res){
+        console.log("inside server");
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+        var data = {};
+        data = req.body;
+        console.log(data);
+        console.log(res);
+       // Controller.updatePreferences(req,res,data);
+    });
+
 
 
 
