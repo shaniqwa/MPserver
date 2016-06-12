@@ -189,53 +189,21 @@ exports.updateCounters = function(res,prodId,songId,userId){
 
 exports.getFacebookYoutubeStatistics = function(res,prodId){
 	User.findOne({ userId : prodId}, function (err, docprod) {
-		console.log(docprod.YT_AT);
-	 //   async.parallel({
-		//     facebook: function(callback) {
-		//     	//"https://graph.facebook.com/me?insights&access_token=EAACEdEose0cBAJZAgZAExBU6XJTniYxQ7jKZCAZAuXqUPmoZBjTg3keUHFVgWPVNuduM5gVZAO3H7LNnDIZAoyUj0opIngRxNXb3bu83qbbdAegp2ZCp83SAyxMx2ilyGwwARWQSzD56dG3tNk36uC24qoHhQYpqr4DSrnvcy3ZApOAZDZD";
-		//     	var url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&key=" + docprod.YT_AT;
-		// 		request.get(url, function (error, response, body) {
-		// 			if (!error && response.statusCode == 200) {
-		// 			    var obj = body.toString();
-		// 			    obj = JSON.parse(obj);
-		// 			    callback(null, obj);
-		// 			    }else if(error){
-		// 			         return console.error(error);
-		// 			    }
-		// 		});
-		//     },
-		//     youtube: function(callback) {
-		//     	//this link will work only with permissions
-		//     	//https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&key=AIzaSyAdYQeToRIpTN7AUURuJd1kB1atDM_hJdw
-		//         var url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&key=" + docprod.YT_AT;
-		// 		request.get(url, function (error, response, body) {
-		// 			if (!error && response.statusCode == 200) {
-		// 			    var obj = body.toString();
-		// 			    obj = JSON.parse(obj);
-		// 			    callback(null, obj);
-		// 			    }else if(error){
-		// 			         return console.error(error);
-		// 			    }
-		// 		});
-		//     }
-		// }, function(err, results) {
-		//     res.status(200).json(docprod.YT_AT);
-		// });
-               var url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=50&mySubscribers=true&access_token=" + docprod.YT_AT + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
+               var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCILObhT-MhprF6OjkBZA4XQ&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
 				request.get(url, function (error, response, body) {
-					//console.log(response);
+
 					    if(error){
 					         console.log("error in getFacebookYoutubeStatistics: " + error.message);
 					         res.status(200).json(error.message);
 					    }
 						else if (!error && response.statusCode == 200) {
+							if(typeof prodId.subscribersCounter == 'undefined'){
+						    	//first time subscribers
+						    }
 						    var obj = body.toString();
 						    obj = JSON.parse(obj);
-						    //console.log(response);
-						    console.log("success: ");
-						    console.log(body);
-						    res.status(200).json(obj);
-
+						    var tempObj = obj.items[0].statistics;
+						    res.status(200).json(tempObj);
 					    }
 				});
                    
