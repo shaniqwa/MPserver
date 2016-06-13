@@ -52,6 +52,8 @@ var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSong
 
 //===============FUNCTIONS===============
 
+
+// Add a sond to favorites. song detains are sent via post and recived in data
 exports.addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -64,6 +66,8 @@ exports.addToFavorites = function(res,data) {
 	});
 }
 
+
+//get users favoties songs list
 exports.getFavorites = function(res,userId) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOne({ userId: userId }, function (err, doc) {
@@ -75,12 +79,21 @@ exports.getFavorites = function(res,userId) {
 	  res.status(200).json(doc.songs);
 	});
 }
+
+
+
+
+// remove song from users favorites list
 exports.removeFav = function(res,userId,song,artist) {
 	
 	Favorites.update({userId: userId}, {$pull:{songs:{song:song,artist:artist} } }).exec(function(err) {
 	    res.status(200).json("New song has been removed from favorites successfully, songId: " + song + " " + artist);
     });
 }
+
+
+
+// add song to users blacklist
 exports.addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
@@ -93,6 +106,9 @@ exports.addToBlackList = function(res,data) {
 	});
 }
 
+
+
+//Delete User
 //safe delete of a user - remove all his data from different collections
 exports.deleteUser = function(res, userID){
 	
@@ -188,6 +204,9 @@ q.drain = function() {
 
 
 }
+
+
+//Validate email - ,ake sure its unique
 var emailValidation = function (email, id,callback){
 	console.log("validate user:" + email + id);
 	var emailValid = false;
@@ -210,6 +229,9 @@ var emailValidation = function (email, id,callback){
      });	
 }
 
+
+
+//process form and update users basic info
 exports.editProfileForm = function(req,res,data){
 	var update = {};
     	update.firstName = data.firstName;
@@ -240,6 +262,9 @@ exports.editProfileForm = function(req,res,data){
 }
 
 
+
+
+//Process the BPwizard form at registration
 exports.processWizardForm = function(req,res,data) {
 	// console.log(data);
 
@@ -523,6 +548,9 @@ exports.processWizardForm = function(req,res,data) {
 
 
 
+
+
+//process form that update the users business/pleasure preferences
 exports.updatePreferences = function(req,res,data) {
 	// console.log(data);
 
@@ -783,6 +811,8 @@ exports.updatePreferences = function(req,res,data) {
 }
 
 
+
+//get the producers Uploads from his youtube channel
 exports.getProducerPlaylists = function(YT_AT){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
@@ -795,9 +825,15 @@ exports.getProducerPlaylists = function(YT_AT){
 			// console.log(list);
 			// return list;	
 			return temp.contentDetails.relatedPlaylists.uploads;
+		}else{
+			console.log("youtube retuered: " , response.statusCode, " error msg: ", response.body);
 		}
 	});
 }
+
+
+
+
 
 //get all songs from a youtube playlist and insert to DB
 exports.getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
@@ -815,11 +851,17 @@ exports.getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallb
 			}
 			PlaylistItemsCallback(null,list);	
 		}else{
+			console.log("youtube retuered: " , response.statusCode, " error msg: ", response.body);
 			PlaylistItemsCallback(error,null);	
 		}
 	});
 }
 
+
+
+
+
+//process the producer registration form
 exports.processProducerWizardForm = function(req,res,data){
 
 	async.parallel([
@@ -845,15 +887,9 @@ exports.processProducerWizardForm = function(req,res,data){
 
 	    //call getProducerPlaylistItems - populate all songs from youtube 
 	    function(callback){
-	    	// console.log("selected playlist id: ");
-	    	// console.log(data.playlistID);
 			console.log("songs from wizard:");
 			console.log(data.list);
 
-			// getProducerPlaylistItems(playlistID, req.user.YT_AT,function(error, list){
-				// if(error){
-				// 	console.log(error);
-				// }
 				var ProducerSongsDoc = {};
 
 				ProducerSongsDoc.songs = [];
@@ -936,9 +972,6 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre1.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		// console.log(genre);
-	    		// console.log(category);
-	    		// console.log(data.slider1);
 	    		total += parseInt(data.slider1);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider1});
 	    	}
@@ -947,9 +980,6 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre2.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		// console.log(genre);
-	    		// console.log(category);
-	    		// console.log(data.slider2);
 	    		total += parseInt(data.slider2);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider2});
 	    	}
@@ -958,9 +988,6 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre3.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		// console.log(genre);
-	    		// console.log(category);
-	    		// console.log(data.slider3);
 	    		total += parseInt(data.slider3);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider3});
 	    	}
@@ -969,9 +996,6 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre4.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		// console.log(genre);
-	    		// console.log(category);
-	    		// console.log(data.slider4);
 	    		total += parseInt(data.slider4);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider4});
 	    	}
@@ -980,18 +1004,12 @@ exports.processProducerWizardForm = function(req,res,data){
 	    		var values = data.genre5.split('|');
 	    		var genre = values[0];
 	    		var category = values[1];
-	    		// console.log(genre);
-	    		// console.log(category);
-	    		// console.log(data.slider5);
 	    		total += parseInt(data.slider5);	
 	    		temp.genres.push({category: category, genreName: genre, percent: data.slider5});
 	    	}
-	    	// console.log("total: " + total);
-	    	// console.log("num_of_genres: " + num_of_genres);
 
 	    	for(var i=0; i<temp.genres.length; i++){
 	    		temp.genres[i].percent = math.round((temp.genres[i].percent/total)*100,2);
-	    		// console.log(temp.genres[i]);
 	    	}
 
 	    	temp.save(function (err, doc) {
@@ -1013,7 +1031,7 @@ exports.processProducerWizardForm = function(req,res,data){
 
 
 
-
+//internal function that returns all the users in the system sorted by reg date. also counts how many Consumers and Producers 
 exports.getUsers = function(res){
 	User.find({}).sort({registered: 'desc'}).exec(function(err, docs) { 
 		var results = {};

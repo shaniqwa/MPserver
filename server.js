@@ -14,6 +14,7 @@ var transporter = nodemailer.createTransport('smtps://s.almog88%40gmail.com:shan
 var mongoose = require('mongoose');
 
 var configDB = require('./config/database.js');
+var signup = require('./controllers/signup.js');
 mongoose.createConnection(configDB.url); // connect to our database
 
 var bodyParser = require('body-parser');
@@ -254,7 +255,6 @@ io.on('connection', function(client) {
                                 'https://www.googleapis.com/auth/youtubepartner',
                                 'https://www.googleapis.com/auth/youtube.force-ssl',
                                 'https://www.googleapis.com/auth/youtube.upload',
-                                'https://www.googleapis.com/auth/youtubepartner',
                                 'https://www.googleapis.com/auth/youtubepartner-channel-audit'
                             ],
                     state: req.query.type
@@ -300,7 +300,13 @@ io.on('connection', function(client) {
 
     // connect google ---------------------------------
     // send to google to do the authentication
-    app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+    app.get('/connect/google', passport.authorize('google', { 
+                        scope : [
+                            'profile', 
+                            'email' , 
+                            'https://www.googleapis.com/auth/youtube.readonly', 
+                            'https://www.googleapis.com/auth/youtubepartner'
+                        ], }));
 
     // the callback after google has authorized the user
     app.get('/connect/google/callback',
@@ -395,6 +401,108 @@ io.on('connection', function(client) {
 	    // if they aren't redirect them to the home page
 	    res.redirect('/');
 	}
+
+
+
+    // =====================================
+    // MOBILE ROUTES =======================
+    // =====================================
+        app.get('/Mobile', function(req, res) {
+        var user,
+            business, 
+            pleasure, 
+            songs,
+            artistPie;
+
+        async.waterfall([
+        //find user
+        function(callback) {
+            User.findOne({ 'userId' :  req.query.userId }, function(err, doc) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                user = doc;
+                //check if user is_new == 0 
+
+                
+                callback();
+            });
+        },
+        //find user's pies
+        function(callback) {
+            BusinessPie.findOne({ 'businessPieId' :  req.query.userId }, function(err, businessPie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                business = businessPie;
+                callback();
+            });
+        },
+        function(callback) {
+            PleasurePie.findOne({ 'pleasurePieId' :  req.query.userId }, function(err, pleasurePie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                pleasure = pleasurePie;
+                callback();
+            });
+        },
+        function(callback) {
+            //if Producer - load also ProducerSongs and ArtistPie
+            if(req.query.typeOfUser == "Producer"){
+                ProducerSongs.findOne({ 'prodId' :  req.query.userId }, function(err, doc) {
+                    if (err){
+                        return console.log(err);
+                    }
+                    
+                    songs = doc.songs;
+
+                    ArtistPie.findOne({ 'artistPieId' :  req.query.userId }, function(err, doc) {
+                        // if there are any errors, return the error
+                        if (err){
+                            return console.log(err);
+                        }
+                        artistPie = doc;
+                        callback();
+                    });
+                });    
+            }else{
+                callback();
+            }
+            
+        },
+        function(callback){
+            //call findMatch each time a user is looging in to find new recommandations
+            ControllerB.findMatch( req.query.userId , function(){
+                console.log("findMatch finished");
+                callback();
+            });
+        }
+        ], function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('all done');
+              if(req.query.typeOfUser == "Consumer"){
+                    res.render('profile.ejs', {
+                    user : user, // get the user out of session and pass to template
+                    business: business,
+                    pleasure: pleasure
+                });
+            }else{
+                res.render('profile.ejs', {
+                    user : user, // get the user out of session and pass to template
+                    business: business,
+                    pleasure: pleasure,
+                    songs: songs,
+                    artist: artistPie
+                });                
+            }
+        });        
+    });
 
 
 
@@ -518,6 +626,10 @@ io.on('connection', function(client) {
 
 
 
+
+
+
+
     // PRIVACY POLICY
         app.get('/privacyPolicy', function(req, res) {
            res.render('privacyPolicy.ejs');
@@ -542,7 +654,7 @@ io.on('connection', function(client) {
 
 
     //process BPWizard Form
-    app.post('/processWizardForm', isLoggedIn, function (req, res){
+    app.post('/processWizardForm', function (req, res){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         app.set('json spaces', 4);
@@ -595,11 +707,40 @@ io.on('connection', function(client) {
         res.set("Content-Type", "application/json");
         res.status(200);
 
-        var data = {};
+       
+         var data = {};
         data = req.body;
-        console.log(data);
-        console.log(res);
-       // Controller.updatePreferences(req,res,data);
+
+
+       
+       data.user = JSON.parse(data.user);
+
+       var searchKey, 
+       searchId = data.user.id;
+       console.log(data.user.id);
+       if (data.platform == "facebook"){
+        console.log("face succes");
+        searchKey = 'FB_id';
+       }else if(data.platform == "google"){
+            searchKey = 'YT_id';
+       }
+       // try to find the user based on their google id
+            User.findOne({ 'FB_id' : searchId }, function(err, doc) {
+                if (err){
+                    console.log(err);
+                    res.json(err);
+                }
+                if (doc) {
+                    // if a user is found, log them in
+                    console.log(doc);
+                     res.json(doc.userId);
+                } else {
+                    // if the user isnt in our database, create a new user
+                    signup.registerNewUserFromMobile(data.platform, data.type, data.user, data.token, "refreshToken",  function(err,newUser){
+                    });
+                        // return done(null, newUser);
+                }
+            });
     });
 
 
