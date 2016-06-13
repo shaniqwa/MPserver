@@ -254,7 +254,6 @@ io.on('connection', function(client) {
                                 'https://www.googleapis.com/auth/youtubepartner',
                                 'https://www.googleapis.com/auth/youtube.force-ssl',
                                 'https://www.googleapis.com/auth/youtube.upload',
-                                'https://www.googleapis.com/auth/youtubepartner',
                                 'https://www.googleapis.com/auth/youtubepartner-channel-audit'
                             ],
                     state: req.query.type
@@ -300,7 +299,13 @@ io.on('connection', function(client) {
 
     // connect google ---------------------------------
     // send to google to do the authentication
-    app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email', 'https://www.googleapis.com/auth/youtube' , 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner'] }));
+    app.get('/connect/google', passport.authorize('google', { 
+                        scope : [
+                            'profile', 
+                            'email' , 
+                            'https://www.googleapis.com/auth/youtube.readonly', 
+                            'https://www.googleapis.com/auth/youtubepartner'
+                        ], }));
 
     // the callback after google has authorized the user
     app.get('/connect/google/callback',
@@ -395,6 +400,108 @@ io.on('connection', function(client) {
 	    // if they aren't redirect them to the home page
 	    res.redirect('/');
 	}
+
+
+
+    // =====================================
+    // MOBILE ROUTES =======================
+    // =====================================
+        app.get('/Mobile', function(req, res) {
+        var user,
+            business, 
+            pleasure, 
+            songs,
+            artistPie;
+
+        async.waterfall([
+        //find user
+        function(callback) {
+            User.findOne({ 'userId' :  req.query.userId }, function(err, doc) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                user = doc;
+                //check if user is_new == 0 
+
+                
+                callback();
+            });
+        },
+        //find user's pies
+        function(callback) {
+            BusinessPie.findOne({ 'businessPieId' :  req.query.userId }, function(err, businessPie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                business = businessPie;
+                callback();
+            });
+        },
+        function(callback) {
+            PleasurePie.findOne({ 'pleasurePieId' :  req.query.userId }, function(err, pleasurePie) {
+                // if there are any errors, return the error
+                if (err){
+                    return console.log(err);
+                }
+                pleasure = pleasurePie;
+                callback();
+            });
+        },
+        function(callback) {
+            //if Producer - load also ProducerSongs and ArtistPie
+            if(req.query.typeOfUser == "Producer"){
+                ProducerSongs.findOne({ 'prodId' :  req.query.userId }, function(err, doc) {
+                    if (err){
+                        return console.log(err);
+                    }
+                    
+                    songs = doc.songs;
+
+                    ArtistPie.findOne({ 'artistPieId' :  req.query.userId }, function(err, doc) {
+                        // if there are any errors, return the error
+                        if (err){
+                            return console.log(err);
+                        }
+                        artistPie = doc;
+                        callback();
+                    });
+                });    
+            }else{
+                callback();
+            }
+            
+        },
+        function(callback){
+            //call findMatch each time a user is looging in to find new recommandations
+            ControllerB.findMatch( req.query.userId , function(){
+                console.log("findMatch finished");
+                callback();
+            });
+        }
+        ], function(err) {
+            if (err) {
+                throw err;
+            }
+            console.log('all done');
+              if(req.query.typeOfUser == "Consumer"){
+                    res.render('profile.ejs', {
+                    user : user, // get the user out of session and pass to template
+                    business: business,
+                    pleasure: pleasure
+                });
+            }else{
+                res.render('profile.ejs', {
+                    user : user, // get the user out of session and pass to template
+                    business: business,
+                    pleasure: pleasure,
+                    songs: songs,
+                    artist: artistPie
+                });                
+            }
+        });        
+    });
 
 
 
@@ -518,6 +625,10 @@ io.on('connection', function(client) {
 
 
 
+
+
+
+
     // PRIVACY POLICY
         app.get('/privacyPolicy', function(req, res) {
            res.render('privacyPolicy.ejs');
@@ -542,7 +653,7 @@ io.on('connection', function(client) {
 
 
     //process BPWizard Form
-    app.post('/processWizardForm', isLoggedIn, function (req, res){
+    app.post('/processWizardForm', function (req, res){
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         app.set('json spaces', 4);
