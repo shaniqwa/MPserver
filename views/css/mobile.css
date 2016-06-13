@@ -18,7 +18,7 @@
 		bottom: 0;
 		z-index: 9998;
 		background-color: #222;
-		height: 38vh !important;
+		height: 48vh !important;
 	}
     .col-sm-3 .rightSidebar, .col-sm-7 .content{
     	display: none;
@@ -81,6 +81,75 @@
     text-align: center;
     height: 7vh;
     border-top: 2px solid #03BBFF;
+  }
+  #fullpage .section{
+     display: none;
+  }
+  #fullpage .section:first-child{
+     display: block;
+  }
+  .holder-4 img{
+     width:320px;
+     position: unset;
+     display: inline-block;
+     top:0;
+     left:0;
+     margin-right: 0;
+     transform:unset;
+
+  }
+  .inner-container{
+    display: table-cell;
+    float: left;
+    margin-right: 10px;
+  }
+  .consumer-container{
+     padding-right: 15px;
+    padding-left: 15px;
+    
+    display: table;
+    margin: 0 auto;
+  }
+  .header-login{
+    float: unset;
+  }
+  .navbar {
+    display: none;
+  }
+  .producer-container{
+     padding-right: 15px;
+    padding-left: 15px;
+    
+    padding-top: 25px;
+    display: table;
+    margin: 0 auto;
+  }
+  .navbar-text{
+    margin:0;
+    padding: 0;
+  }
+  #fp-nav{
+    display: none;
+  }
+  .bounce{
+    display: none;
+  }
+  .holder-4{
+    position: relative;
+    z-index: 9999;
+     display: block;
+    top:0;
+    padding: 0;
+        height: 90vh;
+    
+  }
+  .navbar-right.nav-icon{
+      width:50px;
+  }
+  .login-container{
+    position: absolute;
+    bottom: 10%;
+    width:100%;
   }
 }
  
