@@ -123,10 +123,38 @@
                               <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
                               <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
                           </div>
+
+                          <div class="profile-control-container">
+                              <!-- <div class="mode-container">
+                                  <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
+                                  <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
+                                  <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
+                              </div> -->
+                              
+                              <!-- <div class="row"> -->
+                                <!-- <div class="col-xs-2"> -->
+                                  <!-- <div class="form-group"> -->
+                                    <label for="select-mode">MODE :</label>
+                                    <select class="selectpicker" data-width="fit">
+                                      <option>Pleasure</option>
+                                      <option>Business</option>
+                                    </select>
+                                  <!-- </div> -->
+                                <!-- </div> -->
+                              <!-- </div> -->
+                              
+                              <div class="play-container">
+                              <button type = "button" id="business" class = " btn-default mode-btn btn-lg active">Get Playlist</button>
+                                  <button type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">Play Favorites</button>
+                                  
+                              </div>
+                          </div>
+                          <hr>
+                          <div id="profile-container">
                               <!-- MP pie container -->
-                            <div id="MPcontainer" style=" height: 450px; margin: 0 auto">
-                                  <div id="playDJ"></div>
-                            </div>
+                              <div id="MPcontainer" style=" height: 450px; margin: 0 auto"></div>
+                              <div id="playDJ"></div>
+                          </div>
                       </div>
                   <!-- END PROFILE TAB -->
 
@@ -401,6 +429,9 @@
           <!-- RIGHT SIDEBAR -->
            <div class="col-sm-3">
                 <div class="well rightSidebar">
+                    <div ng-if="myID == user.userId" id="edit-profile">
+                      <a class="inline" href="#settings"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    </div>
                     <!-- USER DETAILS -->
                     <h4 style="display: inline-block;">
                     <img ng-if="user.typeOfUser == 'Producer'" src="images/producer-white.png" width="20" class="side-icon">
@@ -480,7 +511,7 @@
                    
                    <div id="recommended">
                    
-                      <h4>Recommended</h4>
+                      <h4>Your Match</h4>
                       <p>Check out your recent matches with great Producers</p>
                        <div class="recommand-result">
                              <img   class="simg" width="50" height="50" border-radius: 100 ng-src="{{user.profileImage}}" /> 

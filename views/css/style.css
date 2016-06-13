@@ -245,16 +245,23 @@ ul{
 
 
 
-#MPcontainer{
+#profile-container{
   position: relative;
 }
 
 
 #playDJ{
-  position: absolute;
-  width:200px;
-  height: 200px;
-  background-color: black;
+ position: absolute;
+  width: 90px;
+  height: 90px;
+  top: 40%;
+  left: 43.5%;
+  background: url("../images/play-dj.png") no-repeat;
+  /*background-color: black;*/
+}
+#playDJ:hover{
+  cursor: pointer;
+  background: url("../images/play-dj-hover.png") no-repeat;
 }
 
 
@@ -389,6 +396,7 @@ margin-top: -42px;
   padding: 0px;
 }
 .rightSidebar {
+  position: relative;
   background:  linear-gradient(rgba(255,255, 255,0.10) 70%, rgba(255, 255, 255,0));
   min-height: 100vh;
   height: 100%;
@@ -403,6 +411,17 @@ margin-top: -42px;
   height: 100vh;
   margin-bottom: 0px;
   padding: 30px;
+}
+#edit-profile{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 21px;
+  right: 28px;
+  font-size: 18px;
+}
+#edit-profile a{
+  color: #e4e4e4;
 }
 .side-icon{
   margin-bottom: 6px;
@@ -595,8 +614,11 @@ margin-top: -42px;
 #profile-tab:after{
   content: url(../images/profile.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 }
 #profile-tab:hover:after , .nav-tabs li.active a#profile-tab:after{
     opacity:1;
@@ -615,8 +637,11 @@ orites tab*/
 #favorites-tab:after{
   content: url(../images/favorites.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 }
 #favorites-tab:hover:after , .nav-tabs li.active a#favorites-tab:after{
     opacity:1;
@@ -633,8 +658,11 @@ orites tab*/
 #following-tab:after{
   content: url(../images/following.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 }
 #following-tab:hover:after , .nav-tabs li.active a#following-tab:after{
     opacity:1;
@@ -651,8 +679,11 @@ orites tab*/
 #followers-tab:after{
   content: url(../images/followers.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 }
 #followers-tab:hover:after , .nav-tabs li.active a#followers-tab:after{
     opacity:1;
@@ -669,9 +700,11 @@ orites tab*/
 #statistics-tab:after{
   content: url(../images/statistics.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
-}
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;}
 #statistics-tab:hover:after , .nav-tabs li.active a#statistics-tab:after{
     opacity:1;
     display: block;
@@ -687,8 +720,11 @@ orites tab*/
 #mySongs-tab:after{
   content: url(../images/my_songs.png);
   opacity:0;
-    transition: opacity 0.5s ease;
-    -webkit-transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
+  -webkit-transition: opacity 0.7s ease;
+  -moz-transition: opacity 0.7s ease-in-out;
+  -o-transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 }
 #mySongs-tab:hover:after , .nav-tabs li.active a#mySongs-tab:after{
     opacity:1;
@@ -833,9 +869,19 @@ textarea, input , .btn{
   border: 0px;
 
 }
+.profile-control-container{
+  overflow: hidden;
+}
 .mode-container{
-  margin: 0 auto;
-  text-align: center;
+  float:left;
+  /*margin: 0 auto;*/
+  /*text-align: center;*/
+}
+#profile > div.profile-control-container > div.col-xs-3 > div > div .form-control{
+  height:20px;
+}
+.play-container{
+  float:right;
 }
 .mode-btn{
   color: #64d8ff;
