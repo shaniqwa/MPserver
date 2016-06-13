@@ -37,6 +37,12 @@ var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureG
 var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
 
 
+
+//===============FUNCTIONS===============
+
+
+// Find Match
+// This function searches for match between a given user ID and all producers in DB
 exports.findMatch = function(userID,findMatchC){
 	var matchGeners = [];
 	console.log("FindMatch start");
@@ -124,7 +130,10 @@ exports.findMatch = function(userID,findMatchC){
 	});//end async
 }
 
-//search Specific User
+
+
+//Search Specific User
+//find one user by username
 exports.searchSpecificUser = function(res,data) {
 
 	User.findOne({ username: data }, function (err, doc) {
@@ -139,7 +148,10 @@ exports.searchSpecificUser = function(res,data) {
 	});
 }
 
+
+
 //Srach User
+//find any users that match the search string , by first name/ last name / username
 exports.searchuser = function(res,data) {
 
 	User.find({ $or:[ {'username': {$regex: new RegExp(data, "i")} }, {'firstName': {$regex: new RegExp(data, "i")} },{'lastName': {$regex: new RegExp(data, "i")}}	  ]  }, function (err, doc) {
@@ -157,16 +169,12 @@ exports.searchuser = function(res,data) {
 }
 
 
-//delete song from favorite
-exports.removeFav = function(res, data){
-	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } },function(err,doc){
-		res.status(200).json("Songs has been deleted " + userID);
-	});
-}
+
 
 
 
 //recommandation
+//Collects all the matching producers from both of the users pies and return as json
 exports.recommandation = function(res, userID){
 	var producers = [];
 	var result = [];
@@ -282,7 +290,7 @@ exports.recommandation = function(res, userID){
 
 
 
-
+//Get users following
 exports.getFollowing = function(res,userId) {
 	//addToSet make sure there are no duplicates is songs array.
 	User.findOne({ userId: userId }, function (err, doc) {
@@ -299,7 +307,7 @@ exports.getFollowing = function(res,userId) {
 
 
 
-//add to followers
+//Follow
 exports.addToFollow = function(res,Fuser,userF) {
 var follower = {};
 
@@ -360,7 +368,7 @@ var follower = {};
 }
 
 
-//unfollow
+//Unfollow
 exports.unfollow = function(res,Fuser,userF) {
 var follower = {};
 
@@ -419,5 +427,14 @@ var follower = {};
 	    }
 	    console.log("unfollow");
 	    res.status(200).json("unfollow");
+	});
+}
+
+
+
+//Delete song from favorite
+exports.removeFav = function(res, data){
+	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } },function(err,doc){
+		res.status(200).json("Songs has been deleted " + userID);
 	});
 }
