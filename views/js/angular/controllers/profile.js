@@ -11,13 +11,16 @@ var seconds;
 var minutes;
 var songWasDeleted = false;
 var iframe = $('#player');
+var views;
+var sub;
+var com;
 angular.module('profile',['datatables']).filter('titleCase', function() {
     return function(input) {
       input = input || '';
       return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     };
   })
-.controller('profileCtrl', function ($scope, $http, $sce, $interval, DTOptionsBuilder) {
+.controller('profileCtrl', function ($scope, $http, $sce, $interval, $timeout, DTOptionsBuilder) {
 
    $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDisplayLength(10)
@@ -72,7 +75,8 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
    $scope.iCameFromMyPlaylist = false;
    $scope.videoDuration;
    $scope.timer;
-   $scope.tickInterval = 1000 //ms
+   $scope.tickInterval = 1000; //ms
+   $scope.ticktickInterval = 150; //ms
    $scope.timeWidth;
    $scope.timeHeight;
    $scope.removedSongsIndexes = [];
@@ -80,6 +84,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
    $scope.tickColor = 1;
    $scope.generalLoader;
    $scope.token;
+   $scope.views = 0;
+   $scope.subscribers = 0;
+   $scope.comments = 0;
+    $scope.firstTimeStatistics = true;
    // create youtube player
     var player;
 
@@ -263,6 +271,19 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
          }
       }
       
+
+var ticktick1 = function(){
+         if($scope.views<views){
+             $scope.views++;
+         }
+         if($scope.subscribers<sub){ 
+            $scope.subscribers++;
+         }
+        if($scope.comments<com){
+            $scope.comments++;
+         }
+}
+
 /***********************************************************/
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
@@ -385,9 +406,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
                    drawLocalVsWorldDiagram($scope.songCounters[$scope.selectedSong]);
                    //drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
                });
-               $http.get(model.domain + '/getFacebookYoutubeStatistics/' + $scope.userId).success(function(data){
-                    console.log(data); 
-                    drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
+               $http.get("https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCILObhT-MhprF6OjkBZA4XQ&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc").success(function(data){ 
+                    $scope.views = data.items[0].statistics.viewCount;
+                    $scope.subscribers = data.items[0].statistics.subscriberCount;
+                    $scope.comments = data.items[0].statistics.commentCount;
                });
 
             }//end if producer
@@ -834,7 +856,7 @@ console.log("inside recommandation");
 /********************playFavorites FUNCTION**********************/
 /***********************************************************/
     $scope.playFavorites = function(url){
-         //console.log(model.myfavorites);
+        //console.log(url);
         if ( typeof url === 'undefined') {
               if($scope.firstTimePlaylist == false){
                    onYouTubePlayerAPIReady();
@@ -852,7 +874,7 @@ console.log("inside recommandation");
                    onYouTubePlayerAPIReady();
                    $scope.firstTimePlaylist = true;
               }
-             
+             $scope.track = [];
              $scope.firstTracks = [];
              $scope.counter = 0;
              var i = 0;
@@ -1088,6 +1110,25 @@ console.log("inside recommandation");
           $("body").removeClass("BodyFullScreenStyle");
           $(".video-close-hide").removeClass("video-close");
           $(".navbar-static-top").removeClass("video-close-hide");
+   }
+
+
+
+/***********************************************************/
+/*************showCounters FUNCTION*************/
+/***********************************************************/
+   $scope.showCounters = function(){
+      if($scope.firstTimeStatistics){
+        $scope.firstTimeStatistics = false;
+         views = $scope.views;
+         sub = $scope.subscribers;
+         com = $scope.comments;
+         $scope.views = 0;
+         $scope.subscribers = 0;
+         $scope.comments = 0;
+         $interval(ticktick1, $scope.ticktickInterval);
+      }
+         
    }
 
 

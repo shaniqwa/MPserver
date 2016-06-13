@@ -108,7 +108,7 @@
                     <li><a data-toggle="tab" href="#favorites" id="favorites-tab">Favorites</a></li>
                     <li><a data-toggle="tab" href="#following" id="following-tab">Following</a></li>
                     <li><a data-toggle="tab" href="#followers" id="followers-tab">Followers</a></li>
-                    <li ng-if="user.typeOfUser == 'Producer'" ><a data-toggle="tab" href="#statistics" id="statistics-tab">Statistics</a></li>
+                    <li ng-if="user.typeOfUser == 'Producer'"><a ng-click="showCounters()" data-toggle="tab" href="#statistics" id="statistics-tab">Statistics</a></li>
                     <li ng-if="user.typeOfUser == 'Producer'" ><a data-toggle="tab" href="#mySongs" id="mySongs-tab">My Songs</a></li>
                     <li><a data-toggle="tab" href="#search" id="search-tab">Search</a></li>
                   </ul>
@@ -223,7 +223,9 @@
                     <div id="statistics" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
                         <h3>Popularity Rate</h3>
                         <div class="col-sm-12">
-                          <div id="YTContainer" style=" height: 300px; width:400px; margin: 0 auto"></div>
+                          <div id="counter" class="col-md-4 views">{{views}}<div class="viewstitle">Views</div></div>
+                          <div id="counter" class="col-md-4 subscribers">{{subscribers}}<div class="subscriberstitle">Subscribers</div></div>
+                          <div id="counter" class="col-md-4 comments">{{comments}}<div class="commentstitle">Comments</div></div>
                         </div>
 
 
@@ -591,8 +593,9 @@
 
 <script>
 $(document).ready(function(){
+
   var playlist_height = $(".playlist-container").height() - $(".player-container").height() - 70;
-  console.log(playlist_height);
+  //console.log(playlist_height);
    $('.playlist-container').css({"height":playlist_height + "px"} );
 
 

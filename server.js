@@ -14,6 +14,7 @@ var transporter = nodemailer.createTransport('smtps://s.almog88%40gmail.com:shan
 var mongoose = require('mongoose');
 
 var configDB = require('./config/database.js');
+var signup = require('./controllers/signup.js');
 mongoose.createConnection(configDB.url); // connect to our database
 
 var bodyParser = require('body-parser');
@@ -695,6 +696,51 @@ io.on('connection', function(client) {
         var data = {};
         data = req.body;
         Controller.updatePreferences(req,res,data);
+    });
+
+    //mobile connection
+    app.post('/enterfromMobile', function (req, res){
+        console.log("inside server");
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        app.set('json spaces', 4);
+        res.set("Content-Type", "application/json");
+        res.status(200);
+
+       
+         var data = {};
+        data = req.body;
+
+
+       
+       data.user = JSON.parse(data.user);
+
+       var searchKey, 
+       searchId = data.user.id;
+       console.log(data.user.id);
+       if (data.platform == "facebook"){
+        console.log("face succes");
+        searchKey = 'FB_id';
+       }else if(data.platform == "google"){
+            searchKey = 'YT_id';
+       }
+       // try to find the user based on their google id
+            User.findOne({ 'FB_id' : searchId }, function(err, doc) {
+                if (err){
+                    console.log(err);
+                    res.json(err);
+                }
+                if (doc) {
+                    // if a user is found, log them in
+                    console.log(doc);
+                     res.json(doc.userId);
+                } else {
+                    // if the user isnt in our database, create a new user
+                    signup.registerNewUserFromMobile(data.platform, data.type, data.user, data.token, "refreshToken",  function(err,newUser){
+                    });
+                        // return done(null, newUser);
+                }
+            });
     });
 
 
