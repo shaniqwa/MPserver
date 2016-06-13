@@ -660,6 +660,24 @@ orites tab*/
 }
 
 /*statistics tab*/
+#counter{
+  font-size: 100px;
+  text-align: center;
+  color:#3772ff;
+}
+#counter div{
+    font-size: 20px;
+    margin-top: -33px;
+    margin-bottom: 58px;
+    font-weight: bold;
+    color:white;
+    opacity: 0.3;
+     -webkit-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+}
+
 #statistics-tab{
   background-color: #ff1a7c;
   color: #ff1a7c;
