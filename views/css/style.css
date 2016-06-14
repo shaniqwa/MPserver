@@ -255,7 +255,9 @@ ul{
   width: 90px;
   height: 90px;
   top: 40%;
-  left: 43.5%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
   background: url("../images/play-dj.png") no-repeat;
   /*background-color: black;*/
 }
