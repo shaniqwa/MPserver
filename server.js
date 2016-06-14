@@ -187,10 +187,11 @@ io.on('connection', function(client) {
         },
         function(callback){
             //call findMatch each time a user is looging in to find new recommandations
-            ControllerB.findMatch( req.user.userId , function(){
-                console.log("findMatch finished");
-                callback();
-            });
+            // ControllerB.findMatch( req.user.userId , function(){
+            //     console.log("findMatch finished");
+            //     callback();
+            // });
+            callback();
         }
         ], function(err) {
             if (err) {
@@ -476,10 +477,11 @@ io.on('connection', function(client) {
         },
         function(callback){
             //call findMatch each time a user is looging in to find new recommandations
-            ControllerB.findMatch( req.query.userId , function(){
-                console.log("findMatch finished");
-                callback();
-            });
+            // ControllerB.findMatch( req.query.userId , function(){
+            //     console.log("findMatch finished");
+            //     callback();
+            // });
+             callback();
         }
         ], function(err) {
             if (err) {
