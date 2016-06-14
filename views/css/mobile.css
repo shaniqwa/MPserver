@@ -100,7 +100,8 @@
   }
   .inner-container{
     display: table-cell;
-    float: left;
+    /*float: left;*/
+    display: block;
     margin-right: 10px;
   }
   .consumer-container{
@@ -146,9 +147,13 @@
   .navbar-right.nav-icon{
       width:50px;
   }
+  #logo-gif{
+    width:100% !important;
+  }
   .login-container{
-    position: absolute;
-    bottom: 10%;
+    display: block;
+    /*position: absolute;*/
+    /*top: 10%;*/
     width:100%;
   }
 }

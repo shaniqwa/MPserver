@@ -52,25 +52,27 @@
                 <source src="movie.ogg" type="video/ogg" />
                 Your browser does not support the video tag.
               </video> -->
-              <img src="images/gif-grey.gif" width="400">
+              <img id="logo-gif" src="images/gif-grey.gif" >
+
+
               <div class="login-container">
-                <div class="consumer-container">
-                    <a href="/auth/google?type=Consumer" class="btn btn-google header-login">
-                      <span class="fa fa-google-plus"></span> Google</a>
-                    <a href="/auth/facebook?type=Consumer" class="btn btn-facebook header-login">
-                      <span class="fa fa-facebook"></span> Facebook</a>
-                    
-                    <div class="inner-container"><img src="images/consumer-white.png" width="20" class="navbar-right nav-icon"><p class="navbar-text navbar-right nav-text">Consumer</p></div>
-                    
+                    <div class="consumer-container">
+                        <div class="inner-container"><img src="images/consumer-white.png" width="20" class="navbar-right nav-icon"><p class="navbar-text navbar-right nav-text">Consumer</p></div>
+                        <a href="/auth/google?type=Consumer" class="btn btn-google header-login">
+                          <span class="fa fa-google-plus"></span> Signup/Login with Google</a>
+                        <a href="/auth/facebook?type=Consumer" class="btn btn-facebook header-login">
+                          <span class="fa fa-facebook"></span> Signup/Login with Facebook</a>
+                    </div>
+
+                     <div class="producer-container">
+                         <div class="inner-container">
+                            <img src="images/producer-white.png" width="20" class="navbar-right nav-icon"><p class="navbar-text navbar-right nav-text">Producer</p>
+                        </div>
+                        <a href="/auth/google?type=Producer" class="btn btn-google header-login">
+                          <span class="fa fa-google-plus"></span> Signup/Login with Google</a>
+                      </div>
                 </div>
 
-                 <div class="producer-container">
-                    <a href="/auth/google?type=Producer" class="btn btn-google header-login">
-                      <span class="fa fa-google-plus"></span> Google</a>
-                    <div class="inner-container"><img src="images/producer-white.png" width="20" class="navbar-right nav-icon"><p class="navbar-text navbar-right nav-text">Producer</p><div>
-                    
-                  </div>
-                </div>
             </div>
           <div class="bounce"><i class="fa fa-angle-double-down"></i></div>
      </div>
