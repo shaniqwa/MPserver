@@ -144,8 +144,12 @@ q.drain = function() {
 	PleasureGraph.findOne({ pieId: userID }).remove().exec();
 	ProducerSongs.findOne({ prodId: userID }).remove().exec();
 	ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
-
-	res.status(200).json("User has been deleted " + userID);
+	if(res){
+		res.status(200).json("User has been deleted " + userID);	
+	}else{
+		return true;
+	}
+	
 }
 
 	var me = {};
@@ -170,11 +174,14 @@ q.drain = function() {
 				ProducerSongs.findOne({ prodId: userID }).remove().exec();
 				ProducerSongsGeneral.findOne({ userId: userID }).remove().exec();
 
-				res.status(200).json("User has been deleted " + userID);
+				if(res){
+					res.status(200).json("User has been deleted " + userID);	
+				}else{
+					return true;
+				}
 
             }
 			for(var i=0; i<doc.followers.length; i++){
-				console.log("first for");
 				//push to queue
 				var task = {
 					userId: doc.followers[i].userId,
@@ -186,7 +193,6 @@ q.drain = function() {
 			}
 
 			for(var i=0; i<doc.following.length; i++){
-				console.log("second for");
 				//push to queue
 				var task = {
 					userId: doc.following[i].userId,
@@ -197,7 +203,12 @@ q.drain = function() {
 				});
 			}
 		}else{
-			res.status(200).json("User " + userID + " does not exsist");
+			if(res){
+				res.status(200).json("User " + userID + " does not exsist");
+			}else{
+				return false;
+			}
+			
 		}
 	});
 
@@ -346,6 +357,7 @@ exports.processWizardForm = function(req,res,data) {
           }else if(error){
             console.error("ERROR with request to WS: " + error);
             res.status(200).json("Sorry, something went wrong... Please try again later.");
+            deleteUser(null,data.userID);
           }
         });
     },
@@ -888,8 +900,8 @@ exports.processProducerWizardForm = function(req,res,data){
 
 	    //call getProducerPlaylistItems - populate all songs from youtube 
 	    function(callback){
-			console.log("songs from wizard:");
-			console.log(data.list);
+			// console.log("songs from wizard:");
+			// console.log(data.list);
 
 				var ProducerSongsDoc = {};
 
