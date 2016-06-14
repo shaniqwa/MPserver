@@ -18,7 +18,7 @@
 		bottom: 0;
 		z-index: 9998;
 		background-color: #222;
-		height: 48vh !important;
+		height: 45vh !important;
 	}
     .col-sm-3 .rightSidebar, .col-sm-7 .content{
     	display: none;
@@ -54,7 +54,7 @@
   .mobile-buttons{
   	padding-bottom: 0px;
     padding-top: 4px;
-    z-index: 9999;
+    z-index: 999;
     position: relative;
     bottom: 0;
     width: 100vw;
@@ -62,7 +62,7 @@
     //border-top: 2px solid white;
     display: block !important;
     background-color: #222;
-    height: 7vh;
+    height: 10vh;
     color: #03BBFF;
     line-height: 1.9;
     font-weight: bold;
@@ -71,7 +71,8 @@
   	display: table-cell;
     width: 50vw;
     text-align: center;
-    height: 7vh;
+    height: 10vh;
+    vertical-align: middle;
     border-top: 2px solid #03BBFF;
     border-right: 2px solid #03BBFF;
   }
@@ -79,7 +80,8 @@
   	display: table-cell;
     width: 50vw;
     text-align: center;
-    height: 7vh;
+    height: 10vh;
+    vertical-align: middle;
     border-top: 2px solid #03BBFF;
   }
   #fullpage .section{
@@ -156,10 +158,22 @@
     /*top: 10%;*/
     width:100%;
   }
+  body{
+    background-image: unset;
+  }
 }
  
 @media only screen and (min-device-width : 480px) and (max-device-width : 759px){
     .playlist-container{
         min-height: 170px;
+    }
+    .rightSidebar{
+      display: none;
+    }
+    .nav-tabs{
+      display: none;
+    }
+    .navbar{
+      display: none;
     }
 }	

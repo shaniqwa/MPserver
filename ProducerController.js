@@ -188,7 +188,7 @@ exports.updateCounters = function(res,prodId,songId,userId){
 } 
 
 exports.getFacebookYoutubeStatistics = function(res,prodId){
-	User.findOne({ userId : prodId}, function (err, docprod) {
+	User.findOne({ userId : prodId}, function (err, docprod) {//TODO GET CHANNEL ID (id in url)
                var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCILObhT-MhprF6OjkBZA4XQ&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
 				request.get(url, function (error, response, body) {
 
@@ -197,13 +197,11 @@ exports.getFacebookYoutubeStatistics = function(res,prodId){
 					         res.status(200).json(error.message);
 					    }
 						else if (!error && response.statusCode == 200) {
-							if(typeof prodId.subscribersCounter == 'undefined'){
-						    	//first time subscribers
-						    }
+							
 						    var obj = body.toString();
 						    obj = JSON.parse(obj);
-						    var tempObj = obj.items[0].statistics;
-						    res.status(200).json(tempObj);
+						    
+						    res.status(200).json(obj);
 					    }
 				});
                    

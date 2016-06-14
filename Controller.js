@@ -542,9 +542,10 @@ exports.processWizardForm = function(req,res,data) {
 
             // step 5 - findMatch
     	function(callback){
-    		ControllerB.findMatch( data.userID , function(){
-    			callback();
-    		});
+    		// ControllerB.findMatch( data.userID , function(){
+    		// 	callback();
+    		// });
+			callback();
     	}
 
         ],callback);
