@@ -288,13 +288,16 @@ io.on('connection', function(client) {
             }),function(req, res){
                 if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
                     console.log("auth with google, reg as consumer");
-                    return res.redirect('/BPwizard'); 
+                    // return res.redirect('/BPwizard'); 
+                    Controller.createMP(req,res);
                 }
-                if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+                else if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
                     console.log("auth with google, reg as producer");
                     return res.redirect('/ProducerWizard'); 
+                }else{
+                    res.redirect('/profile');    
                 }
-                res.redirect('/profile');
+                
             });
 
 
@@ -357,12 +360,15 @@ io.on('connection', function(client) {
             failureRedirect : '/'
         }),function(req, res){
             if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
-                return res.redirect('/BPwizard'); 
+                // return res.redirect('/BPwizard'); 
+                Controller.createMP(req,res);
             }
-            if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
+            else if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
                 return res.redirect('/ProducerWizard'); 
+            }else{
+                res.redirect('/profile');    
             }
-            res.redirect('/profile');
+            
         });
 
 
@@ -645,12 +651,12 @@ io.on('connection', function(client) {
     // =====================================
 
 	//Business Pleasure Wizard - a step in registration
-	app.get('/BPwizard', isLoggedIn, function (req, res){
-        // console.log("user id: " +req.user.userId);
-            res.render('BPwizard.ejs', {
-                user : req.user
-            });
-	});
+	// app.get('/BPwizard', isLoggedIn, function (req, res){
+ //        // console.log("user id: " +req.user.userId);
+ //            res.render('BPwizard.ejs', {
+ //                user : req.user
+ //            });
+	// });
 
 
 

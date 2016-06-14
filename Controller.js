@@ -276,15 +276,42 @@ exports.editProfileForm = function(req,res,data){
 
 
 //Process the BPwizard form at registration
-exports.processWizardForm = function(req,res,data) {
-	// console.log(data);
+exports.createMP = function(req,res) {
+	console.log("Create MP");
+	console.log(req.user);
 
 	var MP = {};
     MP.business = {};
-    MP.business.preferences = [];
+    MP.business.preferences =  [
+        "Rock",
+        "Classical",
+        "Country",
+        "Latin",
+        "Blues",
+        "World",
+        "Jazz",
+        "Reggae",
+        "Hip Hop"
+    ];
     MP.business.genres = [];
     MP.pleasure = {};
-    MP.pleasure.preferences = [];
+    MP.pleasure.preferences =  [
+        "Rock",
+        "Pop",
+        "rNb",
+        "Classical",
+        "Country",
+        "Electronic",
+        "Latin",
+        "Blues",
+        "World",
+        "Punk",
+        "Metal",
+        "Jazz",
+        "Folk",
+        "Reggae",
+        "Hip Hop"
+    ];
     MP.pleasure.genres = [];
 
     var url;
@@ -293,44 +320,23 @@ exports.processWizardForm = function(req,res,data) {
     //step1 : get user from db
     function(callback) {
     	var update = {is_New: 0};
-    	update.firstName = data.firstName;
-    	update.lastName = data.lastName
-    	update.country = data.country;
-        update.ageGroup = data.ageGroup;
-        update.profileImage = data.profileImg;
+		User.findOneAndUpdate({ 'userId' : req.user.userId },update,function(err, user) {
+		    if (err)
+		        console.log(err);
 
+		    if (user) {
+		        req.user = user;
+		        if(req.user.FB_AT){
+		        	console.log("register with facebook, token: " + req.user.FB_AT);
+		        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
+		        }else if(req.user.YT_AT){
+		        	console.log("register with google, token: " + req.user.YT_AT);
+		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
+		        }
 
-        emailValidation(data.email,data.userID,function(status,err){
-			if(err){
-				console.log(err);
-			}
-			if(!status){
-				return res.status(200).json({error: "Email is taken, please try again"});
-			}else{
-		     	update.email = data.email;
-
-        		User.findOneAndUpdate({ 'userId' : data.userID },update,function(err, user) {
-				    if (err)
-				        console.log(err);
-
-				    if (user) {
-				        req.user = user;
-				        if(req.user.FB_AT){
-				        	console.log("register with facebook, token: " + req.user.FB_AT);
-				        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
-				        }else if(req.user.YT_AT){
-				        	console.log("register with google, token: " + req.user.YT_AT);
-				        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
-				        }
-
-				        callback();
-				    } 
-				});
-     		}
-
+		        callback();
+		    } 
 		});
-
-        
     },
     //step 2: creat initial MP
     function(callback) {
@@ -348,115 +354,23 @@ exports.processWizardForm = function(req,res,data) {
             }
             // console.log(body); // Show the HTML for the Google homepage. 
             body = JSON.stringify([obj]);
-            MP.business.businessPieId = data.userID;
+            MP.business.businessPieId = req.user.userId;
             MP.business.genres = obj;
-            MP.pleasure.pleasurePieId = data.userID;
+            MP.pleasure.pleasurePieId = req.user.userId;
             MP.pleasure.genres = obj;
             // console.log(MP);
             callback();
           }else if(error){
             console.error("ERROR with request to WS: " + error);
-            res.status(200).json("Sorry, something went wrong... Please try again later.");
-            deleteUser(null,data.userID);
+            // res.status(200).json("Sorry, something went wrong... Please try again later.");
+			deleteUser(null,req.user.userId);
+            res.redirect('/');
+            
           }
         });
     },
     //step 3: save preferences recived in form and calculate new pies
      function(callback) {
-     	// MP.business.preferences
-		if(data.b_rock){
-			MP.business.preferences.push(data.b_rock);
-		}
-		if(data.b_pop){
-			MP.business.preferences.push(data.b_pop);
-		}
-		if(data.b_rnb){
-			MP.business.preferences.push(data.b_rnb);
-		}
-		if(data.b_classical){
-			MP.business.preferences.push(data.b_classical);
-		}
-		if(data.b_country){
-			MP.business.preferences.push(data.b_country);
-		}
-		if(data.b_elctronic){
-			MP.business.preferences.push(data.b_elctronic);
-		}
-		if(data.b_latin){
-			MP.business.preferences.push(data.b_latin);
-		}
-		if(data.b_blues){
-			MP.business.preferences.push(data.b_blues);
-		}
-		if(data.b_world){
-			MP.business.preferences.push(data.b_world);
-		}
-		if(data.b_punk){
-			MP.business.preferences.push(data.b_punk);
-		}
-		if(data.b_metal){
-			MP.business.preferences.push(data.b_metal);
-		}
-		if(data.b_jazz){
-			MP.business.preferences.push(data.b_jazz);
-		}
-		if(data.b_folk){
-			MP.business.preferences.push(data.b_folk);
-		}
-		if(data.b_reggae){
-			MP.business.preferences.push(data.b_reggae);
-		}
-		if(data.b_hiphop){
-			MP.business.preferences.push(data.b_hiphop);
-		}
-
-		// MP.pleasure.preferences
-		if(data.p_rock){
-			MP.pleasure.preferences.push(data.p_rock);
-		}
-		if(data.p_pop){
-			MP.pleasure.preferences.push(data.p_pop);
-		}
-		if(data.p_rnb){
-			MP.pleasure.preferences.push(data.p_rnb);
-		}
-		if(data.p_classical){
-			MP.pleasure.preferences.push(data.p_classical);
-		}
-		if(data.p_country){
-			MP.pleasure.preferences.push(data.p_country);
-		}
-		if(data.p_elctronic){
-			MP.pleasure.preferences.push(data.p_elctronic);
-		}
-		if(data.p_latin){
-			MP.pleasure.preferences.push(data.p_latin);
-		}
-		if(data.p_blues){
-			MP.pleasure.preferences.push(data.p_blues);
-		}
-		if(data.p_world){
-			MP.pleasure.preferences.push(data.p_world);
-		}
-		if(data.p_punk){
-			MP.pleasure.preferences.push(data.p_punk);
-		}
-		if(data.p_metal){
-			MP.pleasure.preferences.push(data.p_metal);
-		}
-		if(data.p_jazz){
-			MP.pleasure.preferences.push(data.p_jazz);
-		}
-		if(data.p_folk){
-			MP.pleasure.preferences.push(data.p_folk);
-		}
-		if(data.p_reggae){
-			MP.pleasure.preferences.push(data.p_reggae);
-		}
-		if(data.p_hiphop){
-			MP.pleasure.preferences.push(data.p_hiphop);
-		}
-
 		
 		var arrB = [];
 		var arrP = [];
