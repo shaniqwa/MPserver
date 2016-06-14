@@ -1102,8 +1102,13 @@ app.param('artist', function ( req, res, next, value){
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
     });
+	 app.param('oneGenre', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
     //route that recives parameter using defined parameters
-    app.get('/getPlaylist/:uid/:mode/:limit/:genre', 
+    app.get('/getPlaylist/:uid/:mode/:limit/:genre/:oneGenre', 
         function (req, res, next){
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -1111,8 +1116,8 @@ app.param('artist', function ( req, res, next, value){
         },
 
         function (req, res) {
-        	console.log("request for playlist with user id " +req.params.uid + " on mode " +req.params.mode + " list length " +req.params.limit + " genre: " + req.params.genre);
-        DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre);
+        	console.log("request for playlist with user id " +req.params.uid + " on mode " +req.params.mode + " list length " +req.params.limit + " genre: " + req.params.genre + "oneGenre mode:" + req.params.oneGenre);
+        DJ.getUserPlaylist(res,req.params.uid,req.params.mode,req.params.limit, req.params.genre,req.params.oneGenre);
     });
 
 

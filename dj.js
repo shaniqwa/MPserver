@@ -7,7 +7,7 @@ var async = require("async");
 // var times = 20;
 // var mode = 2;
 // var uid = 59;
-exports.getUserPlaylist = function(res,uid,mode,times,startGenre){
+exports.getUserPlaylist = function(res,uid,mode,times,startGenre,oneGenre){
 var user = new graph(uid,mode);
 user.buildGraph();
 //console.log(user.getGraph());
@@ -23,7 +23,7 @@ console.log("waiting");
    require('deasync').sleep(1000);
 }
 
-var ns = new nextsong(currGenre,uid,mode,user,startGenre);
+var ns = new nextsong(currGenre,uid,mode,user,startGenre,oneGenre);
 
 	async.waterfall([
 	    function(callback){

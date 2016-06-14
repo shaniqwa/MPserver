@@ -24,13 +24,14 @@ var youTube = new YouTube();
 
 youTube.setKey('AIzaSyAj8gdaFuSOQ2nBnBh1ShUVRsuhxoWFsXk');
 // constructor
-function nextSong(currGenre, user, mode, userGraph, startGenre) {
+function nextSong(currGenre, user, mode, userGraph, startGenre,oneGenre) {
     this.currGenre = currGenre;
     this.user = parseInt(user);
     this.mode = parseInt(mode);
     this.userGraph = userGraph;
     this.startGenre = startGenre;
     this.playlist = [];
+	this.oneGenre = oneGenre;
     //this.flagFinish = 0;
     ng = currGenre;
 }
@@ -50,7 +51,7 @@ nextSong.prototype.clearPlaylist = function() {
 
 // methods
 nextSong.prototype.getNextSong = function(NScallback) {
-    this.connectDB(this.currGenre, this.user, this.mode, this.userGraph, this.startGenre, function(err) {
+    this.connectDB(this.currGenre, this.user, this.mode, this.userGraph, this.startGenre,this.oneGenre, function(err) {
         if (err) {
             NScallback(err);
         } else {
@@ -250,8 +251,8 @@ function getRandTrackProducer(arrSongs,genre) {
     return theSong;
 };
 
-nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startGenre, callback) {
-    if ((runs != 0) && (typeof prevNG !== 'undefined')) {
+nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startGenre,oneGenre, callback) {
+    if ((runs != 0) && (typeof prevNG !== 'undefined') && oneGenre==0) {
         if (prevNG == false) {
             currGenre = ng;
         } else {
@@ -290,7 +291,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
 									if(document.genres[i].genreName == currGenre) { idCurrGenreArr = i; } // store id of currgenre in array
                                 }
                                 var newGenre = pickChoice(results);
-                                if ((currGenre == newGenre) || (runs == 1) ) { // if same genre or first run
+                                if ((currGenre == newGenre) || (runs == 1) || oneGenre==1 ) { // if same genre or first run or onegenre mode
                                     var prodOrConsumer = pickProducerConsumer();
                                     if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
 										prodOrConsumer = "artists";
@@ -547,7 +548,7 @@ nextSong.prototype.connectDB = function(currGenre, user, mode, userGraph, startG
                                 }
                                 var newGenre = pickChoice(results);
                                 ng = newGenre;
-                                if ((currGenre == newGenre) || (runs == 1)) { //stay in same genre or first run
+                                if ((currGenre == newGenre) || (runs == 1) || oneGenre == 1) { //stay in same genre or first run or onegenre mode
                                     var prodOrConsumer = pickProducerConsumer();
                                     if ((prodOrConsumer == "artists") || (document.genres[idCurrGenreArr].producers.length == 0)) { // known artist
 										prodOrConsumer = "artists";
