@@ -42,13 +42,13 @@ exports.registerNewUserFromMobile = function(platform, type, profile, token , re
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
         newUser.YT_RT = refreshToken;
-        newUser.YT_email = profile.emails[0].value; // pull the first email
-        newUser.username = profile.emails[0].value; //when signing up with google, the username is the email
-        newUser.email = profile.emails[0].value; 
-        newUser.firstName = profile.name.givenName;
-        newUser.lastName = profile.name.familyName;
+        newUser.YT_email = profile.email; // pull the first email
+        newUser.username = profile.email; //when signing up with google, the username is the email
+        newUser.email = profile.email; 
+        newUser.firstName = profile.name.split(" ")[0];
+        newUser.lastName = profile.name.split(" ")[1];
         if(profile._json.picture !== 'undefined'){
-            newUser.profileImage = profile._json.picture;    
+            newUser.profileImage = profile.photo;    
         }
         
     }else if(platform == "facebook"){
@@ -127,6 +127,7 @@ exports.registerNewUserFromMobile = function(platform, type, profile, token , re
             return console.error(err);
           }
             userid = doc.userId;
+            newUser = doc;
             // console.log("userid:" + userid);
             callback();
         });

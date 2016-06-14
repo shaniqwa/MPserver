@@ -187,10 +187,11 @@ io.on('connection', function(client) {
         },
         function(callback){
             //call findMatch each time a user is looging in to find new recommandations
-            ControllerB.findMatch( req.user.userId , function(){
-                console.log("findMatch finished");
-                callback();
-            });
+            // ControllerB.findMatch( req.user.userId , function(){
+            //     console.log("findMatch finished");
+            //     callback();
+            // });
+            callback();
         }
         ], function(err) {
             if (err) {
@@ -476,10 +477,11 @@ io.on('connection', function(client) {
         },
         function(callback){
             //call findMatch each time a user is looging in to find new recommandations
-            ControllerB.findMatch( req.query.userId , function(){
-                console.log("findMatch finished");
-                callback();
-            });
+            // ControllerB.findMatch( req.query.userId , function(){
+            //     console.log("findMatch finished");
+            //     callback();
+            // });
+             callback();
         }
         ], function(err) {
             if (err) {
@@ -714,18 +716,49 @@ io.on('connection', function(client) {
 
        
        data.user = JSON.parse(data.user);
-
+       console.log(data);
        var searchKey, 
        searchId = data.user.id;
        console.log(data.user.id);
        if (data.platform == "facebook"){
+         var key = 'FB_id';
+            var query = {};
+            query[key] = searchId;
+
         console.log("face succes");
-        searchKey = 'FB_id';
+        // try to find the user based on their facebook id
+         User.findOne(query, function(err, doc) {
+                if (err){
+                    console.log(err);
+                    res.json("error");
+                }
+                if (doc) {
+                    // if a user is found, log them in
+                    console.log(doc);
+                     res.json(doc.userId);
+                } else {
+                    // if the user isnt in our database, create a new user
+                    signup.registerNewUserFromMobile(data.platform, data.type, data.user, data.token, "refreshToken",  function(err,newUser){
+                        if(err){
+                            console.log(err);
+                            res.json("error");
+                        }else{
+                            console.log(newUser);
+                            res.json(newUser.userId);
+                        }
+
+                    });
+                }
+            });
+        
        }else if(data.platform == "google"){
-            searchKey = 'YT_id';
-       }
-       // try to find the user based on their google id
-            User.findOne({ 'FB_id' : searchId }, function(err, doc) {
+            console.log("google succes");
+            var key = 'YT_id';
+            var query = {};
+            query[key] = searchId;
+
+            // try to find the user based on their google id
+             User.findOne(query, function(err, doc) {
                 if (err){
                     console.log(err);
                     res.json(err);
@@ -735,12 +768,24 @@ io.on('connection', function(client) {
                     console.log(doc);
                      res.json(doc.userId);
                 } else {
+                    console.log("call rej with google");
                     // if the user isnt in our database, create a new user
                     signup.registerNewUserFromMobile(data.platform, data.type, data.user, data.token, "refreshToken",  function(err,newUser){
-                    });
+                           if(err){
+                            console.log(err);
+                            res.json("error");
+                        }else{
+                            console.log(newUser);
+                            res.json(newUser.userId);
+                        }
+
+                   });
                         // return done(null, newUser);
                 }
             });
+       }
+       
+           
     });
 
 
