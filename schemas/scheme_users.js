@@ -18,6 +18,7 @@ var usersSchema = new Schema({
     YT_RT: String,
     YT_email: String, 
     YT_id : String,   
+    YT_channelId: String,
     country: String,
     profileImage: String,
     mode: Number,

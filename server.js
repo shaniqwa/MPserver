@@ -756,16 +756,39 @@ io.on('connection', function(client) {
                     request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + req.user.YT_AT, function(error, response, body) {
                         if (!error && response.statusCode == 200) {
                             var temp = JSON.parse(body);
-                            var uploadsPlaylistID =  temp.items[0].contentDetails.relatedPlaylists.uploads;
 
-                            Controller.getProducerPlaylistItems(uploadsPlaylistID, req.user.YT_AT, function(error, list){
-                                if(error){
-                                    console.log(error);
-                                }
-                                uploadsList = list;
-                                // console.log(list);
-                                callback();
-                            })
+
+                            //can't register as producer if there are no uploads in youtube channel
+                            if(temp.items.length > 0){
+                                //get channel id from youtube and save to DB
+                                var channelID = temp.items[0].id;
+                                console.log("channelID: " + channelID);
+                                var update = {YT_channelId: channelID};
+                                User.findOneAndUpdate({ 'userId' : req.user.userId },update,function(err, user) {
+                                    if (err)
+                                        console.log(err);
+                                    if (user) {
+                                        req.user = user;
+                                    }
+                                    
+                                    var uploadsPlaylistID =  temp.items[0].contentDetails.relatedPlaylists.uploads;
+
+                                    Controller.getProducerPlaylistItems(uploadsPlaylistID, req.user.YT_AT, function(error, list){
+                                        if(error){
+                                            console.log(error);
+                                        }
+                                        uploadsList = list;
+                                        // console.log(list);
+                                        callback();
+                                    });
+
+                                });
+                            }else{
+                                console.log("can't register as producer, no songs!");
+                                //TODO: return this error to client
+                                res.redirect('/');
+                            }
+                            
                         }else{
                             console.log("error with http request to google. check ip settings in google console");
                         }
