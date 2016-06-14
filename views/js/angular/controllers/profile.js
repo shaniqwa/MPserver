@@ -289,6 +289,7 @@ var ticktick1 = function(){
 /***************INIT FUNCTION - ON LOAD PAGE****************/
 /***********************************************************/
   $scope.init = function(userID){
+    $scope.autosearchResults = [];  
      $scope.thereAreSongsInPlaylist = true;
       if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
@@ -522,7 +523,15 @@ activaTab('search');
 
 
 
+$scope.autosearch = function(text){
 
+  $scope.autosearchResults = [];  
+  $http.get(model.domain + '/searchuser/' + text).success(function(data){ 
+    for (i in data){
+       $scope.autosearchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
+    }
+  });
+};
 
 
 

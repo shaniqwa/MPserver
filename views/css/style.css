@@ -670,7 +670,33 @@ orites tab*/
     opacity:1;
     display: block;
 }
-
+.auto-search-response{
+  position: absolute;
+  top: 28px;
+    right: 2px;
+    left: 2px;
+  height: auto;
+  background-color: white;
+  max-height: 350px;
+  overflow-y:scroll; 
+  overflow-x: hidden;
+}
+.autosearchResults{
+  width:100% !important;
+  margin-right: 0 !important;
+ height: auto !important;
+ cursor: pointer;
+}
+.autosearchResults:hover{
+  background-color: #3772ff;
+}
+.autosearchResults img{
+  height:50px;
+  width:50px !important;
+}
+.autosearchResults p{
+  color:black;
+}
 /*followers tab*/
 #followers-tab{
   background-color: #d31fa4;
@@ -934,10 +960,12 @@ textarea, input , .btn{
 }
 .search-wrapper{
   margin-top: 6px;
+  margin-left: 117px;
+  position: relative;
 }
 .search-custom {
     height: 25px;
-    margin-left: 117px;
+    
     width: 370px !important;
     background-color: #4a4a4a;
     border: 0px;
