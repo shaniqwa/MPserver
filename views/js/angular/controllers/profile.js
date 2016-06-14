@@ -475,9 +475,9 @@ $scope.bringMePlaylist = function($event){
     }
          // console.log(genre);
     var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-         //console.log(url);
-    $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
-           // console.log(data);
+         console.log(url);
+    $http.get(url).success(function(data){
+           console.log(data);  
             $scope.thereAreSongsInPlaylist = true;
             $scope.videoFrame3 = true;
 
@@ -498,7 +498,7 @@ $scope.bringMePlaylist = function($event){
              }
             $scope.loaderStatus2 = "invisible-loader";
             $scope.nextSong();
-     
+            
            
       });
     };
@@ -535,14 +535,14 @@ $scope.follow = function(myID, userID){
     $http.get(model.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Following";
       $scope.fafollow = "fa-check";
-      console.log(data);
+      // console.log(data);
     });  
   }else if($scope.isFollowing == "Following"){
     // unfollow
     $http.get(model.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Follow";
       $scope.fafollow = "fa-plus";
-      console.log(data);
+      // console.log(data);
     });
   }
 };
@@ -607,8 +607,8 @@ $scope.drawDiagram = function(index){
            
          // console.log(genre);
          var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre;
-          //console.log(url);
-         $http.get(model.domain + '/getPlaylist/' + $scope.user.userId + '/' + myMode + '/' + 6 + '/' + genre).success(function(data){
+          console.log(url);
+         $http.get(url).success(function(data){
            // console.log(data);
            $scope.thereAreSongsInPlaylist = true;
            for(i in data){

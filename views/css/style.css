@@ -810,10 +810,10 @@ textarea, input , .btn{
   font-size: 20px;
   text-align: center;
   background-color: transparent;
-   -moz-transition: all .2s ease-in;
-    -o-transition: all .2s ease-in;
-    -webkit-transition: all .2s ease-in;
-    transition: all .2s ease-in;
+  -moz-transition: all .2s ease-in;
+  -o-transition: all .2s ease-in;
+  -webkit-transition: all .2s ease-in;
+  transition: all .2s ease-in;
 }
 .share-fb:hover{
   background-color: #3b5998;
@@ -886,7 +886,7 @@ textarea, input , .btn{
   background-color: #00cbff;
 }
 .search-btn {
-  height:20px;
+  height:25px;
   border-radius: 0px 30px 30px 0px;
   cursor: pointer;
   background-color: #4a4a4a;
@@ -934,12 +934,12 @@ textarea, input , .btn{
   margin-top: 6px;
 }
 .search-custom {
-  display: inline-block;
-  height:20px;
-  width: 88%;
-  background-color: #4a4a4a;
-  border: 0px;
-  color:#ffffff;
+    height: 25px;
+    margin-left: 117px;
+    width: 370px !important;
+    background-color: #4a4a4a;
+    border: 0px;
+    color: #ffffff;
 }
 .search-custom:focus{
   outline: 0;
