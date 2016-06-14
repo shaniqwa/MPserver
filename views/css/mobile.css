@@ -54,7 +54,7 @@
   .mobile-buttons{
   	padding-bottom: 0px;
     padding-top: 4px;
-    z-index: 9999;
+    z-index: 999;
     position: relative;
     bottom: 0;
     width: 100vw;
@@ -157,6 +157,9 @@
     /*position: absolute;*/
     /*top: 10%;*/
     width:100%;
+  }
+  body{
+    background-image: unset;
   }
 }
  

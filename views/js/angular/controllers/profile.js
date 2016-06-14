@@ -404,7 +404,7 @@ var ticktick1 = function(){
                    drawLocalVsWorldDiagram($scope.songCounters[$scope.selectedSong]);
                    //drawYTlistenersDiagram($scope.songCounters[$scope.selectedSong]);
                });
-               $http.get("https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCILObhT-MhprF6OjkBZA4XQ&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc").success(function(data){ 
+               $http.get(model.domain + '/getFacebookYoutubeStatistics/' + $scope.userId).success(function(data){ 
                     $scope.views = data.items[0].statistics.viewCount;
                     $scope.subscribers = data.items[0].statistics.subscriberCount;
                     $scope.comments = data.items[0].statistics.commentCount;
