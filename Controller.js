@@ -54,7 +54,7 @@ var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSong
 
 
 // Add a sond to favorites. song detains are sent via post and recived in data
-exports.addToFavorites = function(res,data) {
+var addToFavorites = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
 	  if (err){
@@ -68,7 +68,7 @@ exports.addToFavorites = function(res,data) {
 
 
 //get users favoties songs list
-exports.getFavorites = function(res,userId) {
+var getFavorites = function(res,userId) {
 	//addToSet make sure there are no duplicates is songs array.
 	Favorites.findOne({ userId: userId }, function (err, doc) {
 	  if (err){
@@ -84,7 +84,7 @@ exports.getFavorites = function(res,userId) {
 
 
 // remove song from users favorites list
-exports.removeFav = function(res,userId,song,artist) {
+var removeFav = function(res,userId,song,artist) {
 	
 	Favorites.update({userId: userId}, {$pull:{songs:{song:song,artist:artist} } }).exec(function(err) {
 	    res.status(200).json("New song has been removed from favorites successfully, songId: " + song + " " + artist);
@@ -94,7 +94,7 @@ exports.removeFav = function(res,userId,song,artist) {
 
 
 // add song to users blacklist
-exports.addToBlackList = function(res,data) {
+var addToBlackList = function(res,data) {
 	//addToSet make sure there are no duplicates is songs array.
 	BlackList.findOneAndUpdate({ userId: data.userId }, {$addToSet: { songs: data.songData }} ,{new: true}, function (err, doc) {
 	  if (err){
@@ -110,7 +110,7 @@ exports.addToBlackList = function(res,data) {
 
 //Delete User
 //safe delete of a user - remove all his data from different collections
-exports.deleteUser = function(res, userID){
+var deleteUser = function(res, userID){
 	
 	//remove user from all following users, by cheking the deleted user followers 
 	var q = async.queue(function (task, taskCallback) {
@@ -243,7 +243,7 @@ var emailValidation = function (email, id,callback){
 
 
 //process form and update users basic info
-exports.editProfileForm = function(req,res,data){
+var editProfileForm = function(req,res,data){
 	var update = {};
     	update.firstName = data.firstName;
     	update.lastName = data.lastName
@@ -275,8 +275,8 @@ exports.editProfileForm = function(req,res,data){
 
 
 
-//Process the BPwizard form at registration
-exports.createMP = function(req,res) {
+//Contiue registration : create MP with initial business/pleasure preferences
+var createMP = function(req,res) {
 	console.log("Create MP");
 	console.log(req.user);
 
@@ -478,7 +478,7 @@ exports.createMP = function(req,res) {
 
 
 //process form that update the users business/pleasure preferences
-exports.updatePreferences = function(req,res,data) {
+var updatePreferences = function(req,res,data) {
 	// console.log(data);
 
 	var MP = {};
@@ -740,7 +740,7 @@ exports.updatePreferences = function(req,res,data) {
 
 
 //get the producers Uploads from his youtube channel
-exports.getProducerPlaylists = function(YT_AT){
+var getProducerPlaylists = function(YT_AT){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
@@ -763,7 +763,7 @@ exports.getProducerPlaylists = function(YT_AT){
 
 
 //get all songs from a youtube playlist and insert to DB
-exports.getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
+var getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallback){
 	var list = [];
 	request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistID + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc&access_token=" + YT_AT, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
@@ -789,7 +789,7 @@ exports.getProducerPlaylistItems = function(playlistID, YT_AT,PlaylistItemsCallb
 
 
 //process the producer registration form
-exports.processProducerWizardForm = function(req,res,data){
+var processProducerWizardForm = function(req,res,data){
 
 	async.parallel([
 
@@ -951,7 +951,8 @@ exports.processProducerWizardForm = function(req,res,data){
 	function(err, results){
 	    // all done
 	    console.log('New Producer has been added successfully');
-		res.redirect('/BPwizard'); 
+		// res.redirect('/BPwizard'); 
+		createMP(req,res);
 	});
 
 }
@@ -959,7 +960,7 @@ exports.processProducerWizardForm = function(req,res,data){
 
 
 //internal function that returns all the users in the system sorted by reg date. also counts how many Consumers and Producers 
-exports.getUsers = function(res){
+var getUsers = function(res){
 	User.find({}).sort({registered: 'desc'}).exec(function(err, docs) { 
 		var results = {};
 		if(docs){
@@ -992,8 +993,19 @@ exports.getUsers = function(res){
 
 
 
-
-
+module.exports = {
+	deleteUser: deleteUser,
+	createMP: createMP,
+	addToFavorites: addToFavorites,
+	getFavorites : getFavorites,
+	removeFav : removeFav,
+	addToBlackList : addToBlackList,
+	updatePreferences : updatePreferences,
+	getProducerPlaylists :  getProducerPlaylists,
+	getProducerPlaylistItems: getProducerPlaylistItems,
+	processProducerWizardForm : processProducerWizardForm,
+	getUsers : getUsers
+}
 
 
 
