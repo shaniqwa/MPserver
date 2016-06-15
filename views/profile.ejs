@@ -1,6 +1,6 @@
 <!doctype html>
 <html ng-app="profile">
-<head>
+<head profile="http://www.w3.org/2005/10/profile">
 
     <title>Music Profile</title>  
 
@@ -118,6 +118,8 @@
 
                       <!-- PROFILE TAB -->
                       <div id="profile" class="tab-pane fade in active">
+                          
+
                           <div class="mode-container">
                               <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
                               <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
@@ -392,10 +394,7 @@
 
                     <!-- STATIC PAGE -->
                     <div id="developer" class="tab-pane fade">
-                          <h3>Developer API</h3>
-                          <div class="developer-container"> 
-                             
-                          </div>
+                          <%- include developer-api %>
                     </div>
                     <!--END STATIC PAGE -->
 
@@ -604,20 +603,13 @@
 <script>
 $(document).ready(function(){
 
+
+
+
   var playlist_height = $(".playlist-container").height() - $(".player-container").height() - 70;
   //console.log(playlist_height);
    $('.playlist-container').css({"height":playlist_height + "px"} );
 
-
-
-
-$(".search-custom").focusout(function(){
-    $(".auto-search-response").css("display", "none");
-});
-
-$(".search-custom").focus(function(){
-    $(".auto-search-response").css("display", "block");
-});
 
   $(".content").mCustomScrollbar();
 //mobile slider init
