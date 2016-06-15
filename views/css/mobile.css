@@ -161,9 +161,15 @@
   body{
     background-image: unset;
   }
+  .content {
+    display: none;
+  }
 }
  
 @media only screen and (min-device-width : 480px) and (max-device-width : 759px){
+  .content {
+    display: block;
+  }
     .playlist-container{
         min-height: 170px;
     }
