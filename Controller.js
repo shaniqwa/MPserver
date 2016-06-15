@@ -469,7 +469,12 @@ var createMP = function(req,res) {
 			console.log(err);  
         }
         console.log('New user has been added successfully');
-		res.redirect('/profile'); 
+        if(req.mobile){
+        	res.json(req.user.userId);
+        }else{
+        	res.redirect('/profile'); 	
+        }
+		
     });
 }
 
@@ -1004,7 +1009,8 @@ module.exports = {
 	getProducerPlaylists :  getProducerPlaylists,
 	getProducerPlaylistItems: getProducerPlaylistItems,
 	processProducerWizardForm : processProducerWizardForm,
-	getUsers : getUsers
+	getUsers : getUsers,
+	editProfileForm : editProfileForm
 }
 
 
