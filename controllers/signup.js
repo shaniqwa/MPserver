@@ -5,7 +5,7 @@ var configDB = require('./../config/database.js');
 var async = require("async");
 var request = require('request');
 var math = require('mathjs');
-
+var Controller = require("./../Controller.js").usersSchema; 
 //SCHEMAS
 // load up the user model
 var usersSchema = require("./../schemas/scheme_users.js").usersSchema; 

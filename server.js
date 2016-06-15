@@ -749,8 +749,12 @@ io.on('connection', function(client) {
                             console.log(err);
                             res.json("error");
                         }else{
+                            req.user = newUser;
                             console.log(newUser);
-                            res.json(newUser.userId);
+                            req.mobile = true;
+                            Controller.createMP(req,res);
+                            //return id to app
+                            // res.json(newUser.userId);
                         }
 
                     });
@@ -773,6 +777,7 @@ io.on('connection', function(client) {
                     // if a user is found, log them in
                     console.log(doc);
                      res.json(doc.userId);
+                     
                 } else {
                     console.log("call rej with google");
                     // if the user isnt in our database, create a new user
@@ -782,7 +787,10 @@ io.on('connection', function(client) {
                             res.json("error");
                         }else{
                             console.log(newUser);
-                            res.json(newUser.userId);
+                            req.user = newUser;
+                            req.mobile = true;
+                            Controller.createMP(req,res);
+                            // res.json(newUser.userId);
                         }
 
                    });
