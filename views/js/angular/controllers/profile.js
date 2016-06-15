@@ -94,6 +94,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
     $scope.fawhat = '';
     $scope.tracksYouMayLike = [];
     $scope.newFlag = false;
+    $scope.globalMode = "P";
    // create youtube player
     var player;
 
@@ -208,11 +209,19 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         }
        
     }
-
+$(document).on("click", ".navTimer2", function(){
+    jQuery(document).on('keyup',function(evt) {
+        if (evt.keyCode == 27) {
+          console.log("esc");
+           $scope.closeFullScreen();
+        }
+    });
+});
        
       var tick = function(){
        //$scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
-
+            $(".navTimer2")[0].click();
+            $(".navTimer2").trigger('click'); 
             hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
             seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
             minutes = new Date(player.getDuration() * 1000).toISOString().substr(17, 2);
@@ -458,22 +467,28 @@ $scope.changePie = function(mode){
   if(mode == "pleasure"){
     drawPie($scope.pleasure, $scope.user.profileImage);
      $('#pleasure').addClass('active');
+     $scope.globalMode = "P";
   }
   if(mode == "business"){
     drawPie($scope.business, $scope.user.profileImage);
     $('#business').addClass('active');
+    $scope.globalMode = "B";
   }
   if(mode == "artist"){
     drawPie($scope.artist.genres, $scope.user.profileImage);
     $('#artist').addClass('active');
+    $scope.globalMode = "A";
   }
 }
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
 $scope.bringMePlaylist = function($event){
-
-    $scope.track = [];
+    if($scope.globalMode == 'A'){
+          $scope.playMySongs(0);
+    }
+    else{
+       $scope.track = [];
     $scope.counter = 0;
     $scope.videoFrame3 = false;
     if($scope.videoFrame == false){
@@ -538,6 +553,8 @@ $scope.bringMePlaylist = function($event){
             
            
       });
+    }
+    
     };
 
 
@@ -1136,17 +1153,15 @@ console.log("inside recommandation");
         var result = youtubeTime * player.getDuration();
         player.seekTo(result);
    }
-
-
 /***********************************************************/
 /*************fullScreen FUNCTION*************/
 /***********************************************************/
    $scope.fullScreen = function(){
+
           $("iframe").addClass("fullScreenVideoStyle");
           $("body").addClass("BodyFullScreenStyle");
           $(".video-close-hide").addClass("video-close");
           $(".navbar-static-top").addClass("video-close-hide");
-          
    }
 
 
