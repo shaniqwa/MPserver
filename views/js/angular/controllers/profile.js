@@ -262,7 +262,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
       // 100 – The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.
       // 101 – The owner of the requested video does not allow it to be played in embedded players.
       // 150 – This error is the same as 101. It's just a 101 error in disguise!
-      function onPlayerError(event){
+  function onPlayerError(event){
         console.log("error accured - onPlayerError function");
          $scope.nextSong();
          if(event.data == 2){
@@ -488,7 +488,7 @@ $scope.bringMePlaylist = function($event){
         
     }
          // console.log(genre);
-    var url = model.domain + "/getPlaylist/" + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+    var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
          console.log(url);
     $http.get(url).success(function(data){
            console.log(data);  
@@ -625,7 +625,7 @@ $scope.updatePlaylist = function(genre){
       }
             
           
-      var url = model.domain + '/getPlaylist/' + $scope.user.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+      var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
       console.log(url);
       $http.get(url).success(function(data){
            console.log(data);

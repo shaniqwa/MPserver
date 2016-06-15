@@ -83,19 +83,8 @@ Highcharts.createElement('link', {
 Highcharts.theme = {
    colors: ["#06befe", "#3872f8", "#8900fe", "#d120a6", "#ff166f","#d120a6", "#8900fe","#3872f8","#ff166f"],
    chart: {
-      // backgroundColor: {
-      //    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-      //    stops: [
-      //       [0, '#2a2a2b'],
-      //       [1, '#3e3e40']
-      //    ]
-      // },
-
       // ###############    BACKGROUND COLOR   ###############
-      // backgroundColor: '#333335',
-      backgroundColor: 'rgba(51, 51, 53,0',  
-
-
+      backgroundColor: 'transparent',  
       style: {
          fontFamily: "'Source Sans Pro', sans-serif"
       },
@@ -149,7 +138,6 @@ Highcharts.theme = {
       }
    },
    tooltip: {
-      // backgroundColor: 'rgba(0, 0, 0, 0.85)',
       useHTML: true,
       animation: true,
       borderWidth: 0,
@@ -305,7 +293,7 @@ Highcharts.setOptions(Highcharts.theme);
         for(i in pieData){
             if($.inArray(pieData[i].category, categories) == -1){
                 categories.push(pieData[i].category);
-// console.log("color: " + counter);
+
                 var obj = {
                     y: 0,
                     color: colors[counter],
@@ -320,9 +308,8 @@ Highcharts.setOptions(Highcharts.theme);
                     counter++;
             }
         }
-        // console.log(data);
         
-
+        //push data to pie
         for(i in data){
             for(j in pieData){
                 if(pieData[j].category == data[i].drilldown.name){
@@ -346,14 +333,14 @@ Highcharts.setOptions(Highcharts.theme);
     // Build the data arrays
     for (i = 0; i < dataLen; i += 1) {
 
-        // add browser data
+        // add categories data
         Category.push({
             name: categories[i],
             y: data[i].y,
             color: data[i].color
         });
 
-        // add version data
+        // add genres data
         drillDataLen = data[i].drilldown.data.length;
         for (j = 0; j < drillDataLen; j += 1) {
             brightness = 0.2 - (j / drillDataLen) / 2;
@@ -365,11 +352,7 @@ Highcharts.setOptions(Highcharts.theme);
         }
     }
 
-
-// var pixelX = 438;
-// var pixelY = 276;
-// var pixelR = 70;
-
+    //position circle with profile image in the middle
     var circleX = 438;
     var circleY = 276;
     var circleR = 66;
@@ -397,7 +380,12 @@ function addCircle(chart){
 }
 
 
-    // Create the chart
+
+
+
+
+
+    // CREATE PIE
     $('#MPcontainer').highcharts({
         credits: {
             enabled: false
@@ -428,7 +416,7 @@ function addCircle(chart){
         // },
         yAxis: {
             title: {
-                text: 'Total percent market share'
+                text: ' ' 
             }
         },
         plotOptions: {
@@ -442,28 +430,37 @@ function addCircle(chart){
         tooltip: {
             valueSuffix: '%',
             positioner: function () {
-        var tooltipX, tooltipY;
-        tooltipX = this.chart.plotLeft + (this.chart.plotWidth  * 0.5)  - (152  * 0.5);;
-        tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (151 * 0.5);;
-            return { x: tooltipX, y: tooltipY };
-        },
-        formatter: function () {
-          var color = this.color;
-          color = color.replace("rgb", "rgba");
-          color = color.replace(")", ",0.7)");
+                var tooltipX, tooltipY;
+                tooltipX = this.chart.plotLeft + (this.chart.plotWidth  * 0.5)  - (152  * 0.5);;
+                tooltipY = this.chart.plotTop  + (this.chart.plotHeight * 0.5) - (151 * 0.5);;
+                    return { x: tooltipX, y: tooltipY };
+            },
+            formatter: function () {
+                var color = this.color;
+                color = color.replace("rgb", "rgba");
+                color = color.replace(")", ",0.7)");
 
-          var name = toTitleCase(this.point.name);
-
-
-          // console.log(color);
-        return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p><b>' + name + '</p>' + '<p>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
-    },
+                var name = toTitleCase(this.point.name);
+                return '<div class="custom-tooltip" style="background-color:' + color + '"><span><p><b>' + name + '</p>' + '<p>' + Highcharts.numberFormat(this.y).replace(",", " ") +'%</b></p></span></div>';
+            },
         },
         series: [{
             name: ' ',
             data: Category,
             size: '60%',
             innerSize: '70%',
+            events: {
+              mouseOver: function () {
+                  $("#playDJ").fadeOut();
+              },
+              mouseOut: function () {
+                  setTimeout(function(){
+                    if (  $("#playDJ").is(":hidden") ) {
+                      $("#playDJ").fadeIn();
+                    }
+                  }, 3000);
+              }
+            },
             dataLabels: {
                 formatter: function () {
                     // return this.y > 5 ? this.point.name : null;
@@ -484,9 +481,19 @@ function addCircle(chart){
             cursor: 'pointer',
             events: {
                     click: function (event) {
-                        // console.log(event.point.name);
+                        //fire event - a genre was selected
                         sendEvent(event.point.name);
-                    }
+                    },
+                    mouseOver: function () {
+                        $("#playDJ").fadeOut();
+                    },
+                    mouseOut: function () {
+                        setTimeout(function(){
+                          if (  $("#playDJ").is(":hidden") ) {
+                            $("#playDJ").fadeIn();
+                          }
+                        }, 3000);
+                    },
             },
             dataLabels: {
                 formatter: function () {
@@ -506,29 +513,26 @@ function addCircle(chart){
         }]
     }
     , function(chart) { // on complete
-    var r = chart.renderer,
-        pattern = r.createElement('pattern')
-            .attr({
-                id: 'pattern',
-                patternUnits: 'objectBoundingBox',
-                x: 0,
-                y: 0,
-                width: '100%',
-                height: '100%',
-                viewBox: '0 0 135 135'
-            })
-            .add(r.defs);
+            var r = chart.renderer,
+                pattern = r.createElement('pattern')
+                    .attr({
+                        id: 'pattern',
+                        patternUnits: 'objectBoundingBox',
+                        x: 0,
+                        y: 0,
+                        width: '100%',
+                        height: '100%',
+                        viewBox: '0 0 135 135'
+                    })
+                    .add(r.defs);
 
-   r.rect(0, 0, 135, 135, 0)
-       .attr('fill', '#ddd')
-       .add(pattern);
-    
-   r.image(profileImg,0,0,135,135)
-       .add(pattern);
-});
-
-
-// document.addEventListener("getPlaylist", getPlaylistHandler, false);
+           r.rect(0, 0, 135, 135, 0)
+               .attr('fill', '#ddd')
+               .add(pattern);
+            
+           r.image(profileImg,0,0,135,135)
+               .add(pattern);
+    });
 };
 
 
@@ -538,21 +542,7 @@ function addCircle(chart){
 
 function sendEvent(currGenre){
     $("#currGenre").html(currGenre);
-    $("#currGenre").trigger("click");
-    // var event = new CustomEvent(
-    //     "getPlaylist", 
-    //     {
-    //         detail: {
-    //             message: "a user request playlist",
-    //             genre: currGenre,
-    //             time: new Date(),
-    //         },
-    //         bubbles: true,
-    //         cancelable: true
-    //     }
-    // );
-    // document.getElementById("currGenre").dispatchEvent(event);
-    
+    $("#currGenre").trigger("click");    
 }
 
 
@@ -566,11 +556,8 @@ function convertHex(hex,opacity){
     return result;
 }
 
-function toTitleCase(str)
-{
+function toTitleCase(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
-// function getPlaylistHandler(event){
-//     console.log(event);
-// }
+

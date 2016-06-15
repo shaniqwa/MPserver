@@ -29,6 +29,9 @@ dataSum = parseInt(diagramData.counterAgeGroup1) + parseInt(diagramData.counterA
         credits: {
             enabled: false
         },
+        exporting: {
+            enabled: false
+        },
         legend: {
             enabled: false
         },

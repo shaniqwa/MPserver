@@ -42,6 +42,9 @@ var drawLocalVsWorldDiagram = function (diagramData) {
         credits: {
             enabled: false
         },
+        exporting: {
+         enabled: false
+        },
         plotOptions: {
             pie: {
                 allowPointSelect: true,

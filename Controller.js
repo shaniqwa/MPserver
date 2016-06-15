@@ -277,8 +277,8 @@ var editProfileForm = function(req,res,data){
 
 //Contiue registration : create MP with initial business/pleasure preferences
 var createMP = function(req,res) {
-	console.log("Create MP");
-	console.log(req.user);
+	console.log("Create MP, req.mobile:");
+	console.log(req.mobile);
 
 	var MP = {};
     MP.business = {};
@@ -470,7 +470,8 @@ var createMP = function(req,res) {
         }
         console.log('New user has been added successfully');
         if(req.mobile){
-        	res.json(req.user.userId);
+        	console.log("return user id to app: " + req.user.userId);
+        	res.status(200).json(req.user.userId);
         }else{
         	res.redirect('/profile'); 	
         }

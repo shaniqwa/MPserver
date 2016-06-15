@@ -1,0 +1,133 @@
+<h3>Developer API : The Music Profile Builder</h3>
+                          <div class="developer-container"> 
+                             <p>Topics</p>
+                             <ul class="api-topics">
+                               <li><a href="#getting-started">Getting Started</a></li>
+                               <li><a href="#make-request">Make a Request</a></li>
+                               <li><a href="#response">The Response</a></li>
+                               <li><a href="#example">Example</a></li>
+                             </ul>
+                            
+
+                            <a name="getting-started"></a> 
+                            <br><br>
+                             
+                             <h4><span style="color:#00cbff">Getting Started</span></h4>
+                             <p><strong>Get an access token:</strong> To make API requests you will need a Facebook access token or Google access token. To get the best results we recommand using both. If you want to make requests on behalf of a user, that token must be authenticated with the following permissions:</p>
+                             <p><strong>Google:</strong> Use Google OAuth 2.0 to authoriz YouTube Data API v3
+                             <ul class="api-topics">
+                               <li>youtube.readonly</li>
+                               <li>youtubepartner</li>
+                             </ul>
+                             </p>
+                             <p><strong>Facebook</strong>
+                             <ul class="api-topics">
+                               <li>user_likes</li>
+                             </ul>
+                             </p>
+
+
+                             <a name="make-request"></a>  
+                            <br><br>
+                            <h4><span style="color:#00cbff">Make a Request</span></h4>
+                            <p>Once you have an access token, you can make an API call. To make the call, user the following format to make http.GET request:</p>
+                            <p class="well">http://www.themusicprofile.com:8082/MP/<span style="color:#409ae7">{facebook_access_token}</span>/<span style="color:#ea4640">{google_access_token}</span></p>
+
+                            <table class="table-bordered well">
+                                <thead>
+                                  <th>Field</th>
+                                  <th>Required</th>
+                                  <th>Description</th>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>{facebook_access_token}</td>
+                                    <td>Optional</td>
+                                    <td>Put facebook access token here, or "null" if you want to get results only from Google.</td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>{google_access_token}</td>
+                                    <td>Optional</td>
+                                    <td>Put google access token here, or "null" if you want to get results only from Facebook.</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+
+                            
+
+
+                            <a name="response"></a>
+                            <br><br> 
+                            <h4><span style="color:#00cbff">The Response</span></h4>
+                            <p>All data is received as JSON. The Music Profile Builder provides an array of genres. Each genre is an object with the following keys:</p>
+                            <ul class="api-topics">
+                               <li>genre (String) : the genre name</li>
+                               <li>category (String) : the general category</li>
+                               <li>counter (Nubmer) : how many artists found in this genre</li>
+                               <li>percent (Nubmer) : this genre percent in the Music Profile </li>
+                               <li>artists (String Array) : all the artists found in this genre</li>
+                             </ul>
+
+
+
+
+                             <a name="example"></a> 
+                             <br><br> 
+                            
+                            <h4><span style="color:#00cbff">Example</span></h4>
+                            <p>Here is an example for a response:</p>
+
+                            <div class="well">
+                              <p>
+                                [<br>
+                                <span style="padding-left:10px">
+                                  {<br>
+                                  <span style="padding-left:20px">
+                                  genre: "psychedelic trance",<br>
+                                  <span style="padding-left:20px">
+                                  category: "Electronic",<br>
+                                  <span style="padding-left:20px">
+                                  counter: 2,<br>
+                                  <span style="padding-left:20px">
+                                  percent: 6.67,<br>
+                                  <span style="padding-left:20px">
+                                  artists: [<br>
+                                  <span style="padding-left:30px">
+                                  "Space Cat",<br>
+                                  <span style="padding-left:30px">
+                                  "Man With No Name"<br>
+                                  <span style="padding-left:30px">
+                                  ]<br>
+                                  <span style="padding-left:10px">
+                                  },<br>
+                                  <span style="padding-left:10px">
+                                  {<br>
+                                  <span style="padding-left:20px">
+                                  genre: "soul",<br>
+                                  <span style="padding-left:20px">
+                                  category: "rNb",<br>
+                                  <span style="padding-left:20px">
+                                  counter: 1,<br>
+                                  <span style="padding-left:20px">
+                                  percent: 3.33,<br>
+                                  <span style="padding-left:20px">
+                                  artists: [<br>
+                                  <span style="padding-left:30px">
+                                  "Amy Winehouse"<br>
+                                  <span style="padding-left:30px">
+                                  ]<br>
+                                  <span style="padding-left:10px">
+                                  },<br>
+                                  <!-- <span style="padding-left:10px"> -->
+                                  .<br>
+                                  <!-- <span style="padding-left:10px"> -->
+                                  .<br>
+                                  <!-- <span style="padding-left:10px"> -->
+                                  .<br>
+                                  <!-- <span style="padding-left:10px"> -->
+                                ]<br>
+                              </p>
+                            </div>
+
+                          </div>
