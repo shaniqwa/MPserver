@@ -58,8 +58,9 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
    $scope.videoFrame2 = false;
    $scope.videoFrame3 = false;
    $scope.nowPlaying = [];
-   $scope.msg = [];
+   $scope.msg = '';
    $scope.elementToFadeInAndOut = '';
+   $scope.elementToFadeInAndOut2 = '';
    $scope.loaderStatus = "invisible-loader";
    $scope.loaderStatus2 = "invisible-loader";
    $scope.firstTimePlaylist = false;
@@ -89,6 +90,8 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
    $scope.comments = 0;
     $scope.firstTimeStatistics = true;
     $scope.singleORdj = 0;
+    $scope.thisIsNotFirstTimePlaylist = false;
+    $scope.fawhat = '';
    // create youtube player
     var player;
 
@@ -124,7 +127,11 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
-        
+        if($scope.firstTimePlaylist == false){
+          $scope.firstTimePlaylist = true;
+          player.pauseVideo();
+
+        }
         $scope.$apply(function() {
           $interval(tick, $scope.tickInterval);
           $scope.videoFrame = true;
@@ -145,6 +152,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
 
         }
         if(event.data === 1){   //video playing
+        
           $scope.$apply(function() {
             $scope.toggle = true;
             
@@ -175,7 +183,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
               
         }
          if(event.data === 2){  //video paused
-          $scope.toggle = false;
+         
+           $scope.$apply(function() {
+              $scope.toggle = false;
+          });
         }
          if(event.data === 3){  //video buffering
           
@@ -334,6 +345,8 @@ var ticktick1 = function(){
                      
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
                      model.randomGenre = allGenres[getRandomNumber];
+
+                      $scope.updatePlaylist(model.randomGenre);
               }
             }
 
@@ -445,14 +458,14 @@ $scope.bringMePlaylist = function($event){
     if($scope.videoFrame == false){
         $scope.videoFrame2 = false; 
     }
-    if($scope.track.length == 1){
+    if($scope.track.length < 2){
         $scope.thereAreSongsInPlaylist = false;
     }
     else{
          $scope.thereAreSongsInPlaylist = true;
     }
     if($scope.firstTimePlaylist == false){
-       $scope.thereAreSongsInPlaylist = true;
+       $scope.thereAreSongsInPlaylist = false;
     }
      
     $scope.loaderStatus = "visible-loader";
@@ -497,6 +510,8 @@ $scope.bringMePlaylist = function($event){
                  onYouTubePlayerAPIReady();
                  $scope.firstTimePlaylist = true;
              }
+
+            
             $scope.loaderStatus2 = "invisible-loader";
             $scope.nextSong();
             
@@ -592,11 +607,12 @@ $scope.updatePlaylist = function(genre){
              $scope.videoFrame2 = false; 
           }
       }
+     
        
       $scope.loaderStatus = "visible-loader";
     
       var myMode = ($scope.data.select == 'P') ? 1 : 2;
-      console.log("updateplaylist:: " + genre);
+      console.log("updateplaylist: " + genre);
       if(genre === 'undefined'){
         genre = model.randomGenre;
       }
@@ -626,11 +642,12 @@ $scope.updatePlaylist = function(genre){
            }
            $scope.videoFrame3 = false;
            $scope.loaderStatus2 = "invisible-loader";
+
            if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
-               $scope.firstTimePlaylist = true;
                $scope.nextSong();
           }
+         
       });
 };
 
@@ -730,6 +747,7 @@ $scope.updatePlaylist = function(genre){
        
       if($scope.heart == "fa-heart-o"){
         //add to fav
+       
         $scope.heart = "fa-heart";
          if($scope.userId == $scope.myID){
           // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
@@ -749,11 +767,12 @@ $scope.updatePlaylist = function(genre){
             //console.log(model.domain);
             $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
                  //console.log(data);
-                 $scope.msg = $scope.track[$scope.counter - 1].songName + " added successfuly to your Favorites";
+                 
                  $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
             });
       }else{
         //remove from fav
+        
         $scope.heart = "fa-heart-o";
         //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
         $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + $scope.track[$scope.counter - 1].songName + '/' + $scope.track[$scope.counter - 1].artistName).success(function(data){
@@ -769,7 +788,7 @@ $scope.updatePlaylist = function(genre){
                        });
                   }
               }
-              $scope.msg = $scope.track[$scope.counter - 1].songName + " removed successfuly from your Favorites";
+              
               $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
         });
   
@@ -837,8 +856,15 @@ console.log("inside recommandation");
 /********************pauseSong FUNCTION*********************/
 /***********************************************************/
     $scope.pauseSong = function(){
+      $scope.elementToFadeInAndOut2 = '';
       player.pauseVideo();
       $scope.toggle = false;
+     
+      $timeout(function(){
+        $scope.elementToFadeInAndOut2 = "elementToFadeInAndOut2";
+      },100);
+     
+      
     };
 
 
@@ -850,8 +876,12 @@ console.log("inside recommandation");
 /********************playSong FUNCTION**********************/
 /***********************************************************/
     $scope.playSong = function(){
+      $scope.elementToFadeInAndOut3 = '';
          player.playVideo();
          $scope.toggle = true;
+         $timeout(function(){
+        $scope.elementToFadeInAndOut3 = "elementToFadeInAndOut2";
+      },100);
     };
 
 

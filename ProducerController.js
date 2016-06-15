@@ -189,7 +189,7 @@ exports.updateCounters = function(res,prodId,songId,userId){
 
 exports.getFacebookYoutubeStatistics = function(res,prodId){
 	User.findOne({ userId : prodId}, function (err, docprod) {//TODO GET CHANNEL ID (id in url)
-               var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCILObhT-MhprF6OjkBZA4XQ&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
+               var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" + docprod.YT_channelId + "&key=AIzaSyCFLDEh1SbsSvQcgEVHuMOGfKefK8Ko-xc";
 				request.get(url, function (error, response, body) {
 
 					    if(error){
