@@ -92,6 +92,8 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
     $scope.singleORdj = 0;
     $scope.thisIsNotFirstTimePlaylist = false;
     $scope.fawhat = '';
+    $scope.tracksYouMayLike = [];
+    $scope.newFlag = false;
    // create youtube player
     var player;
 
@@ -357,11 +359,14 @@ var ticktick1 = function(){
               }
             }
 
-
+            
 
             drawPie($scope.pleasure, $scope.user.profileImage);
             activaTab('profile');
+            
+             
 
+           
             // get user's favorits
             $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
                 $scope.favorits = [];
@@ -369,6 +374,12 @@ var ticktick1 = function(){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
                 }
                 model.myfavorites = $scope.favorits; 
+                if((model.myfavorites).length > 1){
+                   $scope.newFlag = true;
+                   $scope.tracksYouMayLike.push({artistName: model.myfavorites[0].artistName, songName: model.myfavorites[0].songName, duration: model.myfavorites[0].duration,url: model.myfavorites[0].url});
+                   $scope.tracksYouMayLike.push({artistName: model.myfavorites[1].artistName, songName: model.myfavorites[1].songName, duration: model.myfavorites[1].duration,url: model.myfavorites[1].url});
+                }
+               
             });
 
               

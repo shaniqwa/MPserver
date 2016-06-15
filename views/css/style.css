@@ -1599,6 +1599,9 @@ table.dataTable.no-footer {
   font-size: 70px;
   opacity: 0;
 }
+.tracksYouMayLikeItems{
+  cursor: pointer;
+}
 .playerControllersBlock {
   background-color: transparent;
   color: #c0c0c0;
