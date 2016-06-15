@@ -131,7 +131,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         event.target.playVideo();
         if($scope.firstTimePlaylist == false){
           $scope.firstTimePlaylist = true;
-          player.pauseVideo();
+          $timeout(function(){
+               player.pauseVideo();
+            },900);
+         
 
         }
         $scope.$apply(function() {
