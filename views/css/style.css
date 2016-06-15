@@ -1589,17 +1589,36 @@ table.dataTable.no-footer {
 }
 
 .msgBlock {
-  background-color: #222;
-  color: #64d8ff;
-  padding: 15px;
+  background-color: transparent;
+  color: #ff166f;
+  //padding: 15px;
   position: fixed;
   bottom: 10px;
   left: 10px;
   z-index: 9999;
-  font-size: 16px;
-  /*font-weight: bold;*/
-  border-radius: 0.5em;
-  border: 1px solid #64d8ff;
+  font-size: 70px;
+  opacity: 0;
+}
+.playerControllersBlock {
+  background-color: transparent;
+  color: #c0c0c0;
+  //padding: 15px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 9999;
+  font-size: 70px;
+  opacity: 0;
+}
+.playerControllersBlock2 {
+  background-color: transparent;
+  color: #c0c0c0;
+  //padding: 15px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 9999;
+  font-size: 70px;
   opacity: 0;
 }
 .elementToFadeInAndOut {
@@ -1628,6 +1647,35 @@ table.dataTable.no-footer {
     opacity: 0;
   }
 }
+
+
+.elementToFadeInAndOut2 {
+  -webkit-animation: fadeinout 1s linear 1 forwards;
+  animation: fadeinout 1s linear 1 forwards;
+}
+@-webkit-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .timeContainer{
   overflow: hidden;
   position: relative;
