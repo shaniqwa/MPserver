@@ -152,7 +152,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
 
         }
         if(event.data === 1){   //video playing
-        
+          $scope.elementToFadeInAndOut3 = '';
+           $timeout(function(){
+              $scope.elementToFadeInAndOut3 = "elementToFadeInAndOut2";
+            },100);
           $scope.$apply(function() {
             $scope.toggle = true;
             
@@ -186,6 +189,10 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
          
            $scope.$apply(function() {
               $scope.toggle = false;
+              $scope.elementToFadeInAndOut2 = '';
+               $timeout(function(){
+                  $scope.elementToFadeInAndOut2 = "elementToFadeInAndOut2";
+                },100);
           });
         }
          if(event.data === 3){  //video buffering
@@ -856,13 +863,9 @@ console.log("inside recommandation");
 /********************pauseSong FUNCTION*********************/
 /***********************************************************/
     $scope.pauseSong = function(){
-      $scope.elementToFadeInAndOut2 = '';
+      
       player.pauseVideo();
       $scope.toggle = false;
-     
-      $timeout(function(){
-        $scope.elementToFadeInAndOut2 = "elementToFadeInAndOut2";
-      },100);
      
       
     };
@@ -876,12 +879,10 @@ console.log("inside recommandation");
 /********************playSong FUNCTION**********************/
 /***********************************************************/
     $scope.playSong = function(){
-      $scope.elementToFadeInAndOut3 = '';
+     
          player.playVideo();
          $scope.toggle = true;
-         $timeout(function(){
-        $scope.elementToFadeInAndOut3 = "elementToFadeInAndOut2";
-      },100);
+        
     };
 
 
