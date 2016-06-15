@@ -610,6 +610,15 @@ $(document).ready(function(){
 
 
 
+
+$(".search-custom").focusout(function(){
+    $(".auto-search-response").css("display", "none");
+});
+
+$(".search-custom").focus(function(){
+    $(".auto-search-response").css("display", "block");
+});
+
   $(".content").mCustomScrollbar();
 //mobile slider init
  $(".rslides").responsiveSlides({
@@ -645,7 +654,7 @@ $(document).ready(function(){
             $('.rightSidebar').css({"height":content + "px"} );
     });
 
-    
+
 
 
   //post music preferences form
