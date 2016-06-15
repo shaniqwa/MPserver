@@ -158,7 +158,7 @@ ul{
   position: relative;
   top:200px;
   padding: 30px;
-  background-color: rgba(0, 0, 0,0.5);
+  background-color: rgba(0, 0, 0,0.7);
   width:65%;
   max-width: 960px;
   margin: 0 auto;
@@ -188,7 +188,7 @@ ul{
 .mobile-holder{
   width:420px;
   margin: 0 auto;
-  background-color: rgba(0, 0, 0,0.4);
+  background-color: rgba(0, 0, 0,0.7);
   position: relative;
   top:20%;
   padding: 20px;
