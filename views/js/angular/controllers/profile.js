@@ -134,6 +134,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
           $scope.firstTimePlaylist = true;
           $timeout(function(){
                player.pauseVideo();
+                $scope.toggle = false
             },900);
          
 
@@ -382,6 +383,7 @@ var ticktick1 = function(){
             // get user's favorits
             $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
                 $scope.favorits = [];
+                $scope.tracksYouMayLike = [];
                 for(i in data){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
                 }
@@ -1026,7 +1028,7 @@ console.log("inside recommandation");
                $scope.track.push({artistName: item.title, songName: item.title, url: url, active: flag});
              }
              else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: url, active: flag});
+               $scope.firstTracks.push({artistName: item.title, songName: item.title, url: url, active: flag});
              }
              //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              i++;
