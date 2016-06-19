@@ -237,6 +237,7 @@
                       <!-- STATISTICS -->
                     <div id="statistics" class="tab-pane fade" ng-if="user.typeOfUser == 'Producer'" >
                         <h3>Popularity Rate</h3>
+                        <p>Your YouTube channel</p>
                         <div class="col-sm-12">
                           <div id="counter" class="col-md-4 views">{{views}}<div class="viewstitle">Views</div></div>
                           <div id="counter" class="col-md-4 subscribers">{{subscribers}}<div class="subscriberstitle">Subscribers</div></div>
@@ -251,6 +252,7 @@
                        <div class="styled-select"><select name="name" id="select-song" ng-model="selectedSong" ng-options="selectedSong as selectedSong.title for selectedSong in songs" ng-change="drawDiagram(selectedSong.songId)">
                           <option ng-repeat="song in songs">{{song.title}}</option>
                        </select></div>
+                       <br><br>
                         <!-- <div>name: {{songs[selectedSong].title}}</div> -->
 
                           <!-- AGcontainer-->
@@ -387,7 +389,7 @@
                           </div>
                           <div class="FAQ well" onclick="toggle('faq7')">
                             <font size="3"><i>How can I contact The Music Profile's support?</i></font>
-                            <div id="faq7" class="ANS"> <font size = "3">Please contact us by mail to s.almog88@gmail.com and will respond to your request, or visit our <a ng-click="goToHelpPage()" href="#">help page</a></font></div>
+                            <div id="faq7" class="ANS"> <font size = "3">Please visit our <a ng-click="goToAboutPage()" href="#">About page to get all the ways to contact us. </a></font></div>
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
                             
@@ -550,7 +552,7 @@
                       
                     </div>
                      <hr>
-                     <h4 class="tracksYouMayLikeTitle" ng-show="newFlag">Listen Again!</h4>
+                     <h4 class="tracksYouMayLikeTitle" ng-show="newFlag">Listen Again</h4>
                      <div class="tracksYouMayLike">
                           <div class="tracksYouMayLikeItems item{{$index}}" ng-repeat="x in tracksYouMayLike track by $index" ng-click="playFavorites(x.url)">
                                     <div class="location"><strong>{{x.songName}}</strong></div>

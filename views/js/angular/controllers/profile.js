@@ -566,8 +566,9 @@ $scope.bringMePlaylist = function($event){
 $scope.search = function(text){
 
 activaTab('search');
-  $scope.searchResults = [];  
+    
   $http.get(model.domain + '/searchuser/' + text).success(function(data){ 
+    $scope.searchResults = [];
     for (i in data){
        $scope.searchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
@@ -577,9 +578,9 @@ activaTab('search');
 
 
 $scope.autosearch = function(text){
-
-  $scope.autosearchResults = [];  
+   
   $http.get(model.domain + '/searchuser/' + text).success(function(data){ 
+    $scope.autosearchResults = []; 
     for (i in data){
        $scope.autosearchResults.push({userID: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
