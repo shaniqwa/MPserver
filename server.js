@@ -1013,6 +1013,40 @@ app.param('artist', function ( req, res, next, value){
 
 
 
+    //WHO TO FOLLOW
+    app.param('userId', function ( req, res, next, value){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    //route that recives parameter using defined parameters
+    app.get('/whoToFollow/:userId', 
+        function (req, res, next){
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            app.set('json spaces', 4);
+            res.set("Content-Type", "application/json");
+            res.status(200);
+            next(); 
+        },
+
+        function (req, res) {
+            ControllerB.whoToFollow(req.params.userId, function(err,result){
+                if(err){
+                    console.log(err);
+                }else{
+                    res.json(result);
+                }
+            });
+
+            
+        
+    });
+
+
+
+
+
 
     //FOLLOW
     app.param('userF', function ( req, res, next, value){

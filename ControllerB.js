@@ -435,6 +435,44 @@ var follower = {};
 //Delete song from favorite
 exports.removeFav = function(res, data){
 	Favorites.update({ userId: data.userID }, { $pull: { 'songs': { song: data.songs.song } } },function(err,doc){
-		res.status(200).json("Songs has been deleted " + userID);
+		res.status(200).json("Song has been deleted " + userID);
 	});
+}
+
+
+exports.whoToFollow = function(userId,callback){
+	var result = {};
+	result.error = false;
+	User.findOne({userId : userId}, function(err, doc){
+		if(err){
+			console.log(err);
+			result.error = err;
+			callback(result,null);
+		}else if(doc){
+			var url =  "https://graph.facebook.com/v2.6/" + doc.FB_id+ "/friends?fields&access_token=" +  doc.FB_AT;
+			request.get(url, function (error, response, body) {
+		          if (!error && response.statusCode == 200) {
+		          		var obj = body.toString();
+		                obj = JSON.parse(obj);
+		                
+		                result.friends = obj;
+		                callback(null,result);
+
+		          }else if(error){
+		            console.error("ERROR with whoToFollow: " + error);
+		            result.error = "ERROR with whoToFollow: " + error;
+		            callback(result,null);
+		          }
+		      });
+
+		}else{
+			console.log("whoToFollow: no user found with id " + userId);
+			result.error = "whoToFollow: no user found with id " + userId;
+			callback(result,null);
+		}
+	
+
+
+	});
+
 }
