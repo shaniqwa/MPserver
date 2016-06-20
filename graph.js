@@ -46,6 +46,11 @@ var structure2 = {
 }
 /************Default Graph*************/
 
+if(this.mode == 1)
+    var gr = new Graph(structure);
+  else
+    var gr = new Graph(structure2);
+
 /************Constructor*************/
 function graph(pieId, mode) {
     this.pieId = parseInt(pieId);

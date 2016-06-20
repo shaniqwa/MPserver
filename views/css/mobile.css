@@ -19,6 +19,7 @@
 		z-index: 9998;
 		background-color: #222;
 		height: 40vh !important;
+    -webkit-overflow-scrolling: touch;
 	}
     .col-sm-3 .rightSidebar, .col-sm-7 .content{
     	display: none;
@@ -166,6 +167,15 @@
   }
   .content {
     display: none;
+  }
+  .playlistItem:last-child hr{
+    display: none;
+  }
+  #currGenre{
+    margin:0;
+  }
+  .playerControllersBlock2 ,.playerControllersBlock, .msgBlock{
+      display: none;
   }
 }
  

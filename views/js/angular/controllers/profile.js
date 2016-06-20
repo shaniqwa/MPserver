@@ -133,8 +133,13 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         if($scope.firstTimePlaylist == false){
           $scope.firstTimePlaylist = true;
           $timeout(function(){
-               player.pauseVideo();
+               //player.playVideo();
+                $(".fa-pause")[0].click();
+                $(".fa-pause").trigger('click');
+                $(".fa-play")[0].click();
+                $(".fa-play").trigger('click');
                 $scope.toggle = false
+
             },900);
          
 
