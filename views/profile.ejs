@@ -389,7 +389,7 @@
                           </div>
                           <div class="FAQ well" onclick="toggle('faq7')">
                             <font size="3"><i>How can I contact The Music Profile's support?</i></font>
-                            <div id="faq7" class="ANS"> <font size = "3">Please visit our <a ng-click="goToAboutPage()" href="#">About page to get all the ways to contact us. </a></font></div>
+                            <div id="faq7" class="ANS"> <font size = "3">Please visit our <a ng-click="goToAboutPage()" href="#">About page to get all the ways to contact </a></font></div>
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </div>
                             
@@ -464,33 +464,38 @@
                             <div class="details">
                                 
                                 <!-- <strong>Activity Token</strong>: {{user.activityToken}}<br> -->
-                                  <div ng-if="myID == user.userId">
-                                <strong><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp Email</strong>
-                                <p> {{user.email}}</p>
+                                <div ng-if="myID == user.userId">
+                                      <strong><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp Email</strong>
+                                      <p> {{user.email}}</p>
                                 </div>
 
-                                <strong><i class="fa fa-map-marker" aria-hidden="true"></i> &nbsp  Country</strong> 
-                                <p> {{user.country}}</p>
 
-                                <strong><i class="fa fa-users" aria-hidden="true"></i>&nbsp Age Group</strong>
-                                <p ng-if="user.ageGroup == 1">
-                                    Under 14
-                                </p>
-                                <p ng-if="user.ageGroup == 2">
-                                    15-25
-                                </p>
-                                <p ng-if="user.ageGroup == 3">
-                                    24-35
-                                </p>
-                                <p ng-if="user.ageGroup == 4">
-                                    35-44
-                                </p>
-                                <p ng-if="user.ageGroup == 5">
-                                    44-55
-                                </p>
-                                <p ng-if="user.ageGroup == 6">
-                                    55+
-                                </p>
+                                <div ng-if="user.country != null">
+                                    <strong><i class="fa fa-map-marker" aria-hidden="true"></i> &nbsp  Country</strong> 
+                                    <p> {{user.country}}</p>
+                                </div>
+
+                                <div ng-if="user.ageGroup != null">
+                                      <strong><i class="fa fa-users" aria-hidden="true"></i>&nbsp Age Group</strong>
+                                      <p ng-if="user.ageGroup == 1">
+                                          Under 14
+                                      </p>
+                                      <p ng-if="user.ageGroup == 2">
+                                          15-25
+                                      </p>
+                                      <p ng-if="user.ageGroup == 3">
+                                          24-35
+                                      </p>
+                                      <p ng-if="user.ageGroup == 4">
+                                          35-44
+                                      </p>
+                                      <p ng-if="user.ageGroup == 5">
+                                          44-55
+                                      </p>
+                                      <p ng-if="user.ageGroup == 6">
+                                          55+
+                                      </p>
+                                </div>
                             
                     <!-- END USER DETAILS -->
 
