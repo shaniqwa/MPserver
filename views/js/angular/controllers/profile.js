@@ -609,6 +609,8 @@ $scope.deleteAllSearches = function(text){
   $scope.autosearchResults = [];
 };
 
+  
+
 
 /***********************************************************/
 /****************FOLLOW FUNCTION*******************/
