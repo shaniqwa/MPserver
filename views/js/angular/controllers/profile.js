@@ -606,7 +606,10 @@ $scope.autosearch = function(text){
   });
 };
 $scope.deleteAllSearches = function(text){
-  $scope.autosearchResults = [];
+  $timeout(function(){
+            $scope.autosearchResults = [];
+  },200);
+  
 };
 
   
