@@ -68,7 +68,6 @@ module.exports = function(passport) {
 
     },
     function(req, token, refreshToken, profile, done) {
-        // console.log("state: " + req.query.state);
         profile.type = req.query.state;
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
@@ -108,14 +107,16 @@ module.exports = function(passport) {
                     if(user.is_New == 1){
                             return done(null, user);
                     }else{
-                        if(user.FB_AT != null){
-                            console.log("call update pie");
+                        if(user.FB_AT != null && (!req.query.state)){
+                            console.log("call update pie on user " + user.userId );
                             UpdateMP(user, function(err,callback){
                                 if(err){
                                     return console.log(err);
                                 }
                                 return done(null, user);    
                             }); 
+                        }else{
+                            return done(null, user); 
                         }
                     }
                 });
@@ -191,14 +192,17 @@ module.exports = function(passport) {
                     if(user.is_New == 1){
                             return done(null, user);
                     }else{
-                        if(user.YT_AT != null){
-                            console.log("call update pie");
+                        if(user.YT_AT != null && (!req.query.state)){
+                            console.log("call update pie on user " + user.userId );
+                            //TODO: check if both access tokens needs to be refreashed
                             UpdateMP(user, function(err,callback){
                                 if(err){
                                     return console.log(err);
                                 }
                                 return done(null, user);    
                             }); 
+                        }else{
+                            return done(null, user); 
                         }
                     }
                 });
