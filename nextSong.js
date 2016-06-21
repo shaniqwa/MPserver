@@ -111,7 +111,7 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 			console.log(error);
 		} else { // no error
 			if (result.items.length == 0) { // skip iter
-				console.log("*search on youtube : 0 results, keep looping");
+				// console.log("*search on youtube : 0 results, keep looping");
 				var i = 0;
 				var runsYT = 0;
 				var finYT = 0;
@@ -120,7 +120,7 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 						if (finYT == 1) {
 							return;
 						}
-						console.log("waiting for YT iter to finish");
+						// console.log("waiting for YT iter to finish");
 
 						require('deasync').sleep(1000);
 					}
@@ -210,7 +210,7 @@ function getRandTrack(artist) { // get's random track by artist
 	if (typeof artist === 'object') {
 		artist = artist.name;
 	}
-	console.log("getRandTrack: calling last fm...");
+	console.log("getRandTrack: calling last fm with artist : " + artist);
 	var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
 	var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
 	var theSong = Random.pick(engine, tracks, 0, tracks.length);
@@ -248,7 +248,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 		if (err) {
 			throw err;
 		} else {
-			console.log("[]successfully connected to the database");
+			// console.log("[]successfully connected to the database");
 			var collection = db.collection('Users');
 			collection.findOne({
 				userId : user

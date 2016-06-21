@@ -259,10 +259,10 @@ io.on('connection', function(client) {
                                 'https://www.googleapis.com/auth/youtubepartner-channel-audit'
                             ],
                     state: req.query.type
-                    })(req,res);
+                })(req,res);
 
         }else if(req.query.type == "Consumer"){
-       passport.authenticate(
+            passport.authenticate(
             'google', 
             { 
                 scope : [
@@ -272,10 +272,10 @@ io.on('connection', function(client) {
                             'https://www.googleapis.com/auth/youtubepartner'
                         ],
                 state: req.query.type
-                })(req,res);
-            }
+            })(req,res);
+        }
  
-        });
+    });
 
 
 
@@ -304,13 +304,16 @@ io.on('connection', function(client) {
 
     // connect google ---------------------------------
     // send to google to do the authentication
-    app.get('/connect/google', passport.authorize('google', { 
-                        scope : [
-                            'profile', 
-                            'email' , 
-                            'https://www.googleapis.com/auth/youtube.readonly', 
-                            'https://www.googleapis.com/auth/youtubepartner'
-                        ], }));
+    app.get('/connect/google', function(req, res){
+        passport.authorize('google', { 
+            scope : [
+                        'profile', 
+                        'email' , 
+                        'https://www.googleapis.com/auth/youtube.readonly', 
+                        'https://www.googleapis.com/auth/youtubepartner'
+                    ]
+        })(req,res);
+    });
 
     // the callback after google has authorized the user
     app.get('/connect/google/callback',
@@ -341,8 +344,8 @@ io.on('connection', function(client) {
     app.get('/auth/facebook', function(req, res){
         console.log("auth with facebook, user type: " + req.query.type);
         passport.authenticate(
-            'facebook', 
-            { scope :   [
+            'facebook', { 
+                scope :   [
                             'email',
                             'user_actions.music', 
                             'user_likes',
@@ -377,7 +380,17 @@ io.on('connection', function(client) {
 
     // connect facebook -------------------------------
     // send to facebook to do the authentication
-    app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email','user_actions.music', 'user_likes','user_location','user_friends'] }));
+    app.get('/connect/facebook', function(req, res){
+        passport.authorize('facebook',  { 
+            scope : [
+                        'email',
+                        'user_actions.music', 
+                        'user_likes',
+                        'user_location',
+                        'user_friends'
+                    ]
+        })(req,res);
+    });
 
     // handle the callback after facebook has authorized the user
     app.get('/connect/facebook/callback',
@@ -850,6 +863,8 @@ io.on('connection', function(client) {
                             
                         }else{
                             console.log("error with http request to google. check ip settings in google console");
+                            Controller.deleteUser(null,req.user.userId);
+                            res.redirect('/');
                         }
                     });
                 }else{
