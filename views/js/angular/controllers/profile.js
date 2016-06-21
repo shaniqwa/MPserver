@@ -605,7 +605,14 @@ $scope.autosearch = function(text){
     }
   });
 };
+$scope.deleteAllSearches = function(text){
+  $timeout(function(){
+            $scope.autosearchResults = [];
+  },200);
+  
+};
 
+  
 
 
 /***********************************************************/

@@ -72,7 +72,7 @@
                     <!-- <h3><span class="fa fa-play-circle font-size" ng-click="clickMe()"></span> Playlist</h3> -->
                     <div id="generalLoaderId" class="{{generalLoader}}" ng-hide="thereAreSongsInPlaylist"></div>
                     <p id="currGenre" ng-model="mod.currGenre" ng-click="bringMePlaylist($event)" customDir>{{mod.currGenre}}</p> 
-                     <div class="abs loader {{loaderStatus2}}"></div>
+                    
                     <div ng-repeat="x in track track by $index" class="playlistItem playlistItem{{$index}}" ng-class="{'first-item': $first}" ng-click="playThisSong(x.url)" ng-show="item + $index">                        
                         <div class="element{{$index}}">
                             <div class="location"><strong>{{x.songName}}</strong></div>

@@ -29,13 +29,13 @@
       </ul>
       <form id="search-form" ng-submit="search(searchText)" class="navbar-form navbar-left" role="search">
         <div class="form-group search-wrapper">
-          <input type="text" ng-model="searchText" ng-change="autosearch(searchText)" class="form-control search-form search-custom" placeholder="Search">
+          <input type="text" ng-model="searchText" ng-change="autosearch(searchText)" ng-blur="deleteAllSearches()" class="form-control search-form search-custom" placeholder="Search">
           <button type="submit" class="btn btn-default search-btn"><span class="fa fa-search"></button>
           <div class="auto-search-response mCustomScrollbar" data-mcs-theme="dark">
-                <div class="searchresults autosearchResults" ng-click="init(x.userID)" ng-repeat="x in autosearchResults">
+                <div class="searchresults autosearchResults" ng-click="init(x.userID)" ng-repeat="x in autosearchResults | orderBy: '-type' track by $index" ng-class="x.type == 'Producer' ? 'styledItem' : ''">
                                <img width="130" height="130" class="simg focus" border-radius: 100 ng-src="{{x.profileImage}}" /> 
                                <p>{{x.firstName}} {{x.lastName}}</p>
-                               <!-- <p>{{x.type}}</p> -->
+                                <p>{{x.type}}</p>
                             </div>
           </div>
         </div>
