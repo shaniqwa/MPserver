@@ -10,7 +10,7 @@
     	width:100%;
     	z-index: 9998;
     	//top:10vh;
-    	height: 45vh;
+    	height: 50vh;
     }
 	.playlist-container{
 		position: relative;
@@ -18,7 +18,8 @@
 		bottom: 0;
 		z-index: 9998;
 		background-color: #222;
-		height: 45vh !important;
+		height: 40vh !important;
+    -webkit-overflow-scrolling: touch;
 	}
     .col-sm-3 .rightSidebar, .col-sm-7 .content{
     	display: none;
@@ -33,12 +34,15 @@
     .playerControllers{
     	padding: 0;
     	margin-top: 10px;
+      position: relative;
+      z-index: 9999;
     }
     .timeContainer{
     	position: absolute;
     	left:0;
     	right:0;
     	bottom: 0;
+      z-index: 9998;
     }
     .leftSidebar{
     	height: 100%;
@@ -163,6 +167,15 @@
   }
   .content {
     display: none;
+  }
+  .playlistItem:last-child hr{
+    display: none;
+  }
+  #currGenre{
+    margin:0;
+  }
+  .playerControllersBlock2 ,.playerControllersBlock, .msgBlock{
+      display: none;
   }
 }
  

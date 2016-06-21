@@ -133,7 +133,13 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         if($scope.firstTimePlaylist == false){
           $scope.firstTimePlaylist = true;
           $timeout(function(){
-               player.pauseVideo();
+               //player.playVideo();
+                $(".fa-pause")[0].click();
+                $(".fa-pause").trigger('click');
+                $(".fa-play")[0].click();
+                $(".fa-play").trigger('click');
+                $scope.toggle = false
+
             },900);
          
 
@@ -382,6 +388,7 @@ var ticktick1 = function(){
             // get user's favorits
             $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
                 $scope.favorits = [];
+                $scope.tracksYouMayLike = [];
                 for(i in data){
                   $scope.favorits.push({artistName: data[i].artist, songName: data[i].song, duration: data[i].duration,url: data[i].url});
                 }
@@ -468,11 +475,13 @@ $scope.changePie = function(mode){
     drawPie($scope.pleasure, $scope.user.profileImage);
      $('#pleasure').addClass('active');
      $scope.globalMode = "P";
+     myMode = 1;
   }
   if(mode == "business"){
     drawPie($scope.business, $scope.user.profileImage);
     $('#business').addClass('active');
     $scope.globalMode = "B";
+    myMode = 2;
   }
   if(mode == "artist"){
     drawPie($scope.artist.genres, $scope.user.profileImage);
@@ -524,6 +533,11 @@ $scope.bringMePlaylist = function($event){
         
     }
          // console.log(genre);
+         if($scope.globalMode == "P"){
+           myMode = 1;
+         }
+         else myMode = 2;
+         console.log("myMode: " + myMode);
     var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
          console.log(url);
     $http.get(url).success(function(data){
@@ -673,8 +687,11 @@ $scope.updatePlaylist = function(genre){
       else{
             console.log("update playlist with genre: " + genre);
       }
-            
-          
+            if($scope.globalMode == "P"){
+             myMode = 1;
+           }
+           else myMode = 2; 
+          console.log("myMode: " + myMode);
       var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
       console.log(url);
       $http.get(url).success(function(data){
@@ -1040,7 +1057,7 @@ console.log("inside recommandation");
                $scope.track.push({artistName: item.title, songName: item.title, url: url, active: flag});
              }
              else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: url, active: flag});
+               $scope.firstTracks.push({artistName: item.title, songName: item.title, url: url, active: flag});
              }
              //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              i++;

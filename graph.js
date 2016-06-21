@@ -26,11 +26,30 @@ var structure = {
         }
     ]
 }
+var structure2 = {
+    pieId: 1,
+    nodes: [
+        {
+            name: 'test1', percent: 0, visited: 0, counter:0
+        },
+        {
+            name: 'test2', percent: 0, visited: 0, counter:0
+        }
+    ],
+    edges: [
+        {
+            name: 'test1->test2',
+            from: 'test1',
+            to: 'test2'
+        }
+    ]
+}
 /************Default Graph*************/
 
-/************Graph Object*************/
-var gr = new Graph(structure);
-/************Graph Object*************/
+if(this.mode == 1)
+    var gr = new Graph(structure);
+  else
+    var gr = new Graph(structure2);
 
 /************Constructor*************/
 function graph(pieId, mode) {
@@ -89,6 +108,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                       //console.log(this.related);
               /************Mode == Pleasure_pie*************/
               if(mode == 1){
+               var gr = new Graph(structure);
                 var collection = db.collection('Pleasure_pie');
                 var graphsCollection = db.collection('Pleasure_graph');
 
@@ -130,7 +150,9 @@ graph.prototype.connectDB = function(pieId, mode) {
                      throw err;
                   } 
                   else { //found pie data
+                   
                      this.pie = document;
+                     // console.log(this.pie);
                      for(o in this.pie.genres){
                       for(y in this.related.genres){
                          var genreNameTemp = this.pie.genres[o].genreName;
@@ -167,7 +189,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                          }
                       }
                     }
-                    
+                       //console.log(structure);
                       graphsCollection.update(
                          { pieId: pieId },
                          {
@@ -189,6 +211,8 @@ graph.prototype.connectDB = function(pieId, mode) {
 
            /************Mode == Business_pie*************/
            if(mode == 2){
+
+              var gr = new Graph(structure2);
               var collection = db.collection('Business_pie');
               var graphsCollection = db.collection('Business_graph');
 
@@ -198,14 +222,16 @@ graph.prototype.connectDB = function(pieId, mode) {
                      throw err;
                   } 
                   else { //console.log(document);
+                    //console.log(document);
                     if (document != null){
                         //structure = document;
-
+                         
                         for (i in document.nodes){
                           var someNode = gr.getNode(document.nodes[i].name);
                           if(typeof someNode === 'undefined')
                            gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
                         }
+
                         for(j in document.edges){
                           var outboundEdges = gr.getEdge(document.edges[j].name); 
 
@@ -232,6 +258,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                      throw err;
                   } 
                   else { //found pie data
+                   // console.log(document);
                      this.pie = document;  
                      //console.log(this.pie);
                      for(i in this.pie.genres){
@@ -269,7 +296,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                          }
                       }
                     }
-                     
+                     //console.log(structure2);
                      graphsCollection.update(
                          { pieId: pieId },
                          {
@@ -279,8 +306,8 @@ graph.prototype.connectDB = function(pieId, mode) {
                          },
                          { upsert: true }
                     );
-  statusa = 1;
-                 return gr;   
+                    statusa = 1;
+                    return gr;   
                   }
                 });
               }
@@ -302,12 +329,14 @@ graph.prototype.nextGenre = function(userId, startGenre, currGenre) {
   console.log("userId: " + userId + " startGenre: " + startGenre + " currGenre: " + currGenre);
   console.log(" ");
   console.log(" ");
+
     if(this.nextNode(currGenre)){ //if there is a circle in the graph and there are no nodes connected
        //return to stas genre after random
           return this.getRandomGenre(startGenre, currGenre);
     }
-
+     
     else{ 
+
       for(i in gr.nodes){
           gr.nodes[i].visited = 0;
       }
