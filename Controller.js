@@ -495,6 +495,9 @@ var updatePreferences = function(req,res,data) {
     MP.pleasure.preferences = [];
     MP.pleasure.genres = [];
 
+    var arrB = [];
+	var arrP = [];
+
     var url;
 
 	async.waterfall([
@@ -536,13 +539,16 @@ var updatePreferences = function(req,res,data) {
                 delete obj[i].genre;
                 delete obj[i].counter;
                 obj[i].producers = [];
+                arrB.push(obj[i]);
+                arrP.push(obj[i]);
             }
+
             // console.log(body); // Show the HTML for the Google homepage. 
             body = JSON.stringify([obj]);
             MP.business.businessPieId = data.userID;
-            MP.business.genres = obj;
+            // MP.business.genres = obj;
             MP.pleasure.pleasurePieId = data.userID;
-            MP.pleasure.genres = obj;
+            // MP.pleasure.genres = obj;
             // console.log(MP);
             callback();
           }else if(error){
@@ -646,58 +652,6 @@ var updatePreferences = function(req,res,data) {
 			MP.pleasure.preferences.push(data.p_hiphop);
 		}
 
-		
-		var arrB = [];
-		var arrP = [];
-
-		for(i in MP.business.genres){
-			arrB.push(MP.business.genres[i]);
-			arrP.push(MP.business.genres[i]);
-		}
-
- 		for(var i = arrB.length - 1; i >= 0; i--){
-			//check if category is in prefs
-			if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
-			    //In the array! all good
-			} else {
-			    //Not in the array, take this genre out of pie
-			    arrB.splice(i, 1);	
-			}
-		}
-
-		for(var j = arrP.length - 1; j >= 0; j--){
-				//check jf category js jn prefs
-				if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
-				    //jn the array! all good
-				} else {
-				    //Not jn the array, take thjs genre out of pje
-				    arrP.splice(j, 1);	
-				}
-		}
-
-		//calc new percentages
-		var Btotal = 0, Ptotal = 0;
-		for(i in arrB){
-			Btotal+= arrB[i].artists.length;
-		}
-
-		for(i in arrP){
-			Ptotal+= arrP[i].artists.length;
-		}
-
-		var len = arrB.length;
-		for(var k = 0; k<len; k++){
-			arrB[k].percent = (arrB[k].artists.length / Btotal) * 100;
-			arrB[k].percent = math.round(arrB[k].percent, 2);
-		}
-		var len = arrP.length;
-		for(var k = 0; k<len; k++){
-			arrP[k].percent = (arrP[k].artists.length / Ptotal) * 100;
-			arrP[k].percent = math.round(arrP[k].percent, 2);
-		}
-
-		MP.business.genres = arrB;
-		MP.pleasure.genres = arrP;
 
         callback();
     },
@@ -708,30 +662,97 @@ var updatePreferences = function(req,res,data) {
         async.waterfall([
             function(callback) {
                 // var business_pie = new BusinessPie(MP.business);
+                console.log(MP.business);
                 //Save user's business pie
                 BusinessPie.findOneAndUpdate({ 'businessPieId' : data.userID }, MP.business, function (err, doc) {
-                  if (err) {
-                    res.status(200).json("error saving user business pie: " + err.message);
-                    return console.error(err);
-                  }
-                  console.log("business pie updated");
-                  callback();
+                    if (err) {
+                    	res.status(200).json("error saving user business pie: " + err.message);
+                    	return console.error(err);
+                  	}
+
+                  	for(var i = arrB.length - 1; i >= 0; i--){
+						//check if category is in prefs
+						if (MP.business.preferences.indexOf(arrB[i].category) > -1) {
+						    //In the array! all good
+						} else {
+						    //Not in the array, take this genre out of pie
+						    arrB.splice(i, 1);	
+						}
+					}
+
+					//calc new percentages
+					var Btotal = 0;
+					for(i in arrB){
+						Btotal+= arrB[i].artists.length;
+					}
+
+					for(var j = 0; j<arrB.length; j++){
+						arrB[j].percent = (arrB[j].artists.length / Btotal) * 100;
+						arrB[j].percent = math.round(arrB[j].percent, 2);
+						console.log(arrB[j].genreName + " " + arrB[j].percent);
+					}
+
+                  //update genres in pie
+                    doc.genres = arrB; 
+                    //save pie
+                    doc.save(function (err, doc) {    
+                       if (err) {
+                         res.status(200).json("error saving user business pie: " + err.message);
+                         return console.error(err);
+                       }
+                        callback();
+                    });
                 });
             },
             function(callback) {
                 // var pleasure_pie = new PleasurePie(MP.pleasure);
                 //Save user's pleasure pie
                 PleasurePie.findOneAndUpdate({ 'pleasurePieId' : data.userID },MP.pleasure, function (err, doc) {
-                  if (err) {
-                    res.status(200).json("error saving user pleasure pie: " + err.message);
-                    return console.error(err);
-                  }
-                  console.log("pleasure pie updated");
-                  callback();
+                  	if (err) {
+                    	res.status(200).json("error saving user pleasure pie: " + err.message);
+                    	return console.error(err);
+                  	}
+
+                  	for(var j = arrP.length - 1; j >= 0; j--){
+						//check jf category js jn prefs
+						if (MP.pleasure.preferences.indexOf(arrP[j].category) > -1) {
+						    //jn the array! all good
+						} else {
+						    //Not jn the array, take thjs genre out of pje
+						    arrP.splice(j, 1);	
+						}
+					}
+
+					//calc new percentages
+					var Ptotal = 0;
+					for(i in arrP){
+						Ptotal+= arrP[i].artists.length;
+					}
+
+					for(var k = 0; k<arrP.length; k++){
+						arrP[k].percent = (arrP[k].artists.length / Ptotal) * 100;
+						arrP[k].percent = math.round(arrP[k].percent, 2);
+					}
+
+					//update genres in pie
+                    doc.genres = arrP; 
+                    //save pie
+                    doc.save(function (err, doc) {    
+                       	if (err) {
+                         	res.status(200).json("error saving user pleasure pie: " + err.message);
+                         	return console.error(err);
+                       	}
+                       	console.log("pleasure pie updated");
+                       	callback();
+                    });
                 });
             }
 
         ],callback);
+    },
+    //step 5: update graph
+    function(callback){
+    	callback();
     }
     ], function(err) {
         if (err) {

@@ -365,6 +365,7 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 
 UpdateMP = function(user,UpdateMPcallback){
     console.log("updating user MP.....");
+    //TODO: validate tokens , if exprired : use refresh token 
     request.get('http://52.35.9.144:8082/MP/'+ user.FB_AT +'/' + user.YT_AT, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             //fix result to match our pie schema
@@ -400,10 +401,7 @@ UpdateMP = function(user,UpdateMPcallback){
                                 //check if category is in prefs
                                 if (doc.preferences.indexOf(arrB[i].category) > -1) {
                                     //In the array! all good
-                                    // console.log("in business array: "+ arrB[i].category);
                                 } else {
-                                    //Not in the array, take this genre out of pie
-                                    // console.log("NOT in business array: "+ arrB[i].category);
                                     arrB.splice(i, 1);  
                                 }
                             }
@@ -434,21 +432,16 @@ UpdateMP = function(user,UpdateMPcallback){
                     });
                 },  
                 function(callback) {
-                    //findOndAndUpdate :  pleasure pies
                     PleasurePie.findOne({ pleasurePieId: user.userId }, function (err, doc) {
                           if (err){
                             callback(err);
                           } 
-                          //found pie
+
                         //update pie: compare data found in initial MP with user's preferences
                           for(var i = arrP.length - 1; i >= 0; i--){
                                 //check if category is in prefs
                                 if (doc.preferences.indexOf(arrP[i].category) > -1) {
-                                    //In the array! all good
-                                    // console.log("in business array: "+ arrP[i].category);
                                 } else {
-                                    //Not in the array, take this genre out of pie
-                                    // console.log("NOT in business array: "+ arrP[i].category);
                                     arrP.splice(i, 1);  
                                 }
                             }
@@ -485,7 +478,7 @@ UpdateMP = function(user,UpdateMPcallback){
                 console.log('Both pies are saved now');
                 UpdateMPcallback();
             });
-        }else if(error){ //error with lastfm request
+        }else if(error){ //error with lastfm http request
                 return console.error(error);
             }
     });
