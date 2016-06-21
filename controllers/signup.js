@@ -47,7 +47,7 @@ exports.registerNewUserFromMobile = function(platform, type, profile, token , re
         newUser.email = profile.email; 
         newUser.firstName = profile.name.split(" ")[0];
         newUser.lastName = profile.name.split(" ")[1];
-        if(profile._json.picture !== 'undefined'){
+        if(profile.photo !== 'undefined'){
             newUser.profileImage = profile.photo;    
         }
         
