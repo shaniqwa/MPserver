@@ -243,7 +243,7 @@ io.on('connection', function(client) {
 
     // 'https://www.googleapis.com/auth/youtube'
     app.get('/auth/google', function(req, res){
-        console.log("auth with google, user type: " + req.query.type);
+        console.log("/auth/google: auth with google, user type: " + req.query.type);
         //different permissions for Producer and Consumer
         if(req.query.type == "Producer"){
            passport.authenticate(
@@ -258,6 +258,8 @@ io.on('connection', function(client) {
                                 'https://www.googleapis.com/auth/youtube.upload',
                                 'https://www.googleapis.com/auth/youtubepartner-channel-audit'
                             ],
+                    accessType: 'offline', 
+                    approvalPrompt: 'force',
                     state: req.query.type
                 })(req,res);
 
@@ -271,6 +273,8 @@ io.on('connection', function(client) {
                             'https://www.googleapis.com/auth/youtube.readonly', 
                             'https://www.googleapis.com/auth/youtubepartner'
                         ],
+                accessType: 'offline', 
+                approvalPrompt: 'force',
                 state: req.query.type
             })(req,res);
         }
@@ -288,7 +292,6 @@ io.on('connection', function(client) {
             }),function(req, res){
                 if (req.user.is_New && req.user.typeOfUser == "Consumer"){ 
                     console.log("auth with google, reg as consumer");
-                    // return res.redirect('/BPwizard'); 
                     Controller.createMP(req,res);
                 }
                 else if (req.user.is_New && req.user.typeOfUser == "Producer"){ 
@@ -298,7 +301,7 @@ io.on('connection', function(client) {
                     res.redirect('/profile');    
                 }
                 
-            });
+    });
 
 
 

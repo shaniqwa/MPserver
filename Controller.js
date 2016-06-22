@@ -9,7 +9,7 @@ var request = require('request');
 autoIncrement.initialize(db);
 var math = require('mathjs');
 var ControllerB = require('./ControllerB');
-
+var refresh = require('passport-oauth2-refresh');
 
 //===============MODELS===============
 var usersSchema = require("./schemas/scheme_users.js").usersSchema; 
@@ -510,19 +510,64 @@ var updatePreferences = function(req,res,data) {
 
 		    if (user) {
 		        req.user = user;
-		        if(req.user.FB_AT && req.user.YT_AT){
-					url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT +  "/" + req.user.YT_AT;
-		        }
-		        else if(req.user.FB_AT){
-		        	console.log("register with facebook, token: " + req.user.FB_AT);
-		        	url = "http://52.35.9.144:8082/MP/" + req.user.FB_AT + "/null";
-		        }else if(req.user.YT_AT){
-		        	console.log("register with google, token: " + req.user.YT_AT);
-		        	url = "http://52.35.9.144:8082/MP/null/" + req.user.YT_AT;
-		        	console.log(url);
-		        }
+		        if(user.FB_AT && user.YT_AT){
+					refresh.requestNewAccessToken('google', user.YT_RT, function(err, accessToken, refreshToken) {
+		        		if(err){
+		        			console.log(err);
+		        		}else{
+			        		user.YT_AT = accessToken;
+			        		console.log("token refreshed");
+			        		console.log(accessToken);
+			        		if(refreshToken){
+			        			user.YT_RT = refreshToken;
+			        		}	
+		        		}
+		        		
+		        		url = "http://52.35.9.144:8082/MP/" + user.FB_AT +  "/" + user.YT_AT;
+		        		console.log("updatePreferences: update pie with google, token: " + user.YT_AT + " and facebook: " + user.FB_AT);
 
-		        callback();
+		        		//save user token
+                    	user.save(function (err, doc) {    
+                       		if (err) {
+                         		res.status(200).json("error saving user pleasure pie: " + err.message);
+                         		return console.error(err);
+                       		}
+                       		callback();
+                    	});
+					});
+					
+		        }
+		        else if(user.FB_AT){
+		        	console.log("updatePreferences: update pie with facebook, token: " + user.FB_AT);
+		        	url = "http://52.35.9.144:8082/MP/" + user.FB_AT + "/null";
+		        }else if(user.YT_AT){
+		        	console.log("YT_RT: " + user.YT_RT);
+		        	refresh.requestNewAccessToken('google', user.activityToken, function(err, accessToken, refreshToken) {
+		        		if(err){
+		        			console.log(err);
+		        		}else{
+			        		user.YT_AT = accessToken;
+			        		console.log("token refreshed");
+			        		console.log(accessToken);
+			        		if(refreshToken){
+			        			user.YT_RT = refreshToken;
+			        		}	
+		        		}
+
+		        		console.log("updatePreferences: update pie with google, token: " + user.YT_AT);
+		        		url = "http://52.35.9.144:8082/MP/null/" + user.YT_AT;
+		        		console.log(url);
+		        		//save user token
+                    	user.save(function (err, doc) {    
+                       		if (err) {
+                         		res.status(200).json("error saving user pleasure pie: " + err.message);
+                         		return console.error(err);
+                       		}
+                       		callback();
+                    	});
+					});
+		        	
+		        }
 		    } 
 		});
     },
@@ -542,14 +587,9 @@ var updatePreferences = function(req,res,data) {
                 arrB.push(obj[i]);
                 arrP.push(obj[i]);
             }
-
-            // console.log(body); // Show the HTML for the Google homepage. 
             body = JSON.stringify([obj]);
             MP.business.businessPieId = data.userID;
-            // MP.business.genres = obj;
             MP.pleasure.pleasurePieId = data.userID;
-            // MP.pleasure.genres = obj;
-            // console.log(MP);
             callback();
           }else if(error){
             return console.error("ERROR with request to WS: " + error);
@@ -661,8 +701,6 @@ var updatePreferences = function(req,res,data) {
 
         async.waterfall([
             function(callback) {
-                // var business_pie = new BusinessPie(MP.business);
-                console.log(MP.business);
                 //Save user's business pie
                 BusinessPie.findOneAndUpdate({ 'businessPieId' : data.userID }, MP.business, function (err, doc) {
                     if (err) {
@@ -689,7 +727,6 @@ var updatePreferences = function(req,res,data) {
 					for(var j = 0; j<arrB.length; j++){
 						arrB[j].percent = (arrB[j].artists.length / Btotal) * 100;
 						arrB[j].percent = math.round(arrB[j].percent, 2);
-						console.log(arrB[j].genreName + " " + arrB[j].percent);
 					}
 
                   //update genres in pie
