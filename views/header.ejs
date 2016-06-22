@@ -35,7 +35,7 @@
                 <div class="searchresults autosearchResults" ng-click="init(x.userID)" ng-repeat="x in autosearchResults | orderBy: '-type' track by $index" ng-class="x.type == 'Producer' ? 'styledItem' : ''">
                                <img width="130" height="130" class="simg focus" border-radius: 100 ng-src="{{x.profileImage}}" /> 
                                <p>{{x.firstName}} {{x.lastName}}</p>
-                                <p>{{x.type}}</p>
+                                <p><span style="color:#ccc">{{x.type}}</span></p>
                             </div>
           </div>
         </div>
