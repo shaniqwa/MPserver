@@ -2,6 +2,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var refresh = require('passport-oauth2-refresh');
 
 var mongoose = require('mongoose');
 var configDB = require('./database.js');
@@ -57,7 +58,7 @@ module.exports = function(passport) {
     // =========================================================================
     // GOOGLE ==================================================================
     // =========================================================================
-    passport.use(new GoogleStrategy({
+    var strategy_g = new GoogleStrategy({
 
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
@@ -75,15 +76,38 @@ module.exports = function(passport) {
 
         // check if the user is already logged in
         if (!req.user) {
-            // try to find the user based on their google id
-            User.findOne({ 'YT_id' : profile.id }, function(err, user) {
+            // try to find the user based on their google id or email
+            var email = null;
+             if(typeof profile.emails !== 'undefined'){
+                email = profile.emails[0].value; 
+            }    
+            User.findOne({ $or: [{ 'YT_id' : profile.id },{ 'email': email } ]}, function(err, user) {
                 if (err)
                     return done(err);
 
-                if (user) {
-                    // if a user is found, log them in
-                    return done(null, user);
-                } else {
+                if(user){
+                    if (user.YT_id) {
+                        // if a user is found by google id, log them in
+                        
+                        console.log("update google tokens: ");
+                        console.log(token);
+                        console.log(refreshToken);
+                        user.YT_AT = token;
+                        user.YT_RT = refreshToken;
+                        user.save(function(err){
+                            if(err){
+                                console.log(err);
+                            }else{
+                                return done(null, user);        
+                            }
+                        });
+                        
+                    } else if(user.email){
+                                //user found only by his email, which means he is registered with a defferent social account.
+                                //return that user already exsist, and direct to connect accounts.
+                                done(null, false, { message: 'user email exists' });
+                            }
+                }else{
                     // if the user isnt in our database, create a new user
                     registerNewUser("google",profile, token, refreshToken, function(err,newUser){
                         return done(null, newUser);
@@ -124,7 +148,10 @@ module.exports = function(passport) {
             }
         });
 
-    }));
+    });
+
+    passport.use("google", strategy_g);
+    refresh.use(strategy_g);
 
 
     // =========================================================================
@@ -137,7 +164,8 @@ module.exports = function(passport) {
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
         profileFields   : ['id','picture.type(large)', 'emails', 'displayName', 'name','birthday','location'],
-        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback : true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        enableProof: true
 
     },
 
@@ -148,19 +176,31 @@ module.exports = function(passport) {
         process.nextTick(function() {
         // check if the user is already logged in
         if (!req.user) {
-
-            // find the user in the database based on their facebook id
-            User.findOne({ 'FB_id' : profile.id }, function(err, user) {
+            var email = null;
+             if(typeof profile.emails !== 'undefined'){
+                email = profile.emails[0].value; 
+            }            
+            // find the user in the database based on their facebook id or email
+            User.findOne({ $or: [{ 'FB_id' : profile.id },{ 'email': email } ]}, function(err, user) {
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
                 if (err)
                     return done(err);
+                if(user){
+                    if (user.FB_id) {
+                        // if the user is found by facebook id, then log them in
+                        console.log("facebook tekens: ");
+                        console.log(token);
+                        console.log(refreshToken);
 
-                // if the user is found, then log them in
-                if (user) {
-                    return done(null, user); // user found, return that user
-                } else {
-                    // if there is no user found with that facebook id, create them
+                        return done(null, user); // user found, return that user
+                    } else if(user.email){
+                        //user found only by his email, which means he is registered with a defferent social account.
+                        //return that user already exsist, and direct to connect accounts.
+                        done(null, false, { message: 'user email exists' });
+                    }
+                }else{
+                    // if there is no user found with that facebook id or email, create them
                     registerNewUser("facebook",profile, token, refreshToken, function(err,newUser){
                         return done(null, newUser);
                     });
@@ -168,14 +208,15 @@ module.exports = function(passport) {
 
             });
              } else {
+
                 // user already exists and is logged in, we have to link accounts
                 var user = req.user; // pull the user out of the session
 
                 // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
-                // console.log("fb token: " + token);
                 user.FB_RT = refreshToken;
+
                  if(typeof profile.emails !== 'undefined'){
                     user.FB_email = profile.emails[0].value; 
                 }
@@ -217,6 +258,7 @@ module.exports = function(passport) {
 
 //by google
 registerNewUser = function(platform, profile, token , refreshToken , NewUserCallback){
+    console.log("reg new user, refresh token : " + refreshToken);
     var newUser = new User();
     // var url;
     console.log(profile.type);
