@@ -95,6 +95,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
     $scope.tracksYouMayLike = [];
     $scope.newFlag = false;
     $scope.globalMode = "P";
+    $scope.canIClick = true;
    // create youtube player
     var player;
 
@@ -493,6 +494,7 @@ $scope.changePie = function(mode){
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
 $scope.bringMePlaylist = function($event){
+
     if($scope.globalMode == 'A'){
           $scope.playMySongs(0);
     }
@@ -540,38 +542,46 @@ $scope.bringMePlaylist = function($event){
          console.log("myMode: " + myMode);
     var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
          console.log(url);
-    $http.get(url).success(function(data){
-           console.log("raw data from server:");  
-           console.log(data);  
 
-            $scope.thereAreSongsInPlaylist = true;
-            $scope.videoFrame3 = true;
+         if($scope.canIClick){
+                        $scope.canIClick = false;
 
-            $scope.track = [];
-            for(i in data){
-                 if(data[i].type == 'producer'){
-                  var startUrl = "https://www.youtube.com/watch?v=";
-                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 
-                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
-                 }
-                 else{
-                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
-                 }
-             }
-             console.log("the playlist:");
-             console.log($scope.track);
-             if($scope.firstTimePlaylist == false){
-                 onYouTubePlayerAPIReady();
-                 $scope.firstTimePlaylist = true;
-             }
+                          $http.get(url).success(function(data){
+                                 $scope.canIClick = true;
+                                 console.log("raw data from server:");  
+                                 console.log(data);  
 
-            
-            $scope.loaderStatus2 = "invisible-loader";
-            $scope.nextSong();
-            
-           
-      });
+                                  $scope.thereAreSongsInPlaylist = true;
+                                  $scope.videoFrame3 = true;
+
+                                  $scope.track = [];
+                                  for(i in data){
+                                       if(data[i].type == 'producer'){
+                                        var startUrl = "https://www.youtube.com/watch?v=";
+                                        //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                                       
+                                         $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
+                                       }
+                                       else{
+                                         $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
+                                       }
+                                   }
+                                   console.log("the playlist:");
+                                   console.log($scope.track);
+                                   if($scope.firstTimePlaylist == false){
+                                       onYouTubePlayerAPIReady();
+                                       $scope.firstTimePlaylist = true;
+                                   }
+
+                                  
+                                  $scope.loaderStatus2 = "invisible-loader";
+                                  $scope.nextSong();
+                                  
+                                 
+                            });
+          }
+          else console.log("you can not click");
+
     }
     
     };
@@ -1024,16 +1034,16 @@ console.log("inside recommandation");
          angular.forEach($scope.tempTrack, function(item){
             var flag = (item.url == url) ? 1:0;
             if(item.url == url){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
             }
             else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
             }
              i++;
          });
         
             angular.forEach($scope.firstTracks, function(item){
-                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag, currGenre: item.currGenre});
+                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
             });
          
          
