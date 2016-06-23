@@ -121,7 +121,9 @@ module.exports = function(passport) {
                 // update the current users google credentials
                 user.YT_id    = profile.id;
                 user.YT_AT = token;
-                user.YT_RT = refreshToken;
+                if(refreshToken){
+                    user.YT_RT = refreshToken;    
+                }
                 user.YT_email = profile.emails[0].value; 
 
                 // save the user
@@ -215,7 +217,10 @@ module.exports = function(passport) {
                 // add current users facebook credentials
                 user.FB_id    = profile.id;
                 user.FB_AT = token;
-                user.FB_RT = refreshToken;
+                if(refreshToken){
+                    user.FB_RT = refreshToken;    
+                }
+                
 
                  if(typeof profile.emails !== 'undefined'){
                     user.FB_email = profile.emails[0].value; 
@@ -283,7 +288,13 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         newUser.firstName = profile.name.givenName;
         newUser.lastName = profile.name.familyName;
         if(profile._json.picture !== 'undefined'){
-            newUser.profileImage = profile._json.picture;    
+            //if google defualt image - use our own defualt image
+            if(profile._json.picture == "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"){
+                newUser.profileImage = "http://themusicprofile.com/images/defualt_avatar.png";
+            }else{
+                newUser.profileImage = profile._json.picture;        
+            }
+            
         }
         
     }else if(platform == "facebook"){
