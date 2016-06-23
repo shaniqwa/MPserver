@@ -1024,16 +1024,16 @@ console.log("inside recommandation");
          angular.forEach($scope.tempTrack, function(item){
             var flag = (item.url == url) ? 1:0;
             if(item.url == url){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
             }
             else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
             }
              i++;
          });
         
             angular.forEach($scope.firstTracks, function(item){
-                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag, currGenre: item.currGenre});
             });
          
          
