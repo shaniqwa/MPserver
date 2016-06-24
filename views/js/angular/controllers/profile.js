@@ -359,20 +359,24 @@ var ticktick1 = function(){
                    //onYouTubePlayerAPIReady();
                    //$scope.firstTimePlaylist = true;
                     var allGenres = [];
-                    if($scope.data.select == 'B'){
+                   
                        for(i in data.business.genres){
                         allGenres.push(data.business.genres[i].genreName);
-                     }
-                    }
-                    if($scope.data.select == 'P'){
+                        }
+                   
+                    var getRandomNumber = Math.floor((Math.random() * allGenres.length));
+                     model.randomGenreB = allGenres[getRandomNumber];
+
+                   var allGenres = [];
+                   
                       for(j in data.pleasure.genres){
                             allGenres.push(data.pleasure.genres[j].genreName);
-                     }
-                    }
+                      }
+                   
                      
                      
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
-                     model.randomGenre = allGenres[getRandomNumber];
+                     model.randomGenreP = allGenres[getRandomNumber];
 
                       // $scope.updatePlaylist(model.randomGenre);
               }
@@ -499,6 +503,7 @@ $scope.bringMePlaylist = function($event){
           $scope.playMySongs(0);
     }
     else{
+      var genre = ($scope.globalMode == 'B') ? model.randomGenreB : model.randomGenreP;
        $scope.track = [];
     $scope.counter = 0;
     $scope.videoFrame3 = false;
@@ -521,12 +526,12 @@ $scope.bringMePlaylist = function($event){
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
     
     if(typeof $event === 'undefined'){
-        var genre =  model.randomGenre;
+        //var genre =  model.randomGenre;
         $scope.singleORdj = 0;
     }else{
         $scope.singleORdj = 1;
         if(typeof $event.currentTarget === 'undefined'){
-          var genre = model.randomGenre;
+          //var genre = model.randomGenre;
         }
         else{
           var genre = $event.currentTarget.innerHTML;
@@ -695,7 +700,7 @@ $scope.updatePlaylist = function(genre){
       var myMode = ($scope.data.select == 'P') ? 1 : 2;
       
       if(genre === 'undefined'){
-        genre = model.randomGenre;
+        genre = (myMode == 1) ? model.randomGenreP : model.randomGenreB;
       }
 
      if($scope.singleORdj == 0 ){
