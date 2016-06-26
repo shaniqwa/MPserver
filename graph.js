@@ -45,18 +45,21 @@ var structure2 = {
     ]
 }
 /************Default Graph*************/
-
-if(this.mode == 1)
-    var gr = new Graph(structure);
-  else
-    var gr = new Graph(structure2);
-
+var gr
 /************Constructor*************/
 function graph(pieId, mode) {
     this.pieId = parseInt(pieId);
     this.mode = parseInt(mode);
-    
+    if(mode == 1){
+     gr = null;
+     gr = new Graph(structure);
+   }
+  else{
+     gr = null;
+     gr = new Graph(structure2);
+   }
 }
+
 /************Constructor*************/
 
 /************Update Graph*************/
@@ -378,11 +381,13 @@ graph.prototype.findCycle = function(startGenre, currGenre) {
       console.log("*************************************************");
       console.log("#: nextGenre of " + currGenre + " creats a cycle");
       console.log("print cycle: ")
+     
       for(b in gr.nodes){
         if (gr.nodes[b].visited == 1){
-          console.log(gr.nodes[b].name + " ");
+          console.log(gr.nodes[b].name + "=> ");
         }
       }
+      
       console.log("*************************************************");
       console.log(" ");
       console.log(" ");

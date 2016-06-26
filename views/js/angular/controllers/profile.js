@@ -95,6 +95,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
     $scope.tracksYouMayLike = [];
     $scope.newFlag = false;
     $scope.globalMode = "P";
+    $scope.canIClick = true;
    // create youtube player
     var player;
 
@@ -358,20 +359,24 @@ var ticktick1 = function(){
                    //onYouTubePlayerAPIReady();
                    //$scope.firstTimePlaylist = true;
                     var allGenres = [];
-                    if($scope.data.select == 'B'){
+                   
                        for(i in data.business.genres){
                         allGenres.push(data.business.genres[i].genreName);
-                     }
-                    }
-                    if($scope.data.select == 'P'){
+                        }
+                   
+                    var getRandomNumber = Math.floor((Math.random() * allGenres.length));
+                     model.randomGenreB = allGenres[getRandomNumber];
+
+                   var allGenres = [];
+                   
                       for(j in data.pleasure.genres){
                             allGenres.push(data.pleasure.genres[j].genreName);
-                     }
-                    }
+                      }
+                   
                      
                      
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
-                     model.randomGenre = allGenres[getRandomNumber];
+                     model.randomGenreP = allGenres[getRandomNumber];
 
                       // $scope.updatePlaylist(model.randomGenre);
               }
@@ -493,10 +498,12 @@ $scope.changePie = function(mode){
 /****************bringMePlaylist FUNCTION*******************/
 /***********************************************************/
 $scope.bringMePlaylist = function($event){
+
     if($scope.globalMode == 'A'){
           $scope.playMySongs(0);
     }
     else{
+      var genre = ($scope.globalMode == 'B') ? model.randomGenreB : model.randomGenreP;
        $scope.track = [];
     $scope.counter = 0;
     $scope.videoFrame3 = false;
@@ -519,12 +526,12 @@ $scope.bringMePlaylist = function($event){
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
     
     if(typeof $event === 'undefined'){
-        var genre =  model.randomGenre;
+        //var genre =  model.randomGenre;
         $scope.singleORdj = 0;
     }else{
         $scope.singleORdj = 1;
         if(typeof $event.currentTarget === 'undefined'){
-          var genre = model.randomGenre;
+          //var genre = model.randomGenre;
         }
         else{
           var genre = $event.currentTarget.innerHTML;
@@ -540,38 +547,46 @@ $scope.bringMePlaylist = function($event){
          console.log("myMode: " + myMode);
     var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
          console.log(url);
-    $http.get(url).success(function(data){
-           console.log("raw data from server:");  
-           console.log(data);  
 
-            $scope.thereAreSongsInPlaylist = true;
-            $scope.videoFrame3 = true;
+         if($scope.canIClick){
+                        $scope.canIClick = false;
 
-            $scope.track = [];
-            for(i in data){
-                 if(data[i].type == 'producer'){
-                  var startUrl = "https://www.youtube.com/watch?v=";
-                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 
-                   $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
-                 }
-                 else{
-                   $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
-                 }
-             }
-             console.log("the playlist:");
-             console.log($scope.track);
-             if($scope.firstTimePlaylist == false){
-                 onYouTubePlayerAPIReady();
-                 $scope.firstTimePlaylist = true;
-             }
+                          $http.get(url).success(function(data){
+                                 $scope.canIClick = true;
+                                 console.log("raw data from server:");  
+                                 console.log(data);  
 
-            
-            $scope.loaderStatus2 = "invisible-loader";
-            $scope.nextSong();
-            
-           
-      });
+                                  $scope.thereAreSongsInPlaylist = true;
+                                  $scope.videoFrame3 = true;
+
+                                  $scope.track = [];
+                                  for(i in data){
+                                       if(data[i].type == 'producer'){
+                                        var startUrl = "https://www.youtube.com/watch?v=";
+                                        //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                                       
+                                         $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
+                                       }
+                                       else{
+                                         $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
+                                       }
+                                   }
+                                   console.log("the playlist:");
+                                   console.log($scope.track);
+                                   if($scope.firstTimePlaylist == false){
+                                       onYouTubePlayerAPIReady();
+                                       $scope.firstTimePlaylist = true;
+                                   }
+
+                                  
+                                  $scope.loaderStatus2 = "invisible-loader";
+                                  $scope.nextSong();
+                                  
+                                 
+                            });
+          }
+          else console.log("you can not click");
+
     }
     
     };
@@ -685,7 +700,7 @@ $scope.updatePlaylist = function(genre){
       var myMode = ($scope.data.select == 'P') ? 1 : 2;
       
       if(genre === 'undefined'){
-        genre = model.randomGenre;
+        genre = (myMode == 1) ? model.randomGenreP : model.randomGenreB;
       }
 
      if($scope.singleORdj == 0 ){
@@ -701,31 +716,39 @@ $scope.updatePlaylist = function(genre){
           console.log("myMode: " + myMode);
       var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
       console.log(url);
-      $http.get(url).success(function(data){
-           console.log(data);
-           $scope.thereAreSongsInPlaylist = true;
-           for(i in data){
-               if(data[i].type == 'producer'){
-                 var startUrl = "https://www.youtube.com/watch?v=";
-                  //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                 $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p" , currGenre : data[i].currGenre});
-               }
-               else{
-                 $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c" , currGenre : data[i].currGenre});
-               }
-           }
 
-           console.log("the playlist:");
-          console.log($scope.track);
-           $scope.videoFrame3 = false;
-           $scope.loaderStatus2 = "invisible-loader";
 
-           if($scope.firstTimePlaylist == false){
-               onYouTubePlayerAPIReady();
-               $scope.nextSong();
-          }
-         
-      });
+      if($scope.canIClick){
+                
+                $scope.canIClick = false;
+                $http.get(url).success(function(data){
+                  $scope.canIClick = true;
+                     console.log(data);
+                     $scope.thereAreSongsInPlaylist = true;
+                     for(i in data){
+                         if(data[i].type == 'producer'){
+                           var startUrl = "https://www.youtube.com/watch?v=";
+                            //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                           $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p" , currGenre : data[i].currGenre});
+                         }
+                         else{
+                           $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c" , currGenre : data[i].currGenre});
+                         }
+                     }
+
+                     console.log("the playlist:");
+                    console.log($scope.track);
+                     $scope.videoFrame3 = false;
+                     $scope.loaderStatus2 = "invisible-loader";
+
+                     if($scope.firstTimePlaylist == false){
+                         onYouTubePlayerAPIReady();
+                         $scope.nextSong();
+                    }
+                   
+                });
+         }
+         else console.log("you can not click");
 };
 
 
@@ -1024,16 +1047,16 @@ console.log("inside recommandation");
          angular.forEach($scope.tempTrack, function(item){
             var flag = (item.url == url) ? 1:0;
             if(item.url == url){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
             }
             else{
-               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre: item.currGenre});
+               $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
             }
              i++;
          });
         
             angular.forEach($scope.firstTracks, function(item){
-                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag, currGenre: item.currGenre});
+                $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
             });
          
          
