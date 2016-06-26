@@ -624,6 +624,15 @@
 $(document).ready(function(){
 
 
+//close full screen using esc button 
+$(document).on('keyup',function(evt) {
+    if (evt.keyCode == 27) {
+       $("iframe").removeClass("fullScreenVideoStyle");
+          $("body").removeClass("BodyFullScreenStyle");
+          $(".video-close-hide").removeClass("video-close");
+          $(".navbar-static-top").removeClass("video-close-hide");
+    }
+});
 
 
   var playlist_height = $(".playlist-container").height() - $(".player-container").height() - 70;
