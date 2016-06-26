@@ -4,6 +4,7 @@ var related;
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var Graph = require('node-graph');
 var assert = require('assert');
+var async = require("async");
 var statusa = 0;
 /************GLOBAL PARAMS*************/
 
@@ -106,217 +107,110 @@ graph.prototype.connectDB = function(pieId, mode) {
                   if (err) { // didn't found pie data
                      throw err;
                   } 
-                  else { 
-                     this.related = document;
-                      //console.log(this.related);
-              /************Mode == Pleasure_pie*************/
-              if(mode == 1){
-               var gr = new Graph(structure);
-                var collection = db.collection('Pleasure_pie');
-                var graphsCollection = db.collection('Pleasure_graph');
+                  else if(document){ 
+                    this.related = document;
 
-                graphsCollection.findOne({"pieId": pieId}, 
-                function(err, document) {
-                  if (err) { // didn't found pie data
-                     throw err;
-                  } 
-                  else { //console.log(document);
-                    if (document != null){
-                        //structure = document;
-                        for (i in document.nodes){
-                          var someNode = gr.getNode(document.nodes[i].name);
-                          if(typeof someNode === 'undefined')
-                           gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
+                    //set the collections to the correct mode
+                    if(mode == 1){
+                          var gr = new Graph(structure);
+                          var collection = db.collection('Pleasure_pie');
+                          var graphsCollection = db.collection('Pleasure_graph');
+                    }else if (mode == 2){
+                          var gr = new Graph(structure2);
+                          var collection = db.collection('Business_pie');
+                          var graphsCollection = db.collection('Business_graph');
                         }
-                        for(j in document.edges){
-                          var outboundEdges = gr.getEdge(document.edges[j].name); 
-                          if(typeof outboundEdges === 'undefined')
-                           gr.edges.push({name:document.edges[j].name , from:document.edges[j].from , to:document.edges[j].to});
-                        }
-                        //console.log(gr);
-                       
-                         statusa = 1;
-                  
-                        return gr;
-                    }
-                    else{
-                        //console.log(" null " + document);
-                    } //end of else
-                  } //end of else
-                }); //end of findOne
 
-                collection.findOne({
-                   pleasurePieId: pieId
-                }, 
-                function(err, document) {
-                  if (err) { // didn't found pie data
-                     throw err;
-                  } 
-                  else { //found pie data
-                   
-                     this.pie = document;
-                     // console.log(this.pie);
-                     for(o in this.pie.genres){
-                      for(y in this.related.genres){
-                         var genreNameTemp = this.pie.genres[o].genreName;
-                         var genrePercentTemp = this.pie.genres[o].percent;
-                         if(typeof this.related.genres[y][genreNameTemp] === 'undefined'){
-                         }
-                         else{
-                            
-                               if (typeof gr.getNode(genreNameTemp) === 'undefined'){
-                                 gr.nodes.push({name:genreNameTemp , percent:genrePercentTemp , visited:0, counter:0});
-
-                                for(n = 0; n < 6; n++){
-                                  var relatedGenre = this.related.genres[y][genreNameTemp][n].related.trim();
-                                  for(m in this.pie.genres){
-                                    pieGenre = this.pie.genres[m].genreName;
-                                    if(pieGenre == relatedGenre){
-                                      //in the pie
-                                      var edgeName = genreNameTemp + "->" + relatedGenre;
-                                      gr.edges.push({name:edgeName, from: genreNameTemp,  to: relatedGenre});
-                                    }
-
+                        async.waterfall([
+                          //find graph and push to graph element
+                            function(callback) {graphsCollection.findOne({"pieId": pieId}, function(err, document) {
+                            if (err) { 
+                               throw err;
+                            } 
+                            else if (document){
+                                  //structure = document;
+                                  for (i in document.nodes){
+                                    var someNode = gr.getNode(document.nodes[i].name);
+                                    if(typeof someNode === 'undefined')
+                                     gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
                                   }
-                                 }
-
-
-                               }
-                               else{
-                                var someNode = gr.getNode(genreNameTemp);
-                                someNode.percent = genrePercentTemp;
-                               }
-                            
-                           
-                          
-                         }
-                      }
-                    }
-                       //console.log(structure);
-                      graphsCollection.update(
-                         { pieId: pieId },
-                         {
-                            pieId: pieId,
-                            nodes: gr.nodes,
-                            edges: gr.edges
-                         },
-                         { upsert: true }
-                      );
-                        statusa = 1;
-                 return gr;   
-                  }
-                });
-              }
-
-              
-              /************Mode == Pleasure_pie*************/
-
-
-           /************Mode == Business_pie*************/
-           if(mode == 2){
-
-              var gr = new Graph(structure2);
-              var collection = db.collection('Business_pie');
-              var graphsCollection = db.collection('Business_graph');
-
-                 graphsCollection.findOne({"pieId": pieId}, 
-                function(err, document) {
-                  if (err) { // didn't found pie data
-                     throw err;
-                  } 
-                  else { //console.log(document);
-                    //console.log(document);
-                    if (document != null){
-                        //structure = document;
-                         
-                        for (i in document.nodes){
-                          var someNode = gr.getNode(document.nodes[i].name);
-                          if(typeof someNode === 'undefined')
-                           gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
-                        }
-
-                        for(j in document.edges){
-                          var outboundEdges = gr.getEdge(document.edges[j].name); 
-
-                          if(typeof outboundEdges === 'undefined')
-
-                           gr.edges.push({name:document.edges[j].name , from:document.edges[j].from , to:document.edges[j].to});
-                        }
-                        //console.log(gr);
-                      
-                    statusa = 1;
-                        return gr;
-                    }
-                    else{
-                        //console.log(" null " + document);
-                    } //end of else
-                  } //end of else
-                 }); //end of findOne
-
-                collection.findOne({
-                   businessPieId: pieId
-                }, 
-                function(err, document) {
-                  if (err) { // didn't found pie data
-                     throw err;
-                  } 
-                  else { //found pie data
-                   // console.log(document);
-                     this.pie = document;  
-                     //console.log(this.pie);
-                     for(i in this.pie.genres){
-                      for(j in this.related.genres){
-                         var genreNameTemp = this.pie.genres[i].genreName;
-                         var genrePercentTemp = this.pie.genres[i].percent;
-                         if(typeof this.related.genres[j][genreNameTemp] === 'undefined'){
-                         }
-                         else{
-                             
-                               if (typeof gr.getNode(genreNameTemp) === 'undefined'){
-                                 gr.nodes.push({name:genreNameTemp , percent:genrePercentTemp , visited:0, counter:0});
+                                  for(j in document.edges){
+                                    var outboundEdges = gr.getEdge(document.edges[j].name); 
+                                    if(typeof outboundEdges === 'undefined')
+                                     gr.edges.push({name:document.edges[j].name , from:document.edges[j].from , to:document.edges[j].to});
+                                  }
+                                  // console.log("GRAPH: step 1 - find graph and push to element");
+                                  // console.log(gr);
+                                 
+                                  statusa = 1;
+                                  callback();
+                                }
+                                else{
+                                  //pie not found, retuen error!
+                                    console.log("GRAPH: can't find graph. mode: " + mode);
+                                    callback("GRAPH: can't find graph. mode: " + mode, null);
+                                } 
+                              }); //end of findOne pie
                                 
-                                 for(n = 0; n < 6; n++){
-                                  var relatedGenre = this.related.genres[j][genreNameTemp][n].related.trim();
-                                  for(m in this.pie.genres){
-                                    pieGenre = this.pie.genres[m].genreName;
-                                   //console.log(pieGenre + " " + relatedGenre);
-                                    if(pieGenre == relatedGenre){
-                                      //in the pie
+                            },
 
-                                      var edgeName = genreNameTemp + "->" + relatedGenre;
-                                      gr.edges.push({name:edgeName, from: genreNameTemp,  to: relatedGenre});
-                                    }
+                            //find pie 
+                            function(callback) {
+                              collection.findOne({ pleasurePieId: pieId }, function(err, document) {
+                                if (err) { 
+                                   throw err;
+                                } 
+                                else if(document){ //found pie data
+                                 
+                                   this.pie = document;
+                                   // console.log(this.pie);
+                                   for(o in this.pie.genres){
+                                      for(y in this.related.genres){
+                                         var genreNameTemp = this.pie.genres[o].genreName;
+                                         var genrePercentTemp = this.pie.genres[o].percent;
+                                         if(typeof this.related.genres[y][genreNameTemp] === 'undefined'){
+                                          //??
+                                         }
+                                         else{
+                                               if (typeof gr.getNode(genreNameTemp) === 'undefined'){
+                                                  gr.nodes.push({name:genreNameTemp , percent:genrePercentTemp , visited:0, counter:0});
 
-                                  }
-                                 }
-                               }
-                               else{
-                                var someNode = gr.getNode(genreNameTemp);
-                                someNode.percent = genrePercentTemp;
-                               }
-                            
-                          
-                         }
-                      }
-                    }
-                     //console.log(structure2);
-                     graphsCollection.update(
-                         { pieId: pieId },
-                         {
-                            pieId: pieId,
-                            nodes: gr.nodes,
-                            edges: gr.edges
-                         },
-                         { upsert: true }
-                    );
-                    statusa = 1;
-                    return gr;   
-                  }
-                });
-              }
-              /************Mode == Business_pie*************/
-           
-          } //end of else
+                                                  for(n = 0; n < 6; n++){
+                                                    var relatedGenre = this.related.genres[y][genreNameTemp][n].related.trim();
+                                                    for(m in this.pie.genres){
+                                                      pieGenre = this.pie.genres[m].genreName;
+                                                      if(pieGenre == relatedGenre){
+                                                        //in the pie
+                                                        var edgeName = genreNameTemp + "->" + relatedGenre;
+                                                        gr.edges.push({name:edgeName, from: genreNameTemp,  to: relatedGenre});
+                                                      }
+                                                    }
+                                                  }
+                                               }
+                                               else{
+                                                var someNode = gr.getNode(genreNameTemp);
+                                                someNode.percent = genrePercentTemp;
+                                               }
+                                         }
+                                      }//end second for
+                                  }//end first for
+                                  callback();
+                                  //console.log(structure);  
+                                }//end if document (with pie)
+                                else{
+                                    console.log("GRAPH: can't find pie. mode: " + mode);
+                                    callback("GRAPH: can't find pie. mode: " + mode, null);
+                                }
+                              });     
+                            }
+
+                        ], function (err, result) {
+                            // all done
+                            graphsCollection.update({ pieId: pieId },{ pieId: pieId, nodes: gr.nodes, edges: gr.edges },{ upsert: true });
+                                  statusa = 1;
+                                  return gr;   
+                        }); //end of waterfall
+                   }//end if document found (with all genres)
         }); //end of findOne
   });  //end of connection to DB
  } //end of function
