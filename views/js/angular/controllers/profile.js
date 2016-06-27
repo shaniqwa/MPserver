@@ -227,8 +227,7 @@ $(document).on("click", ".navTimer2", function(){
        
       var tick = function(){
        //$scope.timer = new Date(player.getCurrentTime() * 1000).toISOString().substr(11, 8);
-            $(".navTimer2")[0].click();
-            $(".navTimer2").trigger('click'); 
+             
             hours = new Date(player.getDuration() * 1000).toISOString().substr(11, 2);
             seconds = new Date(player.getDuration() * 1000).toISOString().substr(14, 2);
             minutes = new Date(player.getDuration() * 1000).toISOString().substr(17, 2);
@@ -1249,10 +1248,10 @@ console.log("inside recommandation");
          views = $scope.views;
          sub = $scope.subscribers;
          com = $scope.comments;
-         $scope.views = 0;
-         $scope.subscribers = 0;
-         $scope.comments = 0;
-         $interval(ticktick1, $scope.ticktickInterval);
+         // $scope.views = 0;
+         // $scope.subscribers = 0;
+         // $scope.comments = 0;
+         // $interval(ticktick1, $scope.ticktickInterval);
       }
          
    }
