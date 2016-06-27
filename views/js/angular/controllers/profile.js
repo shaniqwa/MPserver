@@ -377,7 +377,7 @@ var ticktick1 = function(){
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
                      model.randomGenreP = allGenres[getRandomNumber];
 
-                      // $scope.updatePlaylist(model.randomGenre);
+                      $scope.updatePlaylist(model.randomGenre);
               }
             }
 

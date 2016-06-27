@@ -123,11 +123,14 @@ graph.prototype.connectDB = function(pieId, mode) {
                         async.waterfall([
                           //find graph and push to graph element
                             function(callback) {
+                              console.log("looking for graph");
                               graphsCollection.findOne({"pieId": pieId}, function(err, document) {
                                   if (err) { 
                                      throw err;
                                   } 
                                   else if (document){
+                                        console.log("found gragh");
+                                        console.log(document);
                                         //structure = document;
                                         for (i in document.nodes){
                                           var someNode = gr.getNode(document.nodes[i].name);
@@ -148,7 +151,7 @@ graph.prototype.connectDB = function(pieId, mode) {
                                       else{
                                         //pie not found, retuen error!
                                           console.log("GRAPH: can't find graph. mode: " + mode);
-                                          callback("GRAPH: can't find graph. mode: " + mode, null);
+                                          callback();
                                       } 
                               }); //end of findOne pie
                                 
@@ -156,12 +159,13 @@ graph.prototype.connectDB = function(pieId, mode) {
 
                             //find pie 
                             function(callback) {
+                              console.log("GRAPH: looking for pieId: " + pieId);
                               collection.findOne({ pleasurePieId: pieId }, function(err, document) {
                                 if (err) { 
                                    throw err;
                                 } 
                                 else if(document){ //found pie data
-                                 
+                                 console.log("found the pie, building graph");
                                    this.pie = document;
                                    // console.log(this.pie);
                                    for(o in this.pie.genres){
@@ -194,18 +198,21 @@ graph.prototype.connectDB = function(pieId, mode) {
                                          }
                                       }//end second for
                                   }//end first for
+                                  console.log("GRAPH: finished buiding pragh from pie");
                                   callback();
                                   //console.log(structure);  
                                 }//end if document (with pie)
                                 else{
                                     console.log("GRAPH: can't find pie. mode: " + mode);
-                                    callback("GRAPH: can't find pie. mode: " + mode, null);
+                                    callback();
                                 }
                               });     
                             }
 
                         ], function (err, result) {
                             // all done
+                            console.log("GRAPH: all done");
+                            console.log(gr);
                             graphsCollection.update({ pieId: pieId },{ pieId: pieId, nodes: gr.nodes, edges: gr.edges },{ upsert: true });
                                   statusa = 1;
                                   return gr;   
