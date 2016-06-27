@@ -692,12 +692,19 @@ $(document).on('keyup',function(evt) {
         {
             //data: return data from server
             // console.log(data);
+            if(data.error){
+              alert("Sorry, an error has ocurred. Please try again later.")
+              parent.$.fancybox.close();  
+            }
             parent.$.fancybox.close();
             $("#updatePreferencesFormSubmit").html("Submit");
+            //TODO: update the view
         },
         error: function(jqXHR, textStatus, errorThrown) 
         {
-            //if fails      
+            //if fails    
+            alert("Sorry, an error has ocurred. Please try again later.")
+            parent.$.fancybox.close();  
         }
     });
     e.preventDefault(); //STOP default action
@@ -731,7 +738,9 @@ $(document).on('keyup',function(evt) {
         },
         error: function(jqXHR, textStatus, errorThrown) 
         {
-            //if fails      
+            //if fails 
+            alert("Sorry, an error has ocurred. Please try again later.")
+            parent.$.fancybox.close();     
         }
     });
     e.preventDefault(); //STOP default action

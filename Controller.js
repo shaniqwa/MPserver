@@ -529,7 +529,9 @@ var updatePreferences = function(req,res,data) {
 		        		//save user token
                     	user.save(function (err, doc) {    
                        		if (err) {
-                         		res.status(200).json("error saving user pleasure pie: " + err.message);
+                       			var response = {};
+                       			response.error = "error saving user pleasure pie: " + err.message;
+                         		res.status(200).json(response);
                          		return console.error(err);
                        		}
                        		callback();
@@ -592,7 +594,10 @@ var updatePreferences = function(req,res,data) {
             MP.pleasure.pleasurePieId = data.userID;
             callback();
           }else if(error){
-            return console.error("ERROR with request to WS: " + error);
+             console.error("ERROR with request to WS: " + error);
+             var response = {};
+   			response.error = "ERROR with request to WS: " + err.message;
+     		res.status(200).json(response);
           }
         });
     },

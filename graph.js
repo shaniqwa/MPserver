@@ -102,8 +102,7 @@ graph.prototype.connectDB = function(pieId, mode) {
         console.log("Connected correctly to server.");
           var collection = db.collection('GenresAndRelated');
 
-                collection.findOne({"start": 1}, 
-                function(err, document) {
+                collection.findOne({"start": 1}, function(err, document) {
                   if (err) { // didn't found pie data
                      throw err;
                   } 
@@ -123,33 +122,34 @@ graph.prototype.connectDB = function(pieId, mode) {
 
                         async.waterfall([
                           //find graph and push to graph element
-                            function(callback) {graphsCollection.findOne({"pieId": pieId}, function(err, document) {
-                            if (err) { 
-                               throw err;
-                            } 
-                            else if (document){
-                                  //structure = document;
-                                  for (i in document.nodes){
-                                    var someNode = gr.getNode(document.nodes[i].name);
-                                    if(typeof someNode === 'undefined')
-                                     gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
-                                  }
-                                  for(j in document.edges){
-                                    var outboundEdges = gr.getEdge(document.edges[j].name); 
-                                    if(typeof outboundEdges === 'undefined')
-                                     gr.edges.push({name:document.edges[j].name , from:document.edges[j].from , to:document.edges[j].to});
-                                  }
-                                  // console.log("GRAPH: step 1 - find graph and push to element");
-                                  // console.log(gr);
-                                 
-                                  statusa = 1;
-                                  callback();
-                                }
-                                else{
-                                  //pie not found, retuen error!
-                                    console.log("GRAPH: can't find graph. mode: " + mode);
-                                    callback("GRAPH: can't find graph. mode: " + mode, null);
-                                } 
+                            function(callback) {
+                              graphsCollection.findOne({"pieId": pieId}, function(err, document) {
+                                  if (err) { 
+                                     throw err;
+                                  } 
+                                  else if (document){
+                                        //structure = document;
+                                        for (i in document.nodes){
+                                          var someNode = gr.getNode(document.nodes[i].name);
+                                          if(typeof someNode === 'undefined')
+                                           gr.nodes.push({name:document.nodes[i].name , percent:document.nodes[i].percent , visited:document.nodes[i].visited, counter:document.nodes[i].counter});
+                                        }
+                                        for(j in document.edges){
+                                          var outboundEdges = gr.getEdge(document.edges[j].name); 
+                                          if(typeof outboundEdges === 'undefined')
+                                           gr.edges.push({name:document.edges[j].name , from:document.edges[j].from , to:document.edges[j].to});
+                                        }
+                                        // console.log("GRAPH: step 1 - find graph and push to element");
+                                        // console.log(gr);
+                                       
+                                        statusa = 1;
+                                        callback();
+                                      }
+                                      else{
+                                        //pie not found, retuen error!
+                                          console.log("GRAPH: can't find graph. mode: " + mode);
+                                          callback("GRAPH: can't find graph. mode: " + mode, null);
+                                      } 
                               }); //end of findOne pie
                                 
                             },
