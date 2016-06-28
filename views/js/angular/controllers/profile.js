@@ -291,23 +291,24 @@ $(document).on("click", ".navTimer2", function(){
       // 150 – This error is the same as 101. It's just a 101 error in disguise!
   function onPlayerError(event){
         console.log("error accured - onPlayerError function");
-         $scope.nextSong();
+         
          if(event.data == 2){
             $scope.nextSong();
          }
-         if(event.data == 5){
+         else if(event.data == 5){
             $scope.nextSong();
          }
-         if(event.data == 100){
+         else if(event.data == 100){
             //TODO CATCH ERROR AND CHANGE SONG
             $scope.nextSong();
          }
-         if(event.data == 101){
+         else if(event.data == 101){
             $scope.nextSong();
          }
-         if(event.data == 150){
+         else if(event.data == 150){
             $scope.nextSong();
          }
+         else $scope.nextSong();
       }
       
 
