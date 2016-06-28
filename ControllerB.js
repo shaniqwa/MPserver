@@ -420,7 +420,9 @@ var removeFav = function(res, data){
 
 
 var whoToFollow = function(userId,callback){
+	console.log("whoToFollow");
 	var result = {};
+	result.friends = [];
 	result.error = false;
 	User.findOne({userId : userId}, function(err, doc){
 		if(err){
@@ -433,9 +435,40 @@ var whoToFollow = function(userId,callback){
 		          if (!error && response.statusCode == 200) {
 		          		var obj = body.toString();
 		                obj = JSON.parse(obj);
-		                
-		                result.friends = obj;
-		                callback(null,result);
+
+		                //the queue: find each friend in the DB based on his FB_id
+		                var q = async.queue(function (task, taskCallback) {
+							User.findOne( { "FB_id": task.FB_id } , function(err,user){
+								if(err){
+									console.log(err);
+									taskCallback(err);
+								}
+								if(user){
+									result.friends.push({"firstName" : user.firstName , "lastName" : user.lastName, "userId" : user.userId, "profileImage" : user.profileImage});
+									taskCallback();
+								}else{
+									taskCallback();
+								}
+							});
+					}, 3);
+
+
+		            q.drain = function() {
+		            	callback(null,result);
+		            }
+
+		            for(i in obj.data){
+						//push to queue
+						var task = {};
+						task.FB_id = obj.data[i].id;
+							q.push(task, function (err) {
+								if(err){
+									result.error = true;
+									console.log(err);
+									callback(result,null);
+								}
+						});
+					}
 
 		          }else if(error){
 		            console.error("ERROR with whoToFollow: " + error);

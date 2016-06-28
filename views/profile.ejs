@@ -199,12 +199,28 @@
                     <!-- FOLLOWING -->
                     <div id="following" class="tab-pane fade">
                       <h3>Following</h3>
+                      <div ng-hide="user.following.length">
+                        You are not following anyone
+                      </div>
                        <div class="following-container"> 
                             <div class="following searchresults" ng-repeat="x in user.following">
                                <img ng-click="init(x.userId)" width="130" height="130" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
                                <p>{{x.first}} {{x.last}}</p>
                             </div>
                         </div>
+
+
+                        <div ng-if="whoToFollow.length > 0">
+                        <h4>Who To Follow?</h4>
+                        <p>Friends who also use The Music Profile</p>
+                        <div ng-repeat="x in whoToFollow" class="searchresults">
+                           <img  ng-click="init(x.userId)" class="simg" width="130" height="130" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                           <div class="recommand-text">
+                              <p>{{x.firstName}}  {{x.lastName}}</p>
+                           </div>
+                        </div>
+                      </div>
+
                     </div>
                     <!-- END FOLLOWING -->
 
@@ -213,6 +229,9 @@
                     <!-- FOLLOWERS -->
                     <div id="followers" class="tab-pane fade">
                       <h3>Followers</h3>
+                      <div ng-hide="user.followers.length">
+                        You have no followers
+                      </div>
                       <div class="followers-container"> 
                             <div class="followers searchresults" ng-repeat="x in user.followers">
                                <img ng-click="init(x.userId)" width="130" height="130" class="simg" border-radius: 100 ng-src="{{x.profileImg}}" /> 
@@ -522,12 +541,11 @@
 
               </div>
               <!-- END DETAILS -->
-              <hr>
+              
                 <!-- RECOMMANDED --> 
-                   
-                   <div id="recommended">
-                   
-                      <h4>Your Match</h4>
+                   <div id="recommended" ng-if="reco.length > 0">
+                   <hr>
+                      <h4>Match</h4>
                       <p>Check out your recent matches with great Producers</p>
                        <div class="recommand-result">
                              <img   class="simg" width="50" height="50" border-radius: 100 ng-src="{{user.profileImage}}" /> 
@@ -551,15 +569,40 @@
 
                       
                     </div>
+
+
                      <hr>
-                     <h4 class="tracksYouMayLikeTitle" ng-show="newFlag">Listen Again</h4>
-                     <div class="tracksYouMayLike">
-                          <div class="tracksYouMayLikeItems item{{$index}}" ng-repeat="x in tracksYouMayLike track by $index" ng-click="playFavorites(x.url)">
-                                    <div class="location"><strong>{{x.songName}}</strong></div>
-                                    <div class="name">{{x.artistName}}</div>
-                                    
-                                    <hr>
-                          </div>
+
+                     <div id="whoToFollow" ng-ig="whoToFollow.length >0 0 ">
+                     <h4>Friends</h4>
+                     <p>Listen to your friends Music Profiles
+                     <div class="whoToFollow-container-sidebar mCustomScrollbar" data-mcs-theme="dark">
+                          <div ng-repeat="x in whoToFollow">
+                            <div class="recommand-result slideUp">
+                               <img  ng-click="init(x.userId)" class="simg" width="50" height="50" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                               <div class="recommand-text">
+                                  <p style="color: rgba(255,255, 255,0.5)">{{x.firstName}}  {{x.lastName}}</p>
+                                  <p ng-click="init(x.userId)" style="color: white; cursor:pointer;">Check my pie &nbsp<i class="fa fa-angle-right" aria-hidden="true"></i> </p>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+
+
+                    <!-- Listen again -->
+                    <div id="listen-again">
+                      <hr>
+                       <h4 class="tracksYouMayLikeTitle" ng-show="newFlag">Listen Again</h4>
+                       <div class="tracksYouMayLike">
+                            <div class="tracksYouMayLikeItems item{{$index}}" ng-repeat="x in tracksYouMayLike track by $index" ng-click="playFavorites(x.url)">
+                                      <div class="location"><strong>{{x.songName}}</strong></div>
+                                      <div class="name">{{x.artistName}}</div>
+                                      
+                                      <hr>
+                            </div>
+                       </div>
                      </div>
 
 
@@ -665,14 +708,30 @@ $(document).on('keyup',function(evt) {
     //init imagepicker
     $("#img").imagepicker();
 
+
+
     //set sidebars height dynemicly
+    var right   = $('.rightSidebar').height(),
+            left    = $('.leftSidebar').height(),
+            content = $('.content').height();
+            console.log("r " + right + " l " + left + " c " + content);
+
+            var max = Math.max(right, left, content);
+            $('.content').css({"height":max + "px"} );
+            $('.leftSidebar').css({"height":max + "px"} );
+            $('.rightSidebar').css({"height":max + "px"} );
+
+
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var right   = $('.rightSidebar').height(),
             left    = $('.leftSidebar').height(),
             content = $('.content').height();
+            console.log("r " + right + " l " + left + " c " + content);
 
-            //$('.leftSidebar').css({"height":content + "px"} );
-            $('.rightSidebar').css({"height":content + "px"} );
+            var max = Math.max(right, left, content);
+            $('.content').css({"height":max + "px"} );
+            $('.leftSidebar').css({"height":max + "px"} );
+            $('.rightSidebar').css({"height":max + "px"} );
     });
 
 
