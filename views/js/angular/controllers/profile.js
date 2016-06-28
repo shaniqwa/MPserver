@@ -50,53 +50,52 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
     option2: 'B',
     option3: 'A'
    };
-  $scope.track = [];
-  $scope.tempTrack = [];
-  $scope.firstTracks = [];
-  $scope.toggle = true;
-  $scope.videoFrame = false;
-  $scope.videoFrame2 = false;
-  $scope.videoFrame3 = false;
-  $scope.nowPlaying = [];
-  $scope.msg = '';
-  $scope.elementToFadeInAndOut = '';
-  $scope.elementToFadeInAndOut2 = '';
-  $scope.loaderStatus = "invisible-loader";
-  $scope.loaderStatus2 = "invisible-loader";
-  $scope.firstTimePlaylist = false;
-  $scope.user;
-  $scope.business = [];
-  $scope.businessPreferences = [];
-  $scope.pleasure = [];
-  $scope.pleasurePreferences = [];
-  $scope.whoToFollow = [];
-  $scope.artist;
-  $scope.songs;
-  $scope.selectedSong;
-  $scope.UserIsLoggedIn = false;
-  $scope.iCameFromMyPlaylist = false;
-  $scope.videoDuration;
-  $scope.timer;
-  $scope.tickInterval = 1000; //ms
-  $scope.ticktickInterval = 150; //ms
-  $scope.timeWidth;
-  $scope.timeHeight;
-  $scope.removedSongsIndexes = [];
-  $scope.elementIsEmpty;
-  $scope.tickColor = 1;
-  $scope.generalLoader;
-  $scope.token;
-  $scope.views = 0;
-  $scope.subscribers = 0;
-  $scope.comments = 0;
-  $scope.firstTimeStatistics = true;
-  $scope.singleORdj = 0;
-  $scope.thisIsNotFirstTimePlaylist = false;
-  $scope.fawhat = '';
-  $scope.tracksYouMayLike = [];
-  $scope.newFlag = false;
-  $scope.globalMode = "P";
-  $scope.canIClick = true;
+   $scope.track = [];
+   $scope.tempTrack = [];
+   $scope.firstTracks = [];
+   $scope.toggle = true;
+   $scope.videoFrame = false;
+   $scope.videoFrame2 = false;
+   $scope.videoFrame3 = false;
+   $scope.nowPlaying = [];
+   $scope.msg = '';
+   $scope.elementToFadeInAndOut = '';
+   $scope.elementToFadeInAndOut2 = '';
+   $scope.loaderStatus = "invisible-loader";
+   $scope.loaderStatus2 = "invisible-loader";
+   $scope.firstTimePlaylist = false;
+   $scope.user;
+   $scope.business = [];
+   $scope.businessPreferences = [];
+   $scope.pleasure = [];
+   $scope.pleasurePreferences = [];
+   $scope.artist;
+   $scope.songs;
+   $scope.selectedSong;
+   $scope.UserIsLoggedIn = false;
+   $scope.iCameFromMyPlaylist = false;
+   $scope.videoDuration;
+   $scope.timer;
+   $scope.tickInterval = 1000; //ms
+   $scope.ticktickInterval = 150; //ms
+   $scope.timeWidth;
+   $scope.timeHeight;
+   $scope.removedSongsIndexes = [];
+   $scope.elementIsEmpty;
+   $scope.tickColor = 1;
+   $scope.generalLoader;
+   $scope.token;
+   $scope.views = 0;
+   $scope.subscribers = 0;
+   $scope.comments = 0;
+    $scope.firstTimeStatistics = true;
+    $scope.singleORdj = 0;
+    $scope.thisIsNotFirstTimePlaylist = false;
+    $scope.fawhat = '';
+    $scope.tracksYouMayLike = [];
+    $scope.newFlag = false;
+    $scope.globalMode = "P";
+    $scope.canIClick = true;
    // create youtube player
     var player;
 
@@ -127,6 +126,9 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
 
      // autoplay video
      function onPlayerReady(event) {
+
+        // console.log("player ready");
+        //event.target.playVideo();
         $scope.nextSong(); 
         event.target.playVideo();
         if($scope.firstTimePlaylist == false){
@@ -217,6 +219,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
 $(document).on("click", ".navTimer2", function(){
     jQuery(document).on('keyup',function(evt) {
         if (evt.keyCode == 27) {
+          console.log("esc");
            $scope.closeFullScreen();
         }
     });
@@ -271,6 +274,11 @@ $(document).on("click", ".navTimer2", function(){
         }
        var tempTimer = player.getCurrentTime() / player.getDuration();
        $scope.timeWidth = tempTimer * 100;
+      
+       
+       //$scope.color = hours.toString() + seconds.toString() + minutes.toString();
+       
+       //console.log( $scope.tickColor);
       }
 
       
@@ -282,24 +290,25 @@ $(document).on("click", ".navTimer2", function(){
       // 101 – The owner of the requested video does not allow it to be played in embedded players.
       // 150 – This error is the same as 101. It's just a 101 error in disguise!
   function onPlayerError(event){
-        // console.log("error accured - onPlayerError function");
-         $scope.nextSong();
+        console.log("error accured - onPlayerError function");
+         
          if(event.data == 2){
             $scope.nextSong();
          }
-         if(event.data == 5){
+         else if(event.data == 5){
             $scope.nextSong();
          }
-         if(event.data == 100){
+         else if(event.data == 100){
             //TODO CATCH ERROR AND CHANGE SONG
             $scope.nextSong();
          }
-         if(event.data == 101){
+         else if(event.data == 101){
             $scope.nextSong();
          }
-         if(event.data == 150){
+         else if(event.data == 150){
             $scope.nextSong();
          }
+         else $scope.nextSong();
       }
       
 
@@ -400,20 +409,11 @@ var ticktick1 = function(){
               
 
             // get recommendation
+           // $scope.recommandation($scope.userId);
             $http.get(model.domain + '/recommandation/' + $scope.userId).success(function(data){ 
                $scope.reco = []; 
               for (i in data){
                 $scope.reco.push({userId: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
-              }
-            });
-
-
-
-             // get who to follow
-            $http.get(model.domain + '/whoToFollow/' + $scope.userId).success(function(data){ 
-               $scope.whoToFollow = []; 
-              for (i in data.friends){
-                $scope.whoToFollow.push({userId: data.friends[i].userId, firstName : data.friends[i].firstName , lastName: data.friends[i].lastName , profileImage : data.friends[i].profileImage });
               }
             });
 
@@ -467,16 +467,6 @@ var ticktick1 = function(){
                });
 
             }//end if producer
-
-            var right   = $('.rightSidebar').height(),
-            left    = $('.leftSidebar').height(),
-            content = $('.content').height();
-            console.log("r " + right + " l " + left + " c " + content);
-
-            var max = Math.max(right, left, content);
-            $('.content').css({"height":max + "px"} );
-            $('.leftSidebar').css({"height":max + "px"} );
-            $('.rightSidebar').css({"height":max + "px"} );
             
         });//end getUser
 
@@ -532,6 +522,7 @@ $scope.bringMePlaylist = function($event){
      
     $scope.loaderStatus = "visible-loader";
     $scope.loaderStatus2 = "visible-loader";
+    // console.log("my select is: " + $scope.data.select);
     var myMode = ($scope.data.select == 'P') ? 1 : 2;
     
     if(typeof $event === 'undefined'){
@@ -548,16 +539,23 @@ $scope.bringMePlaylist = function($event){
         }
         
     }
-    if($scope.globalMode == "P"){
-      myMode = 1;
-    }
-    else myMode = 2;
+         // console.log(genre);
+         if($scope.globalMode == "P"){
+           myMode = 1;
+         }
+         else myMode = 2;
+         console.log("myMode: " + myMode);
     var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+         console.log(url);
+
          if($scope.canIClick){
                         $scope.canIClick = false;
 
                           $http.get(url).success(function(data){
                                  $scope.canIClick = true;
+                                 console.log("raw data from server:");  
+                                 console.log(data);  
+
                                   $scope.thereAreSongsInPlaylist = true;
                                   $scope.videoFrame3 = true;
 
@@ -573,8 +571,8 @@ $scope.bringMePlaylist = function($event){
                                          $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
                                        }
                                    }
-                                   // console.log("the playlist:");
-                                   // console.log($scope.track);
+                                   console.log("the playlist:");
+                                   console.log($scope.track);
                                    if($scope.firstTimePlaylist == false){
                                        onYouTubePlayerAPIReady();
                                        $scope.firstTimePlaylist = true;
@@ -587,12 +585,11 @@ $scope.bringMePlaylist = function($event){
                                  
                             });
           }
-          else {
-            // console.log("you can not click");
-          }
+          else console.log("you can not click");
+
     }
     
-  };
+    };
 
 
 
@@ -642,12 +639,14 @@ $scope.follow = function(myID, userID){
     $http.get(model.domain + '/addToFollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Following";
       $scope.fafollow = "fa-check";
+      // console.log(data);
     });  
   }else if($scope.isFollowing == "Following"){
     // unfollow
     $http.get(model.domain + '/unfollow/' + myID + '/' + userID).success(function(data){ 
       $scope.isFollowing = "Follow";
       $scope.fafollow = "fa-plus";
+      // console.log(data);
     });
   }
 };
@@ -660,8 +659,11 @@ $scope.follow = function(myID, userID){
 /****************DRAW DIAGRAM*******************************/
 /***********************************************************/
 $scope.drawDiagram = function(index){
+  //console.log($scope.songCounters[index]);
+  //$scope.selectedSong = numberOfSong;
   drawAgeGroupDiagram($scope.songCounters[index]);
   drawLocalVsWorldDiagram($scope.songCounters[index]);
+  // activaTab('statistics');
 };
 
 
@@ -672,8 +674,10 @@ $scope.drawDiagram = function(index){
 /*****************updatePlaylist FUNCTION*******************/
 /***********************************************************/
 $scope.updatePlaylist = function(genre){
+      console.log(genre);
       if(genre == "undefined"){
         genre = $scope.track[$scope.track.length-1].currGenre;
+        console.log(genre);
       }
 
       if($scope.track.length == 1){
@@ -700,22 +704,26 @@ $scope.updatePlaylist = function(genre){
       }
 
      if($scope.singleORdj == 0 ){
-        // console.log("no genre, DJ mode on. continue with genre: " + genre);
+        console.log("no genre, DJ mode on. continue with genre: " + genre);
       }
       else{
-            // console.log("update playlist with genre: " + genre);
+            console.log("update playlist with genre: " + genre);
       }
-      if($scope.globalMode == "P"){
-         myMode = 1;
-      }
-      else myMode = 2; 
-            
+            if($scope.globalMode == "P"){
+             myMode = 1;
+           }
+           else myMode = 2; 
+          console.log("myMode: " + myMode);
       var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+      console.log(url);
+
+
       if($scope.canIClick){
                 
                 $scope.canIClick = false;
                 $http.get(url).success(function(data){
                   $scope.canIClick = true;
+                     console.log(data);
                      $scope.thereAreSongsInPlaylist = true;
                      for(i in data){
                          if(data[i].type == 'producer'){
@@ -728,8 +736,8 @@ $scope.updatePlaylist = function(genre){
                          }
                      }
 
-                     // console.log("the playlist:");
-                    // console.log($scope.track);
+                     console.log("the playlist:");
+                    console.log($scope.track);
                      $scope.videoFrame3 = false;
                      $scope.loaderStatus2 = "invisible-loader";
 
@@ -740,9 +748,7 @@ $scope.updatePlaylist = function(genre){
                    
                 });
          }
-         else {
-          // console.log("you can not click");
-        }
+         else console.log("you can not click");
 };
 
 
@@ -753,6 +759,8 @@ $scope.updatePlaylist = function(genre){
 /********************nextSong FUNCTION**********************/
 /***********************************************************/
     $scope.nextSong = function(){
+         
+        //console.log(model.myfavorites);
         if($scope.heart == "fa-heart"){
           $scope.heart = "fa-heart-o";
         }
@@ -761,7 +769,7 @@ $scope.updatePlaylist = function(genre){
                 if( model.myfavorites[p].url == $scope.track[$scope.counter].url){
                     $scope.heart = "fa-heart";
                 }
-              }
+              }//console.log($scope.track[$scope.counter].url);
               
               if(typeof $scope.track[$scope.counter].url === 'undefined'){
                 $scope.counter++;
@@ -770,15 +778,17 @@ $scope.updatePlaylist = function(genre){
                 $scope.counter--;
                 var myEl = angular.element( document.querySelector( ".repeatClass" + ($scope.counter - 1) ) );
                 myEl.remove();
-                // console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
+                console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
               }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
               url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
+              // console.log(url);
               $scope.myVideo = $sce.trustAsResourceUrl(url);
               player.cueVideoByUrl(url);
               var date = new Date(null);
 
               $scope.track[$scope.counter].active = 1;
+              // console.log($scope.counter);
               $scope.nowPlaying = $scope.track[$scope.counter];
               if($scope.counter != 0){
                 $scope.track[$scope.counter - 1].active = 0;
@@ -800,15 +810,20 @@ $scope.updatePlaylist = function(genre){
             else{
               //bring me newplaylist
               //$scope.counter = 0;
+
+              
             }
+            // console.log("track lenght: " + $scope.track.length);
             if($scope.track.length == 5){
                 $scope.updatePlaylist($scope.track[$scope.track.length-1].currGenre);
-                // console.log("list length is 5, call update playlist with genre: " + $scope.track[$scope.track.length-1].currGenre);
+                console.log("list length is 5, call update playlist with genre: " + $scope.track[$scope.track.length-1].currGenre);
             }
             if($scope.track.length == 1){
                 $scope.videoFrame3 = true;
                 $scope.thereAreSongsInPlaylist = false;
                 $scope.loaderStatus2 = "visible-loader";
+                // console.log("list length is 1, call update playlist with genre: " + $scope.track[0].currGenre);
+                // $scope.updatePlaylist($scope.track[0].currGenre);
             }
             else{
               $scope.thereAreSongsInPlaylist = true;
@@ -847,31 +862,39 @@ $scope.updatePlaylist = function(genre){
                          url:  $scope.track[$scope.counter - 1].url
                       }
                  });
-            
+            // console.log("fav: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
             $http.defaults.headers.post["Content-Type"] = "application/json";
+            //console.log(model.domain);
             $http.post(model.domain + '/addToFavorites/',data).success(function(data,status){
+                 //console.log(data);
+                 
                  $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
             });
       }else{
         //remove from fav
-
+        
         $scope.heart = "fa-heart-o";
+        //TODO REQUEST TO SERVER TO DELETE THIS SONG FROM FAVORITS
         $http.get(model.domain + '/removeFav/' + $scope.user.userId + '/' + $scope.track[$scope.counter - 1].songName + '/' + $scope.track[$scope.counter - 1].artistName).success(function(data){
-            for(i in model.myfavorites){
-                if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
-                   $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
-                        $scope.favorits = [];
-                        for(j in data){
-                          $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
-                        }
-                        model.myfavorites = $scope.favorits; 
-                   });
-                }
-            }
-            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
+              for(i in model.myfavorites){
+                
+                  if(model.myfavorites[i].url ==  $scope.track[$scope.counter - 1].url){
+                       $http.get(model.domain + '/getFavorites/' + $scope.userId).success(function(data){
+                            $scope.favorits = [];
+                            for(j in data){
+                              $scope.favorits.push({artistName: data[j].artist, songName: data[j].song, duration: data[j].duration,url: data[j].url});
+                            }
+                            model.myfavorites = $scope.favorits; 
+                       });
+                  }
+              }
+              
+              $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
         });
+  
       }
-  };
+     
+    };
 
 
 
@@ -889,9 +912,10 @@ $scope.updatePlaylist = function(genre){
                        song: $scope.track[$scope.counter - 1].songName
                     }
                  });
-      // console.log("black: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
+      console.log("black: " + $scope.track[$scope.counter - 1].songName + " " + $scope.track[$scope.counter - 1].artistName + " " + 1);
       $http.defaults.headers.post["Content-Type"] = "application/json";
       $http.post(model.domain + '/addToBlackList/',data).success(function(data,status){
+           console.log(data);
            $scope.msg = "Added successfuly to your Blacklist";
            $scope.elementToFadeInAndOut = "elementToFadeInAndOut";
       });
@@ -910,12 +934,17 @@ $scope.updatePlaylist = function(genre){
 
 
 $scope.recommandation = function(userId){
+console.log("inside recommandation");
+
   $http.get(model.domain + '/recommandation/' + userId).success(function(data){ 
+    console.log(data);
     for (i in data){
       $scope.reco.push({firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
     }
   });
-};
+
+
+ };
 
 /***********************************************************/
 /*****************recommandation FUNCTION*******************/
@@ -943,8 +972,10 @@ $scope.recommandation = function(userId){
 /********************playSong FUNCTION**********************/
 /***********************************************************/
     $scope.playSong = function(){
+     
          player.playVideo();
          $scope.toggle = true;
+        
     };
 
 
@@ -953,6 +984,7 @@ $scope.recommandation = function(userId){
 /********************playFavorites FUNCTION**********************/
 /***********************************************************/
     $scope.playFavorites = function(url){
+        //console.log(url);
         if ( typeof url === 'undefined') {
               if($scope.firstTimePlaylist == false){
                    onYouTubePlayerAPIReady();
@@ -1000,6 +1032,8 @@ $scope.recommandation = function(userId){
 /********************playThisSong FUNCTION**********************/
 /***********************************************************/
     $scope.playThisSong = function(url){
+         //console.log(model.myfavorites);
+        
         $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
@@ -1035,6 +1069,8 @@ $scope.recommandation = function(userId){
 /********************playMySongs FUNCTION**********************/
 /***********************************************************/
     $scope.playMySongs = function(index){
+         //console.log(model.mySongs);
+
          $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
@@ -1068,9 +1104,10 @@ $scope.recommandation = function(userId){
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
+        //console.log("updateCounters function" );
          if($scope.track[0].type == "p"){
             $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
-                // console.log("updateCounters successfuly");
+                console.log("updateCounters successfuly");
             });
          }
          
