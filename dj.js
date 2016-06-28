@@ -8,6 +8,7 @@ var async = require("async");
 // var mode = 2;
 // var uid = 59;
 exports.getUserPlaylist = function(res,uid,mode,times,startGenre,oneGenre){
+	console.log("start genre: " + startGenre);
 var user = new graph(uid,mode);
 user.buildGraph();
 //console.log(user.getGraph());

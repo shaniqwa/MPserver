@@ -1040,11 +1040,11 @@ var getUsers = function(res){
 			results.producers = [];
 			for(i in docs){
 				if(docs[i].typeOfUser == "Consumer"){
-					results.consumers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered});	
+					results.consumers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered, "id" : docs[i].userId});	
 					results.total_consumers++;
 				}
 				else if(docs[i].typeOfUser == "Producer"){
-					results.producers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered});	
+					results.producers.push({"firstName" : docs[i].firstName,"lastName" : docs[i].lastName,"date" : docs[i].registered, "id" : docs[i].userId});	
 					results.total_producers++;
 				}
 				

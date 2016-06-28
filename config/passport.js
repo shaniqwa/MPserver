@@ -278,7 +278,6 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
 
         // set all of the relevant information from google to our user
         console.log("registering new user with google platform");
-        newUser.country = "Israel";
         newUser.YT_id    = profile.id;
         newUser.YT_AT = token;
         newUser.YT_RT = refreshToken;
