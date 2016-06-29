@@ -60,14 +60,20 @@ graph.prototype.getGraphStatus = function() {
 }
 
 /************Build Graph*************/
-graph.prototype.buildGraph = function() {
+graph.prototype.buildGraph = function(BGCallback) {
     console.log("buildGraph");
-    return this.connectDB(this.pieId, this.mode);
+    this.connectDB(this.pieId, this.mode, function(err){
+        if(err){
+          BGCallback(err);
+        }else{
+          BGCallback();
+        }
+    });
 }
 /************Build Graph*************/
 
 /************Connect to DB and load the pie's and the related*************/
-graph.prototype.connectDB = function(pieId, mode) {
+graph.prototype.connectDB = function(pieId, mode, connectDBCallback) {
 
      var url = 'mongodb://52.35.9.144:27017/musicprofile';
       MongoClient.connect(url, function(err, db) {
@@ -91,14 +97,14 @@ graph.prototype.connectDB = function(pieId, mode) {
               async.waterfall([
                 //find graph and push to graph element
                   function(callback) {
-                    console.log("looking for graph");
+                    console.log("GRAPH: looking for graph");
                     if(mode == 1){
                       PleasureGraph.findOne({"pieId" : pieId}, function(err, document) {
                         if (err) { 
                            throw err;
                         } 
                         else if (document){
-                              console.log("found gragh");
+                              console.log("GRAPH: found gragh");
                               var structure = {};
                                   structure.nodes = [];
                                   structure.edges = [];
@@ -277,6 +283,11 @@ graph.prototype.connectDB = function(pieId, mode) {
                   // all done
                   console.log("GRAPH: all done");
                   statusa = 1;
+                  if(err){
+                    connectDBCallback(err);
+                  }else{
+                    connectDBCallback();
+                  }
               }); //end of waterfall
       });  
 } //end of function

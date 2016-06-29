@@ -8,23 +8,17 @@ var async = require("async");
 // var mode = 2;
 // var uid = 59;
 exports.getUserPlaylist = function(res,uid,mode,times,startGenre,oneGenre){
-	console.log("start genre: " + startGenre);
+	console.log("DJ: start genre: " + startGenre);
 var user = new graph(uid,mode);
-user.buildGraph();
-//console.log(user.getGraph());
-//genre,userid,p/b
-var currGenre = startGenre;
+user.buildGraph(function(err){
+	if(err){
+		console.log(err);
+	}else{
+	console.log("DJ: build graph finished");
+	var currGenre = startGenre;
 
-console.log("times: " + times);
-
-
-while(user.getGraphStatus()  == 0) {
-console.log("waiting");
-   console.log(user.getGraphStatus());
-   require('deasync').sleep(1000);
-}
-
-var ns = new nextsong(currGenre,uid,mode,user,startGenre,oneGenre);
+	console.log("DJ: times: " + times);
+	var ns = new nextsong(currGenre,uid,mode,user,startGenre,oneGenre);
 
 	async.waterfall([
 	    function(callback){
@@ -37,12 +31,24 @@ var ns = new nextsong(currGenre,uid,mode,user,startGenre,oneGenre);
 	    //all is done
 	    function(err) {
 	        if (err) {
-				console.log("error with dj: " + err);
+				console.log("DJ: error with dj: " + err);
 	        }
-			console.log("the playlist is done. length: "+ ns.getPlaylistLength());
+			console.log("DJ: the playlist is done. length: "+ ns.getPlaylistLength());
 			var result = ns.getPlaylist();
 			res.status(200).json(result);   
 	    });
+	}
+});
+
+
+
+// while(user.getGraphStatus()  == 0) {
+// console.log("waiting");
+//    console.log(user.getGraphStatus());
+//    require('deasync').sleep(1000);
+// }
+
+
 
 }
 

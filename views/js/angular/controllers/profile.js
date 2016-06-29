@@ -373,7 +373,7 @@ var ticktick1 = function(){
                      var getRandomNumber = Math.floor((Math.random() * allGenres.length));
                      model.randomGenreP = allGenres[getRandomNumber];
 
-                      $scope.updatePlaylist(model.randomGenre);
+                      $scope.updatePlaylist(model.randomGenreP);
               }
             }
 
@@ -472,10 +472,10 @@ var ticktick1 = function(){
 
             }//end if producer
 
+            //set layout hight
             var right   = $('.rightSidebar').height(),
             left    = $('.leftSidebar').height(),
             content = $('.content').height();
-            console.log("r " + right + " l " + left + " c " + content);
 
             var max = Math.max(right, left, content);
             $('.content').css({"height":max + "px"} );
@@ -676,7 +676,7 @@ $scope.drawDiagram = function(index){
 /*****************updatePlaylist FUNCTION*******************/
 /***********************************************************/
 $scope.updatePlaylist = function(genre){
-      if(genre == "undefined"){
+      if(typeof genre == "undefined"){
         genre = $scope.track[$scope.track.length-1].currGenre;
       }
 
@@ -699,9 +699,9 @@ $scope.updatePlaylist = function(genre){
     
       var myMode = ($scope.data.select == 'P') ? 1 : 2;
       
-      if(genre === 'undefined'){
-        genre = (myMode == 1) ? model.randomGenreP : model.randomGenreB;
-      }
+      // if(genre === 'undefined'){
+      //   genre = (myMode == 1) ? model.randomGenreP : model.randomGenreB;
+      // }
 
      if($scope.singleORdj == 0 ){
         // console.log("no genre, DJ mode on. continue with genre: " + genre);
@@ -715,6 +715,7 @@ $scope.updatePlaylist = function(genre){
       else myMode = 2; 
             
       var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+      console.log(url);
       if($scope.canIClick){
                 
                 $scope.canIClick = false;

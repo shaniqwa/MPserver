@@ -104,7 +104,7 @@ function pickChoice(choice) { // choice picker func
 var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a song to playlist array
 
 	var songFull = song.artist.name + " - " + song.name + " | " + song.artist.name + " | " + song.name;
-	console.log("full song " + songFull);
+	console.log("NEXT SONG : full song " + songFull);
 	youTube.addParam('type', 'video');
 	youTube.search(songFull, 2, function (error, result) {
 		if (error) {
@@ -126,10 +126,10 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 					}
 
 					var chsnSongNew = getRandTrack(artistOrg);
-					console.log("*new song: " + chsnSongNew)
+					console.log("NEXT SONG : *new song: " + chsnSongNew)
 
 					var songFullNew = chsnSongNew.artist.name + " - " + chsnSongNew.name + " | " + chsnSongNew.artist.name + " | " + chsnSongNew.name;
-					console.log("full song " + songFullNew);
+					console.log("NEXT SONG : full song " + songFullNew);
 					youTube.addParam('type', 'video');
 					youTube.search(songFullNew, 2, function (error, result) {
 						if (error) {
@@ -139,7 +139,7 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 								runsYT++;
 
 							} else { // there are results from youtube
-								console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
+								console.log("NEXT SONG : found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
 								playlist.push({
 									artistName : chsnSongNew.artist.name,
 									songName : chsnSongNew.name,
@@ -159,7 +159,7 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 
 
 			} else { // there are results from youtube
-				console.log("found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
+				console.log("NEXT SONG : found url: https://www.youtube.com/watch?v=" + result.items[0].id.videoId);
 				playlist.push({
 					artistName : song.artist.name,
 					songName : song.name,
@@ -210,7 +210,7 @@ function getRandTrack(artist) { // get's random track by artist
 	if (typeof artist === 'object') {
 		artist = artist.name;
 	}
-	console.log("getRandTrack: calling last fm with artist : " + artist);
+	console.log("NEXT SONG : getRandTrack: calling last fm with artist : " + artist);
 	var res = request('GET', 'http://ws.audioscrobbler.com/2.0/?method=artist.getTopTracks&autocorrect=1&limit=30&artist=' + encodeURIComponent(artist) + '&api_key=5b801a66d1a34e73b6e563afc27ef06b&format=json');
 	var tracks = JSON.parse(res.getBody('utf8')).toptracks.track;
 	var theSong = Random.pick(engine, tracks, 0, tracks.length);
@@ -243,7 +243,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 	}
 
 	runs = parseInt(runs) + 1;
-	console.log("*currGenre is: " + currGenre);
+	console.log("NEXT SONG : *currGenre is: " + currGenre);
 	MongoClient.connect('mongodb://52.35.9.144:27017/musicprofile', function (err, db) {
 		if (err) {
 			throw err;
@@ -285,7 +285,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 											var chsnSongArtist = getRandTrack(randArtist);
 											pushSong(chsnSongArtist, "artist", randArtist, currGenre, function (stat) {
 												if (stat == "no_url") { // just a validation in case for some reason no url returns
-													console.log("no url!");
+													console.log("NEXT SONG : no url!");
 
 												} else {
 													callback()
@@ -298,7 +298,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 											var chsnSongSimilar = getRandTrack(artistSimiliar);
 											pushSong(chsnSongSimilar, "artist", artistSimiliar, currGenre, function (stat) {
 												if (stat == "no_url") { // just a validation in case for some reason no url returns
-													console.log("no url!");
+													console.log("NEXT SONG : no url!");
 
 												} else {
 													callback()
@@ -332,10 +332,10 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 									}
 								} else {
-									console.log("*sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
+									console.log("NEXT SONG : *sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
 									var pickedGenre = userGraph.nextGenre(user, startGenre, currGenre);
 									prevNG = pickedGenre;
-									console.log("# the returned value is: " + pickedGenre);
+									console.log("NEXT SONG : # the returned value is: " + pickedGenre);
 									if (pickedGenre == false) { //switch genre and get song
 										collection = db.collection('Pleasure_pie');
 										collection.findOne({
@@ -366,7 +366,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 														var chsnSongArtist = getRandTrack(randArtist);
 														pushSong(chsnSongArtist, "artist", randArtist, newGenre, function (stat) {
 															if (stat == "no_url") { // just a validation in case for some reason no url returns
-																console.log("no url!");
+																console.log("NEXT SONG : no url!");
 
 															} else {
 																callback()
@@ -378,7 +378,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 														var chsnSongSimilar = getRandTrack(artistSimiliar);
 														pushSong(chsnSongSimilar, "artist", artistSimiliar, newGenre, function (stat) {
 															if (stat == "no_url") {
-																console.log("no url!");
+																console.log("NEXT SONG : no url!");
 
 															} else {
 																callback()
@@ -439,7 +439,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 												pushSong(chsnSongArtist, "artist", randArtist, pickedGenre, function (stat) {
 													if (stat == "no_url") { // just a validation in case for some reason no url returns
-														console.log("no url!");
+														console.log("NEXT SONG : no url!");
 
 													} else {
 														callback()
@@ -452,7 +452,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 												pushSong(chsnSongSimilar, "artist", artistSimiliar, pickedGenre, function (stat) {
 													if (stat == "no_url") { // just a validation in case for some reason no url returns
-														console.log("no url!");
+														console.log("NEXT SONG : no url!");
 
 														//callback();
 													} else {
@@ -524,7 +524,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 											pushSong(chsnSongArtist, "artist", randArtist, currGenre, function (stat) {
 												if (stat == "no_url") { // just a validation in case for some reason no url returns
-													console.log("no url!");
+													console.log("NEXT SONG : no url!");
 
 													//callback();
 												} else {
@@ -538,7 +538,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 											pushSong(chsnSongSimilar, "artist", artistSimiliar, currGenre, function (stat) {
 												if (stat == "no_url") { // just a validation in case for some reason no url returns
-													console.log("no url!");
+													console.log("NEXT SONG : no url!");
 
 													//callback();
 												} else {
@@ -572,7 +572,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 									} //ends producer
 								} else {
-									console.log("**sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
+									console.log("NEXT SONG : **sending to nextgenre curr genre:" + currGenre + " startgenre: " + startGenre);
 									var pickedGenre = userGraph.nextGenre(user, startGenre, currGenre);
 									prevNG = pickedGenre;
 									if (pickedGenre == false) { //switch genre and get song
@@ -606,7 +606,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 														pushSong(chsnSongArtist, "artist", randArtist, newGenre, function (stat) {
 															if (stat == "no_url") { // just a validation in case for some reason no url returns
-																console.log("no url!");
+																console.log("NEXT SONG : no url!");
 
 															} else {
 																callback()
@@ -620,7 +620,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 														pushSong(chsnSongSimilar, "artist", artistSimiliar, newGenre, function (stat) {
 															if (stat == "no_url") { // just a validation in case for some reason no url returns
-																console.log("no url!");
+																console.log("NEXT SONG : no url!");
 
 															} else {
 																callback()
@@ -679,7 +679,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 												pushSong(chsnSongArtist, "artist", randArtist, pickedGenre, function (stat) {
 													if (stat == "no_url") { // just a validation in case for some reason no url returns
-														console.log("no url!");
+														console.log("NEXT SONG : no url!");
 
 														//callback();
 													} else {
@@ -694,7 +694,7 @@ nextSong.prototype.connectDB = function (currGenre, user, mode, userGraph, start
 
 												pushSong(chsnSongSimilar, "artist", artistSimiliar, pickedGenre, function (stat) {
 													if (stat == "no_url") { // just a validation in case for some reason no url returns
-														console.log("no url!");
+														console.log("NEXT SONG : no url!");
 
 													} else {
 														callback()
