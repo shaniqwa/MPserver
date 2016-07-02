@@ -149,6 +149,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
           $scope.videoFrame2 = true;
           $scope.videoFrame3 = true;
           $scope.loaderStatus = "invisible-loader";
+          $(".loader").css({'display':'none'});
         });
     }
 
@@ -715,7 +716,7 @@ $scope.updatePlaylist = function(genre){
       else myMode = 2; 
             
       var url = model.domain + '/getPlaylist/' + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
-      console.log(url);
+     // console.log(url);
       if($scope.canIClick){
                 
                 $scope.canIClick = false;
@@ -814,6 +815,7 @@ $scope.updatePlaylist = function(genre){
                 $scope.videoFrame3 = true;
                 $scope.thereAreSongsInPlaylist = false;
                 $scope.loaderStatus2 = "visible-loader";
+                $scope.updatePlaylist(model.randomGenreP);
             }
             else{
               $scope.thereAreSongsInPlaylist = true;
@@ -1040,6 +1042,7 @@ $scope.recommandation = function(userId){
 /********************playMySongs FUNCTION**********************/
 /***********************************************************/
     $scope.playMySongs = function(index){
+
          $scope.iCameFromMyPlaylist = true;
          if($scope.firstTimePlaylist == false){
                onYouTubePlayerAPIReady();
@@ -1049,21 +1052,24 @@ $scope.recommandation = function(userId){
           $scope.firstTracks = [];
          $scope.counter = 0;
          var i = 0;
+         //console.log(model.mySongs);
          angular.forEach(model.mySongs, function(item){
              var flag = (i == index) ? 1:0;
              var url = "https://www.youtube.com/watch?v=" + item.videoId;
              if(i>=index){
-               $scope.track.push({artistName: item.title, songName: item.title, url: url, active: flag, currGenre: item.currGenre });
+               $scope.track.push({artistName: item.title, songName: item.title, url: url, active: flag, currGenre: item.currGenre, songId: item.songId });
              }
              else{
-               $scope.firstTracks.push({artistName: item.title, songName: item.title, url: url, active: flag,  currGenre: item.currGenre});
+               $scope.firstTracks.push({artistName: item.title, songName: item.title, url: url, active: flag,  currGenre: item.currGenre, songId: item.songId});
              }
              //$scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
              i++;
          });
          angular.forEach($scope.firstTracks, function(item){
-               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag,  currGenre: item.currGenre});
+               $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag,  currGenre: item.currGenre, songId: item.songId});
          });
+         //console.log("calling update");
+          $scope.updateCounters();
          $scope.nextSong(); 
     };
 
@@ -1073,12 +1079,9 @@ $scope.recommandation = function(userId){
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-         if($scope.track[0].type == "p"){
-            $http.get("http://localhost:3000/updateCounters/" + $scope.prodId + "/" + $scope.track.songId + "/" + $scope.myID).success(function(data){
-                // console.log("updateCounters successfuly");
+            $http.get(model.domain + "/updateCounters/" + $scope.artist.artistPieId + "/" + $scope.track[0].songId + "/" + $scope.myID).success(function(data){
+                // console.log(data);
             });
-         }
-         
     };
 
 
