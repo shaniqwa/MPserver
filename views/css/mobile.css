@@ -177,11 +177,26 @@
   .playerControllersBlock2 ,.playerControllersBlock, .msgBlock{
       display: none;
   }
+  .content {
+    display: none;
+  }
+  #full{
+    display: none;
+  }
+  .playlistItem:hover{
+    color:cecece;
+  }
 }
  
 @media only screen and (min-device-width : 480px) and (max-device-width : 759px){
   .content {
     display: block;
+  }
+  .playlistItem:hover{
+    color:cecece;
+  }
+   #full{
+    display: inline-block;
   }
     .playlist-container{
         min-height: 170px;

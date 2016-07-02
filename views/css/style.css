@@ -1469,7 +1469,9 @@ table.dataTable.no-footer {
   padding: 10px;
   height: 100vh;
   padding-right: 3px;
+  min-height: 100px;
 }
+
 .player-container p {
   margin-bottom: 3px;
 }
