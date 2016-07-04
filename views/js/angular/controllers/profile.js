@@ -147,6 +147,8 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
                 $(".fa-pause").trigger('click');
                 $(".fa-play")[0].click();
                 $(".fa-play").trigger('click');
+                $(".fa-pause")[0].click();
+                $(".fa-pause").trigger('click');
                 $scope.toggle = false
 
             },900);
@@ -201,7 +203,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
             
            
             
-            $scope.updateCounters();
+            //$scope.updateCounters();
           });  
         }
          if(event.data === -1){  //video unstarted
