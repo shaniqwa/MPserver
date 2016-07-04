@@ -37,7 +37,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
             }
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pointFormat: '<div class="statTooltip"> <span style="color:{point.color}">{point.name}</span> : <b>{point.percentage:.1f}%</b></div>'
         },
         credits: {
             enabled: false
@@ -59,7 +59,7 @@ var drawLocalVsWorldDiagram = function (diagramData) {
             }
         },
         series: [{
-            name: 'Brands',
+            name: 'Local VS World',
             data: [
                 { name: 'Local', y: local },
                 { name: 'World', y: world }

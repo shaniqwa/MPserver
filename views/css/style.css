@@ -404,6 +404,7 @@ margin-top: -42px;
   height: 100%;
   margin-bottom: 0px;
   padding: 10px 25px 10px 25px;
+  overflow: hidden;
 }
 .rightSidebarHome {
   border-top: 10px solid #222;
@@ -742,13 +743,13 @@ orites tab*/
 
 /*statistics tab*/
 #counter{
-  font-size: 100px;
+  font-size: 80px;
   text-align: center;
   color:#3772ff;
 }
 #counter div{
     font-size: 20px;
-    margin-top: -33px;
+    margin-top: -20px;
     margin-bottom: 58px;
     font-weight: bold;
     color:white;
@@ -1217,6 +1218,14 @@ table.dataTable.no-footer {
   animation: fadein 2s;
 }
 /*END PIE*/
+
+/*STATISTICS GRAPHS*/
+.statTooltip{
+  width: 100px;
+  height: 30px;
+  padding: 10px;
+  background: linear-gradient(rgba(0, 0, 0,0.6) 100%, rgba(0, 0, 0,0));
+}
 #ex1Slider .slider-selection {
   background: #BABABA;
 }

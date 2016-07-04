@@ -301,9 +301,13 @@ registerNewUser = function(platform, profile, token , refreshToken , NewUserCall
         
 
         //location
-        if(profile._json.location.name !== 'undefined'){
-            var country = profile._json.location.name.split(', ')[1];
-            newUser.country = country;    
+        try{
+            if(profile._json.location.name !== 'undefined'){
+                var country = profile._json.location.name.split(', ')[1];
+                newUser.country = country;    
+            }
+        }catch(e){
+            console.log("PASSPORST", e);
         }
         
         //age group

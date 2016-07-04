@@ -103,7 +103,7 @@ var findMatch = function(userID,findMatchC){
 			  		}
 		      	}
 
-			    if(matchGeners.length >= 3){
+			    if(matchGeners.length >= 1){
 		      		for(var i=0; i< matchGeners.length; i++){
 		      			BusinessPie.update({ businessPieId: userID, 'genres.genreName': matchGeners[i] }, {$addToSet: { 'genres.$.producers': artist.artistPieId }} ,false, function (err, doc) {
 						  if (err){

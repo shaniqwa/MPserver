@@ -50,12 +50,12 @@ dataSum = parseInt(diagramData.counterAgeGroup1) + parseInt(diagramData.counterA
         },
 
         tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            backgroundColor : "#222",
+            pointFormat: '<div class="statTooltip" ><span style="color:{point.color}">{point.name}</span> <span style="color:white">{point.y:.2f}%</span><br/></div>'
         },
 
         series: [{
-            name: 'Brands',
+            name: 'Age Group',
             colorByPoint: true,
             data: [{
                 name: 'under 14',

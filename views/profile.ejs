@@ -124,46 +124,13 @@
                               <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
                           </div>
 
-                          <div class="profile-control-container">
-                              <!-- <div class="mode-container">
-                                  <button ng-click="changePie('business')" type = "button" id="business" class = " btn-default mode-btn btn-lg">BUSINESS</button>
-                                  <button ng-click="changePie('artist')"  ng-if="user.typeOfUser == 'Producer'" type = "button" id="artist" class = " btn-default mode-btn btn-lg">ARTIST</button>
-                                  <button ng-click="changePie('pleasure')" type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">PLEASURE</button>
-                              </div> -->
-                              
-                              <!-- <div class="row"> -->
-                                <!-- <div class="col-xs-2"> -->
-                                  <!-- <div class="form-group"> -->
-
-
-                                    <!-- mode select -->
-                                    <!-- <label for="select-mode">MODE :</label>
-                                    <select class="selectpicker" data-width="fit">
-                                      <option>Pleasure</option>
-                                      <option>Business</option>
-                                    </select> -->
-                                    <!-- end mode select -->
-
-
-
-                                  <!-- </div> -->
-                                <!-- </div> -->
-                              <!-- </div> -->
-                              
-
-                              <!-- get playlist button -->
-                              <!-- <div class="play-container">
-                              <button type = "button" id="business" class = " btn-default mode-btn btn-lg active">Get Playlist</button>
-                                  <button type = "button" id="pleasure" class = " btn-default mode-btn btn-lg active">Play Favorites</button>
-                              </div> -->
-
-
-                          </div>
                           <hr>
                           <div id="profile-container">
-                              <!-- MP pie container -->
-                              <div id="MPcontainer" style=" height: 450px; margin: 0 auto"></div>
-                              <div id="playDJ" ng-click="bringMePlaylist()"></div>
+                              <div ng-if="globalMode == 'B' && business.length > 0 || globalMode == 'P' && pleasure.length > 0">
+                                <!-- MP pie container -->
+                                <div id="MPcontainer" style=" height: 450px; margin: 0 auto"></div>
+                                <div id="playDJ" ng-click="bringMePlaylist()"></div>
+                              </div>
                           </div>
                       </div>
                   <!-- END PROFILE TAB -->
@@ -547,14 +514,14 @@
                    <hr>
                       <h4>Match</h4>
                       <p>Check out your recent matches with great Producers</p>
-                       <div class="recommand-result">
+                      <!--  <div class="recommand-result">
                              <img   class="simg" width="50" height="50" border-radius: 100 ng-src="{{user.profileImage}}" /> 
                              <div class="recommand-text">
                                 <p style="color: rgba(255,255, 255,0.5)">Example Result</p>
                                 <p ng-click="init(x.userId)" style="color: white; cursor:pointer;">Check my pie &nbsp<i class="fa fa-angle-right" aria-hidden="true"></i> </p>
 
                              </div>
-                          </div>
+                        </div> -->
 
                       <div ng-repeat="x in reco">
                           <div class="recommand-result slideUp">
@@ -571,9 +538,10 @@
                     </div>
 
 
-                     <hr>
+                     
 
-                     <div id="whoToFollow" ng-ig="whoToFollow.length >0 0 ">
+                     <div id="whoToFollow" ng-if="whoToFollow.length > 0 ">
+                     <hr>
                      <h4>Friends</h4>
                      <p>Listen to your friends Music Profiles
                      <div class="whoToFollow-container-sidebar mCustomScrollbar" data-mcs-theme="dark">
@@ -711,24 +679,13 @@ $(document).on('keyup',function(evt) {
 
 
     //set sidebars height dynemicly
-    var right   = $('.rightSidebar').height(),
-            left    = $('.leftSidebar').height(),
-            content = $('.content').height();
-            // console.log("r " + right + " l " + left + " c " + content);
-
-            var max = Math.max(right, left, content);
-            $('.content').css({"height":max + "px"} );
-            $('.leftSidebar').css({"height":max + "px"} );
-            $('.rightSidebar').css({"height":max + "px"} );
-
-
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var right   = $('.rightSidebar').height(),
             left    = $('.leftSidebar').height(),
             content = $('.content').height();
             // console.log("r " + right + " l " + left + " c " + content);
 
-            var max = Math.max(right, left, content);
+            var max = Math.max(right, left, content) + 5;
             $('.content').css({"height":max + "px"} );
             $('.leftSidebar').css({"height":max + "px"} );
             $('.rightSidebar').css({"height":max + "px"} );

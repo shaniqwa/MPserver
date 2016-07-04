@@ -123,7 +123,17 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
         });
          
     }
-    
+    //set layout height
+    function layoutUpdate(){
+      var right   = $('.rightSidebar').height(),
+            left    = $('.leftSidebar').height(),
+            content = $('.content').height();
+
+            var max = Math.max(right, left, content) + 5;
+            $('.content').css({"height":max + "px"} );
+            $('.leftSidebar').css({"height":max + "px"} );
+            $('.rightSidebar').css({"height":max + "px"} );
+    }
 
      // autoplay video
      function onPlayerReady(event) {
@@ -410,6 +420,7 @@ var ticktick1 = function(){
               for (i in data){
                 $scope.reco.push({userId: data[i].userID, firstName : data[i].firstName , lastName: data[i].lastName , username : data[i].username , profileImage : data[i].profileImage , type : data[i].type});
               }
+              layoutUpdate();
             });
 
 
@@ -420,6 +431,7 @@ var ticktick1 = function(){
               for (i in data.friends){
                 $scope.whoToFollow.push({userId: data.friends[i].userId, firstName : data.friends[i].firstName , lastName: data.friends[i].lastName , profileImage : data.friends[i].profileImage });
               }
+              layoutUpdate();
             });
 
 
@@ -474,14 +486,8 @@ var ticktick1 = function(){
             }//end if producer
 
             //set layout hight
-            var right   = $('.rightSidebar').height(),
-            left    = $('.leftSidebar').height(),
-            content = $('.content').height();
-
-            var max = Math.max(right, left, content);
-            $('.content').css({"height":max + "px"} );
-            $('.leftSidebar').css({"height":max + "px"} );
-            $('.rightSidebar').css({"height":max + "px"} );
+            layoutUpdate();
+            
             
         });//end getUser
 
@@ -491,13 +497,14 @@ var ticktick1 = function(){
 
 $scope.changePie = function(mode){
   $('.mode-btn').removeClass('active');
-  if(mode == "pleasure"){
+
+  if(mode == "pleasure" && $scope.pleasure.length > 0){
     drawPie($scope.pleasure, $scope.user.profileImage);
      $('#pleasure').addClass('active');
      $scope.globalMode = "P";
      myMode = 1;
   }
-  if(mode == "business"){
+  if(mode == "business" && $scope.business.length > 0){
     drawPie($scope.business, $scope.user.profileImage);
     $('#business').addClass('active');
     $scope.globalMode = "B";
@@ -1079,9 +1086,12 @@ $scope.recommandation = function(userId){
 /********************updateCounters FUNCTION**********************/
 /***********************************************************/
     $scope.updateCounters = function(){
-            $http.get(model.domain + "/updateCounters/" + $scope.artist.artistPieId + "/" + $scope.track[0].songId + "/" + $scope.myID).success(function(data){
-                // console.log(data);
-            });
+      if($scope.artist){
+          $http.get(model.domain + "/updateCounters/" + $scope.artist.artistPieId + "/" + $scope.track[0].songId + "/" + $scope.myID).success(function(data){
+              // console.log(data);
+          });
+      }
+        
     };
 
 

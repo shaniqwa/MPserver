@@ -55,7 +55,12 @@ exports.updateCounters = function(res,prodId,songId,userId){
 				  	res.status(200).json("error getProducerStatistics: " + err.message);
 				  	return err;
 				  } 
+				  if(docuser.country){
+
+
 				  	if(docuser.country == docprod.country){
+				  		  if(docuser.ageGroup){
+
 				  		  switch(docuser.ageGroup){
 				  		  	 case 1:
                                     ProducerSongsGeneral.findOneAndUpdate({ userId: prodId, 'songs.songId':songId}, {$inc: { totalCounter:1, counterLocal:1, ageGroup1Counter:1, 'songs.$.counterAgeGroup1':1, 'songs.$.counterTotal':1,'songs.$.counterLocal':1 } } ,{new: true}, function (err, doc) {
@@ -118,8 +123,11 @@ exports.updateCounters = function(res,prodId,songId,userId){
 									});
 				  		  	 break;
 				  		  }
+				  		}
 				  	}			
 				  	else{
+				  		if(docuser.ageGroup){
+
 				  		switch(docuser.ageGroup){
 				  		  	 case 1:
                                      ProducerSongsGeneral.findOneAndUpdate({ userId: prodId, 'songs.songId':songId}, {$inc: { totalCounter:1, internalCounter:1, ageGroup1Counter:1, 'songs.$.counterAgeGroup1':1, 'songs.$.counterTotal':1,'songs.$.counterInternal':1 } } ,{new: true}, function (err, doc) {
@@ -182,7 +190,9 @@ exports.updateCounters = function(res,prodId,songId,userId){
 									});
 				  		  	 break;
 				  		  }
+				  		}
 				  	}
+				  }
 				});			
 	});
 } 
