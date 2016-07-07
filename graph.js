@@ -303,20 +303,26 @@ graph.prototype.nextGenre = function(userId, startGenre, currGenre) {
   console.log("userId: " + userId + " startGenre: " + startGenre + " currGenre: " + currGenre);
   console.log(" ");
   console.log(" ");
-
-    if(this.nextNode(currGenre)){ //if there is a circle in the graph and there are no nodes connected
-       //return to stas genre after random
-          return this.getRandomGenre(startGenre, currGenre);
-    }
-     
-    else{ 
-
-      for(i in gr.nodes){
-          gr.nodes[i].visited = 0;
-      }
+   try{
+       if(this.nextNode(currGenre)){ //if there is a circle in the graph and there are no nodes connected
+         //return to stas genre after random
+            return this.getRandomGenre(startGenre, currGenre);
+       }
        
-       return false; 
-    }
+      else{ 
+
+        for(i in gr.nodes){
+            gr.nodes[i].visited = 0;
+        }
+         
+         return false; 
+      }
+   }
+   catch(e){
+    console.log("******error catch - nextGenre()")
+     return false;
+   }
+    
 }
 /************NextGenres for NextSong use*************/   
 
