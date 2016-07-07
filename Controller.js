@@ -23,6 +23,12 @@ var BusinessPie = mongoose.model('Business_pie', businessPieSchema, 'Business_pi
 var pleasurePieSchema = require("./schemas/scheme_pleasurePie.js").pleasurePieSchema; 
 var PleasurePie = mongoose.model('Pleasure_pie', pleasurePieSchema, 'Pleasure_pie');
 
+var BusinessGraphSchema = require("./schemas/scheme_BusinessGraph.js").BusinessGraphSchema; 
+var BusinessGraph = mongoose.model('Business_graph', BusinessGraphSchema, 'Business_graph');
+
+var PleasureGraphSchema = require("./schemas/scheme_PleasureGraph.js").PleasureGraphSchema; 
+var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleasure_graph');
+
 var artistPieSchema = require("./schemas/scheme_artistPie.js").artistPieSchema; 
 var ArtistPie = mongoose.model('Artist_pie', artistPieSchema, 'Artist_pie');
 
@@ -48,7 +54,8 @@ var producerSongsGeneralSchema = require("./schemas/scheme_producerSongsGeneral.
 var ProducerSongsGeneral = mongoose.model('Producer_songs_general', producerSongsGeneralSchema, 'Producer_songs_general');
 
 
-
+var genresSchema = require("./schemas/scheme_genres.js").genresSchema;
+var AllGenres = mongoose.model('genres', genresSchema);
 
 //===============FUNCTIONS===============
 
@@ -453,15 +460,6 @@ var createMP = function(req,res) {
                   callback();
                 });
             },
-
-            // step 5 - findMatch
-    	function(callback){
-    		// ControllerB.findMatch( data.userID , function(){
-    		// 	callback();
-    		// });
-			callback();
-    	}
-
         ],callback);
     }
     ], function(err) {
@@ -501,7 +499,7 @@ var updatePreferences = function(req,res,data) {
     var url;
 
 	async.waterfall([
-    //step1 : get user from db
+    //step1 : get user from db, check what tokens are available (refresh them) and set the correct url to call MP Builder WS
     function(callback) {
     	
         User.findOne({ 'userId' : data.userID },function(err, user) {
@@ -573,7 +571,7 @@ var updatePreferences = function(req,res,data) {
 		    } 
 		});
     },
-    //step 2: creat initial MP
+    //step 2: creat initial MP (call MP Builder WS)
     function(callback) {
        request.get(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -601,7 +599,7 @@ var updatePreferences = function(req,res,data) {
           }
         });
     },
-    //step 3: save preferences recived in form and calculate new pies
+    //step 3: save preferences recived in form 
      function(callback) {
      	// MP.business.preferences
 		if(data.b_rock){
@@ -700,8 +698,126 @@ var updatePreferences = function(req,res,data) {
 
         callback();
     },
+    //step 4: get user's favorite list, add all artists to MP
+    // function(callback){
+    // 	var favorites;
+    // 	Favorites.findOne({ userId : data.userID}, function(err, favDoc){
+    // 		if (err) {
+    //         	res.status(200).json("error saving user business pie: " + err.message);
+    //         	callback(err);
+    //         }
+    //         if(favDoc){
+    //         	favorites = favDoc;
+				// AllGenres.find({ category: { $exists: true } },function (err, allGenres) {
+				// 	if (err) {
+				// 	  	callback(err);
+				// 	  	return;
+				// 	}
+					
+					
+				// 	// create a queue object. the task is requests to last FM and update the MP accordingly
+				// 	var q = async.queue(function (artist, queueCallback) {
+				// 		// TODO: get the key from a config file
+				// 		var lastFM_API_KEY = "5b801a66d1a34e73b6e563afc27ef06b";
+				// 		console.log(artist.name);
+				// 	    	var encodedParam = encodeURIComponent(artist.name); //safe search: encode to support any language search
+				// 			request( "http://ws.audioscrobbler.com/2.0/?method=artist.getTopTags&artist=" + encodedParam + "&api_key="+ lastFM_API_KEY + "&limit=2&format=json", function(error, response, body) {
+				// 			if (!error && response.statusCode == 200) {
+				// 				var temp = JSON.parse(body);
+				// 				if(temp.error){
+				// 					console.log(temp.message , artist.name); //if the artist is not valid - print the error message
+				// 				}else{
+				// 					//artist is valid
+				// 					var tags = temp.toptags.tag;
+				// 					var tagsSize = tags.length;
+				// 					var genresSize = allGenres.length;
+				// 					for(var i = 0 ; i < tagsSize ; i++){
+				// 						for(var j = 0; j < genresSize; j++) {
+				// 							// look for a match between popular last.FM tags and our genres from db. 
+				// 						    if ((tags[i].name == allGenres[j].name) && (tags[i].count > 25) ) { 
+				// 						    	console.log(tags[i].name);
 
-    //step 4:  save new pies to db
+				// 						    	// check if the genre already exsist in pie
+				// 						    	var inPie = false;
+				// 						    	BusinessPie.findOne({ businessPieId : data.userID} , function(err,MPbusiness){
+				// 									if (err) {
+				// 									  	callback(err);
+				// 									}
+				// 									if(MPbusiness){
+				// 								    	for(var k = 0; k<MPbusiness.genres.length; k++){
+				// 								    		if(MPbusiness.genres[k].genreName == tags[i].name){
+				// 								    			inPie = true;
+				// 								    			console.log("genre is in pie: " + tags[i].name);
+				// 								    			// check that the artist is not already in the pie under the same genre
+				// 								    			for(var z = 0; z <MPbusiness.genres[k].artist; z++){
+				// 								    				if(MPbusiness.genres[k].artist[z] == artist.name){
+				// 								    					//artist already in pie.
+				// 								    					break;
+				// 								    				}else{
+				// 								    					//artist is not in pie, add him
+				// 								    					MPbusiness.genres[k].artist.push(artist.name);
+				// 								    				}
+				// 								    			}
+				// 								    			console.log(MPbusiness);
+				// 								    			break;
+				// 								    		}
+				// 								    	}
+				// 								    	if(!inPie){
+				// 								    		console.log("genre is new: " + tags[i].name);
+				// 								    		//new genre found. create it
+				// 								    		var newGenre = {
+				// 										        	category: allGenres[j].category,
+				// 										            genreName: allGenres[j].name,
+				// 										            percent: 0,
+				// 										            artists: [],
+				// 										            producers: []
+				// 										        };
+
+				// 										    newGenre.artists.push(artist.name);
+				// 										    MPbusiness.genres.push(newGenre);
+				// 						    			}
+				// 									}
+				// 						    	});
+										    	
+
+
+				// 						    }
+				// 						}
+				// 					}
+				// 				}
+				// 				queueCallback();
+				// 			  }else{
+				// 			  	//problem with request
+				// 			  	console.log(response.statusCode);
+				// 			  }
+				// 			});
+				// 	}, 5); //end queue - the task  
+		              
+				
+				// 	// push all artist from favorites
+				// 	var len = favorites.songs.length;
+				// 	for(var i = 0; i < len; i++) {
+				// 		var artist = favorites.songs[i].artist;
+				// 		q.push([{ name: artist }], function (err) {
+				// 		    console.log('finished processing add new artist to MP task');
+				// 		});
+				// 	}
+
+
+				// 	// assign a callback to the queue
+				// 	q.drain = function() {
+				// 		callback();
+				// 	}
+				// });
+            
+    //         }else{
+    //         	//no favorites, just move on
+    //         	callback();
+    //         }
+    		
+    // 	});
+    // },
+    //step 5:  save new pies to db
    	function(callback) {
 
         async.waterfall([
@@ -792,8 +908,11 @@ var updatePreferences = function(req,res,data) {
 
         ],callback);
     },
-    //step 5: update graph
+    //step 6: delete graphs (they will be constructed again in the next request for a playlist)
     function(callback){
+    	BusinessGraph.findOne({ userId: data.userID }).remove().exec();
+    	PleasureGraph.findOne({ userId: data.userID }).remove().exec();
+
     	callback();
     }
     ], function(err) {
@@ -802,7 +921,6 @@ var updatePreferences = function(req,res,data) {
         }
         console.log('music preferences have been updated successfully');
         res.status(200).json('music preferences have been updated successfully');
-		// res.redirect('/profile'); 
     });
 }
 
