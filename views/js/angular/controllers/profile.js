@@ -358,7 +358,18 @@ var ticktick1 = function(){
 
             $scope.pleasurePreferences = data.pleasure.preferences;
 
-
+            if($scope.pleasure.length == 0){
+                // $scope.noPie = true;
+                $("#profile-container").hide();
+                $("#noPie").show();
+            }else{
+              $("#noPie").hide();
+              $("#profile-container").show();
+              drawPie($scope.pleasure, $scope.user.profileImage);
+               $('#pleasure').addClass('active');
+               $scope.globalMode = "P";
+               myMode = 1;
+            }
             
 
              if($scope.UserIsLoggedIn == false){
@@ -392,7 +403,7 @@ var ticktick1 = function(){
 
             
 
-            drawPie($scope.pleasure, $scope.user.profileImage);
+            // drawPie($scope.pleasure, $scope.user.profileImage);
             activaTab('profile');
             
              
@@ -501,22 +512,26 @@ $scope.changePie = function(mode){
   $('.mode-btn').removeClass('active');
 
   if(mode == "pleasure" && $scope.pleasure.length > 0){
+    $("#profile-container").show();
     drawPie($scope.pleasure, $scope.user.profileImage);
      $('#pleasure').addClass('active');
      $scope.globalMode = "P";
      myMode = 1;
-  }
-  if(mode == "business" && $scope.business.length > 0){
+  }else if(mode == "business" && $scope.business.length > 0){
+    $("#profile-container").show();
     drawPie($scope.business, $scope.user.profileImage);
     $('#business').addClass('active');
     $scope.globalMode = "B";
     myMode = 2;
-  }
-  if(mode == "artist"){
+  }else if(mode == "artist"){
+    $("#profile-container").show();
     drawPie($scope.artist.genres, $scope.user.profileImage);
     $('#artist').addClass('active');
     $scope.globalMode = "A";
+  }else{
+    $("#profile-container").hide();
   }
+
 }
 /***********************************************************/
 /****************bringMePlaylist FUNCTION*******************/
@@ -527,84 +542,82 @@ $scope.bringMePlaylist = function($event){
           $scope.playMySongs(0);
     }
     else{
+      if($scope.globalMode == 'B' && $scope.business.length > 0 ||  $scope.globalMode == 'P' && $scope.pleasure.length > 0 ){
       var genre = ($scope.globalMode == 'B') ? model.randomGenreB : model.randomGenreP;
-       $scope.track = [];
-    $scope.counter = 0;
-    $scope.videoFrame3 = false;
-    if($scope.videoFrame == false){
-        $scope.videoFrame2 = false; 
-    }
-    if($scope.track.length < 2){
-        $scope.thereAreSongsInPlaylist = false;
-    }
-    else{
-         $scope.thereAreSongsInPlaylist = true;
-    }
-    if($scope.firstTimePlaylist == false){
-       $scope.thereAreSongsInPlaylist = false;
-    }
-     
-    $scope.loaderStatus = "visible-loader";
-    $scope.loaderStatus2 = "visible-loader";
-    var myMode = ($scope.data.select == 'P') ? 1 : 2;
-    
-    if(typeof $event === 'undefined'){
-        //var genre =  model.randomGenre;
-        $scope.singleORdj = 0;
-    }else{
-        $scope.singleORdj = 1;
-        if(typeof $event.currentTarget === 'undefined'){
-          //var genre = model.randomGenre;
-        }
-        else{
-          var genre = $event.currentTarget.innerHTML;
-          $scope.defaultGenre = genre;
-        }
-        
-    }
-    if($scope.globalMode == "P"){
-      myMode = 1;
-    }
-    else myMode = 2;
-    var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
-         if($scope.canIClick){
-                        $scope.canIClick = false;
+            $scope.track = [];
+            $scope.counter = 0;
+            $scope.videoFrame3 = false;
+            if($scope.videoFrame == false){
+                $scope.videoFrame2 = false; 
+            }
+            if($scope.track.length < 2){
+                $scope.thereAreSongsInPlaylist = false;
+            }
+            else{
+                 $scope.thereAreSongsInPlaylist = true;
+            }
+            if($scope.firstTimePlaylist == false){
+               $scope.thereAreSongsInPlaylist = false;
+            }
+             
+            $scope.loaderStatus = "visible-loader";
+            $scope.loaderStatus2 = "visible-loader";
+            var myMode = ($scope.data.select == 'P') ? 1 : 2;
+            
+            if(typeof $event === 'undefined'){
+                //var genre =  model.randomGenre;
+                $scope.singleORdj = 0;
+            }else{
+                $scope.singleORdj = 1;
+                if(typeof $event.currentTarget === 'undefined'){
+                  //var genre = model.randomGenre;
+                }
+                else{
+                  var genre = $event.currentTarget.innerHTML;
+                  $scope.defaultGenre = genre;
+                }
+                
+            }
+            if($scope.globalMode == "P"){
+              myMode = 1;
+            }
+            else myMode = 2;
+            var url = model.domain + "/getPlaylist/" + $scope.userId + "/" + myMode + "/" + 6 + "/" + genre + "/" + $scope.singleORdj;
+                 if($scope.canIClick){
+                    $scope.canIClick = false;
 
-                          $http.get(url).success(function(data){
-                                 $scope.canIClick = true;
-                                  $scope.thereAreSongsInPlaylist = true;
-                                  $scope.videoFrame3 = true;
+                      $http.get(url).success(function(data){
+                             $scope.canIClick = true;
+                              $scope.thereAreSongsInPlaylist = true;
+                              $scope.videoFrame3 = true;
 
-                                  $scope.track = [];
-                                  for(i in data){
-                                       if(data[i].type == 'producer'){
-                                        var startUrl = "https://www.youtube.com/watch?v=";
-                                        //startUrl = startUrl.replace("watch?v=", "embed/"); 
-                                       
-                                         $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
-                                       }
-                                       else{
-                                         $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
-                                       }
+                              $scope.track = [];
+                              for(i in data){
+                                   if(data[i].type == 'producer'){
+                                    var startUrl = "https://www.youtube.com/watch?v=";
+                                    //startUrl = startUrl.replace("watch?v=", "embed/"); 
+                                   
+                                     $scope.track.push({artistName: data[i].title, songName: data[i].title, url: startUrl+data[i].videoId, songId:data[i].songId, prodId:data[i].prodId, active: 0,type:"p", currGenre : data[i].currGenre});
+                                   }else{
+                                     $scope.track.push({artistName: data[i].artistName, songName: data[i].songName, url: data[i].url, active: 0,type:"c", currGenre : data[i].currGenre});
                                    }
-                                   // console.log("the playlist:");
-                                   // console.log($scope.track);
-                                   if($scope.firstTimePlaylist == false){
-                                       onYouTubePlayerAPIReady();
-                                       $scope.firstTimePlaylist = true;
-                                   }
+                               }
+                               // console.log("the playlist:");
+                               // console.log($scope.track);
+                               if($scope.firstTimePlaylist == false){
+                                   onYouTubePlayerAPIReady();
+                                   $scope.firstTimePlaylist = true;
+                               }
 
-                                  
-                                  $scope.loaderStatus2 = "invisible-loader";
-                                  $scope.nextSong();
-                                  
-                                 
-                            });
-          }
-          else {
-            // console.log("you can not click");
-          }
-    }
+                              $scope.loaderStatus2 = "invisible-loader";
+                              $scope.nextSong();                     
+                        });
+                  }else {
+                    // console.log("you can not click");
+                  }
+      }
+      
+      }
     
   };
 
