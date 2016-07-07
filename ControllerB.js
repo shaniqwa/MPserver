@@ -45,9 +45,9 @@ var PleasureGraph = mongoose.model('Pleasure_graph', PleasureGraphSchema, 'Pleas
 // This function searches for match between a given user ID and all producers in DB
 var findMatch = function(userID,findMatchC){
 	var matchGeners = [];
-	console.log("FindMatch start");
+	// console.log("FindMatch start");
 	var genres = [];
-	console.log(userID);
+	// console.log(userID);
 
 	async.waterfall([
     function(callback) {
@@ -97,8 +97,8 @@ var findMatch = function(userID,findMatchC){
 		      		// console.log("categories[i] "+categories[i]);
 		      		// console.log("check if genre exsist in user generes:" + artist.genres[i].genreName + "for artist: "  + artist.artistPieId);
 		      		if(genres.indexOf(artist.genres[i].genreName) > -1){
-		      			console.log("Found Match !");
-		      			console.log(artist.genres[i].genreName);
+		      			// console.log("Found Match !");
+		      			// console.log(artist.genres[i].genreName);
 		      			matchGeners.push(artist.genres[i].genreName);
 			  		}
 		      	}
@@ -206,8 +206,8 @@ var recommandation = function(res, userID){
 			  } 
 			 for(var i=0; i<data.genres.length; i++){
 			  	for(var j=0; j<data.genres[i].producers.length; j++){
-			  		console.log("check if exsist");
-			  		console.log(data.genres[i].producers[j]);
+			  		// console.log("check if exsist");
+			  		// console.log(data.genres[i].producers[j]);
 			  		if(producers.indexOf(data.genres[i].producers[j]) == -1){
 			  		
 			  			 producers.push( data.genres[i].producers[j]);
@@ -228,7 +228,7 @@ var recommandation = function(res, userID){
 			      				console.log(err);
 			      			}
 			      			if(user){
-			      				console.log(user);
+			      				// console.log(user);
 			      				result.push({username: user.username, profileImage: user.profileImage, userID: user.userId,firstName : user.firstName , lastName: user.lastName, type: user.typeOfUser});		
 			      				taskCallback();
 			      			}else{
@@ -250,7 +250,7 @@ var recommandation = function(res, userID){
 			}
 	    		
 				for(var i=0; i<producers.length; i++){
-			      		console.log("producers[i] "+producers[i]);
+			      		// console.log("producers[i] "+producers[i]);
 			      		q.push({id: producers[i]}, function (err) {
 						    // console.log('finished processing ');
 						});
@@ -420,7 +420,7 @@ var removeFav = function(res, data){
 
 
 var whoToFollow = function(userId,callback){
-	console.log("whoToFollow");
+	// console.log("whoToFollow");
 	var result = {};
 	result.friends = [];
 	result.error = false;
