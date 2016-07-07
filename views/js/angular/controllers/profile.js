@@ -357,7 +357,7 @@ var ticktick1 = function(){
             $scope.pleasure = data.pleasure.genres;
 
             $scope.pleasurePreferences = data.pleasure.preferences;
-
+            $scope.whoToFollow = []; 
             if($scope.pleasure.length == 0){
                 // $scope.noPie = true;
                 $("#profile-container").hide();
