@@ -102,7 +102,7 @@ function pickChoice(choice) { // choice picker func
 };
 
 var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a song to playlist array
-
+	try{
 	var songFull = song.artist.name + " - " + song.name + " | " + song.artist.name + " | " + song.name;
 	console.log("NEXT SONG : full song " + songFull);
 	youTube.addParam('type', 'video');
@@ -171,7 +171,11 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 			}
 		}
 
-	});
+	});	
+	}catch(e){
+		console.log(e);
+	}
+	
 
 }
 
