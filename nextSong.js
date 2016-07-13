@@ -57,6 +57,7 @@ nextSong.prototype.getNextSong = function (NScallback) {
 }
 
 function pickChoice(choice) { // choice picker func
+	try{
 	var sum = 0;
 	for (chs in choice) {
 		sum += parseInt(choice[chs][0]);
@@ -98,6 +99,9 @@ function pickChoice(choice) { // choice picker func
 
 	}
 	return choices[choice][1];
+	}catch(e){
+		console.log(e);
+}
 
 };
 
