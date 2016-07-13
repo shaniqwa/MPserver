@@ -57,6 +57,7 @@ nextSong.prototype.getNextSong = function (NScallback) {
 }
 
 function pickChoice(choice) { // choice picker func
+	try{
 	var sum = 0;
 	for (chs in choice) {
 		sum += parseInt(choice[chs][0]);
@@ -98,11 +99,14 @@ function pickChoice(choice) { // choice picker func
 
 	}
 	return choices[choice][1];
+	}catch(e){
+		console.log(e);
+}
 
 };
 
 var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a song to playlist array
-
+	try{
 	var songFull = song.artist.name + " - " + song.name + " | " + song.artist.name + " | " + song.name;
 	console.log("NEXT SONG : full song " + songFull);
 	youTube.addParam('type', 'video');
@@ -171,7 +175,11 @@ var pushSong = function (song, typeAP, artistOrg, genre, callback) { //pushes a 
 			}
 		}
 
-	});
+	});	
+	}catch(e){
+		console.log(e);
+	}
+	
 
 }
 
