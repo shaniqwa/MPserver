@@ -97,6 +97,7 @@ angular.module('profile',['datatables']).filter('titleCase', function() {
   $scope.newFlag = false;
   $scope.globalMode = "P";
   $scope.canIClick = true;
+  $scope.pageTitle = "Music Profile";
    // create youtube player
     var player;
 
@@ -801,13 +802,14 @@ $scope.updatePlaylist = function(genre){
                 // console.log("$scope.track[$scope.counter].url was undefined - nextSong() was fired");
               }
               var url = $scope.track[$scope.counter].url.replace("watch?v=", "embed/"); 
-              url += "?autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
+              url += "?modestbranding=1&autoplay=0&cc_load_policy=1&showinfo=0&controls=0";
               $scope.myVideo = $sce.trustAsResourceUrl(url);
               player.cueVideoByUrl(url);
               var date = new Date(null);
 
               $scope.track[$scope.counter].active = 1;
               $scope.nowPlaying = $scope.track[$scope.counter];
+              $scope.pageTitle = $scope.nowPlaying.artistName + " - " + $scope.nowPlaying.songName + " - MusicProfile";
               if($scope.counter != 0){
                 $scope.track[$scope.counter - 1].active = 0;
                 $scope.track.splice([$scope.counter - 1],1);
@@ -865,7 +867,7 @@ $scope.updatePlaylist = function(genre){
         $scope.heart = "fa-heart";
          if($scope.userId == $scope.myID){
           // $scope.favorits.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: "3:43", url: $scope.track[$scope.counter - 1].url});
-          model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: $scope.videoDuration, url: $scope.track[$scope.counter - 1].url});   
+          model.myfavorites.push({artistName:  $scope.track[$scope.counter - 1].artistName, songName: $scope.track[$scope.counter - 1].songName, duration: $scope.videoDuration, url: $scope.track[$scope.counter - 1].url , currGenre : $scope.track[$scope.counter - 1].currGenre });   
          }
           var data = JSON.stringify({
                       userId : $scope.myID,
@@ -989,7 +991,7 @@ $scope.recommandation = function(userId){
               }
               $scope.track = [];
               angular.forEach(model.myfavorites, function(item){
-                  $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: 0});
+                  $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: 0 , currGenre : item.currGenre});
               });
               $scope.nextSong();
         }
@@ -1006,16 +1008,16 @@ $scope.recommandation = function(userId){
              angular.forEach(model.myfavorites, function(item){
                 var flag = (item.url == url) ? 1:0;
                 if(item.url == url){
-                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                   $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre : item.currGenre});
                 }
                 else{
-                   $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag});
+                   $scope.firstTracks.push({artistName: item.artistName, songName: item.songName, url: item.url, active: flag, currGenre : item.currGenre});
                 }
                  i++;
              });
             
                 angular.forEach($scope.firstTracks, function(item){
-                    $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag});
+                    $scope.track.push({artistName: item.artistName, songName: item.songName, url: item.url, active: $scope.firstTracks.flag , currGenre : item.currGenre});
                 });
              
              

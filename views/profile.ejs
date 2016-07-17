@@ -1,11 +1,8 @@
 <!doctype html>
-<html ng-app="profile">
+<html ng-app="profile" ng-controller="profileCtrl" ng-cloak>
 <head profile="http://www.w3.org/2005/10/profile">
-
-    <title>Music Profile</title>  
-
-     <%- include head %>
-
+    <title>{{ pageTitle }}</title>
+    <%- include head %>
 </head>
 <body>
 <div class="nanobar" style="background-color:#222"></div>
@@ -13,7 +10,7 @@
 <div id="preloader">
     <div id="status">&nbsp;</div>
 </div>
-<div ng-controller="profileCtrl" ng-cloak>
+<div>
   <div class="msgBlock fa fa-heart {{elementToFadeInAndOut}}"></div>
   <div class="playerControllersBlock fa fa-play {{elementToFadeInAndOut3}}"></div>
   <div class="playerControllersBlock2 fa fa-pause {{elementToFadeInAndOut2}}"></div>
