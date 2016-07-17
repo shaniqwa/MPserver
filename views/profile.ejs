@@ -78,7 +78,7 @@
                 <!-- end playlist -->
                <div class="mobile-buttons">
                 <div class="left-mobile-button" ng-click="playFavorites()">Play Favorites</div>
-                <div class="right-mobile-button" ng-click="bringMePlaylist()">Play My Pie</div>
+                <div class="right-mobile-button" ng-click="bringMePlaylist()">Play My MP</div>
               </div>
           </div>
       </div>
@@ -122,18 +122,14 @@
                           </div>
 
                           <hr>
-
-                          <div id="noPie" style = "display: none">
-                                  <p>Sorry, we didn't find any artist you like :( <br>
-                                  You can influence your profile by connecting more social networks (on the right sidebar). In the meanwhile enjoy listening to other profiles by searchig other users.</p>
-                          </div>
-
                           <div id="profile-container">
-
+                   
                                 <!-- MP pie container -->
                                 <div id="MPcontainer" style=" height: 450px; margin: 0 auto"></div>
-                                <div id="playDJ" ng-click="bringMePlaylist()"></div>
 
+                                <div ng-if="globalMode == 'B' && business.length > 0 || globalMode == 'P' && pleasure.length > 0">
+                                    <div id="playDJ" ng-click="bringMePlaylist()"></div>
+                              </div>
                           </div>
                       </div>
                   <!-- END PROFILE TAB -->
@@ -179,13 +175,15 @@
                             </div>
                         </div>
 
-                          <br><br>
+
                         <div ng-if="whoToFollow.length > 0">
                         <h4>Who To Follow?</h4>
                         <p>Friends who also use The Music Profile</p>
                         <div ng-repeat="x in whoToFollow" class="searchresults">
                            <img  ng-click="init(x.userId)" class="simg" width="130" height="130" border-radius: 100 ng-src="{{x.profileImage}}" /> 
+                           <div class="recommand-text">
                               <p>{{x.firstName}}  {{x.lastName}}</p>
+                           </div>
                         </div>
                       </div>
 
@@ -653,8 +651,6 @@ $(document).on('keyup',function(evt) {
 
 
   $(".content").mCustomScrollbar();
-  $("#recommended").mCustomScrollbar();
-  $(".whoToFollow-container-sidebar").mCustomScrollbar();
 //mobile slider init
  $(".rslides").responsiveSlides({
       auto: true,             // Boolean: Animate automatically, true or false

@@ -67,7 +67,7 @@
     display: block !important;
     background-color: #222;
     height: 10vh;
-    color: #03BBFF;
+    color: #cecece;
     line-height: 1.9;
     font-weight: bold;
   }
@@ -77,8 +77,8 @@
     text-align: center;
     height: 10vh;
     vertical-align: middle;
-    border-top: 2px solid #03BBFF;
-    border-right: 2px solid #03BBFF;
+    border-top: 3px solid #cecece;
+    border-right: 3px solid #cecece;
   }
   .right-mobile-button{
   	display: table-cell;
@@ -86,7 +86,7 @@
     text-align: center;
     height: 10vh;
     vertical-align: middle;
-    border-top: 2px solid #03BBFF;
+    border-top: 3px solid #cecece;
   }
   #fullpage .section{
      display: none;
@@ -189,7 +189,7 @@
 }
  
 @media only screen and (min-device-width : 480px) and (max-device-width : 759px){
-  .content {
+ /* .content {
     display: block;
   }
   .playlistItem:hover{
@@ -209,5 +209,33 @@
     }
     .navbar{
       display: none;
-    }
+    }*/
 }	
+
+@media screen and (orientation:landscape) {
+    .content {
+    display: block;
+  }
+  .playlistItem:hover{
+    color:cecece;
+  }
+   #full{
+    display: inline-block;
+  }
+    .playlist-container{
+        min-height: 170px;
+
+    }
+    .rightSidebar{
+      display: none;
+    }
+    .nav-tabs{
+      display: none;
+    }
+    .navbar{
+      display: none;
+    }
+    .leftSidebar{
+      height:auto !important;
+    }
+}
